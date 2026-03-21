@@ -204,7 +204,7 @@ export default async function Home() {
                 </div>
               </div>
 
-              <nav className="flex flex-wrap items-center gap-1 text-sm text-[#5f677c]">
+              <nav className="hidden flex-wrap items-center gap-1 text-sm text-[#5f677c] md:flex">
                 {[
                   ["#scenarios", "Возможности"],
                   ["#courses", "Курсы"],
