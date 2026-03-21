@@ -1,7 +1,23 @@
 import { auth } from "@academy/auth";
+import { CheckCircle2, KeyRound, Mail, ShieldCheck } from "lucide-react";
 import { redirect } from "next/navigation";
 
 import { SignInForm } from "@/components/auth/sign-in-form";
+import { PublicButton, SectionLead } from "@/components/marketing/public-primitives";
+import {
+  marketingBody,
+  marketingContainerClassName,
+  marketingDisplay,
+  marketingFrameClassName,
+  marketingInnerFrameClassName,
+  marketingShellClassName,
+} from "@/lib/marketing-theme";
+
+const accessPoints = [
+  "Вход по email и паролю без лишнего сценария регистрации.",
+  "Автоматический переход в нужный кабинет в зависимости от роли.",
+  "Один логин для администратора, автора, куратора и студента.",
+];
 
 export default async function SignInPage() {
   const session = await auth();
@@ -11,53 +27,116 @@ export default async function SignInPage() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[linear-gradient(180deg,_#f8faff_0%,_#f2f5ff_100%)] px-6 py-16">
-      <section className="grid w-full max-w-5xl overflow-hidden rounded-[28px] border border-[var(--border)] bg-white shadow-[0_30px_90px_rgba(111,139,251,0.14)] md:grid-cols-[1.02fr_0.98fr]">
-        <div className="flex flex-col justify-between bg-[linear-gradient(180deg,_#eef3ff_0%,_#f8faff_100%)] p-8 text-[var(--foreground)] md:p-10">
-          <div className="space-y-6">
-            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[var(--muted)]">
-              Вход в платформу
-            </p>
-            <h1 className="text-4xl font-semibold tracking-tight md:text-5xl">
-              Академия риэлторов для команды, кураторов и студентов.
-            </h1>
-            <p className="max-w-md text-base leading-8 text-[var(--muted)]">
-              Вход выполняется по email и паролю. После авторизации платформа
-              сама открывает нужный кабинет в зависимости от роли пользователя.
-            </p>
-          </div>
+    <main
+      className={`${marketingDisplay.variable} ${marketingBody.variable} ${marketingShellClassName}`}
+    >
+      <div className={marketingContainerClassName}>
+        <section className={marketingFrameClassName}>
+          <div className={marketingInnerFrameClassName}>
+            <header className="flex flex-col gap-4 border-b border-black/5 pb-6 md:flex-row md:items-center md:justify-between">
+              <div className="flex items-center gap-4">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#1c2442] text-sm font-semibold text-white">
+                  AR
+                </div>
+                <div>
+                  <p className="font-[family:var(--font-landing-display)] text-lg font-semibold">
+                    Академия риэлторов
+                  </p>
+                  <p className="text-sm leading-6 text-[#667087]">
+                    Вход в платформу для команды, авторов и студентов.
+                  </p>
+                </div>
+              </div>
 
-          <div className="rounded-[20px] border border-[var(--border)] bg-white p-5 shadow-sm">
-            <p className="text-sm text-[var(--muted)]">Тестовый администратор</p>
-            <p className="mt-3 text-sm leading-7 text-[var(--foreground)]">
-              Email: <span className="font-semibold">test@mail.ru</span>
-              <br />
-              Пароль: <span className="font-semibold">12345</span>
-            </p>
-          </div>
-        </div>
+              <div className="flex flex-wrap gap-3">
+                <PublicButton href="/" tone="secondary">
+                  На главную
+                </PublicButton>
+                <PublicButton href="/catalog">Открыть каталог</PublicButton>
+              </div>
+            </header>
 
-        <div className="flex items-center bg-white p-8 md:p-10">
-          <div className="w-full rounded-[24px] border border-[var(--border)] bg-[var(--surface)] p-6 shadow-sm md:p-8">
-            <div className="space-y-3">
-              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
-                Авторизация
-              </p>
-              <h2 className="text-3xl font-semibold tracking-tight text-[var(--foreground)]">
-                Войти по email
-              </h2>
-              <p className="text-sm leading-7 text-[var(--muted)]">
-                Для проверки можно использовать тестовую учетную запись
-                администратора.
-              </p>
+            <div className="grid gap-8 py-10 lg:grid-cols-[1.02fr_0.98fr] lg:items-start">
+              <div className="space-y-8">
+                <SectionLead
+                  eyebrow="Вход"
+                  title="Открытый доступ в академию без лишнего служебного шума."
+                  text="Страница авторизации должна ощущаться частью продукта, а не отдельным техническим экраном. Поэтому вход сохраняет тот же визуальный язык, что и лендинг."
+                />
+
+                <div className="grid gap-4 md:grid-cols-3">
+                  {[
+                    { icon: Mail, label: "Формат", value: "Email + пароль" },
+                    { icon: ShieldCheck, label: "Роли", value: "Админ, автор, студент" },
+                    { icon: KeyRound, label: "Маршрут", value: "Авто-редирект по роли" },
+                  ].map((item) => {
+                    const Icon = item.icon;
+                    return (
+                      <article
+                        key={item.label}
+                        className="rounded-[24px] border border-black/5 bg-white p-5 shadow-sm"
+                      >
+                        <div className="inline-flex rounded-2xl bg-[#eef2ff] p-3">
+                          <Icon className="h-5 w-5 text-[#2840db]" />
+                        </div>
+                        <p className="mt-4 text-sm text-[#697088]">{item.label}</p>
+                        <p className="mt-2 text-xl font-semibold text-[#1c2442]">{item.value}</p>
+                      </article>
+                    );
+                  })}
+                </div>
+
+                <div className="rounded-[32px] bg-[linear-gradient(135deg,_#18213d_0%,_#3146b6_56%,_#ff8f6d_100%)] p-6 text-white shadow-[0_30px_90px_rgba(38,43,101,0.22)] md:p-8">
+                  <p className="text-xs font-semibold uppercase tracking-[0.34em] text-white/60">
+                    Что важно
+                  </p>
+                  <div className="mt-5 space-y-3">
+                    {accessPoints.map((item) => (
+                      <div
+                        key={item}
+                        className="flex items-start gap-3 rounded-[22px] border border-white/10 bg-white/8 p-4"
+                      >
+                        <CheckCircle2 className="mt-1 h-5 w-5 flex-none text-[#ffd6be]" />
+                        <p className="text-sm leading-7 text-white/84">{item}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <aside className="rounded-[32px] border border-black/5 bg-white p-5 shadow-[0_24px_80px_rgba(28,36,66,0.1)] md:p-6">
+                <div className="rounded-[28px] border border-black/5 bg-[linear-gradient(180deg,_#f6f8ff_0%,_#fffaf7_100%)] p-6">
+                  <div className="space-y-3">
+                    <p className="text-xs font-semibold uppercase tracking-[0.34em] text-[#7b8296]">
+                      Авторизация
+                    </p>
+                    <h2 className="font-[family:var(--font-landing-display)] text-3xl font-semibold tracking-tight text-[#1c2442]">
+                      Войти по email
+                    </h2>
+                    <p className="text-sm leading-7 text-[#596177]">
+                      Для теста можно использовать админскую учетку. После входа
+                      платформа сама отправит пользователя в нужный кабинет.
+                    </p>
+                  </div>
+
+                  <div className="mt-6 rounded-[24px] border border-[#dfe5f7] bg-white p-5 shadow-sm">
+                    <p className="text-sm text-[#697088]">Тестовый администратор</p>
+                    <p className="mt-3 text-sm leading-7 text-[#1c2442]">
+                      Email: <span className="font-semibold">test@mail.ru</span>
+                      <br />
+                      Пароль: <span className="font-semibold">12345</span>
+                    </p>
+                  </div>
+
+                  <div className="mt-6">
+                    <SignInForm />
+                  </div>
+                </div>
+              </aside>
             </div>
-
-            <div className="mt-8">
-              <SignInForm />
-            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
     </main>
   );
 }
