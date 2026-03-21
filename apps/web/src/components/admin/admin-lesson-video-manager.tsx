@@ -1,7 +1,8 @@
 "use client";
 
+import { Link2, Plus, Upload } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -27,6 +28,17 @@ type AdminLessonVideoManagerProps = {
   fallbackVideoUrl?: string | null;
   fallbackVideoPlaybackId?: string | null;
 };
+
+type LinkStrategy =
+  | {
+      kind: "embed";
+      sourceType: "RUTUBE_EMBED" | "EXTERNAL_EMBED";
+      successMessage: string;
+    }
+  | {
+      kind: "import";
+      successMessage: string;
+    };
 
 const statusVariantMap: Record<
   string,
@@ -71,6 +83,45 @@ async function postVideoCommand(payload: Record<string, unknown>) {
   return data.result ?? {};
 }
 
+function resolveVideoLinkStrategy(rawValue: string): LinkStrategy {
+  let parsedUrl: URL;
+
+  try {
+    parsedUrl = new URL(rawValue.trim());
+  } catch {
+    throw new Error("Укажи корректную ссылку на видео.");
+  }
+
+  const hostname = parsedUrl.hostname.toLowerCase();
+  const pathname = parsedUrl.pathname.toLowerCase();
+
+  if (hostname === "rutube.ru" || hostname === "www.rutube.ru") {
+    return {
+      kind: "embed",
+      sourceType: "RUTUBE_EMBED",
+      successMessage: "Видео RUTUBE подключено к уроку.",
+    };
+  }
+
+  if (
+    pathname.includes("/embed/") ||
+    hostname.startsWith("player.") ||
+    hostname.includes("iframe.") ||
+    parsedUrl.searchParams.has("embed")
+  ) {
+    return {
+      kind: "embed",
+      sourceType: "EXTERNAL_EMBED",
+      successMessage: "Видео по embed-ссылке подключено к уроку.",
+    };
+  }
+
+  return {
+    kind: "import",
+    successMessage: "Видео по ссылке отправлено в импорт.",
+  };
+}
+
 export function AdminLessonVideoManager({
   lessonId,
   initialAsset,
@@ -79,16 +130,18 @@ export function AdminLessonVideoManager({
   fallbackVideoPlaybackId,
 }: AdminLessonVideoManagerProps) {
   const router = useRouter();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [managedFile, setManagedFile] = useState<File | null>(null);
-  const [cloudImportUrl, setCloudImportUrl] = useState("");
-  const [rutubeUrl, setRutubeUrl] = useState("");
-  const [externalUrl, setExternalUrl] = useState("");
+  const [videoUrl, setVideoUrl] = useState("");
   const [pendingAction, setPendingAction] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const hasVideo = Boolean(
-    initialAsset || fallbackVideoSourceType || fallbackVideoUrl || fallbackVideoPlaybackId,
+    initialAsset ||
+      fallbackVideoSourceType ||
+      fallbackVideoUrl ||
+      fallbackVideoPlaybackId,
   );
 
   async function runAction(
@@ -134,7 +187,7 @@ export function AdminLessonVideoManager({
         const assetId = String(uploadSession.assetId ?? "");
 
         if (!uploadUrl || !assetId) {
-          throw new Error("Не удалось создать upload session.");
+          throw new Error("Не удалось создать сессию загрузки.");
         }
 
         if (!uploadUrl.startsWith("mock://")) {
@@ -147,7 +200,7 @@ export function AdminLessonVideoManager({
           });
 
           if (!uploadResponse.ok) {
-            throw new Error("Загрузка файла в video provider завершилась ошибкой.");
+            throw new Error("Файл не загрузился в video provider.");
           }
         }
 
@@ -157,70 +210,46 @@ export function AdminLessonVideoManager({
         });
 
         setManagedFile(null);
+
+        if (fileInputRef.current) {
+          fileInputRef.current.value = "";
+        }
       },
       "Видео загружено и привязано к уроку.",
     );
   }
 
-  async function handleCloudImport() {
+  async function handleVideoLink() {
+    const trimmedUrl = videoUrl.trim();
+
+    if (!trimmedUrl) {
+      setError("Вставь ссылку на видео.");
+      return;
+    }
+
+    const strategy = resolveVideoLinkStrategy(trimmedUrl);
+
     await runAction(
-      "cloud-import",
+      "video-link",
       async () => {
-        if (!cloudImportUrl.trim()) {
-          throw new Error("Укажи ссылку на исходный видеофайл.");
+        if (strategy.kind === "embed") {
+          await postVideoCommand({
+            action: "attachEmbed",
+            lessonId,
+            sourceType: strategy.sourceType,
+            videoUrl: trimmedUrl,
+          });
+        } else {
+          await postVideoCommand({
+            action: "importFromUrl",
+            lessonId,
+            sourceUrl: trimmedUrl,
+          });
         }
 
-        await postVideoCommand({
-          action: "importFromUrl",
-          lessonId,
-          sourceUrl: cloudImportUrl.trim(),
-        });
-
-        setCloudImportUrl("");
+        setVideoUrl("");
       },
-      "Импорт видео запущен.",
-    );
-  }
-
-  async function handleRutubeAttach() {
-    await runAction(
-      "rutube-embed",
-      async () => {
-        if (!rutubeUrl.trim()) {
-          throw new Error("Укажи ссылку на видео RUTUBE.");
-        }
-
-        await postVideoCommand({
-          action: "attachEmbed",
-          lessonId,
-          sourceType: "RUTUBE_EMBED",
-          videoUrl: rutubeUrl.trim(),
-        });
-
-        setRutubeUrl("");
-      },
-      "RUTUBE-видео привязано к уроку.",
-    );
-  }
-
-  async function handleExternalAttach() {
-    await runAction(
-      "external-embed",
-      async () => {
-        if (!externalUrl.trim()) {
-          throw new Error("Укажи embed URL.");
-        }
-
-        await postVideoCommand({
-          action: "attachEmbed",
-          lessonId,
-          sourceType: "EXTERNAL_EMBED",
-          videoUrl: externalUrl.trim(),
-        });
-
-        setExternalUrl("");
-      },
-      "Внешнее embed-видео привязано к уроку.",
+      strategy.successMessage,
     );
   }
 
@@ -259,14 +288,15 @@ export function AdminLessonVideoManager({
       <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
-            Video Manager
+            Видео урока
           </p>
           <h3 className="mt-2 text-xl font-semibold text-[var(--foreground)]">
-            Видео урока
+            Ссылка или файл
           </h3>
-          <p className="mt-2 text-sm leading-7 text-[var(--muted)]">
-            Поддержаны три сценария: прямая загрузка файла, импорт по ссылке и
-            привязка RUTUBE/embed-плеера.
+          <p className="mt-2 max-w-2xl text-sm leading-7 text-[var(--muted)]">
+            Вставь ссылку на private/public RUTUBE, embed-плеер или прямой
+            видеофайл. Если видео лежит на компьютере, просто нажми на плюс и
+            загрузи файл.
           </p>
         </div>
 
@@ -276,7 +306,7 @@ export function AdminLessonVideoManager({
               {statusLabelMap[initialAsset.status] ?? initialAsset.status}
             </Badge>
           ) : hasVideo ? (
-            <Badge variant="neutral">Legacy video</Badge>
+            <Badge variant="neutral">Видео из старой схемы</Badge>
           ) : (
             <Badge variant="neutral">Без видео</Badge>
           )}
@@ -290,7 +320,9 @@ export function AdminLessonVideoManager({
               <p>
                 Источник:{" "}
                 <span className="font-medium text-[var(--foreground)]">
-                  {initialAsset?.sourceType ?? fallbackVideoSourceType ?? "Не указан"}
+                  {initialAsset?.sourceType ??
+                    fallbackVideoSourceType ??
+                    "Не указан"}
                 </span>
               </p>
               {initialAsset?.provider ? (
@@ -371,95 +403,97 @@ export function AdminLessonVideoManager({
       ) : null}
 
       <div className="grid gap-4 xl:grid-cols-2">
-        <div className="space-y-3 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4">
-          <Label htmlFor={`managed-video-${lessonId}`}>1. Загрузить файл</Label>
-          <Input
+        <div className="space-y-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4">
+          <div className="flex items-start gap-4">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#eef2ff] text-[#2840db]">
+              <Link2 className="h-5 w-5" />
+            </div>
+            <div className="space-y-1">
+              <p className="font-semibold text-[var(--foreground)]">
+                Вставить ссылку на видео
+              </p>
+              <p className="text-sm leading-6 text-[var(--muted)]">
+                Поддерживаются private RUTUBE, прямые ссылки на видеофайл и
+                embed-плееры. Режим подключится автоматически.
+              </p>
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            <Label htmlFor={`video-link-${lessonId}`}>Ссылка на видео</Label>
+            <Input
+              id={`video-link-${lessonId}`}
+              value={videoUrl}
+              onChange={(event) => setVideoUrl(event.target.value)}
+              placeholder="https://rutube.ru/video/private/... или https://storage..."
+            />
+          </div>
+
+          <Button
+            type="button"
+            onClick={handleVideoLink}
+            disabled={pendingAction !== null}
+          >
+            {pendingAction === "video-link"
+              ? "Подключаем..."
+              : "Подключить видео"}
+          </Button>
+        </div>
+
+        <div className="space-y-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4">
+          <div className="flex items-start gap-4">
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#eef2ff] text-[#2840db] transition hover:bg-[#dfe7ff]"
+            >
+              <Plus className="h-5 w-5" />
+            </button>
+            <div className="space-y-1">
+              <p className="font-semibold text-[var(--foreground)]">
+                Загрузить файл с компьютера
+              </p>
+              <p className="text-sm leading-6 text-[var(--muted)]">
+                Если видео лежит локально, выбери файл и отправь его в урок.
+              </p>
+            </div>
+          </div>
+
+          <input
+            ref={fileInputRef}
             id={`managed-video-${lessonId}`}
             type="file"
             accept="video/*"
+            className="hidden"
             onChange={(event) => {
               const file = event.target.files?.[0] ?? null;
               setManagedFile(file);
             }}
           />
-          <p className="text-sm leading-6 text-[var(--muted)]">
-            Для `Cloudflare Stream` файл уйдет напрямую в provider. Для `mock`
-            режима этот шаг симулируется, чтобы тестировать архитектуру локально.
-          </p>
+
+          <div className="rounded-2xl border border-dashed border-[#cfd7f3] bg-white px-4 py-3 text-sm text-[var(--muted)]">
+            {managedFile ? (
+              <span>
+                Выбран файл:{" "}
+                <span className="font-medium text-[var(--foreground)]">
+                  {managedFile.name}
+                </span>
+              </span>
+            ) : (
+              "Файл пока не выбран."
+            )}
+          </div>
+
           <Button
             type="button"
             onClick={handleManagedUpload}
             disabled={pendingAction !== null}
+            className="inline-flex items-center gap-2"
           >
+            <Upload className="h-4 w-4" />
             {pendingAction === "managed-upload"
               ? "Загружаем..."
-              : "Запустить managed upload"}
-          </Button>
-        </div>
-
-        <div className="space-y-3 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4">
-          <Label htmlFor={`cloud-import-${lessonId}`}>2. Импорт по ссылке</Label>
-          <Input
-            id={`cloud-import-${lessonId}`}
-            value={cloudImportUrl}
-            onChange={(event) => setCloudImportUrl(event.target.value)}
-            placeholder="https://storage.example.com/video.mp4"
-          />
-          <p className="text-sm leading-6 text-[var(--muted)]">
-            Подходит для прямых ссылок на видеофайл. Для публичных файлов из
-            облака лучше использовать ссылку, по которой провайдер сможет скачать
-            сам файл.
-          </p>
-          <Button
-            type="button"
-            onClick={handleCloudImport}
-            disabled={pendingAction !== null}
-          >
-            {pendingAction === "cloud-import" ? "Импортируем..." : "Импортировать"}
-          </Button>
-        </div>
-
-        <div className="space-y-3 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4">
-          <Label htmlFor={`rutube-embed-${lessonId}`}>3. Привязать RUTUBE</Label>
-          <Input
-            id={`rutube-embed-${lessonId}`}
-            value={rutubeUrl}
-            onChange={(event) => setRutubeUrl(event.target.value)}
-            placeholder="https://rutube.ru/video/..."
-          />
-          <p className="text-sm leading-6 text-[var(--muted)]">
-            Можно вставить обычную ссылку RUTUBE, компонент сам переведет ее в
-            embed-формат.
-          </p>
-          <Button
-            type="button"
-            onClick={handleRutubeAttach}
-            disabled={pendingAction !== null}
-          >
-            {pendingAction === "rutube-embed" ? "Сохраняем..." : "Подключить RUTUBE"}
-          </Button>
-        </div>
-
-        <div className="space-y-3 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4">
-          <Label htmlFor={`external-embed-${lessonId}`}>4. Внешний embed</Label>
-          <Input
-            id={`external-embed-${lessonId}`}
-            value={externalUrl}
-            onChange={(event) => setExternalUrl(event.target.value)}
-            placeholder="https://player.example.com/embed/..."
-          />
-          <p className="text-sm leading-6 text-[var(--muted)]">
-            Оставлен как запасной канал для сторонних плееров и кастомных
-            источников.
-          </p>
-          <Button
-            type="button"
-            onClick={handleExternalAttach}
-            disabled={pendingAction !== null}
-          >
-            {pendingAction === "external-embed"
-              ? "Сохраняем..."
-              : "Подключить embed"}
+              : "Загрузить видео"}
           </Button>
         </div>
       </div>

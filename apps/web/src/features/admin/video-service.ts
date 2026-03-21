@@ -14,25 +14,46 @@ import { getVideoProvider } from "@/lib/video/provider";
 type EmbedSourceType = "RUTUBE_EMBED" | "EXTERNAL_EMBED";
 
 function normalizeRutubeEmbedUrl(url: string) {
+  return normalizeRutubePlaybackUrl(url);
+}
+
+function normalizeRutubePlaybackUrl(url: string) {
   const value = url.trim();
+  let parsedUrl: URL;
 
-  const embedMatch = value.match(
-    /^https?:\/\/rutube\.ru\/play\/embed\/([a-zA-Z0-9-_/]+)\/?$/i,
-  );
-
-  if (embedMatch) {
-    return value;
+  try {
+    parsedUrl = new URL(value);
+  } catch {
+    throw new Error("Укажи корректную ссылку на видео RUTUBE.");
   }
 
-  const videoMatch = value.match(
-    /^https?:\/\/rutube\.ru\/video\/([a-zA-Z0-9-]+)\/?$/i,
-  );
+  const hostname = parsedUrl.hostname.toLowerCase();
 
-  if (videoMatch) {
-    return `https://rutube.ru/play/embed/${videoMatch[1]}`;
+  if (hostname !== "rutube.ru" && hostname !== "www.rutube.ru") {
+    throw new Error("Укажи корректную ссылку на видео RUTUBE.");
   }
 
-  throw new Error("Укажи корректную ссылку на видео RUTUBE.");
+  const pathname = parsedUrl.pathname.replace(/\/+$/, "");
+  const embedMatch = pathname.match(/^\/play\/embed\/([a-zA-Z0-9_-]+)$/i);
+  const privateVideoMatch = pathname.match(
+    /^\/video\/private\/([a-zA-Z0-9_-]+)$/i,
+  );
+  const publicVideoMatch = pathname.match(/^\/video\/([a-zA-Z0-9_-]+)$/i);
+
+  const videoId =
+    embedMatch?.[1] ?? privateVideoMatch?.[1] ?? publicVideoMatch?.[1];
+
+  if (!videoId) {
+    throw new Error("Укажи корректную ссылку на видео RUTUBE.");
+  }
+
+  const embedUrl = new URL(`https://rutube.ru/play/embed/${videoId}`);
+
+  parsedUrl.searchParams.forEach((paramValue, paramKey) => {
+    embedUrl.searchParams.set(paramKey, paramValue);
+  });
+
+  return embedUrl.toString();
 }
 
 function normalizeEmbedUrl(sourceType: EmbedSourceType, videoUrl: string) {

@@ -71,21 +71,24 @@ const featuredCourses = [
   {
     title: "Старт в профессии риэлтора",
     meta: "12 уроков • практика с клиентом",
-    price: "4 900 ₽",
+    priceAmount: "4 900",
+    priceCurrency: "₽ за курс",
     image:
       "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1400&q=80",
   },
   {
     title: "Сильные продажи объектов",
     meta: "9 уроков • скрипты и переговоры",
-    price: "7 500 ₽",
+    priceAmount: "7 500",
+    priceCurrency: "₽ за курс",
     image:
       "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1400&q=80",
   },
   {
     title: "Система агентства",
     meta: "15 уроков • управление и команда",
-    price: "12 000 ₽",
+    priceAmount: "12 000",
+    priceCurrency: "₽ за курс",
     image:
       "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=1400&q=80",
   },
@@ -263,82 +266,107 @@ export default async function Home() {
 
               <div className="relative min-h-[460px] lg:min-h-[560px]">
                 <div className="absolute inset-0 rounded-[38px] bg-[linear-gradient(145deg,_#2037d2_0%,_#5a71ff_42%,_#ff8f6c_100%)] shadow-[0_45px_100px_rgba(64,76,173,0.34)]" />
-                <div className="absolute inset-4 rounded-[32px] border border-white/20 bg-white/10 backdrop-blur-md" />
+                <div className="absolute inset-4 rounded-[32px] border border-white/20 bg-[linear-gradient(180deg,_rgba(255,255,255,0.2)_0%,_rgba(255,255,255,0.08)_100%)] backdrop-blur-md" />
 
-                <div className="absolute left-1/2 top-1/2 h-[350px] w-[260px] -translate-x-1/2 -translate-y-[53%] overflow-hidden rounded-[32px] border border-white/30 shadow-[0_30px_80px_rgba(18,24,72,0.38)] md:h-[420px] md:w-[320px]">
-                  <Image
-                    src="https://images.unsplash.com/photo-1573497620053-ea5300f94f21?auto=format&fit=crop&w=1200&q=80"
-                    alt="Автор онлайн-курса"
-                    fill
-                    className="object-cover"
-                  />
-                  <div className="absolute inset-0 bg-[linear-gradient(180deg,_rgba(28,36,66,0.06)_0%,_rgba(28,36,66,0.76)_100%)]" />
-                  <div className="absolute inset-x-4 bottom-4 rounded-[26px] border border-white/15 bg-white/14 p-4 text-white backdrop-blur-md md:inset-x-5 md:bottom-5 md:p-5">
-                    <p className="text-xs uppercase tracking-[0.28em] text-white/65">
-                      Сценарии платформы
-                    </p>
-                    <p className="mt-3 font-[family:var(--font-landing-display)] text-3xl font-semibold leading-none md:text-4xl">
-                      От лендинга курса до вебинарной комнаты.
-                    </p>
-                    <div className="mt-5 grid grid-cols-2 gap-3">
-                      <div className="rounded-2xl bg-white/12 p-3">
-                        <p className="text-xs uppercase tracking-[0.2em] text-white/65">
-                          студенты
-                        </p>
-                        <p className="mt-2 text-base font-semibold md:text-lg">
-                          Личный кабинет
-                        </p>
-                      </div>
-                      <div className="rounded-2xl bg-white/12 p-3">
-                        <p className="text-xs uppercase tracking-[0.2em] text-white/65">
-                          авторы
-                        </p>
-                        <p className="mt-2 text-base font-semibold md:text-lg">
-                          Загрузка и продажи
-                        </p>
+                <div className="relative grid min-h-[460px] gap-4 p-5 md:p-7 lg:min-h-[560px]">
+                  <div className="flex flex-wrap items-start justify-between gap-4">
+                    <div className="max-w-[260px] rounded-[24px] bg-white px-4 py-4 shadow-xl">
+                      <div className="flex items-center gap-3">
+                        <div className="rounded-2xl bg-[#eef2ff] p-3">
+                          <BookOpenText className="h-5 w-5 text-[#2940dd]" />
+                        </div>
+                        <div>
+                          <p className="text-sm text-[#697088]">Курсы</p>
+                          <p className="font-semibold">Программы и траектории</p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>
 
-                <div className="absolute left-4 top-6 rounded-[24px] bg-white px-4 py-4 shadow-xl md:left-6 md:top-8">
-                  <div className="flex items-center gap-3">
-                    <div className="rounded-2xl bg-[#eef2ff] p-3">
-                      <BookOpenText className="h-5 w-5 text-[#2940dd]" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-[#697088]">Курсы</p>
-                      <p className="font-semibold">Программы и траектории</p>
+                    <div className="inline-flex items-center gap-2 rounded-full bg-[#1c2442] px-4 py-3 text-sm font-medium text-white shadow-2xl">
+                      <PlayCircle className="h-4 w-4" />
+                      Живой эфир открыт
                     </div>
                   </div>
-                </div>
 
-                <div className="absolute right-4 top-16 rounded-[24px] bg-[#fff7f1] px-4 py-4 shadow-xl md:right-5 md:top-20">
-                  <div className="flex items-center gap-3">
-                    <div className="rounded-2xl bg-white p-3">
-                      <WalletCards className="h-5 w-5 text-[#ff825f]" />
+                  <div className="grid flex-1 items-end gap-4 md:grid-cols-[0.88fr_1.12fr]">
+                    <div className="max-w-[280px] rounded-[30px] border border-white/18 bg-white/12 p-5 text-white backdrop-blur-md">
+                      <p className="text-xs uppercase tracking-[0.28em] text-white/62">
+                        Сценарии платформы
+                      </p>
+                      <p className="mt-4 font-[family:var(--font-landing-display)] text-3xl font-semibold leading-[1.02] md:text-[2.4rem]">
+                        Курс, продажа и вебинар внутри одной системы.
+                      </p>
+                      <div className="mt-5 grid gap-3">
+                        <div className="rounded-[22px] bg-white/12 px-4 py-3">
+                          <p className="text-xs uppercase tracking-[0.2em] text-white/60">
+                            Студентам
+                          </p>
+                          <p className="mt-2 text-base font-semibold">
+                            Личный кабинет и прогресс
+                          </p>
+                        </div>
+                        <div className="rounded-[22px] bg-white/12 px-4 py-3">
+                          <p className="text-xs uppercase tracking-[0.2em] text-white/60">
+                            Авторам
+                          </p>
+                          <p className="mt-2 text-base font-semibold">
+                            Контент, каталог и продажи
+                          </p>
+                        </div>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-sm text-[#7a6d65]">Продажи</p>
-                      <p className="font-semibold">checkout и доступ</p>
+
+                    <div className="relative mx-auto flex w-full max-w-[360px] items-end justify-center lg:mr-0">
+                      <div className="relative h-[380px] w-[280px] overflow-hidden rounded-[34px] border border-white/25 shadow-[0_32px_80px_rgba(18,24,72,0.38)] md:h-[450px] md:w-[340px]">
+                        <Image
+                          src="https://images.unsplash.com/photo-1573497620053-ea5300f94f21?auto=format&fit=crop&w=1200&q=80"
+                          alt="Автор онлайн-курса"
+                          fill
+                          className="object-cover"
+                        />
+                        <div className="absolute inset-0 bg-[linear-gradient(180deg,_rgba(18,24,72,0.02)_0%,_rgba(18,24,72,0.82)_100%)]" />
+                        <div className="absolute inset-x-5 bottom-5 rounded-[28px] border border-white/12 bg-[#1b2143]/72 p-5 text-white backdrop-blur-md">
+                          <p className="text-xs uppercase tracking-[0.28em] text-white/55">
+                            Продуктовый маршрут
+                          </p>
+                          <p className="mt-3 font-[family:var(--font-landing-display)] text-[2rem] font-semibold leading-[0.98]">
+                            От курса к живому запуску.
+                          </p>
+                          <p className="mt-3 text-sm leading-6 text-white/72">
+                            Один и тот же контур держит материалы, оплату, доступ и
+                            следующий шаг для ученика.
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="absolute bottom-8 left-4 overflow-hidden rounded-[28px] border border-white/20 shadow-2xl md:bottom-10 md:left-6">
-                  <Image
-                    src="https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&w=1200&q=80"
-                    alt="Рабочее место для эфира"
-                    width={250}
-                    height={180}
-                    className="h-[150px] w-[190px] object-cover md:h-[170px] md:w-[250px]"
-                  />
-                </div>
+                  <div className="grid gap-4 md:grid-cols-[1.05fr_0.95fr]">
+                    <div className="overflow-hidden rounded-[28px] border border-white/18 bg-white/12 shadow-2xl">
+                      <Image
+                        src="https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&w=1200&q=80"
+                        alt="Рабочее место для эфира"
+                        width={560}
+                        height={240}
+                        className="h-[170px] w-full object-cover"
+                      />
+                    </div>
 
-                <div className="absolute bottom-5 right-4 rounded-[22px] bg-[#1c2442] px-4 py-3 text-white shadow-2xl md:bottom-7 md:right-7">
-                  <div className="flex items-center gap-2 text-sm font-medium">
-                    <PlayCircle className="h-4 w-4" />
-                    Живой эфир открыт
+                    <div className="rounded-[28px] bg-[#fff7f1] px-5 py-5 text-[#1c2442] shadow-xl">
+                      <div className="flex items-center gap-3">
+                        <div className="rounded-2xl bg-white p-3">
+                          <WalletCards className="h-5 w-5 text-[#ff825f]" />
+                        </div>
+                        <div>
+                          <p className="text-sm text-[#7a6d65]">Продажи</p>
+                          <p className="font-semibold">checkout и выдача доступа</p>
+                        </div>
+                      </div>
+                      <p className="mt-4 text-sm leading-6 text-[#6e625b]">
+                        Когда курс красиво упакован, переход от интереса к оплате
+                        считывается мгновенно и не ломает доверие.
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -459,13 +487,23 @@ export default async function Home() {
                       </span>
                     </div>
                   </div>
-                  <div className="space-y-4 p-5">
+                  <div className="space-y-5 p-6">
                     <div>
                       <h3 className="text-xl font-semibold">{course.title}</h3>
                       <p className="mt-2 text-sm leading-6 text-[#596177]">{course.meta}</p>
                     </div>
-                    <div className="flex items-center justify-between gap-3">
-                      <p className="text-3xl font-semibold">{course.price}</p>
+                    <div className="space-y-3 border-t border-black/5 pt-4">
+                      <div>
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.26em] text-[#7b8296]">
+                          Стоимость доступа
+                        </p>
+                        <p className="mt-3 text-4xl font-semibold leading-none tracking-tight">
+                          {course.priceAmount}
+                        </p>
+                        <p className="mt-1 text-sm font-semibold text-[#5d657a]">
+                          {course.priceCurrency}
+                        </p>
+                      </div>
                       <Link
                         href="/catalog"
                         className="inline-flex items-center gap-2 text-sm font-semibold text-[#1c2442]"
@@ -529,39 +567,63 @@ export default async function Home() {
                 ))}
               </div>
 
-              <div className="relative min-h-[340px] overflow-hidden rounded-[30px] border border-white/10 bg-white/8 p-5 backdrop-blur">
-                <div className="absolute right-5 top-5 overflow-hidden rounded-[24px] shadow-2xl">
-                  <Image
-                    src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1200&q=80"
-                    alt="Автор курса"
-                    width={220}
-                    height={260}
-                    className="h-[180px] w-[150px] object-cover md:h-[220px] md:w-[190px]"
-                  />
-                </div>
-                <div className="absolute left-5 top-5 rounded-[24px] bg-white px-4 py-4 text-[#1c2442] shadow-xl">
+              <div className="grid min-h-[340px] gap-4 overflow-hidden rounded-[30px] border border-white/10 bg-white/8 p-5 backdrop-blur">
+                <div className="rounded-[24px] bg-white px-5 py-4 text-[#1c2442] shadow-xl">
                   <p className="text-sm text-[#697088]">Кабинет автора</p>
-                  <p className="font-semibold">Редактор программы</p>
+                  <p className="font-semibold">Редактор программы и продаж</p>
                 </div>
-                <div className="absolute bottom-5 left-5 right-5 space-y-3">
-                  <div className="rounded-[24px] bg-white p-4 text-[#1c2442] shadow-lg">
-                    <p className="font-semibold">Курс: Система агентства</p>
-                    <p className="mt-2 text-sm leading-6 text-[#697088]">
-                      Модули, уроки, цена, доступы и команда внутри одного сценария.
-                    </p>
-                  </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="rounded-[22px] bg-white/10 p-4 text-white">
-                      <p className="text-xs uppercase tracking-[0.2em] text-white/60">
-                        продажа
+
+                <div className="grid flex-1 gap-4 lg:grid-cols-[1.02fr_0.98fr]">
+                  <div className="space-y-4">
+                    <div className="rounded-[24px] bg-white p-5 text-[#1c2442] shadow-lg">
+                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#7b8296]">
+                        Курс
                       </p>
-                      <p className="mt-2 text-xl font-semibold">Каталог + checkout</p>
+                      <p className="mt-3 text-2xl font-semibold">
+                        Система агентства
+                      </p>
+                      <p className="mt-3 text-sm leading-6 text-[#697088]">
+                        Модули, уроки, цена, доступы и команда живут в одном
+                        сценарии, а не расходятся по разным кабинетам.
+                      </p>
                     </div>
-                    <div className="rounded-[22px] bg-white/10 p-4 text-white">
-                      <p className="text-xs uppercase tracking-[0.2em] text-white/60">
-                        команда
+
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      <div className="rounded-[22px] bg-white/10 p-4 text-white">
+                        <p className="text-xs uppercase tracking-[0.2em] text-white/60">
+                          Продажа
+                        </p>
+                        <p className="mt-2 text-xl font-semibold">
+                          Каталог + checkout
+                        </p>
+                      </div>
+                      <div className="rounded-[22px] bg-white/10 p-4 text-white">
+                        <p className="text-xs uppercase tracking-[0.2em] text-white/60">
+                          Команда
+                        </p>
+                        <p className="mt-2 text-xl font-semibold">
+                          Авторы и кураторы
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="relative min-h-[300px] overflow-hidden rounded-[28px] border border-white/10 shadow-2xl">
+                    <Image
+                      src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1200&q=80"
+                      alt="Автор курса"
+                      fill
+                      className="object-cover"
+                    />
+                    <div className="absolute inset-0 bg-[linear-gradient(180deg,_rgba(19,27,60,0.08)_0%,_rgba(19,27,60,0.72)_100%)]" />
+                    <div className="absolute inset-x-4 bottom-4 rounded-[24px] border border-white/12 bg-[#1c2442]/70 p-4 text-white backdrop-blur-md">
+                      <p className="text-xs uppercase tracking-[0.22em] text-white/55">
+                        Роль автора
                       </p>
-                      <p className="mt-2 text-xl font-semibold">Авторы и кураторы</p>
+                      <p className="mt-2 text-lg font-semibold">
+                        Собрать программу, оформить продукт и передать доступы без
+                        лишнего хаоса.
+                      </p>
                     </div>
                   </div>
                 </div>
