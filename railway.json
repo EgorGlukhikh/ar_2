@@ -1,0 +1,13 @@
+{
+  "$schema": "https://railway.com/railway.schema.json",
+  "build": {
+    "builder": "RAILPACK",
+    "buildCommand": "npm run railway:build"
+  },
+  "deploy": {
+    "preDeployCommand": "npm run railway:db:prepare",
+    "startCommand": "npm run railway:start",
+    "healthcheckPath": "/api/health",
+    "healthcheckTimeout": 300
+  }
+}
