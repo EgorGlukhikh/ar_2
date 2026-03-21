@@ -1,183 +1,183 @@
-# Academy Platform: current implementation roadmap
+# Академия риэлторов: текущий план реализации
 
-## 1. Completed foundation
+## 1. Что уже собрано
 
-### 1.1 Core architecture
+### 1.1 Базовая архитектура
 
-- `Next.js 15` app in a workspace setup
-- `Prisma` as the shared data model
-- modular package structure for future scaling
-- base UI system aligned with the current portal style
+- `Next.js 15` приложение в формате workspace
+- `Prisma` как единая модель данных
+- модульная структура пакетов под дальнейшее масштабирование
+- базовая UI-система в стилистике текущего портала
 
-### 1.2 Infrastructure decisions
+### 1.2 Инфраструктурные решения
 
-- `Railway` is the target deployment platform
-- local development stays on Docker Compose
-- production infrastructure should be assembled with Railway-compatible runtime and env conventions
+- целевая платформа деплоя: `Railway`
+- локальная разработка остается на `Docker Compose`
+- production-инфраструктура собирается с учетом Railway runtime и env conventions
 
-### 1.3 Authentication and roles
+### 1.3 Авторизация и роли
 
-- sign-in via `email + password`
-- `ADMIN` role
-- `STUDENT` role
-- dev admin for testing: `test@mail.ru / 12345`
-- role-based redirect after sign-in
+- вход по `email + password`
+- роль `ADMIN`
+- роль `STUDENT`
+- дев-админ для тестирования: `test@mail.ru / 12345`
+- ролевой редирект после входа
 
-### 1.4 Admin area
+### 1.4 Контур администратора
 
-- courses list
-- create and edit course
-- create and edit modules
-- create and edit lessons
-- manage lesson type, text, preview access, and delayed release
-- manage students
-- grant course access
-- revoke access
-- reset progress
+- список курсов
+- создание и редактирование курса
+- создание и редактирование модулей
+- создание и редактирование уроков
+- управление типом урока, текстом, preview-доступом и отложенным открытием
+- управление студентами
+- выдача доступа на курс
+- отзыв доступа
+- сброс прогресса
 
-### 1.5 Student area
+### 1.5 Контур ученика
 
-- dashboard with available courses
-- course structure view
-- lesson opening flow
-- lesson completion tracking
-- delayed lesson access rules
+- кабинет с доступными курсами
+- просмотр структуры курса
+- открытие уроков
+- учет прохождения уроков
+- правила отложенного открытия уроков
 
-### 1.6 Video
+### 1.6 Видео
 
-- dedicated `VideoAsset` entity
-- `Rutube embed` support
-- external `embed` support
-- foundation for a managed video provider
-- foundation for URL-based video import
-- student player that reflects video processing state
+- отдельная сущность `VideoAsset`
+- поддержка `Rutube embed`
+- поддержка внешнего `embed`
+- foundation под managed video provider
+- foundation под импорт видео по URL
+- player в контуре ученика с учетом статуса обработки видео
 
-### 1.7 Payments
+### 1.7 Оплаты
 
-- demo course catalog
-- demo checkout
-- demo successful payment
-- demo failed payment
-- automatic enrollment after successful payment
-- abstraction layer for future real payment providers
+- демо-каталог курсов
+- демо-checkout
+- демо-успешная оплата
+- демо-отказ
+- автоматическая выдача доступа после успешной оплаты
+- abstraction layer под будущие реальные payment providers
 
-## 2. Next priorities
+## 2. Что дальше по приоритету
 
-### Phase 1. Homework and curator review
+### Этап 1. Домашние задания и проверка куратором
 
-Goal: complete the core educational loop that the platform still lacks.
+Цель: закрыть базовый образовательный цикл, которого платформе сейчас не хватает.
 
-Scope:
+Что входит:
 
-- homework as an optional lesson-level feature
-- multiple answer types:
-  - text
-  - link
-  - file
-- review statuses:
+- домашнее задание как опция на уровне урока
+- несколько форматов ответа:
+  - текст
+  - ссылка
+  - файл
+- статусы проверки:
   - `not_submitted`
   - `submitted`
   - `in_review`
   - `needs_revision`
   - `approved`
-- curator/admin review workspace
-- review comments
-- resubmission after revision
+- кабинет куратора/админа для проверки
+- комментарии к проверке
+- повторная отправка после доработки
 
-### Phase 2. Author and curator roles
+### Этап 2. Роли авторов и кураторов
 
-Goal: prepare the platform for invited experts, not just a single admin.
+Цель: подготовить платформу к работе приглашенных экспертов, а не только одного админа.
 
-Scope:
+Что входит:
 
-- `AUTHOR` role
-- `CURATOR` role
+- роль `AUTHOR`
+- роль `CURATOR`
 - email invite flow
-- clearer permission boundaries:
-  - author manages own courses and lessons
-  - curator sees assigned groups and homework
-  - admin keeps global control
+- более явное разграничение прав:
+  - автор управляет своими курсами и уроками
+  - куратор видит назначенные группы и домашние задания
+  - админ сохраняет глобальный контроль
 
-### Phase 3. Production-grade video
+### Этап 3. Видео production-уровня
 
-Goal: move the video layer from demo-foundation to commercial readiness.
+Цель: перевести видео-контур из foundation-состояния в коммерчески рабочий.
 
-Scope:
+Что входит:
 
-- provider webhooks
-- processing status sync
+- webhooks от provider
+- синхронизация статусов обработки
 - signed playback
-- origin restrictions
-- improved player UX
-- normalized storage pipeline for author-uploaded media
+- ограничения по origin
+- улучшенный player UX
+- нормализованный storage pipeline для видео авторов
 
-### Phase 4. Real payment integrations
+### Этап 4. Реальные платежные интеграции
 
-Goal: replace demo checkout with real payment flows.
+Цель: заменить demo checkout на реальные сценарии оплаты.
 
-Scope:
+Что входит:
 
-- first real provider on top of the existing `PaymentProvider`
-- callback/webhook handling for payment statuses
-- enrollment only after confirmed payment
-- manual payment-link workflow through chat or direct messages
-- follow-up adapters for `Robokassa`, `T-Bank`, and `Bank 131`
+- первый реальный provider поверх существующего `PaymentProvider`
+- callback/webhook обработка статусов оплаты
+- выдача доступа только после подтвержденной оплаты
+- ручной сценарий отправки ссылки на оплату через чат или личные сообщения
+- следующие адаптеры: `Robokassa`, `T-Bank`, `Bank 131`
 
-### Phase 5. Operational platform layer
+### Этап 5. Операционный контур платформы
 
-Goal: make the system easier for the team to operate day to day.
+Цель: сделать систему удобной для ежедневной работы команды.
 
-Scope:
+Что входит:
 
-- student activity feed
-- admin notes on users
-- filters by courses, payments, and access
-- action history for course and student records
-- dashboard with key metrics
+- лента активности студентов
+- заметки администратора по пользователям
+- фильтры по курсам, оплатам и доступам
+- история действий по курсу и студенту
+- dashboard с ключевыми метриками
 
-### Phase 6. Railway deployment and delivery setup
+### Этап 6. Деплой и delivery через Railway
 
-Goal: move the project from local-only development to controlled hosted delivery.
+Цель: перевести проект из локальной разработки в контролируемый hosted-контур.
 
-Scope:
+Что входит:
 
-- Railway project setup
-- web service deployment config
-- PostgreSQL provisioning in Railway
-- environment variable map for local and Railway
-- production database migration flow
-- domain attachment and release checklist
+- настройка Railway project
+- конфигурация web service deployment
+- подъем PostgreSQL в Railway
+- карта env-переменных для local и Railway
+- production flow для миграций базы
+- привязка домена и release checklist
 
-## 3. Immediate build order
+## 3. Ближайший порядок сборки
 
-### Next sprint
+### Следующий спринт
 
-1. add Prisma models for homework and reviews
-2. add server actions and access rules for student, curator, and admin
-3. build homework submission UI in the lesson player
-4. build review UI in the admin/curator area
-5. add review comments and resubmission flow
+1. собрать Prisma-модели для домашних заданий и проверок
+2. собрать server actions и права доступа для ученика, куратора и админа
+3. сделать UI сдачи задания в lesson player
+4. сделать UI проверки задания в admin/curator area
+5. заложить комментарии и повторную отправку
 
-### After that
+### После этого
 
-1. add `AUTHOR` and `CURATOR` roles
-2. build email invite flow
-3. extract access control into a more explicit permission model
-4. prepare Railway deployment configuration
+1. добавить роли `AUTHOR` и `CURATOR`
+2. сделать email invite flow
+3. вынести доступы в более явную permission-модель
+4. завершить Railway deployment configuration
 
-## 4. GitHub tracking rule
+## 4. Правило ведения работ в GitHub
 
-- the repository uses one primary `issue` as the chronological work log
-- every major task or milestone is added there as a new comment
-- code is shipped as separate commits to the repository
-- this roadmap is updated whenever priorities change
+- в репозитории ведется один основной `issue` для хронологии проекта
+- каждая крупная задача или этап фиксируется там новым комментарием
+- код уходит отдельными коммитами в репозиторий
+- этот roadmap обновляется по мере изменения приоритетов
 
-## 5. What is already demo-ready
+## 5. Что уже можно показывать как демо
 
-- email/password sign-in
-- admin course management
-- student access management
-- student dashboard
-- lesson progress tracking
-- video lessons through embed and video asset foundation
-- demo payment and automatic course access after successful payment
+- вход по email/password
+- админка курсов
+- управление доступами студентов
+- кабинет ученика
+- учет прохождения уроков
+- видео-уроки через embed и video asset foundation
+- демо-оплата и автоматическая выдача доступа после успешной оплаты
