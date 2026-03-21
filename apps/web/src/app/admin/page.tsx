@@ -5,6 +5,7 @@ import { USER_ROLES } from "@academy/shared";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { courseStatusLabelMap, courseStatusVariantMap } from "@/lib/labels";
 
 export default async function AdminPage() {
   const [courseCount, studentCount, enrollmentCount, progressCount, recentCourses] =
@@ -62,7 +63,7 @@ export default async function AdminPage() {
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="space-y-3">
             <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[var(--muted)]">
-              Admin Overview
+              Обзор платформы
             </p>
             <h1 className="text-4xl font-semibold tracking-tight text-[var(--foreground)]">
               Панель администратора
@@ -140,7 +141,9 @@ export default async function AdminPage() {
                         /{course.slug}
                       </p>
                     </div>
-                    <Badge>{course.status}</Badge>
+                    <Badge variant={courseStatusVariantMap[course.status]}>
+                      {courseStatusLabelMap[course.status]}
+                    </Badge>
                   </div>
                   <div className="flex flex-wrap gap-4 text-sm text-[var(--muted)]">
                     <span>Модулей: {course._count.modules}</span>
@@ -152,19 +155,19 @@ export default async function AdminPage() {
           </div>
         </article>
 
-        <article className="rounded-[24px] bg-[var(--primary)] p-6 text-[var(--primary-foreground)] shadow-sm">
-          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-white/70">
-            Что дальше
+        <article className="rounded-[24px] border border-[var(--border)] bg-white p-6 shadow-sm">
+          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[var(--muted)]">
+            Контур развития
           </p>
-          <h2 className="mt-2 text-2xl font-semibold tracking-tight">
-            Следующий слой после CRUD контента
+          <h2 className="mt-2 text-2xl font-semibold tracking-tight text-[var(--foreground)]">
+            Что еще усиливает продукт
           </h2>
-          <ul className="mt-6 space-y-4 text-sm leading-7 text-white/90">
-            <li>Загрузка и привязка видеоуроков.</li>
-            <li>Приглашение авторов, кураторов и менеджеров.</li>
-            <li>Просмотр и ручной сброс прогресса студентов.</li>
-            <li>Домашние задания и маршруты проверки.</li>
-            <li>Продукты, цены и выдача доступов после оплаты.</li>
+          <ul className="mt-6 space-y-4 text-sm leading-7 text-[var(--muted)]">
+            <li>Видео, проверка воспроизведения и импорт материалов.</li>
+            <li>Роли авторов, кураторов и менеджеров.</li>
+            <li>Домашние задания и сценарии проверки.</li>
+            <li>Реальные платежи и webhook-статусы.</li>
+            <li>Операционный контроль прогресса и продаж.</li>
           </ul>
         </article>
       </section>

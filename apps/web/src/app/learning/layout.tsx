@@ -17,36 +17,32 @@ export default async function LearningLayout({
   const isElevated = isElevatedUserRole(user.role);
 
   return (
-    <main className="min-h-screen bg-[linear-gradient(180deg,_#f7f9ff_0%,_#f1f5ff_100%)] px-6 py-8">
-      <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[260px_1fr]">
-        <aside className="h-fit rounded-[28px] border border-[var(--border)] bg-white p-5 shadow-sm">
-          <div className="space-y-5">
-            <div className="rounded-2xl bg-[var(--primary-soft)] p-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--muted)]">
-                Академия риэлторов
-              </p>
-              <h2 className="mt-3 text-2xl font-semibold tracking-tight text-[var(--foreground)]">
-                Учебный кабинет
-              </h2>
-              <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
-                {user.email}
-              </p>
+    <main className="min-h-screen bg-[linear-gradient(180deg,_#f7f9ff_0%,_#f1f5ff_100%)] px-4 py-4 md:px-6 md:py-6">
+      <div className="mx-auto max-w-[1400px] space-y-6">
+        <header className="rounded-[28px] border border-[var(--border)] bg-white/90 p-4 shadow-[0_24px_70px_rgba(58,73,142,0.08)] backdrop-blur md:p-5">
+          <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between xl:min-w-0 xl:flex-1">
+              <div className="flex items-center gap-4">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#1c2442] text-sm font-semibold text-white">
+                  AR
+                </div>
+                <div className="min-w-0">
+                  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--muted)]">
+                    Академия риэлторов
+                  </p>
+                  <h1 className="mt-1 truncate text-2xl font-semibold tracking-tight text-[var(--foreground)]">
+                    Учебный кабинет
+                  </h1>
+                  <p className="mt-1 text-sm leading-6 text-[var(--muted)]">
+                    {user.email}
+                  </p>
+                </div>
+              </div>
+
+              <LearningNav />
             </div>
 
-            <LearningNav />
-
-            <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4">
-              <p className="text-sm font-semibold text-[var(--foreground)]">
-                Режим доступа
-              </p>
-              <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
-                {isElevated
-                  ? "Открыт режим просмотра для команды платформы. Курсы можно проверять без отдельного студенческого входа."
-                  : "Здесь студент проходит курсы, открывает уроки и отмечает прогресс."}
-              </p>
-            </div>
-
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-wrap gap-3 xl:justify-end">
               {isElevated ? (
                 <Button asChild variant="outline">
                   <Link href="/admin">Открыть админку</Link>
@@ -61,7 +57,7 @@ export default async function LearningLayout({
               <LogoutButton />
             </div>
           </div>
-        </aside>
+        </header>
 
         <section className="min-w-0">{children}</section>
       </div>

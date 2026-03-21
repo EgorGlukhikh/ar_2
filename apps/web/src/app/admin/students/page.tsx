@@ -44,7 +44,7 @@ export default async function StudentsPage() {
     <section className="space-y-6">
       <header className="rounded-[28px] border border-[var(--border)] bg-white p-8 shadow-sm">
         <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[var(--muted)]">
-          Student Management
+          База студентов
         </p>
         <h1 className="mt-3 text-4xl font-semibold tracking-tight text-[var(--foreground)]">
           Студенты
@@ -111,7 +111,7 @@ export default async function StudentsPage() {
                     <h2 className="text-2xl font-semibold tracking-tight text-[var(--foreground)]">
                       {student.name || student.email}
                     </h2>
-                    <Badge variant="neutral">Student</Badge>
+                    <Badge variant="neutral">Студент</Badge>
                   </div>
                   <p className="text-sm text-[var(--muted)]">{student.email}</p>
                 </div>
