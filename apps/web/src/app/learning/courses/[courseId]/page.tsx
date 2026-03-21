@@ -7,24 +7,15 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { toggleLessonCompletion } from "@/features/learning/actions";
 import {
+  extractLessonAttachments,
+  extractLessonBody,
+} from "@/lib/lesson-content";
+import {
   enrollmentStatusLabelMap,
   enrollmentStatusVariantMap,
   lessonTypeLabelMap,
 } from "@/lib/labels";
 import { isElevatedUserRole, requireStudentOrElevatedUser } from "@/lib/user";
-
-function extractLessonBody(content: unknown) {
-  if (
-    content &&
-    typeof content === "object" &&
-    "body" in content &&
-    typeof content.body === "string"
-  ) {
-    return content.body;
-  }
-
-  return "";
-}
 
 function addDays(date: Date, days: number) {
   const result = new Date(date);
@@ -356,6 +347,37 @@ export default async function CourseLearningPage({
                       Для этого урока пока не добавлен текстовый материал.
                     </div>
                   )}
+
+                  {extractLessonAttachments(selectedEntry.lesson.content).length > 0 ? (
+                    <div className="rounded-[24px] border border-[var(--border)] bg-[var(--surface)] p-6">
+                      <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
+                        Материалы урока
+                      </p>
+                      <div className="mt-4 space-y-3">
+                        {extractLessonAttachments(selectedEntry.lesson.content).map(
+                          (attachment) => (
+                            <a
+                              key={`${attachment.title}-${attachment.url}`}
+                              href={attachment.url}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="flex items-center justify-between gap-3 rounded-2xl border border-[var(--border)] bg-white px-4 py-4 transition hover:border-[var(--primary)]"
+                            >
+                              <div>
+                                <p className="font-medium text-[var(--foreground)]">
+                                  {attachment.title}
+                                </p>
+                                <p className="mt-1 break-all text-sm text-[var(--muted)]">
+                                  {attachment.url}
+                                </p>
+                              </div>
+                              <Badge variant="neutral">Открыть</Badge>
+                            </a>
+                          ),
+                        )}
+                      </div>
+                    </div>
+                  ) : null}
 
                   {!isElevated ? (
                     <form action={toggleLessonCompletion}>

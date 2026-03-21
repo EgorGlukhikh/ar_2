@@ -1,22 +1,24 @@
 "use client";
 
 import Link from "next/link";
+import { BookOpen, LayoutDashboard, Users } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 import { cn } from "@/lib/utils";
 
 const navItems = [
-  { href: "/admin", label: "Обзор" },
-  { href: "/admin/courses", label: "Курсы" },
-  { href: "/admin/students", label: "Студенты" },
+  { href: "/admin", label: "Обзор", icon: LayoutDashboard },
+  { href: "/admin/courses", label: "Курсы", icon: BookOpen },
+  { href: "/admin/students", label: "Студенты", icon: Users },
 ];
 
 export function AdminNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="flex flex-col gap-2">
+    <nav className="flex flex-wrap items-center gap-2">
       {navItems.map((item) => {
+        const Icon = item.icon;
         const isActive =
           pathname === item.href || pathname.startsWith(`${item.href}/`);
 
@@ -25,12 +27,13 @@ export function AdminNav() {
             key={item.href}
             href={item.href}
             className={cn(
-              "rounded-xl px-4 py-3 text-sm font-medium transition",
+              "inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium transition",
               isActive
-                ? "bg-[var(--primary)] text-white"
-                : "text-[var(--muted)] hover:bg-[var(--primary-soft)] hover:text-[var(--foreground)]",
+                ? "bg-[#2840db] text-white shadow-[0_14px_28px_rgba(40,64,219,0.2)]"
+                : "border border-[var(--border)] bg-white text-[var(--muted)] hover:border-[var(--primary)] hover:text-[var(--foreground)]",
             )}
           >
+            <Icon className="h-4 w-4" />
             {item.label}
           </Link>
         );

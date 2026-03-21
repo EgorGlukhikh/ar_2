@@ -12,6 +12,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 
 import { requireAdminUser } from "@/lib/admin";
+import { buildLessonContent } from "@/lib/lesson-content";
 
 const createCourseSchema = z.object({
   title: z.string().trim().min(3),
@@ -48,6 +49,8 @@ const updateLessonSchema = z.object({
   isPreview: z.boolean().default(false),
   accessAfterDays: z.number().int().min(0).nullable(),
   contentText: z.string().trim().optional(),
+  attachmentTitle: z.string().trim().optional(),
+  attachmentUrl: z.string().trim().optional(),
   videoSourceType: z.nativeEnum(MediaSourceType).nullable(),
   videoUrl: z.string().trim().optional(),
   videoPlaybackId: z.string().trim().optional(),
@@ -221,15 +224,21 @@ export async function createModule(formData: FormData) {
     },
   });
 
-  await prisma.module.create({
+  const createdModule = await prisma.module.create({
     data: {
       courseId: parsed.courseId,
       title: parsed.title,
       position: (lastModule?.position ?? 0) + 1,
     },
+    select: {
+      id: true,
+    },
   });
 
   refreshAdminRoutes(parsed.courseId);
+  redirect(
+    `/admin/courses/${parsed.courseId}/content?moduleId=${createdModule.id}`,
+  );
 }
 
 export async function updateModule(formData: FormData) {
@@ -303,16 +312,22 @@ export async function createLesson(formData: FormData) {
     throw new Error("Module not found");
   }
 
-  await prisma.lesson.create({
+  const lesson = await prisma.lesson.create({
     data: {
       moduleId: parsed.moduleId,
       title: parsed.title,
       type: parsed.type,
       position: (lastLesson?.position ?? 0) + 1,
     },
+    select: {
+      id: true,
+    },
   });
 
   refreshAdminRoutes(moduleRecord.courseId);
+  redirect(
+    `/admin/courses/${moduleRecord.courseId}/content?moduleId=${parsed.moduleId}&lessonId=${lesson.id}`,
+  );
 }
 
 export async function updateLesson(formData: FormData) {
@@ -332,6 +347,8 @@ export async function updateLesson(formData: FormData) {
     isPreview: formData.get("isPreview") === "on",
     accessAfterDays: getOptionalNumber(formData, "accessAfterDays"),
     contentText: getOptionalValue(formData, "contentText"),
+    attachmentTitle: getOptionalValue(formData, "attachmentTitle"),
+    attachmentUrl: getOptionalValue(formData, "attachmentUrl"),
     videoSourceType: getOptionalValue(formData, "videoSourceType") ?? null,
     videoUrl: getOptionalValue(formData, "videoUrl"),
     videoPlaybackId: getOptionalValue(formData, "videoPlaybackId"),
@@ -350,6 +367,12 @@ export async function updateLesson(formData: FormData) {
     throw new Error("Module not found");
   }
 
+  const contentPayload = buildLessonContent({
+    body: parsed.contentText,
+    attachmentTitle: parsed.attachmentTitle,
+    attachmentUrl: parsed.attachmentUrl,
+  });
+
   await prisma.lesson.update({
     where: {
       id: parsed.lessonId,
@@ -360,9 +383,7 @@ export async function updateLesson(formData: FormData) {
       type: parsed.type,
       isPreview: parsed.isPreview,
       accessAfterDays: parsed.accessAfterDays,
-      content: parsed.contentText
-        ? { body: parsed.contentText }
-        : Prisma.JsonNull,
+      content: contentPayload ? contentPayload : Prisma.JsonNull,
       ...(hasVideoFields
         ? {
             videoSourceType: parsed.videoSourceType,
