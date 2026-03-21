@@ -41,7 +41,7 @@ export default async function LearningLayout({
               </p>
               <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
                 {isElevated
-                  ? "Открыт режим просмотра для команды платформы. Курсы можно проверять без пользовательского логина."
+                  ? "Открыт режим просмотра для команды платформы. Курсы можно проверять без отдельного студенческого входа."
                   : "Здесь студент проходит курсы, открывает уроки и отмечает прогресс."}
               </p>
             </div>
@@ -53,7 +53,7 @@ export default async function LearningLayout({
                 </Button>
               ) : null}
               <Button asChild variant="outline">
-                <Link href="/catalog">Каталог и demo-оплата</Link>
+                <Link href="/catalog">Каталог курсов</Link>
               </Button>
               <Button asChild variant="outline">
                 <Link href="/">На главную</Link>

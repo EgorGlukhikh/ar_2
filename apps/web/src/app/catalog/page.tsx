@@ -3,6 +3,7 @@ import { CourseStatus, EnrollmentStatus, prisma } from "@academy/db";
 import Link from "next/link";
 
 import { startDemoCheckout } from "@/features/billing/actions";
+import { courseStatusLabelMap } from "@/lib/labels";
 import { formatMinorUnits } from "@/lib/money";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -65,14 +66,15 @@ export default async function CatalogPage() {
           <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
             <div className="space-y-3">
               <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[var(--muted)]">
-                Course Catalog
+                Каталог курсов
               </p>
               <h1 className="text-4xl font-semibold tracking-tight text-[var(--foreground)]">
-                Каталог курсов
+                Доступные программы
               </h1>
               <p className="max-w-3xl text-base leading-8 text-[var(--muted)]">
-                Это demo-витрина оплаты. Здесь видно цену курса, можно открыть
-                checkout и сымитировать успешную или неуспешную оплату.
+                Здесь видны опубликованные курсы, их цена и сценарий тестовой
+                покупки. После реальной интеграции этот экран останется
+                витриной, а изменится только платежный провайдер.
               </p>
             </div>
 
@@ -86,7 +88,7 @@ export default async function CatalogPage() {
                 </Button>
               ) : (
                 <Button asChild>
-                  <Link href="/sign-in">Войти для оплаты</Link>
+                  <Link href="/sign-in">Войти</Link>
                 </Button>
               )}
             </div>
@@ -100,7 +102,7 @@ export default async function CatalogPage() {
                 Пока нет опубликованных курсов
               </p>
               <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
-                Опубликуй курс и задай ему demo-цену в админке, после чего он
+                Опубликуй курс и задай ему цену в админке, после чего он
                 появится здесь.
               </p>
             </article>
@@ -122,7 +124,9 @@ export default async function CatalogPage() {
                   className="rounded-[24px] border border-[var(--border)] bg-white p-6 shadow-sm"
                 >
                   <div className="flex flex-wrap items-center gap-2">
-                    <Badge variant="success">PUBLISHED</Badge>
+                    <Badge variant="success">
+                      {courseStatusLabelMap[course.status]}
+                    </Badge>
                     <Badge variant="neutral">Уроков {lessonCount}</Badge>
                   </div>
 
@@ -136,7 +140,7 @@ export default async function CatalogPage() {
 
                   <div className="mt-6 rounded-[24px] bg-[var(--surface)] p-5">
                     <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
-                      Demo price
+                      Стоимость
                     </p>
                     <p className="mt-3 text-3xl font-semibold tracking-tight text-[var(--foreground)]">
                       {defaultPrice
@@ -145,7 +149,7 @@ export default async function CatalogPage() {
                     </p>
                     <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
                       {defaultProduct
-                        ? "После demo-оплаты будет создан заказ, платеж и выдан доступ к курсу."
+                        ? "После тестовой оплаты пользователь получает доступ к курсу и видит его в учебном кабинете."
                         : "В админке еще не настроено предложение для этого курса."}
                     </p>
                   </div>
@@ -153,7 +157,9 @@ export default async function CatalogPage() {
                   <div className="mt-6 flex flex-wrap gap-3">
                     {hasAccess ? (
                       <Button asChild>
-                        <Link href={`/learning/courses/${course.id}`}>Перейти к курсу</Link>
+                        <Link href={`/learning/courses/${course.id}`}>
+                          Перейти к курсу
+                        </Link>
                       </Button>
                     ) : defaultProduct && defaultPrice ? (
                       <form action={startDemoCheckout}>
@@ -168,7 +174,7 @@ export default async function CatalogPage() {
 
                     <Button asChild variant="outline">
                       <Link href={session?.user ? "/learning" : "/sign-in"}>
-                        {session?.user ? "Открыть кабинет" : "Войти для оплаты"}
+                        {session?.user ? "Открыть кабинет" : "Войти"}
                       </Link>
                     </Button>
                   </div>

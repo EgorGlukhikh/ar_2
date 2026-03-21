@@ -6,6 +6,11 @@ import { LessonVideoPlayer } from "@/components/learning/lesson-video-player";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { toggleLessonCompletion } from "@/features/learning/actions";
+import {
+  enrollmentStatusLabelMap,
+  enrollmentStatusVariantMap,
+  lessonTypeLabelMap,
+} from "@/lib/labels";
 import { isElevatedUserRole, requireStudentOrElevatedUser } from "@/lib/user";
 
 function extractLessonBody(content: unknown) {
@@ -121,6 +126,7 @@ export default async function CourseLearningPage({
     month: "long",
     year: "numeric",
   });
+
   const lessonEntries = course.modules.flatMap((module) =>
     module.lessons.map((lesson) => {
       const completed = lesson.progress.some((progress) => Boolean(progress.completedAt));
@@ -162,13 +168,15 @@ export default async function CourseLearningPage({
           <div className="space-y-3">
             <div className="flex flex-wrap items-center gap-3">
               <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[var(--muted)]">
-                Course Player
+                Прохождение курса
               </p>
               {isElevated ? (
-                <Badge variant="warning">Preview mode</Badge>
-              ) : (
-                <Badge variant="neutral">{enrollment?.status ?? "ACTIVE"}</Badge>
-              )}
+                <Badge variant="warning">Режим просмотра</Badge>
+              ) : enrollment ? (
+                <Badge variant={enrollmentStatusVariantMap[enrollment.status]}>
+                  {enrollmentStatusLabelMap[enrollment.status]}
+                </Badge>
+              ) : null}
             </div>
             <h1 className="text-4xl font-semibold tracking-tight text-[var(--foreground)]">
               {course.title}
@@ -242,7 +250,7 @@ export default async function CourseLearningPage({
                                 {lesson.title}
                               </p>
                               <p className="mt-1 text-xs uppercase tracking-[0.14em] text-[var(--muted)]">
-                                {lesson.type}
+                                {lessonTypeLabelMap[lesson.type]}
                               </p>
                             </div>
 
@@ -279,9 +287,9 @@ export default async function CourseLearningPage({
             <div className="space-y-6">
               <div className="space-y-4">
                 <div className="flex flex-wrap items-center gap-2">
-                  <Badge>{selectedEntry.lesson.type}</Badge>
+                  <Badge>{lessonTypeLabelMap[selectedEntry.lesson.type]}</Badge>
                   {selectedEntry.lesson.isPreview ? (
-                    <Badge variant="success">Preview</Badge>
+                    <Badge variant="success">Открытый урок</Badge>
                   ) : null}
                   {selectedEntry.completed ? (
                     <Badge variant="success">Выполнено</Badge>
@@ -345,7 +353,7 @@ export default async function CourseLearningPage({
                     </div>
                   ) : (
                     <div className="rounded-[24px] border border-dashed border-[var(--border)] bg-[var(--surface)] p-6 text-sm leading-7 text-[var(--muted)]">
-                      Для этого урока пока не добавлен текстовый контент.
+                      Для этого урока пока не добавлен текстовый материал.
                     </div>
                   )}
 

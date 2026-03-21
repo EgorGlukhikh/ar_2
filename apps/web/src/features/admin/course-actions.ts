@@ -122,6 +122,8 @@ function refreshAdminRoutes(courseId?: string) {
 
   if (courseId) {
     revalidatePath(`/admin/courses/${courseId}`);
+    revalidatePath(`/admin/courses/${courseId}/content`);
+    revalidatePath(`/admin/courses/${courseId}/access`);
   }
 }
 
@@ -150,7 +152,7 @@ export async function createCourse(formData: FormData) {
   });
 
   refreshAdminRoutes(course.id);
-  redirect(`/admin/courses/${course.id}`);
+  redirect(`/admin/courses/${course.id}/content`);
 }
 
 export async function updateCourse(formData: FormData) {

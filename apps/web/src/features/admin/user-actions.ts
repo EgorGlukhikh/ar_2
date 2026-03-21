@@ -32,6 +32,8 @@ function refreshStudentAdminRoutes(courseId?: string) {
 
   if (courseId) {
     revalidatePath(`/admin/courses/${courseId}`);
+    revalidatePath(`/admin/courses/${courseId}/content`);
+    revalidatePath(`/admin/courses/${courseId}/access`);
     revalidatePath(`/learning/courses/${courseId}`);
   }
 }
@@ -57,7 +59,7 @@ export async function createStudent(formData: FormData) {
   });
 
   if (existingUser && existingUser.role !== USER_ROLES.STUDENT) {
-    throw new Error("A non-student user with this email already exists.");
+    throw new Error("Пользователь с этим email уже существует, но имеет не студенческую роль.");
   }
 
   const passwordHash = await hashPassword(parsed.password);

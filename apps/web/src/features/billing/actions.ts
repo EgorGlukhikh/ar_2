@@ -49,6 +49,8 @@ function refreshBillingPaths(courseId?: string, orderId?: string) {
 
   if (courseId) {
     revalidatePath(`/admin/courses/${courseId}`);
+    revalidatePath(`/admin/courses/${courseId}/content`);
+    revalidatePath(`/admin/courses/${courseId}/access`);
     revalidatePath(`/learning/courses/${courseId}`);
   }
 

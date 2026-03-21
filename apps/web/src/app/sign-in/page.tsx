@@ -16,15 +16,14 @@ export default async function SignInPage() {
         <div className="flex flex-col justify-between bg-[linear-gradient(180deg,_#eef3ff_0%,_#f8faff_100%)] p-8 text-[var(--foreground)] md:p-10">
           <div className="space-y-6">
             <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[var(--muted)]">
-              Email Auth
+              Вход в платформу
             </p>
             <h1 className="text-4xl font-semibold tracking-tight md:text-5xl">
-              Вход в платформу для администраторов, команды и студентов.
+              Академия риэлторов для команды, кураторов и студентов.
             </h1>
             <p className="max-w-md text-base leading-8 text-[var(--muted)]">
-              На текущем этапе работает авторизация по email и паролю с ролями в
-              базе. После входа пользователь автоматически попадает в нужный
-              кабинет.
+              Вход выполняется по email и паролю. После авторизации платформа
+              сама открывает нужный кабинет в зависимости от роли пользователя.
             </p>
           </div>
 
@@ -42,14 +41,14 @@ export default async function SignInPage() {
           <div className="w-full rounded-[24px] border border-[var(--border)] bg-[var(--surface)] p-6 shadow-sm md:p-8">
             <div className="space-y-3">
               <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
-                Sign in
+                Авторизация
               </p>
               <h2 className="text-3xl font-semibold tracking-tight text-[var(--foreground)]">
-                Авторизация по email
+                Войти по email
               </h2>
               <p className="text-sm leading-7 text-[var(--muted)]">
-                Для production тестовые данные нужно будет заменить через seed и
-                переменные окружения.
+                Для проверки можно использовать тестовую учетную запись
+                администратора.
               </p>
             </div>
 

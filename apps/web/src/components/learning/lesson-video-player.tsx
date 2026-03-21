@@ -16,7 +16,10 @@ type LessonVideoPlayerProps = {
   title: string;
 };
 
-function canRenderEmbed(sourceType?: MediaSourceType | null, playerUrl?: string | null) {
+function canRenderEmbed(
+  sourceType?: MediaSourceType | null,
+  playerUrl?: string | null,
+) {
   return Boolean(
     playerUrl &&
       (sourceType === MediaSourceType.RUTUBE_EMBED ||
@@ -40,7 +43,7 @@ export function LessonVideoPlayer({
   if (videoAsset?.status === VideoAssetStatus.ERROR) {
     return (
       <div className="rounded-[24px] border border-red-200 bg-red-50 p-6 text-sm leading-7 text-red-700">
-        Видео не удалось подготовить к проигрыванию.
+        Видео не удалось подготовить к воспроизведению.
         {videoAsset.errorMessage ? ` ${videoAsset.errorMessage}` : ""}
       </div>
     );
@@ -58,12 +61,12 @@ export function LessonVideoPlayer({
           Видео готовится
         </p>
         <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
-          Файл уже привязан к уроку, но провайдер еще обрабатывает его. После
-          завершения обработки здесь появится плеер.
+          Файл уже привязан к уроку, но провайдер еще обрабатывает его. Когда
+          подготовка завершится, здесь появится плеер.
         </p>
         {playbackId ? (
           <p className="mt-3 text-sm text-[var(--muted)]">
-            Playback ID: {playbackId}
+            Идентификатор видео уже создан.
           </p>
         ) : null}
       </div>
@@ -90,18 +93,13 @@ export function LessonVideoPlayer({
     return (
       <div className="rounded-[24px] border border-[var(--border)] bg-[var(--surface)] p-6">
         <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
-          Managed video
+          Видео урока
         </p>
         <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
-          Видео уже привязано к уроку, но для его воспроизведения нужен реальный
-          playback URL от провайдера. Это ожидаемо в `mock`-режиме или при
-          неполной конфигурации env.
+          Видео уже прикреплено, но для воспроизведения еще не хватает рабочего
+          адреса плеера. Это ожидаемо в локальном mock-режиме или при неполной
+          настройке видео-провайдера.
         </p>
-        <div className="mt-4 space-y-2 text-sm text-[var(--muted)]">
-          {sourceType ? <p>Источник: {sourceType}</p> : null}
-          {videoAsset?.provider ? <p>Провайдер: {videoAsset.provider}</p> : null}
-          {playbackId ? <p>Playback ID: {playbackId}</p> : null}
-        </div>
       </div>
     );
   }

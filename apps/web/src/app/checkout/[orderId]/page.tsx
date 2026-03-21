@@ -1,6 +1,5 @@
 import {
   OrderStatus,
-  PaymentStatus,
   PaymentProviderType,
   prisma,
 } from "@academy/db";
@@ -12,6 +11,13 @@ import {
   failDemoPayment,
   startDemoCheckout,
 } from "@/features/billing/actions";
+import {
+  orderStatusLabelMap,
+  orderStatusVariantMap,
+  paymentProviderLabelMap,
+  paymentStatusLabelMap,
+  paymentStatusVariantMap,
+} from "@/lib/labels";
 import { formatMinorUnits } from "@/lib/money";
 import { requireAuthenticatedUser } from "@/lib/user";
 import { Badge } from "@/components/ui/badge";
@@ -21,28 +27,6 @@ type CheckoutPageProps = {
   params: Promise<{
     orderId: string;
   }>;
-};
-
-const orderStatusVariantMap: Record<
-  OrderStatus,
-  "default" | "neutral" | "success" | "warning"
-> = {
-  DRAFT: "neutral",
-  PENDING: "warning",
-  PAID: "success",
-  CANCELED: "warning",
-  REFUNDED: "warning",
-};
-
-const paymentStatusVariantMap: Record<
-  PaymentStatus,
-  "default" | "neutral" | "success" | "warning"
-> = {
-  CREATED: "neutral",
-  PENDING: "warning",
-  SUCCEEDED: "success",
-  FAILED: "warning",
-  CANCELED: "warning",
 };
 
 export default async function CheckoutPage({ params }: CheckoutPageProps) {
@@ -84,24 +68,24 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
           <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
             <div className="space-y-3">
               <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[var(--muted)]">
-                Demo Checkout
+                Проверка оплаты
               </p>
               <h1 className="text-4xl font-semibold tracking-tight text-[var(--foreground)]">
-                Оплата курса в демо-режиме
+                Тестовый сценарий покупки курса
               </h1>
               <p className="max-w-3xl text-base leading-8 text-[var(--muted)]">
-                Этот экран показывает, как будет выглядеть checkout: создается
-                заказ, платеж и после подтверждения выдается доступ к курсу.
+                Этот экран показывает будущую логику checkout: создается заказ,
+                платеж и после подтверждения выдается доступ к курсу.
               </p>
             </div>
 
             <div className="flex flex-wrap gap-2">
               <Badge variant={orderStatusVariantMap[order.status]}>
-                Order {order.status}
+                Заказ: {orderStatusLabelMap[order.status]}
               </Badge>
               {payment ? (
                 <Badge variant={paymentStatusVariantMap[payment.status]}>
-                  Payment {payment.status}
+                  Оплата: {paymentStatusLabelMap[payment.status]}
                 </Badge>
               ) : null}
             </div>
@@ -111,14 +95,12 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
         <div className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
           <article className="rounded-[24px] border border-[var(--border)] bg-white p-6 shadow-sm">
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
-              Order Summary
+              Состав заказа
             </p>
             <h2 className="mt-3 text-2xl font-semibold text-[var(--foreground)]">
               {course?.title ?? orderItem?.product.name ?? "Курс"}
             </h2>
-            <p className="mt-2 text-sm text-[var(--muted)]">
-              Заказ #{order.id}
-            </p>
+            <p className="mt-2 text-sm text-[var(--muted)]">Заказ #{order.id}</p>
 
             <div className="mt-6 space-y-4 rounded-[24px] bg-[var(--surface)] p-5">
               <div className="flex items-center justify-between text-sm text-[var(--muted)]">
@@ -136,12 +118,12 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
               <div className="flex items-center justify-between text-sm text-[var(--muted)]">
                 <span>Провайдер</span>
                 <span className="font-medium text-[var(--foreground)]">
-                  {order.paymentProvider}
+                  {paymentProviderLabelMap[order.paymentProvider]}
                 </span>
               </div>
               {payment?.providerPaymentId ? (
                 <div className="flex items-center justify-between gap-3 text-sm text-[var(--muted)]">
-                  <span>Payment ID</span>
+                  <span>Идентификатор платежа</span>
                   <span className="break-all font-medium text-[var(--foreground)]">
                     {payment.providerPaymentId}
                   </span>
@@ -152,10 +134,10 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
 
           <article className="rounded-[24px] border border-[var(--border)] bg-white p-6 shadow-sm">
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
-              Demo Controls
+              Действия
             </p>
             <h2 className="mt-3 text-2xl font-semibold text-[var(--foreground)]">
-              Инструменты демонстрации оплаты
+              Управление тестовой оплатой
             </h2>
             <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
               Здесь можно сымитировать успешную оплату курса или ошибку платежа.
@@ -168,13 +150,15 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
                     Доступ выдан
                   </p>
                   <p className="mt-3 text-sm leading-7 text-emerald-800">
-                    Demo-оплата прошла успешно. Пользователь зачислен на курс и
-                    может открыть обучение.
+                    Тестовая оплата прошла успешно. Пользователь зачислен на курс
+                    и может открыть обучение.
                   </p>
                   <div className="mt-5 flex flex-wrap gap-3">
                     {course?.id ? (
                       <Button asChild>
-                        <Link href={`/learning/courses/${course.id}`}>Открыть курс</Link>
+                        <Link href={`/learning/courses/${course.id}`}>
+                          Открыть курс
+                        </Link>
                       </Button>
                     ) : null}
                     <Button asChild variant="outline">
@@ -185,11 +169,11 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
               ) : order.status === OrderStatus.CANCELED ? (
                 <div className="rounded-[24px] border border-amber-200 bg-amber-50 p-5">
                   <p className="text-lg font-semibold text-amber-900">
-                    Demo-оплата завершилась отказом
+                    Платеж завершился отказом
                   </p>
                   <p className="mt-3 text-sm leading-7 text-amber-800">
                     Заказ закрыт как неуспешный. Можно вернуться в каталог и
-                    создать новый demo checkout.
+                    запустить новый тестовый checkout.
                   </p>
                   <div className="mt-5 flex flex-wrap gap-3">
                     {course?.id ? (
@@ -223,8 +207,8 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
             </div>
 
             <div className="mt-6 rounded-[24px] bg-[var(--surface)] p-5 text-sm leading-7 text-[var(--muted)]">
-              После подключения реальных провайдеров на месте этих demo-кнопок будут
-              ссылки и callback-сценарии Robokassa, T-Bank или Bank 131.
+              После подключения реальных провайдеров на месте этих тестовых
+              кнопок будут реальные ссылки оплаты и callback-сценарии.
             </div>
           </article>
         </div>

@@ -4,6 +4,10 @@ import { prisma } from "@academy/db";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  courseStatusLabelMap,
+  courseStatusVariantMap,
+} from "@/lib/labels";
 
 export default async function CoursesPage() {
   const courses = await prisma.course.findMany({
@@ -34,15 +38,14 @@ export default async function CoursesPage() {
       <header className="flex flex-col gap-4 rounded-[28px] border border-[var(--border)] bg-white p-8 shadow-sm lg:flex-row lg:items-end lg:justify-between">
         <div className="space-y-3">
           <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[var(--muted)]">
-            Course Management
+            Каталог курсов
           </p>
           <h1 className="text-4xl font-semibold tracking-tight text-[var(--foreground)]">
             Курсы
           </h1>
           <p className="max-w-3xl text-base leading-8 text-[var(--muted)]">
-            Здесь создаются и редактируются все учебные продукты платформы. Текущая
-            структура уже готова к расширению в сторону видео, тестов и домашних
-            заданий.
+            Здесь создаются курсы и открываются их рабочие разделы: настройки,
+            программа, доступы и продажи.
           </p>
         </div>
 
@@ -58,8 +61,8 @@ export default async function CoursesPage() {
               Пока нет ни одного курса
             </p>
             <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
-              Создай первый курс, затем добавь в него модули и уроки прямо в
-              админке.
+              Создай первый курс, затем открой вкладку программы и собери внутри
+              него модули и уроки.
             </p>
             <div className="mt-6">
               <Button asChild>
@@ -85,7 +88,9 @@ export default async function CoursesPage() {
                       <h2 className="text-2xl font-semibold tracking-tight text-[var(--foreground)]">
                         {course.title}
                       </h2>
-                      <Badge>{course.status}</Badge>
+                      <Badge variant={courseStatusVariantMap[course.status]}>
+                        {courseStatusLabelMap[course.status]}
+                      </Badge>
                     </div>
                     <p className="text-sm text-[var(--muted)]">/{course.slug}</p>
                     <p className="max-w-3xl text-sm leading-7 text-[var(--muted)]">
@@ -95,7 +100,12 @@ export default async function CoursesPage() {
 
                   <div className="flex flex-wrap gap-3">
                     <Button asChild>
-                      <Link href={`/admin/courses/${course.id}`}>Управлять</Link>
+                      <Link href={`/admin/courses/${course.id}`}>Настройки</Link>
+                    </Button>
+                    <Button asChild variant="outline">
+                      <Link href={`/admin/courses/${course.id}/content`}>
+                        Программа
+                      </Link>
                     </Button>
                   </div>
                 </div>

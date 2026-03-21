@@ -1,6 +1,12 @@
 import { CourseStatus, EnrollmentStatus, prisma } from "@academy/db";
 import Link from "next/link";
 
+import {
+  courseStatusLabelMap,
+  courseStatusVariantMap,
+  enrollmentStatusLabelMap,
+  enrollmentStatusVariantMap,
+} from "@/lib/labels";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { isElevatedUserRole, requireStudentOrElevatedUser } from "@/lib/user";
@@ -58,8 +64,8 @@ export default async function LearningDashboardPage() {
         title: course.title,
         slug: course.slug,
         description: course.description,
-        statusLabel: course.status,
-        statusVariant: course.status === CourseStatus.PUBLISHED ? "success" : "warning",
+        statusLabel: courseStatusLabelMap[course.status],
+        statusVariant: courseStatusVariantMap[course.status],
         lessonCount: lessons.length,
         completedLessons: 0,
         progressPercent: 0,
@@ -113,7 +119,9 @@ export default async function LearningDashboardPage() {
         lesson.progress.some((progress) => Boolean(progress.completedAt)),
       ).length;
       const progressPercent =
-        lessons.length === 0 ? 0 : Math.round((completedLessons / lessons.length) * 100);
+        lessons.length === 0
+          ? 0
+          : Math.round((completedLessons / lessons.length) * 100);
       const nextLesson =
         lessons.find(
           (lesson) => !lesson.progress.some((progress) => Boolean(progress.completedAt)),
@@ -124,9 +132,8 @@ export default async function LearningDashboardPage() {
         title: enrollment.course.title,
         slug: enrollment.course.slug,
         description: enrollment.course.description,
-        statusLabel: enrollment.status,
-        statusVariant:
-          enrollment.status === EnrollmentStatus.COMPLETED ? "success" : "default",
+        statusLabel: enrollmentStatusLabelMap[enrollment.status],
+        statusVariant: enrollmentStatusVariantMap[enrollment.status],
         lessonCount: lessons.length,
         completedLessons,
         progressPercent,
@@ -141,15 +148,15 @@ export default async function LearningDashboardPage() {
         <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
           <div className="space-y-3">
             <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[var(--muted)]">
-              Learning Dashboard
+              Учебный кабинет
             </p>
             <h1 className="text-4xl font-semibold tracking-tight text-[var(--foreground)]">
-              {isElevated ? "Предпросмотр курсов" : "Мои курсы"}
+              {isElevated ? "Просмотр курсов" : "Мои курсы"}
             </h1>
             <p className="max-w-3xl text-base leading-8 text-[var(--muted)]">
               {isElevated
-                ? "Команда платформы может быстро проверить учебный контур и демо-оплаты без отдельной студенческой учетной записи."
-                : "Здесь студент видит активные курсы, прогресс и переход к следующему уроку."}
+                ? "Команда платформы может быстро проверить учебный контур без отдельной студенческой учетной записи."
+                : "Здесь видны активные курсы, текущий прогресс и быстрый переход к следующему уроку."}
             </p>
           </div>
 
@@ -158,7 +165,7 @@ export default async function LearningDashboardPage() {
               Курсов: {courseCards.length}
             </div>
             <Button asChild variant="outline">
-              <Link href="/catalog">Каталог и demo-оплата</Link>
+              <Link href="/catalog">Каталог курсов</Link>
             </Button>
           </div>
         </div>
@@ -172,8 +179,8 @@ export default async function LearningDashboardPage() {
             </p>
             <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
               {isElevated
-                ? "Добавь курсы в админке или открой каталог, чтобы проверить demo-оплату."
-                : "Когда администратор выдаст доступ или ты оплатишь курс в demo-режиме, он появится на этом экране."}
+                ? "Добавь курс в админке или открой каталог, чтобы проверить сценарий покупки."
+                : "Когда администратор выдаст доступ или ты оплатишь курс, он появится на этом экране."}
             </p>
           </article>
         ) : (
