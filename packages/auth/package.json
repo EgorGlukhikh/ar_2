@@ -1,0 +1,16 @@
+{
+  "name": "@academy/auth",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "dependencies": {
+    "@academy/db": "*",
+    "@academy/shared": "*",
+    "@auth/prisma-adapter": "^2.11.1",
+    "bcryptjs": "^3.0.3",
+    "next-auth": "^5.0.0-beta.30",
+    "zod": "^4.1.12"
+  }
+}

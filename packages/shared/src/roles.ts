@@ -1,0 +1,16 @@
+export const USER_ROLES = {
+  ADMIN: "ADMIN",
+  AUTHOR: "AUTHOR",
+  CURATOR: "CURATOR",
+  SALES_MANAGER: "SALES_MANAGER",
+  STUDENT: "STUDENT",
+} as const;
+
+export type UserRole = (typeof USER_ROLES)[keyof typeof USER_ROLES];
+
+export const ELEVATED_ROLES: UserRole[] = [
+  USER_ROLES.ADMIN,
+  USER_ROLES.AUTHOR,
+  USER_ROLES.CURATOR,
+  USER_ROLES.SALES_MANAGER,
+];

@@ -1,0 +1,26 @@
+{
+  "name": "academy-platform",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "dotenv -e .env -- npm run dev --workspace @academy/web",
+    "build": "dotenv -e .env -- npm run build --workspace @academy/web",
+    "lint": "dotenv -e .env -- npm run lint --workspace @academy/web",
+    "db:start": "docker compose up -d db",
+    "db:stop": "docker compose down",
+    "db:generate": "dotenv -e .env -- npm run db:generate --workspace @academy/db",
+    "db:push": "dotenv -e .env -- npm run db:push --workspace @academy/db",
+    "db:migrate": "dotenv -e .env -- npm run db:migrate --workspace @academy/db",
+    "db:seed": "dotenv -e .env -- npm run db:seed --workspace @academy/db"
+  },
+  "devDependencies": {
+    "dotenv-cli": "^8.0.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
