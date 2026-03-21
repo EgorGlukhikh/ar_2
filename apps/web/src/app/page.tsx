@@ -115,7 +115,7 @@ const buildFlow = [
   {
     step: "02",
     title: "Запустить продажи",
-    text: "Каталог, цена, checkout и выдача доступа после оплаты.",
+    text: "Каталог, цена, оплата и выдача доступа после покупки.",
   },
   {
     step: "03",
@@ -143,7 +143,7 @@ const faqItems = [
   {
     question: "Можно ли использовать платформу только как витрину курсов?",
     answer:
-      "Да. Каталог, карточки программ, доступы и checkout могут работать как отдельный контур даже без сложных учебных сценариев.",
+      "Да. Каталог, карточки программ, доступы и оплата могут работать как отдельный контур даже без сложных учебных сценариев.",
   },
   {
     question: "Подходит ли платформа под приглашение авторов и кураторов?",
@@ -158,7 +158,7 @@ const faqItems = [
   {
     question: "Платежи уже настоящие?",
     answer:
-      "Пока checkout работает в demo-режиме для показа сценария. Реальные интеграции будут подключены поверх уже готового платежного слоя.",
+      "Пока оплата работает в демонстрационном режиме для показа сценария. Реальные интеграции будут подключены поверх уже готового платежного слоя.",
   },
 ];
 
@@ -244,7 +244,7 @@ export default async function Home() {
                     Учиться, публиковать свои курсы и проводить вебинары в одном месте.
                   </h1>
                   <p className="max-w-2xl text-lg leading-8 text-[#596177]">
-                    Платформа собирает каталог, checkout, учебный кабинет и авторский
+                    Платформа собирает каталог, оплату, учебный кабинет и авторский
                     контур в одну архитектуру. Это уже не набор экранов, а база для
                     школы, авторских программ и живых эфиров.
                   </p>
@@ -259,7 +259,7 @@ export default async function Home() {
 
                 <div className="grid gap-3 sm:grid-cols-3">
                   <MetricChip label="Формат" value="Курсы + эфиры" />
-                  <MetricChip label="Монетизация" value="Каталог + checkout" />
+                  <MetricChip label="Монетизация" value="Каталог + оплата" />
                   <MetricChip label="Роли" value="Админ, автор, студент" />
                 </div>
               </div>
@@ -359,7 +359,7 @@ export default async function Home() {
                         </div>
                         <div>
                           <p className="text-sm text-[#7a6d65]">Продажи</p>
-                          <p className="font-semibold">checkout и выдача доступа</p>
+                          <p className="font-semibold">оплата и выдача доступа</p>
                         </div>
                       </div>
                       <p className="mt-4 text-sm leading-6 text-[#6e625b]">
@@ -442,7 +442,7 @@ export default async function Home() {
                   {
                     icon: BadgeRussianRuble,
                     title: "Покупка доступа",
-                    text: "Каталог и checkout ведут к оплате без лишних переходов и путаницы.",
+                    text: "Каталог и оплата ведут к покупке без лишних переходов и путаницы.",
                   },
                   {
                     icon: Users,
@@ -480,7 +480,7 @@ export default async function Home() {
                     <div className="absolute inset-0 bg-[linear-gradient(180deg,_rgba(23,31,80,0.05)_0%,_rgba(23,31,80,0.55)_100%)]" />
                     <div className="absolute left-4 right-4 top-4 flex items-center justify-between">
                       <span className="rounded-full bg-white/16 px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white backdrop-blur">
-                        premium
+                        Премиум
                       </span>
                       <span className="rounded-full bg-white/16 p-2 text-white backdrop-blur">
                         <BadgeRussianRuble className="h-4 w-4" />
@@ -594,7 +594,7 @@ export default async function Home() {
                           Продажа
                         </p>
                         <p className="mt-2 text-xl font-semibold">
-                          Каталог + checkout
+                          Каталог + оплата
                         </p>
                       </div>
                       <div className="rounded-[22px] bg-white/10 p-4 text-white">
@@ -645,7 +645,7 @@ export default async function Home() {
                     <div className="flex items-center justify-between gap-4">
                       <div>
                         <p className="text-xs uppercase tracking-[0.24em] text-white/65">
-                          live room
+                          живой эфир
                         </p>
                         <p className="mt-2 text-2xl font-semibold">
                           Живой урок + чат + материалы
