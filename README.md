@@ -19,6 +19,12 @@ Learning platform for "Akademiya rieltorov".
 - Video foundation with provider abstraction, embed support, and managed video asset model
 - Demo billing flow with catalog, checkout, and enrollment after successful payment
 
+## Deployment target
+
+- Railway is the primary deployment target for this project
+- application runtime and managed PostgreSQL should be prepared with Railway-first configuration
+- local Docker Compose remains the main development setup
+
 ## Local bootstrap
 
 1. Start Docker Desktop.

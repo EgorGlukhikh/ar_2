@@ -9,7 +9,13 @@
 - modular package structure for future scaling
 - base UI system aligned with the current portal style
 
-### 1.2 Authentication and roles
+### 1.2 Infrastructure decisions
+
+- `Railway` is the target deployment platform
+- local development stays on Docker Compose
+- production infrastructure should be assembled with Railway-compatible runtime and env conventions
+
+### 1.3 Authentication and roles
 
 - sign-in via `email + password`
 - `ADMIN` role
@@ -17,7 +23,7 @@
 - dev admin for testing: `test@mail.ru / 12345`
 - role-based redirect after sign-in
 
-### 1.3 Admin area
+### 1.4 Admin area
 
 - courses list
 - create and edit course
@@ -29,7 +35,7 @@
 - revoke access
 - reset progress
 
-### 1.4 Student area
+### 1.5 Student area
 
 - dashboard with available courses
 - course structure view
@@ -37,7 +43,7 @@
 - lesson completion tracking
 - delayed lesson access rules
 
-### 1.5 Video
+### 1.6 Video
 
 - dedicated `VideoAsset` entity
 - `Rutube embed` support
@@ -46,7 +52,7 @@
 - foundation for URL-based video import
 - student player that reflects video processing state
 
-### 1.6 Payments
+### 1.7 Payments
 
 - demo course catalog
 - demo checkout
@@ -129,6 +135,19 @@ Scope:
 - action history for course and student records
 - dashboard with key metrics
 
+### Phase 6. Railway deployment and delivery setup
+
+Goal: move the project from local-only development to controlled hosted delivery.
+
+Scope:
+
+- Railway project setup
+- web service deployment config
+- PostgreSQL provisioning in Railway
+- environment variable map for local and Railway
+- production database migration flow
+- domain attachment and release checklist
+
 ## 3. Immediate build order
 
 ### Next sprint
@@ -144,6 +163,7 @@ Scope:
 1. add `AUTHOR` and `CURATOR` roles
 2. build email invite flow
 3. extract access control into a more explicit permission model
+4. prepare Railway deployment configuration
 
 ## 4. GitHub tracking rule
 
