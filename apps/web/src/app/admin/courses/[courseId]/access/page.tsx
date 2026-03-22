@@ -149,7 +149,7 @@ export default async function CourseAccessPage({
                   Цена для каталога
                 </p>
                 <p className="text-sm text-[var(--muted)]">
-                  Определяет, как курс выглядит в витрине и checkout.
+                  Определяет, как курс выглядит в витрине и в шаге оплаты.
                 </p>
               </div>
             </div>
@@ -364,7 +364,7 @@ export default async function CourseAccessPage({
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="inline-student-email">Email</Label>
+                <Label htmlFor="inline-student-email">Почта</Label>
                 <Input
                   id="inline-student-email"
                   name="email"
@@ -373,7 +373,7 @@ export default async function CourseAccessPage({
                   required
                 />
                 <p className="text-sm leading-6 text-[var(--muted)]">
-                  Этот email студент будет использовать для входа в платформу.
+                  Эту почту студент будет использовать для входа в платформу.
                 </p>
               </div>
 

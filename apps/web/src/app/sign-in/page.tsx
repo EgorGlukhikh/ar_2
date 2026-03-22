@@ -14,7 +14,7 @@ import {
 } from "@/lib/marketing-theme";
 
 const accessPoints = [
-  "Вход по email и паролю без лишнего сценария регистрации.",
+  "Вход по почте и паролю без лишнего сценария регистрации.",
   "Автоматический переход в нужный кабинет в зависимости от роли.",
   "Один логин для администратора, автора, куратора и студента.",
 ];
@@ -77,7 +77,7 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
 
                 <div className="grid gap-4 md:grid-cols-3">
                   {[
-                    { icon: Mail, label: "Формат", value: "Email + пароль" },
+                    { icon: Mail, label: "Формат", value: "Почта + пароль" },
                     { icon: ShieldCheck, label: "Роли", value: "Админ, автор, студент" },
                     { icon: KeyRound, label: "Маршрут", value: "Авто-редирект по роли" },
                   ].map((item) => {
@@ -122,7 +122,7 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
                       Авторизация
                     </p>
                     <h2 className="font-[family:var(--font-landing-display)] text-3xl font-semibold tracking-tight text-[#1c2442]">
-                      Войти по email
+                      Войти по почте
                     </h2>
                     <p className="text-sm leading-7 text-[#596177]">
                       Для теста можно использовать админскую учетку. После входа платформа сама
@@ -133,7 +133,7 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
                   <div className="mt-6 rounded-[24px] border border-[#dfe5f7] bg-white p-5 shadow-sm">
                     <p className="text-sm text-[#697088]">Тестовый администратор</p>
                     <p className="mt-3 text-sm leading-7 text-[#1c2442]">
-                      Email: <span className="font-semibold">test@mail.ru</span>
+                      Почта: <span className="font-semibold">test@mail.ru</span>
                       <br />
                       Пароль: <span className="font-semibold">12345</span>
                     </p>

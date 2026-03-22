@@ -75,7 +75,7 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
         <WorkspacePageHeader
           eyebrow="Оформление доступа"
           title="Подтверждение покупки курса"
-          description="Это действующий демонстрационный checkout. Он показывает будущую логику реальной оплаты: создается заказ, меняется статус платежа и после подтверждения студент получает доступ к курсу."
+          description="Это действующий демонстрационный шаг оплаты. Он показывает будущую логику реальной оплаты: создается заказ, меняется статус платежа и после подтверждения студент получает доступ к курсу."
           meta={
             <div className="flex flex-wrap gap-2">
               <Badge variant={orderStatusVariantMap[order.status]}>
@@ -214,7 +214,7 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
                       </p>
                       <p className="mt-3 text-sm leading-7 text-amber-900">
                         Заказ закрыт как неуспешный. Можно вернуться в каталог и
-                        создать новый демонстрационный checkout для повторной
+                        создать новый демонстрационный заказ для повторной
                         проверки сценария.
                       </p>
                     </div>
@@ -224,7 +224,7 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
                     {course?.id ? (
                       <form action={startDemoCheckout}>
                         <input type="hidden" name="courseId" value={course.id} />
-                        <Button type="submit">Создать новый checkout</Button>
+                        <Button type="submit">Создать новый заказ</Button>
                       </form>
                     ) : null}
                     <Button asChild variant="outline">

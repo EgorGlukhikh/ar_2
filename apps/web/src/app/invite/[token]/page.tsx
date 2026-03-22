@@ -106,11 +106,11 @@ export default async function InvitePage({ params }: InvitePageProps) {
                   </h1>
                   <p className="mt-4 text-sm leading-7 text-white/80">
                     Ссылка ведет в реальный рабочий контур. После активации ты сможешь войти
-                    по email и паролю и попасть сразу в свой кабинет по роли.
+                    по почте и паролю и попасть сразу в свой кабинет по роли.
                   </p>
                   <div className="mt-6 space-y-3">
                     {[
-                      "Один invite = одна роль и один рабочий маршрут.",
+                      "Одно приглашение — одна роль и один рабочий маршрут.",
                       "После активации вход идет через обычную форму логина.",
                       "Если приглашение просрочено, админ сможет выпустить новое.",
                     ].map((item) => (
@@ -140,12 +140,12 @@ export default async function InvitePage({ params }: InvitePageProps) {
                 ) : isAccepted ? (
                   <InviteStateCard
                     title="Приглашение уже активировано"
-                    description="Эта ссылка уже использована. Можно просто войти в платформу по своему email и паролю."
+                    description="Эта ссылка уже использована. Можно просто войти в платформу по своей почте и паролю."
                   />
                 ) : isExpired ? (
                   <InviteStateCard
                     title="Приглашение просрочено"
-                    description="Срок действия invite-ссылки истек. Попроси администратора выпустить новое приглашение."
+                    description="Срок действия ссылки-приглашения истек. Попроси администратора выпустить новое приглашение."
                   />
                 ) : (
                   <div className="rounded-[28px] border border-black/5 bg-[linear-gradient(180deg,_#f6f8ff_0%,_#fffaf7_100%)] p-6">
@@ -157,7 +157,7 @@ export default async function InvitePage({ params }: InvitePageProps) {
                         Подтверди приглашение
                       </h2>
                       <p className="text-sm leading-7 text-[#596177]">
-                        После активации этот email получит рабочую роль и сможет входить в свой
+                        После активации эта почта получит рабочую роль и сможет входить в свой
                         контур платформы.
                       </p>
                     </div>
@@ -167,7 +167,7 @@ export default async function InvitePage({ params }: InvitePageProps) {
                         <div className="inline-flex rounded-2xl bg-[#eef2ff] p-3">
                           <Mail className="h-5 w-5 text-[#2840db]" />
                         </div>
-                        <p className="mt-4 text-sm text-[#697088]">Email</p>
+                        <p className="mt-4 text-sm text-[#697088]">Почта</p>
                         <p className="mt-2 text-lg font-semibold text-[#1c2442]">{invite.email}</p>
                       </div>
 

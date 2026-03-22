@@ -64,7 +64,7 @@ export function SectionLead({
       </p>
       <h2
         className={cn(
-          "max-w-[20ch] text-balance font-[family:var(--font-landing-display)] text-[clamp(2.2rem,4vw,3.7rem)] font-semibold leading-[0.98] tracking-tight",
+          "max-w-[24ch] text-balance font-[family:var(--font-landing-display)] text-[clamp(2.2rem,4vw,3.7rem)] font-semibold leading-[0.98] tracking-tight",
           light ? "text-white" : "text-[#1c2442]",
         )}
       >
@@ -92,7 +92,7 @@ export function MetricChip({
   return (
     <div className="rounded-[24px] border border-black/5 bg-white p-4 shadow-sm">
       <p className="text-sm text-[#697088]">{label}</p>
-      <p className="mt-2 text-balance text-xl font-semibold leading-tight md:text-2xl">
+      <p className="mt-2 max-w-[14ch] text-balance text-xl font-semibold leading-tight md:text-2xl">
         {value}
       </p>
     </div>

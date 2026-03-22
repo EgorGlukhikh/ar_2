@@ -55,7 +55,7 @@ export const mediaSourceTypeLabelMap: Record<MediaSourceType, string> = {
   MANAGED_UPLOAD: "Загрузка",
   RUTUBE_EMBED: "RUTUBE",
   CLOUD_IMPORT: "Импорт по ссылке",
-  EXTERNAL_EMBED: "Внешний embed",
+  EXTERNAL_EMBED: "Встроенный плеер",
 };
 
 export const orderStatusLabelMap: Record<OrderStatus, string> = {
@@ -99,7 +99,7 @@ export const paymentProviderLabelMap: Record<PaymentProviderType, string> = {
 };
 
 export const emailProviderLabelMap: Record<EmailProviderType, string> = {
-  MOCK: "Mock",
+  MOCK: "Тестовый контур",
   RESEND: "Resend",
 };
 

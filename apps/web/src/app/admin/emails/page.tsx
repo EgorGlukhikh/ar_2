@@ -72,7 +72,7 @@ export default async function AdminEmailsPage() {
   return (
     <section className="space-y-6">
       <WorkspacePageHeader
-        eyebrow="Email-центр"
+        eyebrow="Почтовый центр"
         title="Уведомления и маркетинговые письма"
         description="Здесь видно, какие письма уже ушли студентам, что стоит в очереди, что было доставлено и какие письма уже открывали."
         actions={
@@ -132,7 +132,7 @@ export default async function AdminEmailsPage() {
         {emails.length === 0 ? (
           <WorkspaceEmptyState
             title="Пока нет писем"
-            description="После создания студентов, выдачи доступа или оплаты курсов здесь начнет собираться полная email-история."
+            description="После создания студентов, выдачи доступа или оплаты курсов здесь начнет собираться полная история писем."
             className="border-[var(--border)] bg-[var(--surface)] shadow-none"
           />
         ) : (
@@ -213,7 +213,7 @@ export default async function AdminEmailsPage() {
 
       <WorkspacePanel
         eyebrow="Что уже собрано"
-        title="Email-слой платформы"
+        title="Почтовый слой платформы"
         description="Сейчас система уже умеет слать служебные письма студенту и отдельную маркетинговую цепочку из 5 сообщений."
       >
         <div className="grid gap-3 lg:grid-cols-2">
@@ -223,7 +223,7 @@ export default async function AdminEmailsPage() {
             "Письмо после успешной оплаты и автоматической выдачи доступа.",
             "Маркетинговая цепочка из 5 писем с задержками по дням.",
             "Статусы очереди, отправки, доставленности и открытий.",
-            "Webhook-ready маршрут для Resend и собственный open/click tracking.",
+            "Готовый маршрут для webhook от Resend и собственная фиксация открытий и переходов.",
           ].map((item) => (
             <div
               key={item}

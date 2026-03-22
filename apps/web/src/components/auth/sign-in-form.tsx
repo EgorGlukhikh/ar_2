@@ -21,7 +21,7 @@ export function SignInForm({ defaultEmail }: SignInFormProps) {
     <form action={formAction} className="space-y-5">
       <div className="space-y-2">
         <label className="text-sm font-medium text-[#4f5870]" htmlFor="email">
-          Email
+          Почта
         </label>
         <input
           id="email"

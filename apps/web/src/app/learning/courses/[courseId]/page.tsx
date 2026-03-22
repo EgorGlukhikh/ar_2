@@ -76,6 +76,17 @@ function getHomeworkGateReason(moduleTitle: string, lessonTitle: string) {
   return `Следующий модуль откроется после принятия домашней работы «${lessonTitle}» в модуле «${moduleTitle}».`;
 }
 
+function getHomeworkReviewLabel(status: string) {
+  const labels: Record<string, string> = {
+    submitted: "Отправлено",
+    in_review: "На проверке",
+    revision_requested: "На доработке",
+    approved: "Принято",
+  };
+
+  return labels[status] ?? status;
+}
+
 type CourseLearningPageProps = {
   params: Promise<{
     courseId: string;
@@ -136,6 +147,22 @@ export default async function CourseLearningPage({
                 videoAsset: true,
                 homeworkAssignment: {
                   include: {
+                    reviews: {
+                      where: {
+                        studentId: user.id,
+                      },
+                      include: {
+                        reviewer: {
+                          select: {
+                            name: true,
+                            email: true,
+                          },
+                        },
+                      },
+                      orderBy: {
+                        createdAt: "desc",
+                      },
+                    },
                     submissions: {
                       where: {
                         studentId: user.id,
@@ -280,6 +307,7 @@ export default async function CourseLearningPage({
     : [];
   const selectedHomeworkAssignment = selectedEntry?.lesson.homeworkAssignment ?? null;
   const selectedHomeworkSubmission = selectedHomeworkAssignment?.submissions[0] ?? null;
+  const selectedHomeworkReviews = selectedHomeworkAssignment?.reviews ?? [];
   const canSubmitHomework =
     !selectedHomeworkSubmission ||
     selectedHomeworkSubmission.status === HomeworkSubmissionStatus.REVISION_REQUESTED;
@@ -658,8 +686,8 @@ export default async function CourseLearningPage({
                         )}
                       </div>
 
-                      {selectedHomeworkSubmission ? (
-                        <div className="mt-5 rounded-[22px] border border-[var(--border)] bg-white p-5">
+                        {selectedHomeworkSubmission ? (
+                          <div className="mt-5 rounded-[22px] border border-[var(--border)] bg-white p-5">
                           <div className="flex flex-wrap items-center gap-2">
                             <Badge
                               variant={
@@ -730,10 +758,45 @@ export default async function CourseLearningPage({
                               </p>
                             </div>
                           ) : null}
-                        </div>
-                      ) : null}
+                          </div>
+                        ) : null}
 
-                      {isElevated ? (
+                        {selectedHomeworkReviews.length > 0 ? (
+                          <div className="mt-5 rounded-[22px] border border-[var(--border)] bg-white p-5">
+                            <p className="text-sm font-medium text-[var(--foreground)]">
+                              История проверки
+                            </p>
+                            <div className="mt-3 space-y-3">
+                              {selectedHomeworkReviews.slice(0, 6).map((review) => (
+                                <div
+                                  key={review.id}
+                                  className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-4 py-4"
+                                >
+                                  <div className="flex flex-wrap items-center gap-2">
+                                    <Badge variant="neutral">
+                                      {getHomeworkReviewLabel(review.status)}
+                                    </Badge>
+                                    <span className="text-sm text-[var(--muted)]">
+                                      {dateFormatter.format(review.createdAt)}
+                                    </span>
+                                    <span className="text-sm text-[var(--muted)]">
+                                      {review.reviewer?.name ||
+                                        review.reviewer?.email ||
+                                        "Системное действие"}
+                                    </span>
+                                  </div>
+                                  {review.feedback ? (
+                                    <p className="mt-2 whitespace-pre-wrap text-sm leading-7 text-[var(--muted)]">
+                                      {review.feedback}
+                                    </p>
+                                  ) : null}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        ) : null}
+
+                        {isElevated ? (
                         <div className="mt-5 rounded-2xl border border-[var(--border)] bg-white px-4 py-4 text-sm leading-7 text-[var(--muted)]">
                           В режиме просмотра форма сдачи не активируется. Для реальной проверки
                           сценария нужна студенческая учетная запись.

@@ -105,7 +105,7 @@ export default async function StudentsPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="student-email">Email</Label>
+                <Label htmlFor="student-email">Почта</Label>
                 <Input
                   id="student-email"
                   name="email"
@@ -129,7 +129,7 @@ export default async function StudentsPage() {
               <div className="grid gap-3 sm:grid-cols-2">
                 <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-4 py-4">
                   <Mail className="h-4 w-4 text-[var(--primary)]" />
-                  <p className="mt-3 text-sm font-medium text-[var(--foreground)]">Email для входа</p>
+                  <p className="mt-3 text-sm font-medium text-[var(--foreground)]">Почта для входа</p>
                   <p className="mt-1 text-xs leading-5 text-[var(--muted)]">
                     Этот адрес студент использует в платформе.
                   </p>

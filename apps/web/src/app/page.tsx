@@ -109,6 +109,40 @@ const webinarPoints = [
   "Продажа доступа к записи после завершения события.",
 ];
 
+const platformDirections = [
+  {
+    title: "Продажи и сделки",
+    text: "Программы по переговорам, показам, упаковке объекта и работе с клиентом.",
+  },
+  {
+    title: "Управление агентством",
+    text: "Внутреннее обучение команды, онбординг сотрудников и методическая база агентства.",
+  },
+  {
+    title: "Авторские школы",
+    text: "Личный бренд эксперта, платные интенсивы, кураторские форматы и вебинарные линейки.",
+  },
+  {
+    title: "Разборы и эфиры",
+    text: "Живые запуски, закрытые комнаты, запись эфира и продажа доступа после события.",
+  },
+];
+
+const storyCards = [
+  {
+    title: "Для школы продаж",
+    text: "Собрать каталог курсов, оплату, личный кабинет и методический контур в одной системе без зоопарка сервисов.",
+  },
+  {
+    title: "Для автора курса",
+    text: "Запустить собственную программу, пригласить куратора и продавать продукт как оформленную цифровую школу.",
+  },
+  {
+    title: "Для команды агентства",
+    text: "Держать обучение сотрудников, разборы, базу материалов и проверку домашних работ в одном рабочем контуре.",
+  },
+];
+
 const buildFlow = [
   {
     step: "01",
@@ -124,21 +158,6 @@ const buildFlow = [
     step: "03",
     title: "Масштабировать сценарий",
     text: "Авторы, кураторы, вебинары, сопровождение и повторные продажи.",
-  },
-];
-
-const proofCards = [
-  {
-    title: "Для команды",
-    text: "Админка и учебный кабинет должны ощущаться продолжением бренда, а не служебной панелью отдельно от лендинга.",
-  },
-  {
-    title: "Для автора",
-    text: "Важно не просто загрузить уроки, а превратить курс в продукт с ценой, витриной и понятным маршрутом для ученика.",
-  },
-  {
-    title: "Для студента",
-    text: "Пользователь должен видеть, что он купил, что уже прошел и куда перейти дальше без лишней когнитивной нагрузки.",
   },
 ];
 
@@ -213,6 +232,7 @@ export default async function Home() {
               <nav className="hidden flex-wrap items-center gap-1 text-sm text-[#5f677c] md:flex">
                 {[
                   ["#scenarios", "Возможности"],
+                  ["#directions", "Направления"],
                   ["#courses", "Курсы"],
                   ["#creators", "Авторы"],
                   ["#webinars", "Вебинары"],
@@ -235,7 +255,7 @@ export default async function Home() {
               </div>
             </header>
 
-            <div className="grid gap-10 py-10 xl:grid-cols-[1.08fr_0.92fr] xl:items-center">
+            <div className="grid gap-10 py-10 xl:grid-cols-[minmax(0,1.02fr)_minmax(520px,0.98fr)] xl:items-center">
               <div className="space-y-8">
                 <div className="inline-flex items-center gap-2 rounded-full border border-[#dce4fb] bg-white px-4 py-2 text-sm text-[#5f677c] shadow-sm">
                   <Sparkles className="h-4 w-4 text-[#ff825f]" />
@@ -243,7 +263,7 @@ export default async function Home() {
                 </div>
 
                 <div className="space-y-5">
-                  <h1 className="max-w-[12.5ch] text-balance font-[family:var(--font-landing-display)] text-[clamp(3.1rem,6.2vw,6rem)] font-semibold leading-[0.92] tracking-tight">
+                  <h1 className="max-w-[11.5ch] text-balance font-[family:var(--font-landing-display)] text-[clamp(3.4rem,6.3vw,6.2rem)] font-semibold leading-[0.9] tracking-tight">
                     Учиться, публиковать свои курсы и проводить вебинары в одном месте.
                   </h1>
                   <p className="max-w-2xl text-lg leading-8 text-[#596177]">
@@ -258,6 +278,9 @@ export default async function Home() {
                   <PublicButton href="/sign-in" tone="secondary">
                     Открыть платформу
                   </PublicButton>
+                  <PublicButton href="/sign-in" tone="dark">
+                    Стать автором
+                  </PublicButton>
                 </div>
 
                 <div className="grid gap-3 sm:grid-cols-3">
@@ -267,11 +290,11 @@ export default async function Home() {
                 </div>
               </div>
 
-              <div className="relative min-h-[460px] xl:min-h-[560px]">
+              <div className="relative min-h-[500px] xl:min-h-[600px]">
                 <div className="absolute inset-0 rounded-[38px] bg-[linear-gradient(145deg,_#2037d2_0%,_#5a71ff_42%,_#ff8f6c_100%)] shadow-[0_45px_100px_rgba(64,76,173,0.34)]" />
                 <div className="absolute inset-4 rounded-[32px] border border-white/20 bg-[linear-gradient(180deg,_rgba(255,255,255,0.2)_0%,_rgba(255,255,255,0.08)_100%)] backdrop-blur-md" />
 
-                <div className="relative grid min-h-[460px] gap-4 p-5 md:p-7 xl:min-h-[560px]">
+                <div className="relative grid min-h-[500px] gap-4 p-5 md:p-7 xl:min-h-[600px]">
                   <div className="flex flex-wrap items-start justify-between gap-4">
                     <div className="max-w-[260px] rounded-[24px] bg-white px-4 py-4 shadow-xl">
                       <div className="flex items-center gap-3">
@@ -291,7 +314,7 @@ export default async function Home() {
                     </div>
                   </div>
 
-                  <div className="grid flex-1 items-end gap-4 xl:grid-cols-[0.94fr_1.06fr]">
+                  <div className="grid flex-1 items-end gap-4 xl:grid-cols-[0.98fr_1.02fr]">
                     <div className="w-full rounded-[30px] border border-white/18 bg-white/12 p-5 text-white backdrop-blur-md">
                       <p className="text-xs uppercase tracking-[0.28em] text-white/62">
                         Сценарии платформы
@@ -319,8 +342,8 @@ export default async function Home() {
                       </div>
                     </div>
 
-                    <div className="relative mx-auto flex w-full max-w-[380px] items-end justify-center xl:mr-0">
-                      <div className="relative h-[380px] w-[280px] overflow-hidden rounded-[34px] border border-white/25 shadow-[0_32px_80px_rgba(18,24,72,0.38)] md:h-[450px] md:w-[340px]">
+                    <div className="relative mx-auto flex w-full max-w-[420px] items-end justify-center xl:mr-0">
+                      <div className="relative h-[400px] w-[300px] overflow-hidden rounded-[34px] border border-white/25 shadow-[0_32px_80px_rgba(18,24,72,0.38)] md:h-[470px] md:w-[360px]">
                         <Image
                           src="https://images.unsplash.com/photo-1573497620053-ea5300f94f21?auto=format&fit=crop&w=1200&q=80"
                           alt="Автор онлайн-курса"
@@ -351,7 +374,7 @@ export default async function Home() {
                         alt="Рабочее место для эфира"
                         width={560}
                         height={240}
-                        className="h-[170px] w-full object-cover"
+                        className="h-[190px] w-full object-cover"
                       />
                     </div>
 
@@ -375,12 +398,13 @@ export default async function Home() {
               </div>
             </div>
 
-            <div className="grid gap-3 rounded-[28px] border border-black/5 bg-[linear-gradient(90deg,_#263bd6_0%,_#5970ff_46%,_#ff906f_100%)] p-4 text-white md:grid-cols-4">
+            <div className="grid gap-3 rounded-[28px] border border-black/5 bg-[linear-gradient(90deg,_#263bd6_0%,_#5970ff_46%,_#ff906f_100%)] p-4 text-white md:grid-cols-5">
               {[
                 "Каталог курсов",
                 "Кабинет студента",
                 "Свои программы",
                 "Вебинарные сценарии",
+                "Авторские школы",
               ].map((item) => (
                 <div
                   key={item}
@@ -427,15 +451,46 @@ export default async function Home() {
         </section>
 
         <SectionShell className="mt-16">
-          <div className="grid gap-10 xl:grid-cols-[0.8fr_1.2fr]">
-            <div className="space-y-6">
+          <div className="grid gap-8 xl:grid-cols-[0.84fr_1.16fr] xl:items-start">
+            <SectionLead
+              eyebrow="Направления"
+              title="Не одна витрина курсов, а база под несколько форматов обучения."
+              text="По духу это уже ближе к сильным edtech-продуктам: у платформы есть не один сценарий, а линейка направлений, которые можно запускать внутри одного бренда."
+              className="max-w-2xl"
+            />
+
+            <div
+              id="directions"
+              className="grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(240px,1fr))]"
+            >
+              {platformDirections.map((item, index) => (
+                <article
+                  key={item.title}
+                  className="rounded-[30px] border border-black/5 bg-white p-6 shadow-[0_18px_50px_rgba(28,36,66,0.06)]"
+                >
+                  <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#7b8296]">
+                    0{index + 1}
+                  </p>
+                  <h3 className="mt-4 text-2xl font-semibold leading-tight text-[#1c2442]">
+                    {item.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-7 text-[#596177]">{item.text}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </SectionShell>
+
+        <SectionShell className="mt-16">
+          <div className="space-y-8">
+            <div className="grid gap-8 xl:grid-cols-[0.9fr_1.1fr] xl:items-end">
               <SectionLead
                 eyebrow="Каталог"
                 title="Курс нужно продавать как продукт, а не как набор уроков."
                 text="Карточка программы должна объяснять ценность, формат, цену и следующий шаг. Тогда каталог работает как витрина, а не как технический список."
               />
 
-              <div className="space-y-3">
+              <div className="grid gap-3 md:grid-cols-3">
                 {[
                   {
                     icon: LayoutTemplate,
@@ -445,7 +500,7 @@ export default async function Home() {
                   {
                     icon: BadgeRussianRuble,
                     title: "Покупка доступа",
-                    text: "Каталог и оплата ведут к покупке без лишних переходов и путаницы.",
+                    text: "Витрина и шаг оплаты ведут к покупке без лишних переходов и путаницы.",
                   },
                   {
                     icon: Users,
@@ -454,18 +509,17 @@ export default async function Home() {
                   },
                 ].map((item) => {
                   const Icon = item.icon;
+
                   return (
                     <div
                       key={item.title}
-                      className="flex items-start gap-4 rounded-[24px] border border-black/5 bg-white p-4 shadow-sm"
+                      className="rounded-[24px] border border-black/5 bg-white p-5 shadow-sm"
                     >
-                      <div className="rounded-2xl bg-[#eef2ff] p-3">
-                        <Icon className="h-5 w-5 text-[#2940dd]" />
+                      <div className="rounded-2xl bg-[#eef2ff] p-3 text-[#2940dd]">
+                        <Icon className="h-5 w-5" />
                       </div>
-                      <div>
-                        <p className="font-semibold">{item.title}</p>
-                        <p className="mt-1 text-sm leading-7 text-[#596177]">{item.text}</p>
-                      </div>
+                      <p className="mt-4 font-semibold text-[#1c2442]">{item.title}</p>
+                      <p className="mt-2 text-sm leading-7 text-[#596177]">{item.text}</p>
                     </div>
                   );
                 })}
@@ -474,17 +528,17 @@ export default async function Home() {
 
             <div
               id="courses"
-              className="grid gap-5 [grid-template-columns:repeat(auto-fit,minmax(250px,1fr))]"
+              className="grid gap-5 [grid-template-columns:repeat(auto-fit,minmax(320px,1fr))]"
             >
               {featuredCourses.map((course) => (
                 <article
                   key={course.title}
-                  className="flex h-full flex-col overflow-hidden rounded-[30px] border border-black/5 bg-white shadow-[0_18px_50px_rgba(28,36,66,0.08)]"
+                  className="flex h-full flex-col overflow-hidden rounded-[32px] border border-black/5 bg-white shadow-[0_18px_50px_rgba(28,36,66,0.08)]"
                 >
-                  <div className="relative h-56">
+                  <div className="relative h-64">
                     <Image src={course.image} alt={course.title} fill className="object-cover" />
-                    <div className="absolute inset-0 bg-[linear-gradient(180deg,_rgba(23,31,80,0.05)_0%,_rgba(23,31,80,0.55)_100%)]" />
-                    <div className="absolute left-4 right-4 top-4 flex items-center justify-between">
+                    <div className="absolute inset-0 bg-[linear-gradient(180deg,_rgba(23,31,80,0.04)_0%,_rgba(23,31,80,0.58)_100%)]" />
+                    <div className="absolute left-5 right-5 top-5 flex items-center justify-between">
                       <span className="rounded-full bg-white/16 px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white backdrop-blur">
                         Премиум
                       </span>
@@ -493,33 +547,30 @@ export default async function Home() {
                       </span>
                     </div>
                   </div>
-                  <div className="flex flex-1 flex-col justify-between space-y-5 p-6">
+
+                  <div className="flex flex-1 flex-col justify-between p-6">
                     <div>
-                      <h3 className="text-balance text-[clamp(1.4rem,2vw,1.85rem)] font-semibold leading-[1.08]">
+                      <h3 className="max-w-[16ch] text-balance text-[clamp(1.6rem,2vw,2.1rem)] font-semibold leading-[1.04]">
                         {course.title}
                       </h3>
-                      <p className="mt-2 text-sm leading-7 text-[#596177]">{course.meta}</p>
+                      <p className="mt-3 text-sm leading-7 text-[#596177]">{course.meta}</p>
                     </div>
-                    <div className="space-y-3 border-t border-black/5 pt-4">
-                      <div>
-                        <p className="text-[11px] font-semibold uppercase tracking-[0.26em] text-[#7b8296]">
-                          Стоимость доступа
+
+                    <div className="mt-6 space-y-3 border-t border-black/5 pt-5">
+                      <div className="flex items-end gap-3">
+                        <p className="text-[clamp(2.4rem,3vw,3.25rem)] font-semibold leading-none tracking-tight">
+                          {course.priceAmount}
                         </p>
-                        <div className="mt-3 flex items-end gap-3">
-                          <p className="text-[clamp(2.25rem,3vw,3rem)] font-semibold leading-none tracking-tight">
-                            {course.priceAmount}
-                          </p>
-                          <div className="pb-1 text-sm font-semibold leading-4 text-[#5d657a]">
-                            <span className="block">{course.priceCurrency}</span>
-                            <span className="block">{course.priceSuffix}</span>
-                          </div>
+                        <div className="pb-1 text-sm font-semibold leading-4 text-[#5d657a]">
+                          <span className="block">{course.priceCurrency}</span>
+                          <span className="block">{course.priceSuffix}</span>
                         </div>
                       </div>
                       <Link
                         href="/catalog"
                         className="inline-flex items-center gap-2 text-sm font-semibold text-[#1c2442]"
                       >
-                        В каталог
+                        Открыть программу
                         <ChevronRight className="h-4 w-4" />
                       </Link>
                     </div>
@@ -553,7 +604,7 @@ export default async function Home() {
           </div>
         </SectionShell>
 
-        <section className="mt-16 grid gap-6 xl:grid-cols-2">
+        <section className="mt-16 space-y-6">
           <article
             id="creators"
             className="overflow-hidden rounded-[38px] border border-white/70 bg-[linear-gradient(160deg,_#18213d_0%,_#25346d_52%,_#3550ac_100%)] p-6 shadow-[0_36px_110px_rgba(26,32,72,0.2)] md:p-8"
@@ -565,7 +616,7 @@ export default async function Home() {
               light
             />
 
-            <div className="mt-8 grid gap-6 xl:grid-cols-[0.88fr_1.12fr]">
+            <div className="mt-8 grid gap-6 xl:grid-cols-[0.82fr_1.18fr]">
               <div className="space-y-3">
                 {creatorPoints.map((item) => (
                   <div
@@ -578,14 +629,14 @@ export default async function Home() {
                 ))}
               </div>
 
-              <div className="grid min-h-[380px] gap-4 overflow-hidden rounded-[30px] border border-white/10 bg-white/8 p-5 backdrop-blur">
+              <div className="grid min-h-[420px] gap-5 overflow-hidden rounded-[30px] border border-white/10 bg-white/8 p-5 backdrop-blur">
                 <div className="rounded-[24px] bg-white px-5 py-4 text-[#1c2442] shadow-xl">
                   <p className="text-sm text-[#697088]">Кабинет автора</p>
                   <p className="font-semibold">Редактор программы и продаж</p>
                 </div>
 
-                <div className="grid flex-1 gap-4 md:grid-cols-[minmax(0,1fr)_220px]">
-                  <div className="space-y-4">
+                <div className="grid flex-1 gap-5 lg:grid-cols-[minmax(0,1fr)_320px]">
+                  <div className="grid gap-4 lg:grid-rows-[auto_auto]">
                     <div className="rounded-[24px] bg-white p-5 text-[#1c2442] shadow-lg">
                       <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#7b8296]">
                         Курс
@@ -619,7 +670,7 @@ export default async function Home() {
                     </div>
                   </div>
 
-                  <div className="relative min-h-[300px] overflow-hidden rounded-[28px] border border-white/10 shadow-2xl md:min-h-full">
+                  <div className="relative min-h-[360px] overflow-hidden rounded-[28px] border border-white/10 shadow-2xl lg:min-h-full">
                     <Image
                       src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1200&q=80"
                       alt="Автор курса"
@@ -631,7 +682,7 @@ export default async function Home() {
                       <p className="text-xs uppercase tracking-[0.22em] text-white/55">
                         Роль автора
                       </p>
-                      <p className="mt-2 max-w-[16ch] text-balance text-lg font-semibold leading-tight">
+                      <p className="mt-2 max-w-[18ch] text-balance text-xl font-semibold leading-tight">
                         Собрать программу, оформить продукт и передать доступы без
                         лишнего хаоса.
                       </p>
@@ -700,13 +751,13 @@ export default async function Home() {
 
         <section className="mt-16 space-y-8">
           <SectionLead
-            eyebrow="Почему это важно"
-            title="Платформа должна восприниматься как сильный продукт с первого экрана."
-            text="И лендинг, и следующие кабинеты должны создавать ощущение цельной академии с амбицией, а не временного MVP."
+            eyebrow="Кому подходит"
+            title="Платформа должна работать и для школы, и для автора, и для команды агентства."
+            text="Ниже не абстрактные обещания, а реальные сценарии, под которые уже можно упаковывать продукт, звать дизайнеров и начинать наполнение методистами."
           />
 
           <div className="grid gap-5 lg:grid-cols-3">
-            {proofCards.map((item, index) => (
+            {storyCards.map((item, index) => (
               <article
                 key={item.title}
                 className="rounded-[28px] border border-black/5 bg-white p-6 shadow-[0_18px_50px_rgba(28,36,66,0.08)]"
@@ -761,6 +812,9 @@ export default async function Home() {
 
             <div className="flex flex-wrap gap-3 lg:justify-end">
               <PublicButton href="/catalog">Открыть каталог</PublicButton>
+              <PublicButton href="/sign-in" tone="secondary">
+                Стать автором
+              </PublicButton>
               <PublicButton href="/sign-in" tone="ghost">
                 Войти в платформу
               </PublicButton>

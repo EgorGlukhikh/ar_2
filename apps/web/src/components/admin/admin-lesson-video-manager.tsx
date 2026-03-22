@@ -74,7 +74,7 @@ async function postVideoCommand(payload: Record<string, unknown>) {
   };
 
   if (!response.ok || !data.ok) {
-    throw new Error(data.error || "Video request failed.");
+    throw new Error(data.error || "Не удалось выполнить действие с видео.");
   }
 
   return data.result ?? {};
@@ -109,7 +109,7 @@ function resolveVideoLinkStrategy(rawValue: string): LinkStrategy {
     return {
       kind: "embed",
       sourceType: "EXTERNAL_EMBED",
-      successMessage: "Видео по embed-ссылке подключено к уроку.",
+      successMessage: "Видео по ссылке плеера подключено к уроку.",
     };
   }
 
@@ -192,7 +192,7 @@ export function AdminLessonVideoManager({
           });
 
           if (!uploadResponse.ok) {
-            throw new Error("Файл не загрузился в video provider.");
+            throw new Error("Файл не загрузился в видеосервис.");
           }
         }
 
@@ -359,7 +359,7 @@ export function AdminLessonVideoManager({
             id={`video-link-${lessonId}`}
             value={videoUrl}
             onChange={(event) => setVideoUrl(event.target.value)}
-            placeholder="RUTUBE private/public, embed или прямая ссылка"
+            placeholder="RUTUBE private/public, ссылка плеера или прямая ссылка"
           />
         </div>
 

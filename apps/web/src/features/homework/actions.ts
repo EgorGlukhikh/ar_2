@@ -47,6 +47,35 @@ function revalidateHomeworkRoutes(courseId: string, lessonId?: string) {
   }
 }
 
+async function buildSubmissionSnapshot(
+  tx: Parameters<Parameters<typeof prisma.$transaction>[0]>[0],
+  submissionId: string,
+  submissionText?: string | null,
+  submissionUrl?: string | null,
+) {
+  const files = await tx.homeworkSubmissionFile.findMany({
+    where: {
+      submissionId,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+    select: {
+      id: true,
+      filename: true,
+      mimeType: true,
+      sizeInBytes: true,
+      createdAt: true,
+    },
+  });
+
+  return {
+    submissionText: submissionText ?? null,
+    submissionUrl: submissionUrl ?? null,
+    files,
+  };
+}
+
 export async function submitHomework(formData: FormData) {
   const user = await requireStudentOrElevatedUser();
 
@@ -183,6 +212,22 @@ export async function submitHomework(formData: FormData) {
       });
     }
 
+    const snapshot = await buildSubmissionSnapshot(
+      tx,
+      submission.id,
+      parsed.submissionText,
+      parsed.submissionUrl,
+    );
+
+    await tx.homeworkReview.create({
+      data: {
+        assignmentId: assignment.id,
+        studentId: user.id,
+        submission: snapshot,
+        status: nextStatus === HomeworkSubmissionStatus.APPROVED ? "approved" : "submitted",
+      },
+    });
+
     if (nextStatus === HomeworkSubmissionStatus.APPROVED) {
       await tx.lessonProgress.upsert({
         where: {
@@ -260,6 +305,24 @@ export async function reviewHomeworkSubmission(formData: FormData) {
           feedback: parsed.feedback ?? submission.feedback,
         },
       });
+
+      const snapshot = await buildSubmissionSnapshot(
+        tx,
+        submission.id,
+        submission.submissionText,
+        submission.submissionUrl,
+      );
+
+      await tx.homeworkReview.create({
+        data: {
+          assignmentId: submission.assignmentId,
+          studentId: submission.student.id,
+          reviewerId: reviewer.id,
+          submission: snapshot,
+          feedback: parsed.feedback ?? submission.feedback,
+          status: "in_review",
+        },
+      });
       return;
     }
 
@@ -278,6 +341,24 @@ export async function reviewHomeworkSubmission(formData: FormData) {
         reviewedAt: now,
         approvedAt: isApproved ? now : null,
         revisionRequestedAt: isApproved ? null : now,
+      },
+    });
+
+    const snapshot = await buildSubmissionSnapshot(
+      tx,
+      submission.id,
+      submission.submissionText,
+      submission.submissionUrl,
+    );
+
+    await tx.homeworkReview.create({
+      data: {
+        assignmentId: submission.assignmentId,
+        studentId: submission.student.id,
+        reviewerId: reviewer.id,
+        submission: snapshot,
+        feedback: parsed.feedback ?? null,
+        status: isApproved ? "approved" : "revision_requested",
       },
     });
 

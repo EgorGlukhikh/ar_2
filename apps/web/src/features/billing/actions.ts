@@ -303,7 +303,7 @@ export async function completeDemoPayment(formData: FormData) {
   });
 
   if (!order) {
-    throw new Error("Demo checkout не найден.");
+    throw new Error("Демонстрационный заказ не найден.");
   }
 
   const courseId = order.items[0]?.product.courseId;
@@ -409,7 +409,7 @@ export async function failDemoPayment(formData: FormData) {
   });
 
   if (!order) {
-    throw new Error("Demo checkout не найден.");
+    throw new Error("Демонстрационный заказ не найден.");
   }
 
   await prisma.$transaction(async (tx) => {

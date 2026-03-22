@@ -111,7 +111,7 @@ export default async function TeamPage() {
       <WorkspacePageHeader
         eyebrow="Команда платформы"
         title="Роли, доступы и приглашения"
-        description="Здесь администратор управляет внутренней командой: может сразу создать участника или выпустить invite-ссылку, по которой автор, куратор или менеджер подключится сам."
+        description="Здесь администратор управляет внутренней командой: может сразу создать участника или выпустить ссылку-приглашение, по которой автор, куратор или менеджер подключится сам."
       />
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
@@ -155,7 +155,7 @@ export default async function TeamPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="team-email">Email</Label>
+              <Label htmlFor="team-email">Почта</Label>
               <Input id="team-email" name="email" type="email" placeholder="author@example.com" required />
             </div>
 
@@ -186,14 +186,14 @@ export default async function TeamPage() {
         </WorkspacePanel>
 
         <WorkspacePanel
-          eyebrow="Invite-flow"
+          eyebrow="Приглашения"
           title="Выпустить ссылку-приглашение"
           description="Этот сценарий удобнее, когда человек должен сам активировать доступ, придумать пароль и зайти в платформу по ссылке."
           className="self-start"
         >
           <form action={createWorkspaceInvite} className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="invite-email">Email</Label>
+              <Label htmlFor="invite-email">Почта</Label>
               <Input id="invite-email" name="email" type="email" placeholder="curator@example.com" required />
             </div>
 
@@ -280,7 +280,7 @@ export default async function TeamPage() {
 
       <WorkspacePanel
         eyebrow="Приглашения"
-        title="Последние invite-ссылки"
+        title="Последние ссылки-приглашения"
         description="Сюда попадают свежие приглашения. Ссылку можно скопировать и отправить человеку вручную, даже если почтовый контур пока отключен."
       >
         {invites.length === 0 ? (
@@ -337,7 +337,7 @@ export default async function TeamPage() {
                         <InviteLinkCopy url={inviteUrl} />
                         <Button asChild variant="outline" size="sm">
                           <a href={inviteUrl} target="_blank" rel="noreferrer">
-                            Открыть invite
+                            Открыть приглашение
                           </a>
                         </Button>
                         {!invite.revokedAt && !invite.acceptedAt ? (
