@@ -7,6 +7,12 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import { requireAdminUser } from "@/lib/admin";
+import {
+  processDueEmailQueue,
+  queueCourseAccessGrantedEmail,
+  queueStudentAccountCreatedEmail,
+  queueStudentMarketingSequence,
+} from "@/features/email/service";
 
 const createStudentSchema = z.object({
   email: z.email().trim().toLowerCase(),
@@ -65,6 +71,7 @@ export async function createStudent(formData: FormData) {
   const passwordHash = await hashPassword(parsed.password);
 
   let userId = existingUser?.id;
+  let isNewStudent = false;
 
   if (existingUser) {
     await prisma.user.update({
@@ -88,6 +95,7 @@ export async function createStudent(formData: FormData) {
     });
 
     userId = user.id;
+    isNewStudent = true;
   }
 
   if (parsed.courseId && userId) {
@@ -110,6 +118,55 @@ export async function createStudent(formData: FormData) {
         completedAt: null,
       },
     });
+  }
+
+  const [student, course] = await Promise.all([
+    userId
+      ? prisma.user.findUnique({
+          where: {
+            id: userId,
+          },
+          select: {
+            id: true,
+            email: true,
+            name: true,
+          },
+        })
+      : Promise.resolve(null),
+    parsed.courseId
+      ? prisma.course.findUnique({
+          where: {
+            id: parsed.courseId,
+          },
+          select: {
+            id: true,
+            title: true,
+          },
+        })
+      : Promise.resolve(null),
+  ]);
+
+  if (student) {
+    await queueStudentAccountCreatedEmail({
+      user: student,
+      password: parsed.password,
+      isExistingAccount: !isNewStudent,
+    });
+
+    if (isNewStudent) {
+      await queueStudentMarketingSequence({
+        user: student,
+      });
+    }
+
+    if (course) {
+      await queueCourseAccessGrantedEmail({
+        user: student,
+        course,
+      });
+    }
+
+    await processDueEmailQueue({ force: true, limit: 10 });
   }
 
   refreshStudentAdminRoutes(parsed.courseId);
@@ -142,6 +199,37 @@ export async function enrollStudentInCourse(formData: FormData) {
       completedAt: null,
     },
   });
+
+  const [student, course] = await Promise.all([
+    prisma.user.findUnique({
+      where: {
+        id: parsed.userId,
+      },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+      },
+    }),
+    prisma.course.findUnique({
+      where: {
+        id: parsed.courseId,
+      },
+      select: {
+        id: true,
+        title: true,
+      },
+    }),
+  ]);
+
+  if (student && course) {
+    await queueCourseAccessGrantedEmail({
+      user: student,
+      course,
+    });
+
+    await processDueEmailQueue({ force: true, limit: 10 });
+  }
 
   refreshStudentAdminRoutes(parsed.courseId);
 }

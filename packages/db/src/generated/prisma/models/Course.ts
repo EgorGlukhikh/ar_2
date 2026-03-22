@@ -210,6 +210,8 @@ export type CourseWhereInput = {
   modules?: Prisma.ModuleListRelationFilter
   enrollments?: Prisma.EnrollmentListRelationFilter
   products?: Prisma.ProductListRelationFilter
+  emails?: Prisma.EmailMessageListRelationFilter
+  lessonSessions?: Prisma.LessonSessionListRelationFilter
 }
 
 export type CourseOrderByWithRelationInput = {
@@ -225,6 +227,8 @@ export type CourseOrderByWithRelationInput = {
   modules?: Prisma.ModuleOrderByRelationAggregateInput
   enrollments?: Prisma.EnrollmentOrderByRelationAggregateInput
   products?: Prisma.ProductOrderByRelationAggregateInput
+  emails?: Prisma.EmailMessageOrderByRelationAggregateInput
+  lessonSessions?: Prisma.LessonSessionOrderByRelationAggregateInput
 }
 
 export type CourseWhereUniqueInput = Prisma.AtLeast<{
@@ -243,6 +247,8 @@ export type CourseWhereUniqueInput = Prisma.AtLeast<{
   modules?: Prisma.ModuleListRelationFilter
   enrollments?: Prisma.EnrollmentListRelationFilter
   products?: Prisma.ProductListRelationFilter
+  emails?: Prisma.EmailMessageListRelationFilter
+  lessonSessions?: Prisma.LessonSessionListRelationFilter
 }, "id" | "slug">
 
 export type CourseOrderByWithAggregationInput = {
@@ -285,6 +291,8 @@ export type CourseCreateInput = {
   modules?: Prisma.ModuleCreateNestedManyWithoutCourseInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutCourseInput
   products?: Prisma.ProductCreateNestedManyWithoutCourseInput
+  emails?: Prisma.EmailMessageCreateNestedManyWithoutCourseInput
+  lessonSessions?: Prisma.LessonSessionCreateNestedManyWithoutCourseInput
 }
 
 export type CourseUncheckedCreateInput = {
@@ -299,6 +307,8 @@ export type CourseUncheckedCreateInput = {
   modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutCourseInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutCourseInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutCourseInput
+  emails?: Prisma.EmailMessageUncheckedCreateNestedManyWithoutCourseInput
+  lessonSessions?: Prisma.LessonSessionUncheckedCreateNestedManyWithoutCourseInput
 }
 
 export type CourseUpdateInput = {
@@ -313,6 +323,8 @@ export type CourseUpdateInput = {
   modules?: Prisma.ModuleUpdateManyWithoutCourseNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutCourseNestedInput
   products?: Prisma.ProductUpdateManyWithoutCourseNestedInput
+  emails?: Prisma.EmailMessageUpdateManyWithoutCourseNestedInput
+  lessonSessions?: Prisma.LessonSessionUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseUncheckedUpdateInput = {
@@ -327,6 +339,8 @@ export type CourseUncheckedUpdateInput = {
   modules?: Prisma.ModuleUncheckedUpdateManyWithoutCourseNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutCourseNestedInput
+  emails?: Prisma.EmailMessageUncheckedUpdateManyWithoutCourseNestedInput
+  lessonSessions?: Prisma.LessonSessionUncheckedUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseCreateManyInput = {
@@ -504,6 +518,36 @@ export type CourseUpdateOneWithoutProductsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CourseUpdateToOneWithWhereWithoutProductsInput, Prisma.CourseUpdateWithoutProductsInput>, Prisma.CourseUncheckedUpdateWithoutProductsInput>
 }
 
+export type CourseCreateNestedOneWithoutEmailsInput = {
+  create?: Prisma.XOR<Prisma.CourseCreateWithoutEmailsInput, Prisma.CourseUncheckedCreateWithoutEmailsInput>
+  connectOrCreate?: Prisma.CourseCreateOrConnectWithoutEmailsInput
+  connect?: Prisma.CourseWhereUniqueInput
+}
+
+export type CourseUpdateOneWithoutEmailsNestedInput = {
+  create?: Prisma.XOR<Prisma.CourseCreateWithoutEmailsInput, Prisma.CourseUncheckedCreateWithoutEmailsInput>
+  connectOrCreate?: Prisma.CourseCreateOrConnectWithoutEmailsInput
+  upsert?: Prisma.CourseUpsertWithoutEmailsInput
+  disconnect?: Prisma.CourseWhereInput | boolean
+  delete?: Prisma.CourseWhereInput | boolean
+  connect?: Prisma.CourseWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CourseUpdateToOneWithWhereWithoutEmailsInput, Prisma.CourseUpdateWithoutEmailsInput>, Prisma.CourseUncheckedUpdateWithoutEmailsInput>
+}
+
+export type CourseCreateNestedOneWithoutLessonSessionsInput = {
+  create?: Prisma.XOR<Prisma.CourseCreateWithoutLessonSessionsInput, Prisma.CourseUncheckedCreateWithoutLessonSessionsInput>
+  connectOrCreate?: Prisma.CourseCreateOrConnectWithoutLessonSessionsInput
+  connect?: Prisma.CourseWhereUniqueInput
+}
+
+export type CourseUpdateOneRequiredWithoutLessonSessionsNestedInput = {
+  create?: Prisma.XOR<Prisma.CourseCreateWithoutLessonSessionsInput, Prisma.CourseUncheckedCreateWithoutLessonSessionsInput>
+  connectOrCreate?: Prisma.CourseCreateOrConnectWithoutLessonSessionsInput
+  upsert?: Prisma.CourseUpsertWithoutLessonSessionsInput
+  connect?: Prisma.CourseWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CourseUpdateToOneWithWhereWithoutLessonSessionsInput, Prisma.CourseUpdateWithoutLessonSessionsInput>, Prisma.CourseUncheckedUpdateWithoutLessonSessionsInput>
+}
+
 export type CourseCreateWithoutAuthorInput = {
   id?: string
   slug: string
@@ -515,6 +559,8 @@ export type CourseCreateWithoutAuthorInput = {
   modules?: Prisma.ModuleCreateNestedManyWithoutCourseInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutCourseInput
   products?: Prisma.ProductCreateNestedManyWithoutCourseInput
+  emails?: Prisma.EmailMessageCreateNestedManyWithoutCourseInput
+  lessonSessions?: Prisma.LessonSessionCreateNestedManyWithoutCourseInput
 }
 
 export type CourseUncheckedCreateWithoutAuthorInput = {
@@ -528,6 +574,8 @@ export type CourseUncheckedCreateWithoutAuthorInput = {
   modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutCourseInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutCourseInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutCourseInput
+  emails?: Prisma.EmailMessageUncheckedCreateNestedManyWithoutCourseInput
+  lessonSessions?: Prisma.LessonSessionUncheckedCreateNestedManyWithoutCourseInput
 }
 
 export type CourseCreateOrConnectWithoutAuthorInput = {
@@ -581,6 +629,8 @@ export type CourseCreateWithoutModulesInput = {
   author?: Prisma.UserCreateNestedOneWithoutAuthoredInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutCourseInput
   products?: Prisma.ProductCreateNestedManyWithoutCourseInput
+  emails?: Prisma.EmailMessageCreateNestedManyWithoutCourseInput
+  lessonSessions?: Prisma.LessonSessionCreateNestedManyWithoutCourseInput
 }
 
 export type CourseUncheckedCreateWithoutModulesInput = {
@@ -594,6 +644,8 @@ export type CourseUncheckedCreateWithoutModulesInput = {
   updatedAt?: Date | string
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutCourseInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutCourseInput
+  emails?: Prisma.EmailMessageUncheckedCreateNestedManyWithoutCourseInput
+  lessonSessions?: Prisma.LessonSessionUncheckedCreateNestedManyWithoutCourseInput
 }
 
 export type CourseCreateOrConnectWithoutModulesInput = {
@@ -623,6 +675,8 @@ export type CourseUpdateWithoutModulesInput = {
   author?: Prisma.UserUpdateOneWithoutAuthoredNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutCourseNestedInput
   products?: Prisma.ProductUpdateManyWithoutCourseNestedInput
+  emails?: Prisma.EmailMessageUpdateManyWithoutCourseNestedInput
+  lessonSessions?: Prisma.LessonSessionUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseUncheckedUpdateWithoutModulesInput = {
@@ -636,6 +690,8 @@ export type CourseUncheckedUpdateWithoutModulesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutCourseNestedInput
+  emails?: Prisma.EmailMessageUncheckedUpdateManyWithoutCourseNestedInput
+  lessonSessions?: Prisma.LessonSessionUncheckedUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseCreateWithoutEnrollmentsInput = {
@@ -649,6 +705,8 @@ export type CourseCreateWithoutEnrollmentsInput = {
   author?: Prisma.UserCreateNestedOneWithoutAuthoredInput
   modules?: Prisma.ModuleCreateNestedManyWithoutCourseInput
   products?: Prisma.ProductCreateNestedManyWithoutCourseInput
+  emails?: Prisma.EmailMessageCreateNestedManyWithoutCourseInput
+  lessonSessions?: Prisma.LessonSessionCreateNestedManyWithoutCourseInput
 }
 
 export type CourseUncheckedCreateWithoutEnrollmentsInput = {
@@ -662,6 +720,8 @@ export type CourseUncheckedCreateWithoutEnrollmentsInput = {
   updatedAt?: Date | string
   modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutCourseInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutCourseInput
+  emails?: Prisma.EmailMessageUncheckedCreateNestedManyWithoutCourseInput
+  lessonSessions?: Prisma.LessonSessionUncheckedCreateNestedManyWithoutCourseInput
 }
 
 export type CourseCreateOrConnectWithoutEnrollmentsInput = {
@@ -691,6 +751,8 @@ export type CourseUpdateWithoutEnrollmentsInput = {
   author?: Prisma.UserUpdateOneWithoutAuthoredNestedInput
   modules?: Prisma.ModuleUpdateManyWithoutCourseNestedInput
   products?: Prisma.ProductUpdateManyWithoutCourseNestedInput
+  emails?: Prisma.EmailMessageUpdateManyWithoutCourseNestedInput
+  lessonSessions?: Prisma.LessonSessionUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseUncheckedUpdateWithoutEnrollmentsInput = {
@@ -704,6 +766,8 @@ export type CourseUncheckedUpdateWithoutEnrollmentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   modules?: Prisma.ModuleUncheckedUpdateManyWithoutCourseNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutCourseNestedInput
+  emails?: Prisma.EmailMessageUncheckedUpdateManyWithoutCourseNestedInput
+  lessonSessions?: Prisma.LessonSessionUncheckedUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseCreateWithoutProductsInput = {
@@ -717,6 +781,8 @@ export type CourseCreateWithoutProductsInput = {
   author?: Prisma.UserCreateNestedOneWithoutAuthoredInput
   modules?: Prisma.ModuleCreateNestedManyWithoutCourseInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutCourseInput
+  emails?: Prisma.EmailMessageCreateNestedManyWithoutCourseInput
+  lessonSessions?: Prisma.LessonSessionCreateNestedManyWithoutCourseInput
 }
 
 export type CourseUncheckedCreateWithoutProductsInput = {
@@ -730,6 +796,8 @@ export type CourseUncheckedCreateWithoutProductsInput = {
   updatedAt?: Date | string
   modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutCourseInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutCourseInput
+  emails?: Prisma.EmailMessageUncheckedCreateNestedManyWithoutCourseInput
+  lessonSessions?: Prisma.LessonSessionUncheckedCreateNestedManyWithoutCourseInput
 }
 
 export type CourseCreateOrConnectWithoutProductsInput = {
@@ -759,6 +827,8 @@ export type CourseUpdateWithoutProductsInput = {
   author?: Prisma.UserUpdateOneWithoutAuthoredNestedInput
   modules?: Prisma.ModuleUpdateManyWithoutCourseNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutCourseNestedInput
+  emails?: Prisma.EmailMessageUpdateManyWithoutCourseNestedInput
+  lessonSessions?: Prisma.LessonSessionUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseUncheckedUpdateWithoutProductsInput = {
@@ -772,6 +842,160 @@ export type CourseUncheckedUpdateWithoutProductsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   modules?: Prisma.ModuleUncheckedUpdateManyWithoutCourseNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
+  emails?: Prisma.EmailMessageUncheckedUpdateManyWithoutCourseNestedInput
+  lessonSessions?: Prisma.LessonSessionUncheckedUpdateManyWithoutCourseNestedInput
+}
+
+export type CourseCreateWithoutEmailsInput = {
+  id?: string
+  slug: string
+  title: string
+  description?: string | null
+  status?: $Enums.CourseStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  author?: Prisma.UserCreateNestedOneWithoutAuthoredInput
+  modules?: Prisma.ModuleCreateNestedManyWithoutCourseInput
+  enrollments?: Prisma.EnrollmentCreateNestedManyWithoutCourseInput
+  products?: Prisma.ProductCreateNestedManyWithoutCourseInput
+  lessonSessions?: Prisma.LessonSessionCreateNestedManyWithoutCourseInput
+}
+
+export type CourseUncheckedCreateWithoutEmailsInput = {
+  id?: string
+  slug: string
+  title: string
+  description?: string | null
+  status?: $Enums.CourseStatus
+  authorId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutCourseInput
+  enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutCourseInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutCourseInput
+  lessonSessions?: Prisma.LessonSessionUncheckedCreateNestedManyWithoutCourseInput
+}
+
+export type CourseCreateOrConnectWithoutEmailsInput = {
+  where: Prisma.CourseWhereUniqueInput
+  create: Prisma.XOR<Prisma.CourseCreateWithoutEmailsInput, Prisma.CourseUncheckedCreateWithoutEmailsInput>
+}
+
+export type CourseUpsertWithoutEmailsInput = {
+  update: Prisma.XOR<Prisma.CourseUpdateWithoutEmailsInput, Prisma.CourseUncheckedUpdateWithoutEmailsInput>
+  create: Prisma.XOR<Prisma.CourseCreateWithoutEmailsInput, Prisma.CourseUncheckedCreateWithoutEmailsInput>
+  where?: Prisma.CourseWhereInput
+}
+
+export type CourseUpdateToOneWithWhereWithoutEmailsInput = {
+  where?: Prisma.CourseWhereInput
+  data: Prisma.XOR<Prisma.CourseUpdateWithoutEmailsInput, Prisma.CourseUncheckedUpdateWithoutEmailsInput>
+}
+
+export type CourseUpdateWithoutEmailsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  author?: Prisma.UserUpdateOneWithoutAuthoredNestedInput
+  modules?: Prisma.ModuleUpdateManyWithoutCourseNestedInput
+  enrollments?: Prisma.EnrollmentUpdateManyWithoutCourseNestedInput
+  products?: Prisma.ProductUpdateManyWithoutCourseNestedInput
+  lessonSessions?: Prisma.LessonSessionUpdateManyWithoutCourseNestedInput
+}
+
+export type CourseUncheckedUpdateWithoutEmailsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+  authorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  modules?: Prisma.ModuleUncheckedUpdateManyWithoutCourseNestedInput
+  enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutCourseNestedInput
+  lessonSessions?: Prisma.LessonSessionUncheckedUpdateManyWithoutCourseNestedInput
+}
+
+export type CourseCreateWithoutLessonSessionsInput = {
+  id?: string
+  slug: string
+  title: string
+  description?: string | null
+  status?: $Enums.CourseStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  author?: Prisma.UserCreateNestedOneWithoutAuthoredInput
+  modules?: Prisma.ModuleCreateNestedManyWithoutCourseInput
+  enrollments?: Prisma.EnrollmentCreateNestedManyWithoutCourseInput
+  products?: Prisma.ProductCreateNestedManyWithoutCourseInput
+  emails?: Prisma.EmailMessageCreateNestedManyWithoutCourseInput
+}
+
+export type CourseUncheckedCreateWithoutLessonSessionsInput = {
+  id?: string
+  slug: string
+  title: string
+  description?: string | null
+  status?: $Enums.CourseStatus
+  authorId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutCourseInput
+  enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutCourseInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutCourseInput
+  emails?: Prisma.EmailMessageUncheckedCreateNestedManyWithoutCourseInput
+}
+
+export type CourseCreateOrConnectWithoutLessonSessionsInput = {
+  where: Prisma.CourseWhereUniqueInput
+  create: Prisma.XOR<Prisma.CourseCreateWithoutLessonSessionsInput, Prisma.CourseUncheckedCreateWithoutLessonSessionsInput>
+}
+
+export type CourseUpsertWithoutLessonSessionsInput = {
+  update: Prisma.XOR<Prisma.CourseUpdateWithoutLessonSessionsInput, Prisma.CourseUncheckedUpdateWithoutLessonSessionsInput>
+  create: Prisma.XOR<Prisma.CourseCreateWithoutLessonSessionsInput, Prisma.CourseUncheckedCreateWithoutLessonSessionsInput>
+  where?: Prisma.CourseWhereInput
+}
+
+export type CourseUpdateToOneWithWhereWithoutLessonSessionsInput = {
+  where?: Prisma.CourseWhereInput
+  data: Prisma.XOR<Prisma.CourseUpdateWithoutLessonSessionsInput, Prisma.CourseUncheckedUpdateWithoutLessonSessionsInput>
+}
+
+export type CourseUpdateWithoutLessonSessionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  author?: Prisma.UserUpdateOneWithoutAuthoredNestedInput
+  modules?: Prisma.ModuleUpdateManyWithoutCourseNestedInput
+  enrollments?: Prisma.EnrollmentUpdateManyWithoutCourseNestedInput
+  products?: Prisma.ProductUpdateManyWithoutCourseNestedInput
+  emails?: Prisma.EmailMessageUpdateManyWithoutCourseNestedInput
+}
+
+export type CourseUncheckedUpdateWithoutLessonSessionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+  authorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  modules?: Prisma.ModuleUncheckedUpdateManyWithoutCourseNestedInput
+  enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutCourseNestedInput
+  emails?: Prisma.EmailMessageUncheckedUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseCreateManyAuthorInput = {
@@ -795,6 +1019,8 @@ export type CourseUpdateWithoutAuthorInput = {
   modules?: Prisma.ModuleUpdateManyWithoutCourseNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutCourseNestedInput
   products?: Prisma.ProductUpdateManyWithoutCourseNestedInput
+  emails?: Prisma.EmailMessageUpdateManyWithoutCourseNestedInput
+  lessonSessions?: Prisma.LessonSessionUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseUncheckedUpdateWithoutAuthorInput = {
@@ -808,6 +1034,8 @@ export type CourseUncheckedUpdateWithoutAuthorInput = {
   modules?: Prisma.ModuleUncheckedUpdateManyWithoutCourseNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutCourseNestedInput
+  emails?: Prisma.EmailMessageUncheckedUpdateManyWithoutCourseNestedInput
+  lessonSessions?: Prisma.LessonSessionUncheckedUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseUncheckedUpdateManyWithoutAuthorInput = {
@@ -829,12 +1057,16 @@ export type CourseCountOutputType = {
   modules: number
   enrollments: number
   products: number
+  emails: number
+  lessonSessions: number
 }
 
 export type CourseCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   modules?: boolean | CourseCountOutputTypeCountModulesArgs
   enrollments?: boolean | CourseCountOutputTypeCountEnrollmentsArgs
   products?: boolean | CourseCountOutputTypeCountProductsArgs
+  emails?: boolean | CourseCountOutputTypeCountEmailsArgs
+  lessonSessions?: boolean | CourseCountOutputTypeCountLessonSessionsArgs
 }
 
 /**
@@ -868,6 +1100,20 @@ export type CourseCountOutputTypeCountProductsArgs<ExtArgs extends runtime.Types
   where?: Prisma.ProductWhereInput
 }
 
+/**
+ * CourseCountOutputType without action
+ */
+export type CourseCountOutputTypeCountEmailsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EmailMessageWhereInput
+}
+
+/**
+ * CourseCountOutputType without action
+ */
+export type CourseCountOutputTypeCountLessonSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LessonSessionWhereInput
+}
+
 
 export type CourseSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -882,6 +1128,8 @@ export type CourseSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   modules?: boolean | Prisma.Course$modulesArgs<ExtArgs>
   enrollments?: boolean | Prisma.Course$enrollmentsArgs<ExtArgs>
   products?: boolean | Prisma.Course$productsArgs<ExtArgs>
+  emails?: boolean | Prisma.Course$emailsArgs<ExtArgs>
+  lessonSessions?: boolean | Prisma.Course$lessonSessionsArgs<ExtArgs>
   _count?: boolean | Prisma.CourseCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["course"]>
 
@@ -926,6 +1174,8 @@ export type CourseInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   modules?: boolean | Prisma.Course$modulesArgs<ExtArgs>
   enrollments?: boolean | Prisma.Course$enrollmentsArgs<ExtArgs>
   products?: boolean | Prisma.Course$productsArgs<ExtArgs>
+  emails?: boolean | Prisma.Course$emailsArgs<ExtArgs>
+  lessonSessions?: boolean | Prisma.Course$lessonSessionsArgs<ExtArgs>
   _count?: boolean | Prisma.CourseCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CourseIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -942,6 +1192,8 @@ export type $CoursePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     modules: Prisma.$ModulePayload<ExtArgs>[]
     enrollments: Prisma.$EnrollmentPayload<ExtArgs>[]
     products: Prisma.$ProductPayload<ExtArgs>[]
+    emails: Prisma.$EmailMessagePayload<ExtArgs>[]
+    lessonSessions: Prisma.$LessonSessionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1350,6 +1602,8 @@ export interface Prisma__CourseClient<T, Null = never, ExtArgs extends runtime.T
   modules<T extends Prisma.Course$modulesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$modulesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ModulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   enrollments<T extends Prisma.Course$enrollmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   products<T extends Prisma.Course$productsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$productsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  emails<T extends Prisma.Course$emailsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$emailsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EmailMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  lessonSessions<T extends Prisma.Course$lessonSessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$lessonSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LessonSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1876,6 +2130,54 @@ export type Course$productsArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.ProductScalarFieldEnum | Prisma.ProductScalarFieldEnum[]
+}
+
+/**
+ * Course.emails
+ */
+export type Course$emailsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the EmailMessage
+   */
+  select?: Prisma.EmailMessageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the EmailMessage
+   */
+  omit?: Prisma.EmailMessageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EmailMessageInclude<ExtArgs> | null
+  where?: Prisma.EmailMessageWhereInput
+  orderBy?: Prisma.EmailMessageOrderByWithRelationInput | Prisma.EmailMessageOrderByWithRelationInput[]
+  cursor?: Prisma.EmailMessageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EmailMessageScalarFieldEnum | Prisma.EmailMessageScalarFieldEnum[]
+}
+
+/**
+ * Course.lessonSessions
+ */
+export type Course$lessonSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LessonSession
+   */
+  select?: Prisma.LessonSessionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LessonSession
+   */
+  omit?: Prisma.LessonSessionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LessonSessionInclude<ExtArgs> | null
+  where?: Prisma.LessonSessionWhereInput
+  orderBy?: Prisma.LessonSessionOrderByWithRelationInput | Prisma.LessonSessionOrderByWithRelationInput[]
+  cursor?: Prisma.LessonSessionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LessonSessionScalarFieldEnum | Prisma.LessonSessionScalarFieldEnum[]
 }
 
 /**

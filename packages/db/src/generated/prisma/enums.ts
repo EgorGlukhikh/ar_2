@@ -112,3 +112,35 @@ export const PaymentStatus = {
 } as const
 
 export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
+
+
+export const EmailProviderType = {
+  MOCK: 'MOCK',
+  RESEND: 'RESEND'
+} as const
+
+export type EmailProviderType = (typeof EmailProviderType)[keyof typeof EmailProviderType]
+
+
+export const EmailKind = {
+  TRANSACTIONAL: 'TRANSACTIONAL',
+  MARKETING: 'MARKETING'
+} as const
+
+export type EmailKind = (typeof EmailKind)[keyof typeof EmailKind]
+
+
+export const EmailStatus = {
+  QUEUED: 'QUEUED',
+  SENDING: 'SENDING',
+  SENT: 'SENT',
+  DELIVERED: 'DELIVERED',
+  OPENED: 'OPENED',
+  CLICKED: 'CLICKED',
+  FAILED: 'FAILED',
+  BOUNCED: 'BOUNCED',
+  COMPLAINED: 'COMPLAINED',
+  CANCELED: 'CANCELED'
+} as const
+
+export type EmailStatus = (typeof EmailStatus)[keyof typeof EmailStatus]

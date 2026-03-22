@@ -11,9 +11,13 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
+import {
+  processDueEmailQueue,
+  queuePaymentSuccessEmail,
+} from "@/features/email/service";
 import { requireAdminUser } from "@/lib/admin";
 import { getPaymentProvider } from "@/lib/billing/provider";
-import { parseAmountToMinorUnits } from "@/lib/money";
+import { formatMinorUnits, parseAmountToMinorUnits } from "@/lib/money";
 import { requireAuthenticatedUser } from "@/lib/user";
 
 const courseOfferSchema = z.object({
@@ -284,6 +288,12 @@ export async function completeDemoPayment(formData: FormData) {
           product: {
             select: {
               courseId: true,
+              course: {
+                select: {
+                  id: true,
+                  title: true,
+                },
+              },
             },
           },
         },
@@ -297,6 +307,7 @@ export async function completeDemoPayment(formData: FormData) {
   }
 
   const courseId = order.items[0]?.product.courseId;
+  const course = order.items[0]?.product.course ?? null;
 
   await prisma.$transaction(async (tx) => {
     await tx.order.update({
@@ -346,6 +357,25 @@ export async function completeDemoPayment(formData: FormData) {
       });
     }
   });
+
+  if (course) {
+    await queuePaymentSuccessEmail({
+      user: {
+        id: user.id,
+        email: user.email ?? "",
+        name: user.name ?? null,
+      },
+      course,
+      order: {
+        id: order.id,
+        totalAmount: order.totalAmount,
+        currency: order.currency,
+      },
+      amountLabel: formatMinorUnits(order.totalAmount, order.currency),
+    });
+
+    await processDueEmailQueue({ force: true, limit: 10 });
+  }
 
   refreshBillingPaths(courseId ?? undefined, order.id);
   redirect(`/checkout/${order.id}?paid=1`);

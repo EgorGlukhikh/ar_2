@@ -292,6 +292,7 @@ export type LessonWhereInput = {
   progress?: Prisma.LessonProgressListRelationFilter
   homeworkAssignment?: Prisma.XOR<Prisma.HomeworkAssignmentNullableScalarRelationFilter, Prisma.HomeworkAssignmentWhereInput> | null
   videoAsset?: Prisma.XOR<Prisma.VideoAssetNullableScalarRelationFilter, Prisma.VideoAssetWhereInput> | null
+  lessonSessions?: Prisma.LessonSessionListRelationFilter
 }
 
 export type LessonOrderByWithRelationInput = {
@@ -313,6 +314,7 @@ export type LessonOrderByWithRelationInput = {
   progress?: Prisma.LessonProgressOrderByRelationAggregateInput
   homeworkAssignment?: Prisma.HomeworkAssignmentOrderByWithRelationInput
   videoAsset?: Prisma.VideoAssetOrderByWithRelationInput
+  lessonSessions?: Prisma.LessonSessionOrderByRelationAggregateInput
 }
 
 export type LessonWhereUniqueInput = Prisma.AtLeast<{
@@ -338,6 +340,7 @@ export type LessonWhereUniqueInput = Prisma.AtLeast<{
   progress?: Prisma.LessonProgressListRelationFilter
   homeworkAssignment?: Prisma.XOR<Prisma.HomeworkAssignmentNullableScalarRelationFilter, Prisma.HomeworkAssignmentWhereInput> | null
   videoAsset?: Prisma.XOR<Prisma.VideoAssetNullableScalarRelationFilter, Prisma.VideoAssetWhereInput> | null
+  lessonSessions?: Prisma.LessonSessionListRelationFilter
 }, "id" | "moduleId_position">
 
 export type LessonOrderByWithAggregationInput = {
@@ -400,6 +403,7 @@ export type LessonCreateInput = {
   progress?: Prisma.LessonProgressCreateNestedManyWithoutLessonInput
   homeworkAssignment?: Prisma.HomeworkAssignmentCreateNestedOneWithoutLessonInput
   videoAsset?: Prisma.VideoAssetCreateNestedOneWithoutLessonInput
+  lessonSessions?: Prisma.LessonSessionCreateNestedManyWithoutLessonInput
 }
 
 export type LessonUncheckedCreateInput = {
@@ -420,6 +424,7 @@ export type LessonUncheckedCreateInput = {
   progress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutLessonInput
   homeworkAssignment?: Prisma.HomeworkAssignmentUncheckedCreateNestedOneWithoutLessonInput
   videoAsset?: Prisma.VideoAssetUncheckedCreateNestedOneWithoutLessonInput
+  lessonSessions?: Prisma.LessonSessionUncheckedCreateNestedManyWithoutLessonInput
 }
 
 export type LessonUpdateInput = {
@@ -440,6 +445,7 @@ export type LessonUpdateInput = {
   progress?: Prisma.LessonProgressUpdateManyWithoutLessonNestedInput
   homeworkAssignment?: Prisma.HomeworkAssignmentUpdateOneWithoutLessonNestedInput
   videoAsset?: Prisma.VideoAssetUpdateOneWithoutLessonNestedInput
+  lessonSessions?: Prisma.LessonSessionUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateInput = {
@@ -460,6 +466,7 @@ export type LessonUncheckedUpdateInput = {
   progress?: Prisma.LessonProgressUncheckedUpdateManyWithoutLessonNestedInput
   homeworkAssignment?: Prisma.HomeworkAssignmentUncheckedUpdateOneWithoutLessonNestedInput
   videoAsset?: Prisma.VideoAssetUncheckedUpdateOneWithoutLessonNestedInput
+  lessonSessions?: Prisma.LessonSessionUncheckedUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonCreateManyInput = {
@@ -687,6 +694,20 @@ export type LessonUpdateOneRequiredWithoutHomeworkAssignmentNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.LessonUpdateToOneWithWhereWithoutHomeworkAssignmentInput, Prisma.LessonUpdateWithoutHomeworkAssignmentInput>, Prisma.LessonUncheckedUpdateWithoutHomeworkAssignmentInput>
 }
 
+export type LessonCreateNestedOneWithoutLessonSessionsInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutLessonSessionsInput, Prisma.LessonUncheckedCreateWithoutLessonSessionsInput>
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutLessonSessionsInput
+  connect?: Prisma.LessonWhereUniqueInput
+}
+
+export type LessonUpdateOneRequiredWithoutLessonSessionsNestedInput = {
+  create?: Prisma.XOR<Prisma.LessonCreateWithoutLessonSessionsInput, Prisma.LessonUncheckedCreateWithoutLessonSessionsInput>
+  connectOrCreate?: Prisma.LessonCreateOrConnectWithoutLessonSessionsInput
+  upsert?: Prisma.LessonUpsertWithoutLessonSessionsInput
+  connect?: Prisma.LessonWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LessonUpdateToOneWithWhereWithoutLessonSessionsInput, Prisma.LessonUpdateWithoutLessonSessionsInput>, Prisma.LessonUncheckedUpdateWithoutLessonSessionsInput>
+}
+
 export type LessonCreateWithoutModuleInput = {
   id?: string
   title: string
@@ -704,6 +725,7 @@ export type LessonCreateWithoutModuleInput = {
   progress?: Prisma.LessonProgressCreateNestedManyWithoutLessonInput
   homeworkAssignment?: Prisma.HomeworkAssignmentCreateNestedOneWithoutLessonInput
   videoAsset?: Prisma.VideoAssetCreateNestedOneWithoutLessonInput
+  lessonSessions?: Prisma.LessonSessionCreateNestedManyWithoutLessonInput
 }
 
 export type LessonUncheckedCreateWithoutModuleInput = {
@@ -723,6 +745,7 @@ export type LessonUncheckedCreateWithoutModuleInput = {
   progress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutLessonInput
   homeworkAssignment?: Prisma.HomeworkAssignmentUncheckedCreateNestedOneWithoutLessonInput
   videoAsset?: Prisma.VideoAssetUncheckedCreateNestedOneWithoutLessonInput
+  lessonSessions?: Prisma.LessonSessionUncheckedCreateNestedManyWithoutLessonInput
 }
 
 export type LessonCreateOrConnectWithoutModuleInput = {
@@ -788,6 +811,7 @@ export type LessonCreateWithoutVideoAssetInput = {
   module: Prisma.ModuleCreateNestedOneWithoutLessonsInput
   progress?: Prisma.LessonProgressCreateNestedManyWithoutLessonInput
   homeworkAssignment?: Prisma.HomeworkAssignmentCreateNestedOneWithoutLessonInput
+  lessonSessions?: Prisma.LessonSessionCreateNestedManyWithoutLessonInput
 }
 
 export type LessonUncheckedCreateWithoutVideoAssetInput = {
@@ -807,6 +831,7 @@ export type LessonUncheckedCreateWithoutVideoAssetInput = {
   updatedAt?: Date | string
   progress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutLessonInput
   homeworkAssignment?: Prisma.HomeworkAssignmentUncheckedCreateNestedOneWithoutLessonInput
+  lessonSessions?: Prisma.LessonSessionUncheckedCreateNestedManyWithoutLessonInput
 }
 
 export type LessonCreateOrConnectWithoutVideoAssetInput = {
@@ -842,6 +867,7 @@ export type LessonUpdateWithoutVideoAssetInput = {
   module?: Prisma.ModuleUpdateOneRequiredWithoutLessonsNestedInput
   progress?: Prisma.LessonProgressUpdateManyWithoutLessonNestedInput
   homeworkAssignment?: Prisma.HomeworkAssignmentUpdateOneWithoutLessonNestedInput
+  lessonSessions?: Prisma.LessonSessionUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutVideoAssetInput = {
@@ -861,6 +887,7 @@ export type LessonUncheckedUpdateWithoutVideoAssetInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   progress?: Prisma.LessonProgressUncheckedUpdateManyWithoutLessonNestedInput
   homeworkAssignment?: Prisma.HomeworkAssignmentUncheckedUpdateOneWithoutLessonNestedInput
+  lessonSessions?: Prisma.LessonSessionUncheckedUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonCreateWithoutProgressInput = {
@@ -880,6 +907,7 @@ export type LessonCreateWithoutProgressInput = {
   module: Prisma.ModuleCreateNestedOneWithoutLessonsInput
   homeworkAssignment?: Prisma.HomeworkAssignmentCreateNestedOneWithoutLessonInput
   videoAsset?: Prisma.VideoAssetCreateNestedOneWithoutLessonInput
+  lessonSessions?: Prisma.LessonSessionCreateNestedManyWithoutLessonInput
 }
 
 export type LessonUncheckedCreateWithoutProgressInput = {
@@ -899,6 +927,7 @@ export type LessonUncheckedCreateWithoutProgressInput = {
   updatedAt?: Date | string
   homeworkAssignment?: Prisma.HomeworkAssignmentUncheckedCreateNestedOneWithoutLessonInput
   videoAsset?: Prisma.VideoAssetUncheckedCreateNestedOneWithoutLessonInput
+  lessonSessions?: Prisma.LessonSessionUncheckedCreateNestedManyWithoutLessonInput
 }
 
 export type LessonCreateOrConnectWithoutProgressInput = {
@@ -934,6 +963,7 @@ export type LessonUpdateWithoutProgressInput = {
   module?: Prisma.ModuleUpdateOneRequiredWithoutLessonsNestedInput
   homeworkAssignment?: Prisma.HomeworkAssignmentUpdateOneWithoutLessonNestedInput
   videoAsset?: Prisma.VideoAssetUpdateOneWithoutLessonNestedInput
+  lessonSessions?: Prisma.LessonSessionUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutProgressInput = {
@@ -953,6 +983,7 @@ export type LessonUncheckedUpdateWithoutProgressInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   homeworkAssignment?: Prisma.HomeworkAssignmentUncheckedUpdateOneWithoutLessonNestedInput
   videoAsset?: Prisma.VideoAssetUncheckedUpdateOneWithoutLessonNestedInput
+  lessonSessions?: Prisma.LessonSessionUncheckedUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonCreateWithoutHomeworkAssignmentInput = {
@@ -972,6 +1003,7 @@ export type LessonCreateWithoutHomeworkAssignmentInput = {
   module: Prisma.ModuleCreateNestedOneWithoutLessonsInput
   progress?: Prisma.LessonProgressCreateNestedManyWithoutLessonInput
   videoAsset?: Prisma.VideoAssetCreateNestedOneWithoutLessonInput
+  lessonSessions?: Prisma.LessonSessionCreateNestedManyWithoutLessonInput
 }
 
 export type LessonUncheckedCreateWithoutHomeworkAssignmentInput = {
@@ -991,6 +1023,7 @@ export type LessonUncheckedCreateWithoutHomeworkAssignmentInput = {
   updatedAt?: Date | string
   progress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutLessonInput
   videoAsset?: Prisma.VideoAssetUncheckedCreateNestedOneWithoutLessonInput
+  lessonSessions?: Prisma.LessonSessionUncheckedCreateNestedManyWithoutLessonInput
 }
 
 export type LessonCreateOrConnectWithoutHomeworkAssignmentInput = {
@@ -1026,6 +1059,7 @@ export type LessonUpdateWithoutHomeworkAssignmentInput = {
   module?: Prisma.ModuleUpdateOneRequiredWithoutLessonsNestedInput
   progress?: Prisma.LessonProgressUpdateManyWithoutLessonNestedInput
   videoAsset?: Prisma.VideoAssetUpdateOneWithoutLessonNestedInput
+  lessonSessions?: Prisma.LessonSessionUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutHomeworkAssignmentInput = {
@@ -1044,6 +1078,103 @@ export type LessonUncheckedUpdateWithoutHomeworkAssignmentInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   progress?: Prisma.LessonProgressUncheckedUpdateManyWithoutLessonNestedInput
+  videoAsset?: Prisma.VideoAssetUncheckedUpdateOneWithoutLessonNestedInput
+  lessonSessions?: Prisma.LessonSessionUncheckedUpdateManyWithoutLessonNestedInput
+}
+
+export type LessonCreateWithoutLessonSessionsInput = {
+  id?: string
+  title: string
+  excerpt?: string | null
+  type?: $Enums.LessonType
+  position: number
+  isPreview?: boolean
+  accessAfterDays?: number | null
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  videoSourceType?: $Enums.MediaSourceType | null
+  videoUrl?: string | null
+  videoPlaybackId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  module: Prisma.ModuleCreateNestedOneWithoutLessonsInput
+  progress?: Prisma.LessonProgressCreateNestedManyWithoutLessonInput
+  homeworkAssignment?: Prisma.HomeworkAssignmentCreateNestedOneWithoutLessonInput
+  videoAsset?: Prisma.VideoAssetCreateNestedOneWithoutLessonInput
+}
+
+export type LessonUncheckedCreateWithoutLessonSessionsInput = {
+  id?: string
+  moduleId: string
+  title: string
+  excerpt?: string | null
+  type?: $Enums.LessonType
+  position: number
+  isPreview?: boolean
+  accessAfterDays?: number | null
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  videoSourceType?: $Enums.MediaSourceType | null
+  videoUrl?: string | null
+  videoPlaybackId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  progress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutLessonInput
+  homeworkAssignment?: Prisma.HomeworkAssignmentUncheckedCreateNestedOneWithoutLessonInput
+  videoAsset?: Prisma.VideoAssetUncheckedCreateNestedOneWithoutLessonInput
+}
+
+export type LessonCreateOrConnectWithoutLessonSessionsInput = {
+  where: Prisma.LessonWhereUniqueInput
+  create: Prisma.XOR<Prisma.LessonCreateWithoutLessonSessionsInput, Prisma.LessonUncheckedCreateWithoutLessonSessionsInput>
+}
+
+export type LessonUpsertWithoutLessonSessionsInput = {
+  update: Prisma.XOR<Prisma.LessonUpdateWithoutLessonSessionsInput, Prisma.LessonUncheckedUpdateWithoutLessonSessionsInput>
+  create: Prisma.XOR<Prisma.LessonCreateWithoutLessonSessionsInput, Prisma.LessonUncheckedCreateWithoutLessonSessionsInput>
+  where?: Prisma.LessonWhereInput
+}
+
+export type LessonUpdateToOneWithWhereWithoutLessonSessionsInput = {
+  where?: Prisma.LessonWhereInput
+  data: Prisma.XOR<Prisma.LessonUpdateWithoutLessonSessionsInput, Prisma.LessonUncheckedUpdateWithoutLessonSessionsInput>
+}
+
+export type LessonUpdateWithoutLessonSessionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  excerpt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.EnumLessonTypeFieldUpdateOperationsInput | $Enums.LessonType
+  position?: Prisma.IntFieldUpdateOperationsInput | number
+  isPreview?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  accessAfterDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  videoSourceType?: Prisma.NullableEnumMediaSourceTypeFieldUpdateOperationsInput | $Enums.MediaSourceType | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoPlaybackId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  module?: Prisma.ModuleUpdateOneRequiredWithoutLessonsNestedInput
+  progress?: Prisma.LessonProgressUpdateManyWithoutLessonNestedInput
+  homeworkAssignment?: Prisma.HomeworkAssignmentUpdateOneWithoutLessonNestedInput
+  videoAsset?: Prisma.VideoAssetUpdateOneWithoutLessonNestedInput
+}
+
+export type LessonUncheckedUpdateWithoutLessonSessionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  moduleId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  excerpt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.EnumLessonTypeFieldUpdateOperationsInput | $Enums.LessonType
+  position?: Prisma.IntFieldUpdateOperationsInput | number
+  isPreview?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  accessAfterDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  content?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  videoSourceType?: Prisma.NullableEnumMediaSourceTypeFieldUpdateOperationsInput | $Enums.MediaSourceType | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoPlaybackId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  progress?: Prisma.LessonProgressUncheckedUpdateManyWithoutLessonNestedInput
+  homeworkAssignment?: Prisma.HomeworkAssignmentUncheckedUpdateOneWithoutLessonNestedInput
   videoAsset?: Prisma.VideoAssetUncheckedUpdateOneWithoutLessonNestedInput
 }
 
@@ -1080,6 +1211,7 @@ export type LessonUpdateWithoutModuleInput = {
   progress?: Prisma.LessonProgressUpdateManyWithoutLessonNestedInput
   homeworkAssignment?: Prisma.HomeworkAssignmentUpdateOneWithoutLessonNestedInput
   videoAsset?: Prisma.VideoAssetUpdateOneWithoutLessonNestedInput
+  lessonSessions?: Prisma.LessonSessionUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateWithoutModuleInput = {
@@ -1099,6 +1231,7 @@ export type LessonUncheckedUpdateWithoutModuleInput = {
   progress?: Prisma.LessonProgressUncheckedUpdateManyWithoutLessonNestedInput
   homeworkAssignment?: Prisma.HomeworkAssignmentUncheckedUpdateOneWithoutLessonNestedInput
   videoAsset?: Prisma.VideoAssetUncheckedUpdateOneWithoutLessonNestedInput
+  lessonSessions?: Prisma.LessonSessionUncheckedUpdateManyWithoutLessonNestedInput
 }
 
 export type LessonUncheckedUpdateManyWithoutModuleInput = {
@@ -1124,10 +1257,12 @@ export type LessonUncheckedUpdateManyWithoutModuleInput = {
 
 export type LessonCountOutputType = {
   progress: number
+  lessonSessions: number
 }
 
 export type LessonCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   progress?: boolean | LessonCountOutputTypeCountProgressArgs
+  lessonSessions?: boolean | LessonCountOutputTypeCountLessonSessionsArgs
 }
 
 /**
@@ -1145,6 +1280,13 @@ export type LessonCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Exten
  */
 export type LessonCountOutputTypeCountProgressArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.LessonProgressWhereInput
+}
+
+/**
+ * LessonCountOutputType without action
+ */
+export type LessonCountOutputTypeCountLessonSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LessonSessionWhereInput
 }
 
 
@@ -1167,6 +1309,7 @@ export type LessonSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   progress?: boolean | Prisma.Lesson$progressArgs<ExtArgs>
   homeworkAssignment?: boolean | Prisma.Lesson$homeworkAssignmentArgs<ExtArgs>
   videoAsset?: boolean | Prisma.Lesson$videoAssetArgs<ExtArgs>
+  lessonSessions?: boolean | Prisma.Lesson$lessonSessionsArgs<ExtArgs>
   _count?: boolean | Prisma.LessonCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["lesson"]>
 
@@ -1229,6 +1372,7 @@ export type LessonInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   progress?: boolean | Prisma.Lesson$progressArgs<ExtArgs>
   homeworkAssignment?: boolean | Prisma.Lesson$homeworkAssignmentArgs<ExtArgs>
   videoAsset?: boolean | Prisma.Lesson$videoAssetArgs<ExtArgs>
+  lessonSessions?: boolean | Prisma.Lesson$lessonSessionsArgs<ExtArgs>
   _count?: boolean | Prisma.LessonCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type LessonIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1245,6 +1389,7 @@ export type $LessonPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     progress: Prisma.$LessonProgressPayload<ExtArgs>[]
     homeworkAssignment: Prisma.$HomeworkAssignmentPayload<ExtArgs> | null
     videoAsset: Prisma.$VideoAssetPayload<ExtArgs> | null
+    lessonSessions: Prisma.$LessonSessionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1659,6 +1804,7 @@ export interface Prisma__LessonClient<T, Null = never, ExtArgs extends runtime.T
   progress<T extends Prisma.Lesson$progressArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$progressArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LessonProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   homeworkAssignment<T extends Prisma.Lesson$homeworkAssignmentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$homeworkAssignmentArgs<ExtArgs>>): Prisma.Prisma__HomeworkAssignmentClient<runtime.Types.Result.GetResult<Prisma.$HomeworkAssignmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   videoAsset<T extends Prisma.Lesson$videoAssetArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$videoAssetArgs<ExtArgs>>): Prisma.Prisma__VideoAssetClient<runtime.Types.Result.GetResult<Prisma.$VideoAssetPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  lessonSessions<T extends Prisma.Lesson$lessonSessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lesson$lessonSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LessonSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2162,6 +2308,30 @@ export type Lesson$videoAssetArgs<ExtArgs extends runtime.Types.Extensions.Inter
    */
   include?: Prisma.VideoAssetInclude<ExtArgs> | null
   where?: Prisma.VideoAssetWhereInput
+}
+
+/**
+ * Lesson.lessonSessions
+ */
+export type Lesson$lessonSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LessonSession
+   */
+  select?: Prisma.LessonSessionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LessonSession
+   */
+  omit?: Prisma.LessonSessionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LessonSessionInclude<ExtArgs> | null
+  where?: Prisma.LessonSessionWhereInput
+  orderBy?: Prisma.LessonSessionOrderByWithRelationInput | Prisma.LessonSessionOrderByWithRelationInput[]
+  cursor?: Prisma.LessonSessionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LessonSessionScalarFieldEnum | Prisma.LessonSessionScalarFieldEnum[]
 }
 
 /**

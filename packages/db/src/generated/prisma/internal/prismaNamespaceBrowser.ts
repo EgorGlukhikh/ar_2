@@ -67,7 +67,12 @@ export const ModelName = {
   Price: 'Price',
   Order: 'Order',
   OrderItem: 'OrderItem',
-  Payment: 'Payment'
+  Payment: 'Payment',
+  EmailMessage: 'EmailMessage',
+  EmailEvent: 'EmailEvent',
+  EmailLinkClick: 'EmailLinkClick',
+  LessonSession: 'LessonSession',
+  LessonSessionEvent: 'LessonSessionEvent'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -329,6 +334,107 @@ export const PaymentScalarFieldEnum = {
 } as const
 
 export type PaymentScalarFieldEnum = (typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum]
+
+
+export const EmailMessageScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  courseId: 'courseId',
+  orderId: 'orderId',
+  provider: 'provider',
+  kind: 'kind',
+  status: 'status',
+  templateKey: 'templateKey',
+  campaignKey: 'campaignKey',
+  sequenceStep: 'sequenceStep',
+  dedupeKey: 'dedupeKey',
+  trackingToken: 'trackingToken',
+  subject: 'subject',
+  fromEmail: 'fromEmail',
+  fromName: 'fromName',
+  toEmail: 'toEmail',
+  toName: 'toName',
+  htmlBody: 'htmlBody',
+  textBody: 'textBody',
+  scheduledAt: 'scheduledAt',
+  sentAt: 'sentAt',
+  deliveredAt: 'deliveredAt',
+  openedAt: 'openedAt',
+  clickedAt: 'clickedAt',
+  failedAt: 'failedAt',
+  providerMessageId: 'providerMessageId',
+  lastError: 'lastError',
+  metadata: 'metadata',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EmailMessageScalarFieldEnum = (typeof EmailMessageScalarFieldEnum)[keyof typeof EmailMessageScalarFieldEnum]
+
+
+export const EmailEventScalarFieldEnum = {
+  id: 'id',
+  emailMessageId: 'emailMessageId',
+  eventType: 'eventType',
+  status: 'status',
+  providerId: 'providerId',
+  payload: 'payload',
+  createdAt: 'createdAt'
+} as const
+
+export type EmailEventScalarFieldEnum = (typeof EmailEventScalarFieldEnum)[keyof typeof EmailEventScalarFieldEnum]
+
+
+export const EmailLinkClickScalarFieldEnum = {
+  id: 'id',
+  emailMessageId: 'emailMessageId',
+  url: 'url',
+  createdAt: 'createdAt'
+} as const
+
+export type EmailLinkClickScalarFieldEnum = (typeof EmailLinkClickScalarFieldEnum)[keyof typeof EmailLinkClickScalarFieldEnum]
+
+
+export const LessonSessionScalarFieldEnum = {
+  id: 'id',
+  clientSessionId: 'clientSessionId',
+  userId: 'userId',
+  courseId: 'courseId',
+  lessonId: 'lessonId',
+  actualRole: 'actualRole',
+  previewRole: 'previewRole',
+  isPreview: 'isPreview',
+  sourceType: 'sourceType',
+  hadVideo: 'hadVideo',
+  entryPath: 'entryPath',
+  lastPlayerState: 'lastPlayerState',
+  exitReason: 'exitReason',
+  durationSeconds: 'durationSeconds',
+  lastPositionSeconds: 'lastPositionSeconds',
+  maxPositionSeconds: 'maxPositionSeconds',
+  startedAt: 'startedAt',
+  lastSeenAt: 'lastSeenAt',
+  endedAt: 'endedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LessonSessionScalarFieldEnum = (typeof LessonSessionScalarFieldEnum)[keyof typeof LessonSessionScalarFieldEnum]
+
+
+export const LessonSessionEventScalarFieldEnum = {
+  id: 'id',
+  lessonSessionId: 'lessonSessionId',
+  eventType: 'eventType',
+  playerState: 'playerState',
+  visibilityState: 'visibilityState',
+  positionSeconds: 'positionSeconds',
+  durationSeconds: 'durationSeconds',
+  payload: 'payload',
+  createdAt: 'createdAt'
+} as const
+
+export type LessonSessionEventScalarFieldEnum = (typeof LessonSessionEventScalarFieldEnum)[keyof typeof LessonSessionEventScalarFieldEnum]
 
 
 export const SortOrder = {

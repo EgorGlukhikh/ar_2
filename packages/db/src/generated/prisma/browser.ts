@@ -102,3 +102,28 @@ export type OrderItem = Prisma.OrderItemModel
  * 
  */
 export type Payment = Prisma.PaymentModel
+/**
+ * Model EmailMessage
+ * 
+ */
+export type EmailMessage = Prisma.EmailMessageModel
+/**
+ * Model EmailEvent
+ * 
+ */
+export type EmailEvent = Prisma.EmailEventModel
+/**
+ * Model EmailLinkClick
+ * 
+ */
+export type EmailLinkClick = Prisma.EmailLinkClickModel
+/**
+ * Model LessonSession
+ * 
+ */
+export type LessonSession = Prisma.LessonSessionModel
+/**
+ * Model LessonSessionEvent
+ * 
+ */
+export type LessonSessionEvent = Prisma.LessonSessionEventModel

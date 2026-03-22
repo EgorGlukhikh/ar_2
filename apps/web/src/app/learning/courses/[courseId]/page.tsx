@@ -2,6 +2,7 @@ import { EnrollmentStatus, prisma } from "@academy/db";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { LessonEngagementTracker } from "@/components/learning/lesson-engagement-tracker";
 import { LessonVideoPlayer } from "@/components/learning/lesson-video-player";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -15,7 +16,8 @@ import {
   enrollmentStatusVariantMap,
   lessonTypeLabelMap,
 } from "@/lib/labels";
-import { isElevatedUserRole, requireStudentOrElevatedUser } from "@/lib/user";
+import { isElevatedUserRole } from "@/lib/user";
+import { requireLearningViewer } from "@/lib/viewer";
 
 function addDays(date: Date, days: number) {
   const result = new Date(date);
@@ -36,8 +38,9 @@ export default async function CourseLearningPage({
   params,
   searchParams,
 }: CourseLearningPageProps) {
-  const user = await requireStudentOrElevatedUser();
-  const isElevated = isElevatedUserRole(user.role);
+  const viewer = await requireLearningViewer();
+  const user = viewer.user;
+  const isElevated = isElevatedUserRole(viewer.effectiveRole);
   const { courseId } = await params;
   const resolvedSearchParams = (searchParams ? await searchParams : {}) as {
     lessonId?: string;
@@ -316,6 +319,23 @@ export default async function CourseLearningPage({
                 </div>
               ) : (
                 <>
+                  <LessonEngagementTracker
+                    courseId={course.id}
+                    lessonId={selectedEntry.lesson.id}
+                    entryPath={`/learning/courses/${course.id}?lessonId=${selectedEntry.lesson.id}`}
+                    hasVideo={Boolean(
+                      selectedEntry.lesson.videoAsset ||
+                        selectedEntry.lesson.videoSourceType ||
+                        selectedEntry.lesson.videoUrl ||
+                        selectedEntry.lesson.videoPlaybackId,
+                    )}
+                    sourceType={
+                      selectedEntry.lesson.videoAsset?.sourceType ??
+                      selectedEntry.lesson.videoSourceType ??
+                      null
+                    }
+                  />
+
                   <LessonVideoPlayer
                     title={selectedEntry.lesson.title}
                     videoSourceType={selectedEntry.lesson.videoSourceType}

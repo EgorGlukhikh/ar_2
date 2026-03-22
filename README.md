@@ -1,29 +1,30 @@
 # Академия риэлторов
 
-Платформа обучения для проекта "Академия риэлторов".
+Платформа обучения для проекта «Академия риэлторов».
 
 ## Стек
 
 - Next.js 15
 - React 19
 - Prisma 7
-- Auth.js credentials auth
-- PostgreSQL через Docker Compose
+- Auth.js c `email + password`
+- PostgreSQL
 - modular monolith на workspace-пакетах
+- Railway как production target
 
-## Что уже собрано
+## Что уже работает
 
-- авторизация по `email + password`
-- админская зона для курсов, модулей, уроков, студентов, доступов и прогресса
-- учебная зона ученика с курсами и прохождением уроков
-- video foundation с provider abstraction, embed-поддержкой и сущностью `VideoAsset`
-- demo billing flow с каталогом, checkout и автоматической выдачей доступа после успешной оплаты
-
-## Деплой
-
-- основной production target проекта: `Railway`
-- runtime приложения и managed PostgreSQL собираются в Railway-first конфигурации
-- локальная разработка остается на `Docker Compose`
+- публичный лендинг, вход и каталог курсов
+- email/password авторизация
+- админский контур для курсов, модулей, уроков, студентов и доступов
+- редактор курса с логикой `модули слева -> тело редактирования справа`
+- урок, в котором одновременно могут жить текст, видео и прикрепленный материал
+- demo checkout и demo-оплата с автоматической выдачей доступа
+- video foundation для `private/public RUTUBE`, embed и managed upload
+- email-центр с очередью, служебными письмами и маркетинговой цепочкой из 5 писем
+- статусы `queued / sent / delivered / opened / clicked / failed`
+- behavioral analytics по урокам и просмотрам видео
+- preview-режимы ролей для админа: `админ / автор / студент`
 
 ## Локальный запуск
 
@@ -38,11 +39,66 @@
 ## Тестовый админ
 
 - Email: `test@mail.ru`
-- Password: `12345`
+- Пароль: `12345`
 
-Эти данные предназначены только для локальной разработки и берутся из корневого `.env`.
+## Production env
+
+Обязательные:
+
+- `DATABASE_URL`
+- `AUTH_SECRET`
+- `AUTH_TRUST_HOST=true`
+- `AUTH_URL`
+- `NEXTAUTH_URL`
+- `APP_BASE_URL`
+- `ADMIN_EMAIL`
+- `ADMIN_PASSWORD`
+
+Текущие провайдеры:
+
+- `PAYMENT_PROVIDER=demo`
+- `VIDEO_PROVIDER=mock`
+- `EMAIL_PROVIDER=mock`
+
+Если включаем реальные письма через Resend:
+
+- `EMAIL_PROVIDER=resend`
+- `EMAIL_FROM_EMAIL`
+- `EMAIL_FROM_NAME`
+- `RESEND_API_KEY`
+- `RESEND_WEBHOOK_SECRET`
+
+Для фоновой обработки очереди писем:
+
+- `CRON_SECRET`
+
+## Railway
+
+В Railway уже развертывается `web` + `Postgres`.
+
+Для production email-цепочек нужен scheduled trigger:
+
+1. Создать cron/job, который вызывает `POST /api/cron/email-queue`
+2. Передавать заголовок `x-cron-secret: <CRON_SECRET>`
+3. Периодичность: раз в 10-15 минут
+
+Без cron-route письма из отложенной цепочки не будут уходить строго по расписанию.
+
+## Что желательно подключить внешне
+
+Реально нужно для production:
+
+- `Resend` для доставляемости и webhook-статусов писем
+- cron/job runner в Railway для email-очереди
+
+Сильно желательно для следующего этапа:
+
+- `Cloudflare Stream` или `Mux`, если нужна точная видео-аналитика не только для RUTUBE, но и для managed video
+- `PostHog`, если захотим вынести продуктовую аналитику и сегментацию из внутренней БД в отдельный аналитический контур
 
 ## Ведение проекта
 
-- product roadmap: `docs/current-implementation-roadmap.md`
-- единая хронология работ ведется в одном GitHub issue
+- roadmap: `docs/current-implementation-roadmap.md`
+- 10x-план улучшений: `docs/10x-product-improvement-roadmap.md`
+- хронология работ: GitHub issue `#1`
+

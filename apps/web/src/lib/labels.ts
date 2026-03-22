@@ -6,6 +6,8 @@ import {
   OrderStatus,
   PaymentProviderType,
   PaymentStatus,
+  EmailProviderType,
+  EmailStatus,
 } from "@academy/db";
 
 type BadgeVariant = "default" | "neutral" | "success" | "warning";
@@ -93,4 +95,35 @@ export const paymentProviderLabelMap: Record<PaymentProviderType, string> = {
   ROBOKASSA: "Robokassa",
   BANK131: "Bank 131",
   TBANK: "T-Bank",
+};
+
+export const emailProviderLabelMap: Record<EmailProviderType, string> = {
+  MOCK: "Mock",
+  RESEND: "Resend",
+};
+
+export const emailStatusLabelMap: Record<EmailStatus, string> = {
+  QUEUED: "В очереди",
+  SENDING: "Отправляется",
+  SENT: "Отправлено",
+  DELIVERED: "Доставлено",
+  OPENED: "Открыто",
+  CLICKED: "Клик",
+  FAILED: "Ошибка",
+  BOUNCED: "Возврат",
+  COMPLAINED: "Жалоба",
+  CANCELED: "Отменено",
+};
+
+export const emailStatusVariantMap: Record<EmailStatus, BadgeVariant> = {
+  QUEUED: "neutral",
+  SENDING: "warning",
+  SENT: "default",
+  DELIVERED: "success",
+  OPENED: "success",
+  CLICKED: "success",
+  FAILED: "warning",
+  BOUNCED: "warning",
+  COMPLAINED: "warning",
+  CANCELED: "warning",
 };

@@ -82,6 +82,29 @@ enum PaymentStatus {
   CANCELED
 }
 
+enum EmailProviderType {
+  MOCK
+  RESEND
+}
+
+enum EmailKind {
+  TRANSACTIONAL
+  MARKETING
+}
+
+enum EmailStatus {
+  QUEUED
+  SENDING
+  SENT
+  DELIVERED
+  OPENED
+  CLICKED
+  FAILED
+  BOUNCED
+  COMPLAINED
+  CANCELED
+}
+
 model User {
   id            String           @id @default(cuid())
   email         String           @unique
@@ -99,6 +122,8 @@ model User {
   progress      LessonProgress[]
   homework      HomeworkReview[] @relation("Reviewer")
   orders        Order[]
+  emails        EmailMessage[]
+  lessonSessions LessonSession[]
 }
 
 model Account {
@@ -152,6 +177,8 @@ model Course {
   modules     Module[]
   enrollments Enrollment[]
   products    Product[]
+  emails      EmailMessage[]
+  lessonSessions LessonSession[]
 }
 
 model Module {
@@ -186,6 +213,7 @@ model Lesson {
   progress           LessonProgress[]
   homeworkAssignment HomeworkAssignment?
   videoAsset         VideoAsset?
+  lessonSessions     LessonSession[]
 
   @@unique([moduleId, position])
 }
@@ -303,6 +331,7 @@ model Order {
   user            User?               @relation(fields: [userId], references: [id], onDelete: SetNull)
   items           OrderItem[]
   payments        Payment[]
+  emails          EmailMessage[]
 }
 
 model OrderItem {
@@ -326,4 +355,118 @@ model Payment {
   createdAt         DateTime            @default(now())
   updatedAt         DateTime            @updatedAt
   order             Order               @relation(fields: [orderId], references: [id], onDelete: Cascade)
+}
+
+model EmailMessage {
+  id                String            @id @default(cuid())
+  userId            String?
+  courseId          String?
+  orderId           String?
+  provider          EmailProviderType @default(MOCK)
+  kind              EmailKind         @default(TRANSACTIONAL)
+  status            EmailStatus       @default(QUEUED)
+  templateKey       String
+  campaignKey       String?
+  sequenceStep      Int?
+  dedupeKey         String?           @unique
+  trackingToken     String            @unique
+  subject           String
+  fromEmail         String
+  fromName          String?
+  toEmail           String
+  toName            String?
+  htmlBody          String
+  textBody          String?
+  scheduledAt       DateTime          @default(now())
+  sentAt            DateTime?
+  deliveredAt       DateTime?
+  openedAt          DateTime?
+  clickedAt         DateTime?
+  failedAt          DateTime?
+  providerMessageId String?
+  lastError         String?
+  metadata          Json?
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  course            Course?           @relation(fields: [courseId], references: [id], onDelete: SetNull)
+  order             Order?            @relation(fields: [orderId], references: [id], onDelete: SetNull)
+  user              User?             @relation(fields: [userId], references: [id], onDelete: SetNull)
+  events            EmailEvent[]
+  clicks            EmailLinkClick[]
+
+  @@index([status, scheduledAt])
+  @@index([userId, createdAt])
+  @@index([courseId, createdAt])
+}
+
+model EmailEvent {
+  id             String      @id @default(cuid())
+  emailMessageId String
+  eventType      String
+  status         EmailStatus?
+  providerId     String?
+  payload        Json?
+  createdAt      DateTime    @default(now())
+  emailMessage   EmailMessage @relation(fields: [emailMessageId], references: [id], onDelete: Cascade)
+
+  @@index([emailMessageId, createdAt])
+}
+
+model EmailLinkClick {
+  id             String       @id @default(cuid())
+  emailMessageId String
+  url            String
+  createdAt      DateTime     @default(now())
+  emailMessage   EmailMessage  @relation(fields: [emailMessageId], references: [id], onDelete: Cascade)
+
+  @@index([emailMessageId, createdAt])
+}
+
+model LessonSession {
+  id                  String            @id @default(cuid())
+  clientSessionId     String            @unique
+  userId              String
+  courseId            String
+  lessonId            String
+  actualRole          UserRole
+  previewRole         UserRole?
+  isPreview           Boolean           @default(false)
+  sourceType          MediaSourceType?
+  hadVideo            Boolean           @default(false)
+  entryPath           String?
+  lastPlayerState     String?
+  exitReason          String?
+  durationSeconds     Int?
+  lastPositionSeconds Int               @default(0)
+  maxPositionSeconds  Int               @default(0)
+  startedAt           DateTime          @default(now())
+  lastSeenAt          DateTime          @default(now())
+  endedAt             DateTime?
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+  user                User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course              Course            @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lesson              Lesson            @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  events              LessonSessionEvent[]
+
+  @@index([userId, createdAt])
+  @@index([courseId, createdAt])
+  @@index([lessonId, createdAt])
+  @@index([actualRole, isPreview, createdAt])
+}
+
+model LessonSessionEvent {
+  id              String         @id @default(cuid())
+  lessonSessionId String
+  eventType       String
+  playerState     String?
+  visibilityState String?
+  positionSeconds Int?
+  durationSeconds Int?
+  payload         Json?
+  createdAt       DateTime       @default(now())
+  lessonSession   LessonSession  @relation(fields: [lessonSessionId], references: [id], onDelete: Cascade)
+
+  @@index([lessonSessionId, createdAt])
+  @@index([eventType, createdAt])
 }

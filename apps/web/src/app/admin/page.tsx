@@ -1,5 +1,11 @@
 import Link from "next/link";
-import { BookOpen, GraduationCap, LayoutDashboard, LineChart, Users } from "lucide-react";
+import {
+  BookOpen,
+  GraduationCap,
+  LayoutDashboard,
+  LineChart,
+  Users,
+} from "lucide-react";
 
 import { prisma } from "@academy/db";
 import { USER_ROLES } from "@academy/shared";
@@ -13,43 +19,51 @@ import {
   WorkspacePanel,
   WorkspaceStatCard,
 } from "@/components/workspace/workspace-primitives";
+import { getStudentAnalyticsSummary } from "@/features/analytics/service";
 import { courseStatusLabelMap, courseStatusVariantMap } from "@/lib/labels";
 
 export default async function AdminPage() {
-  const [courseCount, studentCount, enrollmentCount, progressCount, recentCourses] =
-    await Promise.all([
-      prisma.course.count(),
-      prisma.user.count({
-        where: {
-          role: USER_ROLES.STUDENT,
-        },
-      }),
-      prisma.enrollment.count(),
-      prisma.lessonProgress.count(),
-      prisma.course.findMany({
-        orderBy: {
-          updatedAt: "desc",
-        },
-        take: 4,
-        include: {
-          _count: {
-            select: {
-              modules: true,
-              enrollments: true,
-            },
+  const [
+    courseCount,
+    studentCount,
+    enrollmentCount,
+    progressCount,
+    recentCourses,
+    analyticsSummary,
+  ] = await Promise.all([
+    prisma.course.count(),
+    prisma.user.count({
+      where: {
+        role: USER_ROLES.STUDENT,
+      },
+    }),
+    prisma.enrollment.count(),
+    prisma.lessonProgress.count(),
+    prisma.course.findMany({
+      orderBy: {
+        updatedAt: "desc",
+      },
+      take: 4,
+      include: {
+        _count: {
+          select: {
+            modules: true,
+            enrollments: true,
           },
-          modules: {
-            select: {
-              _count: {
-                select: {
-                  lessons: true,
-                },
+        },
+        modules: {
+          select: {
+            _count: {
+              select: {
+                lessons: true,
               },
             },
           },
         },
-      }),
-    ]);
+      },
+    }),
+    getStudentAnalyticsSummary(),
+  ]);
 
   const stats = [
     {
@@ -86,7 +100,7 @@ export default async function AdminPage() {
         description="Здесь команда создает курсы, собирает программу, назначает доступы, проверяет путь студента и контролирует, как продукт выглядит внутри платформы."
         meta={
           <div className="rounded-full bg-[var(--surface)] px-4 py-3 text-sm text-[var(--muted)]">
-            Активных разделов: 3
+            Активных разделов: 5
           </div>
         }
         actions={
@@ -117,7 +131,7 @@ export default async function AdminPage() {
         <WorkspacePanel
           eyebrow="Последние обновления"
           title="Быстрый вход в работу с контентом"
-          description="Открывай нужный курс не через длинный маршрут, а сразу в нужный рабочий раздел."
+          description="Открывай нужный курс сразу в рабочий раздел, а не через длинный маршрут."
           actions={
             <Button asChild variant="outline">
               <Link href="/admin/courses">Все курсы</Link>
@@ -149,11 +163,7 @@ export default async function AdminPage() {
                     className="overflow-hidden rounded-[28px] border border-[var(--border)] bg-[var(--surface)] shadow-sm"
                   >
                     <div className="p-4">
-                      <CourseThumb
-                        title={course.title}
-                        subtitle={`/${course.slug}`}
-                        compact
-                      />
+                      <CourseThumb title={course.title} subtitle={`/${course.slug}`} compact />
                     </div>
 
                     <div className="space-y-4 px-5 pb-5">
@@ -167,14 +177,10 @@ export default async function AdminPage() {
 
                       <div className="flex flex-wrap gap-3">
                         <Button asChild size="sm">
-                          <Link href={`/admin/courses/${course.id}/content`}>
-                            Программа
-                          </Link>
+                          <Link href={`/admin/courses/${course.id}/content`}>Программа</Link>
                         </Button>
                         <Button asChild size="sm" variant="outline">
-                          <Link href={`/admin/courses/${course.id}/access`}>
-                            Доступы и продажи
-                          </Link>
+                          <Link href={`/admin/courses/${course.id}/access`}>Доступы и продажи</Link>
                         </Button>
                       </div>
                     </div>
@@ -234,8 +240,35 @@ export default async function AdminPage() {
               </Button>
             </div>
           </WorkspacePanel>
+
+          <WorkspacePanel
+            eyebrow="Аналитика студентов"
+            title="Кто зашел в урок и где остановился"
+            description="Поведенческий слой уже включен: система фиксирует открытия уроков, сигналы проигрывания и точку выхода студента."
+            actions={
+              <Button asChild variant="outline">
+                <Link href="/admin/analytics">Открыть аналитику</Link>
+              </Button>
+            }
+          >
+            <div className="grid gap-3">
+              {[
+                `Всего зафиксированных сессий: ${analyticsSummary.totalSessions}.`,
+                `Активных студентов за 7 дней: ${analyticsSummary.activeStudents}.`,
+                `Сессий с ранним выходом: ${analyticsSummary.stalledSessions}.`,
+              ].map((item) => (
+                <div
+                  key={item}
+                  className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-4 py-4 text-sm leading-7 text-[var(--muted)]"
+                >
+                  {item}
+                </div>
+              ))}
+            </div>
+          </WorkspacePanel>
         </div>
       </div>
     </section>
   );
 }
+

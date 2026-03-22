@@ -400,7 +400,12 @@ export const ModelName = {
   Price: 'Price',
   Order: 'Order',
   OrderItem: 'OrderItem',
-  Payment: 'Payment'
+  Payment: 'Payment',
+  EmailMessage: 'EmailMessage',
+  EmailEvent: 'EmailEvent',
+  EmailLinkClick: 'EmailLinkClick',
+  LessonSession: 'LessonSession',
+  LessonSessionEvent: 'LessonSessionEvent'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -416,7 +421,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "account" | "session" | "verificationToken" | "course" | "module" | "lesson" | "videoAsset" | "enrollment" | "lessonProgress" | "homeworkAssignment" | "homeworkReview" | "product" | "price" | "order" | "orderItem" | "payment"
+    modelProps: "user" | "account" | "session" | "verificationToken" | "course" | "module" | "lesson" | "videoAsset" | "enrollment" | "lessonProgress" | "homeworkAssignment" | "homeworkReview" | "product" | "price" | "order" | "orderItem" | "payment" | "emailMessage" | "emailEvent" | "emailLinkClick" | "lessonSession" | "lessonSessionEvent"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1678,6 +1683,376 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    EmailMessage: {
+      payload: Prisma.$EmailMessagePayload<ExtArgs>
+      fields: Prisma.EmailMessageFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.EmailMessageFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailMessagePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.EmailMessageFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailMessagePayload>
+        }
+        findFirst: {
+          args: Prisma.EmailMessageFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailMessagePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.EmailMessageFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailMessagePayload>
+        }
+        findMany: {
+          args: Prisma.EmailMessageFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailMessagePayload>[]
+        }
+        create: {
+          args: Prisma.EmailMessageCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailMessagePayload>
+        }
+        createMany: {
+          args: Prisma.EmailMessageCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.EmailMessageCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailMessagePayload>[]
+        }
+        delete: {
+          args: Prisma.EmailMessageDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailMessagePayload>
+        }
+        update: {
+          args: Prisma.EmailMessageUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailMessagePayload>
+        }
+        deleteMany: {
+          args: Prisma.EmailMessageDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.EmailMessageUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.EmailMessageUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailMessagePayload>[]
+        }
+        upsert: {
+          args: Prisma.EmailMessageUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailMessagePayload>
+        }
+        aggregate: {
+          args: Prisma.EmailMessageAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateEmailMessage>
+        }
+        groupBy: {
+          args: Prisma.EmailMessageGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EmailMessageGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.EmailMessageCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EmailMessageCountAggregateOutputType> | number
+        }
+      }
+    }
+    EmailEvent: {
+      payload: Prisma.$EmailEventPayload<ExtArgs>
+      fields: Prisma.EmailEventFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.EmailEventFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailEventPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.EmailEventFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailEventPayload>
+        }
+        findFirst: {
+          args: Prisma.EmailEventFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailEventPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.EmailEventFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailEventPayload>
+        }
+        findMany: {
+          args: Prisma.EmailEventFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailEventPayload>[]
+        }
+        create: {
+          args: Prisma.EmailEventCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailEventPayload>
+        }
+        createMany: {
+          args: Prisma.EmailEventCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.EmailEventCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailEventPayload>[]
+        }
+        delete: {
+          args: Prisma.EmailEventDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailEventPayload>
+        }
+        update: {
+          args: Prisma.EmailEventUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailEventPayload>
+        }
+        deleteMany: {
+          args: Prisma.EmailEventDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.EmailEventUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.EmailEventUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailEventPayload>[]
+        }
+        upsert: {
+          args: Prisma.EmailEventUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailEventPayload>
+        }
+        aggregate: {
+          args: Prisma.EmailEventAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateEmailEvent>
+        }
+        groupBy: {
+          args: Prisma.EmailEventGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EmailEventGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.EmailEventCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EmailEventCountAggregateOutputType> | number
+        }
+      }
+    }
+    EmailLinkClick: {
+      payload: Prisma.$EmailLinkClickPayload<ExtArgs>
+      fields: Prisma.EmailLinkClickFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.EmailLinkClickFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailLinkClickPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.EmailLinkClickFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailLinkClickPayload>
+        }
+        findFirst: {
+          args: Prisma.EmailLinkClickFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailLinkClickPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.EmailLinkClickFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailLinkClickPayload>
+        }
+        findMany: {
+          args: Prisma.EmailLinkClickFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailLinkClickPayload>[]
+        }
+        create: {
+          args: Prisma.EmailLinkClickCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailLinkClickPayload>
+        }
+        createMany: {
+          args: Prisma.EmailLinkClickCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.EmailLinkClickCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailLinkClickPayload>[]
+        }
+        delete: {
+          args: Prisma.EmailLinkClickDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailLinkClickPayload>
+        }
+        update: {
+          args: Prisma.EmailLinkClickUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailLinkClickPayload>
+        }
+        deleteMany: {
+          args: Prisma.EmailLinkClickDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.EmailLinkClickUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.EmailLinkClickUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailLinkClickPayload>[]
+        }
+        upsert: {
+          args: Prisma.EmailLinkClickUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailLinkClickPayload>
+        }
+        aggregate: {
+          args: Prisma.EmailLinkClickAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateEmailLinkClick>
+        }
+        groupBy: {
+          args: Prisma.EmailLinkClickGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EmailLinkClickGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.EmailLinkClickCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EmailLinkClickCountAggregateOutputType> | number
+        }
+      }
+    }
+    LessonSession: {
+      payload: Prisma.$LessonSessionPayload<ExtArgs>
+      fields: Prisma.LessonSessionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.LessonSessionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonSessionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.LessonSessionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonSessionPayload>
+        }
+        findFirst: {
+          args: Prisma.LessonSessionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonSessionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.LessonSessionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonSessionPayload>
+        }
+        findMany: {
+          args: Prisma.LessonSessionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonSessionPayload>[]
+        }
+        create: {
+          args: Prisma.LessonSessionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonSessionPayload>
+        }
+        createMany: {
+          args: Prisma.LessonSessionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.LessonSessionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonSessionPayload>[]
+        }
+        delete: {
+          args: Prisma.LessonSessionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonSessionPayload>
+        }
+        update: {
+          args: Prisma.LessonSessionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonSessionPayload>
+        }
+        deleteMany: {
+          args: Prisma.LessonSessionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.LessonSessionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.LessonSessionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonSessionPayload>[]
+        }
+        upsert: {
+          args: Prisma.LessonSessionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonSessionPayload>
+        }
+        aggregate: {
+          args: Prisma.LessonSessionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateLessonSession>
+        }
+        groupBy: {
+          args: Prisma.LessonSessionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LessonSessionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.LessonSessionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LessonSessionCountAggregateOutputType> | number
+        }
+      }
+    }
+    LessonSessionEvent: {
+      payload: Prisma.$LessonSessionEventPayload<ExtArgs>
+      fields: Prisma.LessonSessionEventFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.LessonSessionEventFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonSessionEventPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.LessonSessionEventFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonSessionEventPayload>
+        }
+        findFirst: {
+          args: Prisma.LessonSessionEventFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonSessionEventPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.LessonSessionEventFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonSessionEventPayload>
+        }
+        findMany: {
+          args: Prisma.LessonSessionEventFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonSessionEventPayload>[]
+        }
+        create: {
+          args: Prisma.LessonSessionEventCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonSessionEventPayload>
+        }
+        createMany: {
+          args: Prisma.LessonSessionEventCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.LessonSessionEventCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonSessionEventPayload>[]
+        }
+        delete: {
+          args: Prisma.LessonSessionEventDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonSessionEventPayload>
+        }
+        update: {
+          args: Prisma.LessonSessionEventUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonSessionEventPayload>
+        }
+        deleteMany: {
+          args: Prisma.LessonSessionEventDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.LessonSessionEventUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.LessonSessionEventUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonSessionEventPayload>[]
+        }
+        upsert: {
+          args: Prisma.LessonSessionEventUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonSessionEventPayload>
+        }
+        aggregate: {
+          args: Prisma.LessonSessionEventAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateLessonSessionEvent>
+        }
+        groupBy: {
+          args: Prisma.LessonSessionEventGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LessonSessionEventGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.LessonSessionEventCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LessonSessionEventCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1962,6 +2337,107 @@ export const PaymentScalarFieldEnum = {
 export type PaymentScalarFieldEnum = (typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum]
 
 
+export const EmailMessageScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  courseId: 'courseId',
+  orderId: 'orderId',
+  provider: 'provider',
+  kind: 'kind',
+  status: 'status',
+  templateKey: 'templateKey',
+  campaignKey: 'campaignKey',
+  sequenceStep: 'sequenceStep',
+  dedupeKey: 'dedupeKey',
+  trackingToken: 'trackingToken',
+  subject: 'subject',
+  fromEmail: 'fromEmail',
+  fromName: 'fromName',
+  toEmail: 'toEmail',
+  toName: 'toName',
+  htmlBody: 'htmlBody',
+  textBody: 'textBody',
+  scheduledAt: 'scheduledAt',
+  sentAt: 'sentAt',
+  deliveredAt: 'deliveredAt',
+  openedAt: 'openedAt',
+  clickedAt: 'clickedAt',
+  failedAt: 'failedAt',
+  providerMessageId: 'providerMessageId',
+  lastError: 'lastError',
+  metadata: 'metadata',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EmailMessageScalarFieldEnum = (typeof EmailMessageScalarFieldEnum)[keyof typeof EmailMessageScalarFieldEnum]
+
+
+export const EmailEventScalarFieldEnum = {
+  id: 'id',
+  emailMessageId: 'emailMessageId',
+  eventType: 'eventType',
+  status: 'status',
+  providerId: 'providerId',
+  payload: 'payload',
+  createdAt: 'createdAt'
+} as const
+
+export type EmailEventScalarFieldEnum = (typeof EmailEventScalarFieldEnum)[keyof typeof EmailEventScalarFieldEnum]
+
+
+export const EmailLinkClickScalarFieldEnum = {
+  id: 'id',
+  emailMessageId: 'emailMessageId',
+  url: 'url',
+  createdAt: 'createdAt'
+} as const
+
+export type EmailLinkClickScalarFieldEnum = (typeof EmailLinkClickScalarFieldEnum)[keyof typeof EmailLinkClickScalarFieldEnum]
+
+
+export const LessonSessionScalarFieldEnum = {
+  id: 'id',
+  clientSessionId: 'clientSessionId',
+  userId: 'userId',
+  courseId: 'courseId',
+  lessonId: 'lessonId',
+  actualRole: 'actualRole',
+  previewRole: 'previewRole',
+  isPreview: 'isPreview',
+  sourceType: 'sourceType',
+  hadVideo: 'hadVideo',
+  entryPath: 'entryPath',
+  lastPlayerState: 'lastPlayerState',
+  exitReason: 'exitReason',
+  durationSeconds: 'durationSeconds',
+  lastPositionSeconds: 'lastPositionSeconds',
+  maxPositionSeconds: 'maxPositionSeconds',
+  startedAt: 'startedAt',
+  lastSeenAt: 'lastSeenAt',
+  endedAt: 'endedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LessonSessionScalarFieldEnum = (typeof LessonSessionScalarFieldEnum)[keyof typeof LessonSessionScalarFieldEnum]
+
+
+export const LessonSessionEventScalarFieldEnum = {
+  id: 'id',
+  lessonSessionId: 'lessonSessionId',
+  eventType: 'eventType',
+  playerState: 'playerState',
+  visibilityState: 'visibilityState',
+  positionSeconds: 'positionSeconds',
+  durationSeconds: 'durationSeconds',
+  payload: 'payload',
+  createdAt: 'createdAt'
+} as const
+
+export type LessonSessionEventScalarFieldEnum = (typeof LessonSessionEventScalarFieldEnum)[keyof typeof LessonSessionEventScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -2213,6 +2689,48 @@ export type ListEnumPaymentStatusFieldRefInput<$PrismaModel> = FieldRefInputType
 
 
 /**
+ * Reference to a field of type 'EmailProviderType'
+ */
+export type EnumEmailProviderTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EmailProviderType'>
+    
+
+
+/**
+ * Reference to a field of type 'EmailProviderType[]'
+ */
+export type ListEnumEmailProviderTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EmailProviderType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'EmailKind'
+ */
+export type EnumEmailKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EmailKind'>
+    
+
+
+/**
+ * Reference to a field of type 'EmailKind[]'
+ */
+export type ListEnumEmailKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EmailKind[]'>
+    
+
+
+/**
+ * Reference to a field of type 'EmailStatus'
+ */
+export type EnumEmailStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EmailStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'EmailStatus[]'
+ */
+export type ListEnumEmailStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EmailStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -2337,6 +2855,11 @@ export type GlobalOmitConfig = {
   order?: Prisma.OrderOmit
   orderItem?: Prisma.OrderItemOmit
   payment?: Prisma.PaymentOmit
+  emailMessage?: Prisma.EmailMessageOmit
+  emailEvent?: Prisma.EmailEventOmit
+  emailLinkClick?: Prisma.EmailLinkClickOmit
+  lessonSession?: Prisma.LessonSessionOmit
+  lessonSessionEvent?: Prisma.LessonSessionEventOmit
 }
 
 /* Types for Logging */
