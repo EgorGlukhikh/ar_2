@@ -1,3 +1,4 @@
+import { BookOpen, Compass, GraduationCap } from "lucide-react";
 import { CourseStatus, EnrollmentStatus, prisma } from "@academy/db";
 import Link from "next/link";
 
@@ -10,6 +11,13 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { isElevatedUserRole, requireStudentOrElevatedUser } from "@/lib/user";
+import {
+  CourseThumb,
+  WorkspaceEmptyState,
+  WorkspacePageHeader,
+  WorkspacePanel,
+  WorkspaceStatCard,
+} from "@/components/workspace/workspace-primitives";
 
 type CourseCard = {
   id: string;
@@ -142,96 +150,148 @@ export default async function LearningDashboardPage() {
     });
   }
 
+  const averageProgress =
+    courseCards.length === 0
+      ? 0
+      : Math.round(
+          courseCards.reduce((sum, course) => sum + course.progressPercent, 0) /
+            courseCards.length,
+        );
+
   return (
     <section className="space-y-6">
-      <header className="rounded-[28px] border border-[var(--border)] bg-white p-8 shadow-sm">
-        <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
-          <div className="space-y-3">
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[var(--muted)]">
-              Учебный кабинет
-            </p>
-            <h1 className="text-4xl font-semibold tracking-tight text-[var(--foreground)]">
-              {isElevated ? "Просмотр курсов" : "Мои курсы"}
-            </h1>
-            <p className="max-w-3xl text-base leading-8 text-[var(--muted)]">
-              {isElevated
-                ? "Команда платформы может быстро проверить учебный контур без отдельной студенческой учетной записи."
-                : "Здесь видны активные курсы, текущий прогресс и быстрый переход к следующему уроку."}
-            </p>
+      <WorkspacePageHeader
+        eyebrow="Учебный кабинет"
+        title={isElevated ? "Проверка студенческого контура" : "Мои курсы"}
+        description={
+          isElevated
+            ? "Команда платформы может быстро проверить учебный путь и убедиться, что курс, видео и материалы открываются так, как увидит их студент."
+            : "Здесь собраны ваши активные курсы, текущий прогресс и понятный переход к следующему уроку."
+        }
+        meta={
+          <div className="rounded-full bg-[var(--surface)] px-4 py-3 text-sm text-[var(--muted)]">
+            Курсов в кабинете: {courseCards.length}
           </div>
+        }
+        actions={
+          <Button asChild variant="outline">
+            <Link href="/catalog">Каталог курсов</Link>
+          </Button>
+        }
+      />
 
-          <div className="flex flex-wrap gap-3">
-            <div className="rounded-full bg-[var(--surface)] px-4 py-3 text-sm text-[var(--muted)]">
-              Курсов: {courseCards.length}
-            </div>
-            <Button asChild variant="outline">
-              <Link href="/catalog">Каталог курсов</Link>
-            </Button>
-          </div>
-        </div>
-      </header>
-
-      <div className="grid gap-4 xl:grid-cols-2">
-        {courseCards.length === 0 ? (
-          <article className="rounded-[24px] border border-dashed border-[var(--border)] bg-white p-8 shadow-sm xl:col-span-2">
-            <p className="text-lg font-semibold text-[var(--foreground)]">
-              Пока нет доступных курсов
-            </p>
-            <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
-              {isElevated
-                ? "Добавь курс в админке или открой каталог, чтобы проверить сценарий покупки."
-                : "Когда администратор выдаст доступ или ты оплатишь курс, он появится на этом экране."}
-            </p>
-          </article>
-        ) : (
-          courseCards.map((course) => (
-            <article
-              key={course.id}
-              className="rounded-[24px] border border-[var(--border)] bg-white p-6 shadow-sm"
-            >
-              <div className="flex flex-wrap items-center gap-2">
-                <Badge variant={course.statusVariant}>{course.statusLabel}</Badge>
-                <Badge variant="neutral">Уроков {course.lessonCount}</Badge>
-              </div>
-
-              <h2 className="mt-4 text-2xl font-semibold tracking-tight text-[var(--foreground)]">
-                {course.title}
-              </h2>
-              <p className="mt-2 text-sm text-[var(--muted)]">/{course.slug}</p>
-              <p className="mt-4 text-sm leading-7 text-[var(--muted)]">
-                {course.description || "Описание курса пока не заполнено."}
-              </p>
-
-              <div className="mt-6 space-y-3">
-                <div className="flex items-center justify-between text-sm text-[var(--muted)]">
-                  <span>Прогресс</span>
-                  <span>
-                    {course.completedLessons} / {course.lessonCount}
-                  </span>
-                </div>
-                <div className="h-2 overflow-hidden rounded-full bg-[var(--primary-soft)]">
-                  <div
-                    className="h-full rounded-full bg-[var(--primary)] transition-all"
-                    style={{ width: `${course.progressPercent}%` }}
-                  />
-                </div>
-              </div>
-
-              <div className="mt-5 rounded-2xl bg-[var(--surface)] p-4 text-sm leading-7 text-[var(--muted)]">
-                {course.nextLessonTitle
-                  ? `Следующий ориентир: ${course.nextLessonTitle}`
-                  : "Курс пока пустой. Добавь в него уроки в админке."}
-              </div>
-
-              <div className="mt-6">
-                <Button asChild>
-                  <Link href={`/learning/courses/${course.id}`}>Открыть курс</Link>
-                </Button>
-              </div>
-            </article>
-          ))
-        )}
+      <div className="grid gap-4 md:grid-cols-3">
+        <WorkspaceStatCard
+          label="Курсы"
+          value={courseCards.length}
+          hint="Все программы, доступные в текущем кабинете."
+          icon={BookOpen}
+        />
+        <WorkspaceStatCard
+          label="Средний прогресс"
+          value={`${averageProgress}%`}
+          hint="Средний уровень прохождения по доступным курсам."
+          icon={Compass}
+        />
+        <WorkspaceStatCard
+          label="Следующий шаг"
+          value={
+            courseCards.find((course) => course.nextLessonTitle)?.nextLessonTitle
+              ? "Есть"
+              : "Нет"
+          }
+          hint="Показывает, есть ли уже открытый следующий урок для прохождения."
+          icon={GraduationCap}
+        />
       </div>
+
+      <WorkspacePanel
+        eyebrow="Доступные программы"
+        title={isElevated ? "Так выглядит учебный контур" : "Ваши активные курсы"}
+        description={
+          isElevated
+            ? "Открывай любой курс и проверяй, как выглядят уроки, блокировки доступа и вложенные материалы."
+            : "Карточки ниже показывают прогресс, следующий ориентир и быстрый вход в обучение."
+        }
+      >
+        {courseCards.length === 0 ? (
+          <WorkspaceEmptyState
+            title="Пока нет доступных курсов"
+            description={
+              isElevated
+                ? "Добавь курс в админке или опубликуй программу, чтобы проверить реальный студенческий сценарий."
+                : "Когда администратор выдаст доступ или вы оплатите курс, он появится здесь."
+            }
+            action={
+              <Button asChild>
+                <Link href="/catalog">Открыть каталог</Link>
+              </Button>
+            }
+            className="border-[var(--border)] bg-[var(--surface)] shadow-none"
+          />
+        ) : (
+          <div className="grid gap-5 xl:grid-cols-2">
+            {courseCards.map((course) => (
+              <article
+                key={course.id}
+                className="overflow-hidden rounded-[28px] border border-[var(--border)] bg-[linear-gradient(180deg,_#ffffff_0%,_#fbfcff_100%)]"
+              >
+                <div className="grid gap-5 p-5 lg:grid-cols-[280px_minmax(0,1fr)]">
+                  <CourseThumb title={course.title} subtitle={`/${course.slug}`} compact />
+
+                  <div className="flex min-w-0 flex-col justify-between gap-5">
+                    <div className="space-y-4">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <Badge variant={course.statusVariant}>{course.statusLabel}</Badge>
+                        <Badge variant="neutral">Уроков {course.lessonCount}</Badge>
+                      </div>
+
+                      <div>
+                        <h2 className="text-2xl font-semibold tracking-tight text-[var(--foreground)]">
+                          {course.title}
+                        </h2>
+                        <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
+                          {course.description || "Описание курса пока не заполнено."}
+                        </p>
+                      </div>
+
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between text-sm text-[var(--muted)]">
+                          <span>Прогресс</span>
+                          <span>
+                            {course.completedLessons} / {course.lessonCount}
+                          </span>
+                        </div>
+                        <div className="h-2 overflow-hidden rounded-full bg-[var(--primary-soft)]">
+                          <div
+                            className="h-full rounded-full bg-[var(--primary)] transition-all"
+                            style={{ width: `${course.progressPercent}%` }}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-4 py-4 text-sm leading-7 text-[var(--muted)]">
+                        {course.nextLessonTitle
+                          ? `Следующий ориентир: ${course.nextLessonTitle}`
+                          : "Курс пока пустой. Добавь уроки в админке, чтобы появился маршрут прохождения."}
+                      </div>
+                    </div>
+
+                    <div className="flex flex-wrap gap-3">
+                      <Button asChild>
+                        <Link href={`/learning/courses/${course.id}`}>Открыть курс</Link>
+                      </Button>
+                      <Button asChild variant="outline">
+                        <Link href="/catalog">Каталог</Link>
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
+      </WorkspacePanel>
     </section>
   );
 }

@@ -1,13 +1,17 @@
 import Link from "next/link";
+import { BookOpen, LayoutTemplate, PlusCircle, WalletCards } from "lucide-react";
 
 import { prisma } from "@academy/db";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
-  courseStatusLabelMap,
-  courseStatusVariantMap,
-} from "@/lib/labels";
+  CourseThumb,
+  WorkspaceEmptyState,
+  WorkspacePageHeader,
+  WorkspacePanel,
+} from "@/components/workspace/workspace-primitives";
+import { courseStatusLabelMap, courseStatusVariantMap } from "@/lib/labels";
 
 export default async function CoursesPage() {
   const courses = await prisma.course.findMany({
@@ -35,97 +39,139 @@ export default async function CoursesPage() {
 
   return (
     <section className="space-y-6">
-      <header className="flex flex-col gap-4 rounded-[28px] border border-[var(--border)] bg-white p-8 shadow-sm lg:flex-row lg:items-end lg:justify-between">
-        <div className="space-y-3">
-          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[var(--muted)]">
-            Каталог курсов
-          </p>
-          <h1 className="text-4xl font-semibold tracking-tight text-[var(--foreground)]">
-            Курсы
-          </h1>
-          <p className="max-w-3xl text-base leading-8 text-[var(--muted)]">
-            Здесь создаются курсы и открываются их рабочие разделы: настройки,
-            программа, доступы и продажи.
-          </p>
-        </div>
+      <WorkspacePageHeader
+        eyebrow="Каталог курсов"
+        title="Все программы академии"
+        description="Здесь создаются новые курсы и открываются их рабочие разделы: карточка, программа, доступы и продажа."
+        meta={
+          <div className="rounded-full bg-[var(--surface)] px-4 py-3 text-sm text-[var(--muted)]">
+            Всего курсов: {courses.length}
+          </div>
+        }
+        actions={
+          <Button asChild>
+            <Link href="/admin/courses/new">Новый курс</Link>
+          </Button>
+        }
+      />
 
-        <Button asChild>
-          <Link href="/admin/courses/new">Новый курс</Link>
-        </Button>
-      </header>
-
-      <div className="grid gap-4">
-        {courses.length === 0 ? (
-          <article className="rounded-[24px] border border-dashed border-[var(--border)] bg-white p-8 text-center shadow-sm">
-            <p className="text-lg font-semibold text-[var(--foreground)]">
-              Пока нет ни одного курса
-            </p>
-            <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
-              Создай первый курс, затем открой вкладку программы и собери внутри
-              него модули и уроки.
-            </p>
-            <div className="mt-6">
-              <Button asChild>
-                <Link href="/admin/courses/new">Создать курс</Link>
-              </Button>
-            </div>
-          </article>
-        ) : (
-          courses.map((course) => {
+      {courses.length === 0 ? (
+        <WorkspaceEmptyState
+          title="Пока нет ни одного курса"
+          description="Создай первую программу, затем открой вкладку «Программа» и собери внутри нее модули, уроки и материалы."
+          action={
+            <Button asChild>
+              <Link href="/admin/courses/new">Создать курс</Link>
+            </Button>
+          }
+        />
+      ) : (
+        <div className="grid gap-5 xl:grid-cols-2">
+          {courses.map((course) => {
             const lessonCount = course.modules.reduce(
               (sum, module) => sum + module._count.lessons,
               0,
             );
 
             return (
-              <article
+              <WorkspacePanel
                 key={course.id}
-                className="rounded-[24px] border border-[var(--border)] bg-white p-6 shadow-sm"
+                className="overflow-hidden bg-[linear-gradient(180deg,_#ffffff_0%,_#fbfcff_100%)]"
               >
-                <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-                  <div className="space-y-3">
-                    <div className="flex flex-wrap items-center gap-3">
-                      <h2 className="text-2xl font-semibold tracking-tight text-[var(--foreground)]">
-                        {course.title}
-                      </h2>
-                      <Badge variant={courseStatusVariantMap[course.status]}>
-                        {courseStatusLabelMap[course.status]}
-                      </Badge>
+                <div className="grid gap-5 lg:grid-cols-[280px_minmax(0,1fr)]">
+                  <CourseThumb title={course.title} subtitle={`/${course.slug}`} compact />
+
+                  <div className="flex min-w-0 flex-col justify-between gap-5">
+                    <div className="space-y-4">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <Badge variant={courseStatusVariantMap[course.status]}>
+                          {courseStatusLabelMap[course.status]}
+                        </Badge>
+                        <Badge variant="neutral">Модулей {course._count.modules}</Badge>
+                        <Badge variant="neutral">Уроков {lessonCount}</Badge>
+                        <Badge variant="neutral">
+                          Зачислений {course._count.enrollments}
+                        </Badge>
+                      </div>
+
+                      <div>
+                        <h2 className="text-2xl font-semibold tracking-tight text-[var(--foreground)]">
+                          {course.title}
+                        </h2>
+                        <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
+                          {course.description || "Описание курса пока не заполнено."}
+                        </p>
+                      </div>
+
+                      <div className="grid gap-3 sm:grid-cols-3">
+                        <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-4 py-4">
+                          <LayoutTemplate className="h-4 w-4 text-[var(--primary)]" />
+                          <p className="mt-3 text-sm font-medium text-[var(--foreground)]">
+                            Карточка
+                          </p>
+                          <p className="mt-1 text-xs leading-5 text-[var(--muted)]">
+                            Название, slug и статус.
+                          </p>
+                        </div>
+                        <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-4 py-4">
+                          <BookOpen className="h-4 w-4 text-[var(--primary)]" />
+                          <p className="mt-3 text-sm font-medium text-[var(--foreground)]">
+                            Программа
+                          </p>
+                          <p className="mt-1 text-xs leading-5 text-[var(--muted)]">
+                            Модули, уроки и контент.
+                          </p>
+                        </div>
+                        <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-4 py-4">
+                          <WalletCards className="h-4 w-4 text-[var(--primary)]" />
+                          <p className="mt-3 text-sm font-medium text-[var(--foreground)]">
+                            Продажи
+                          </p>
+                          <p className="mt-1 text-xs leading-5 text-[var(--muted)]">
+                            Цена, доступ и выдача курса.
+                          </p>
+                        </div>
+                      </div>
                     </div>
-                    <p className="text-sm text-[var(--muted)]">/{course.slug}</p>
-                    <p className="max-w-3xl text-sm leading-7 text-[var(--muted)]">
-                      {course.description || "Описание курса пока не заполнено."}
-                    </p>
-                  </div>
 
-                  <div className="flex flex-wrap gap-3">
-                    <Button asChild>
-                      <Link href={`/admin/courses/${course.id}`}>Настройки</Link>
-                    </Button>
-                    <Button asChild variant="outline">
-                      <Link href={`/admin/courses/${course.id}/content`}>
-                        Программа
-                      </Link>
-                    </Button>
+                    <div className="flex flex-wrap gap-3">
+                      <Button asChild>
+                        <Link href={`/admin/courses/${course.id}/content`}>
+                          Открыть программу
+                        </Link>
+                      </Button>
+                      <Button asChild variant="outline">
+                        <Link href={`/admin/courses/${course.id}`}>Настройки</Link>
+                      </Button>
+                      <Button asChild variant="outline">
+                        <Link href={`/admin/courses/${course.id}/access`}>
+                          Доступ и продажи
+                        </Link>
+                      </Button>
+                    </div>
                   </div>
                 </div>
-
-                <div className="mt-6 flex flex-wrap gap-3 text-sm text-[var(--muted)]">
-                  <span className="rounded-full bg-[var(--surface)] px-3 py-2">
-                    Модулей: {course._count.modules}
-                  </span>
-                  <span className="rounded-full bg-[var(--surface)] px-3 py-2">
-                    Уроков: {lessonCount}
-                  </span>
-                  <span className="rounded-full bg-[var(--surface)] px-3 py-2">
-                    Зачислений: {course._count.enrollments}
-                  </span>
-                </div>
-              </article>
+              </WorkspacePanel>
             );
-          })
-        )}
-      </div>
+          })}
+        </div>
+      )}
+
+      {courses.length > 0 ? (
+        <WorkspacePanel
+          eyebrow="Быстрое действие"
+          title="Нужен еще один курс?"
+          description="Если методисты начинают новую программу, лучше сразу заводить отдельный курс, а не смешивать материалы внутри существующего."
+          actions={
+            <Button asChild>
+              <Link href="/admin/courses/new">
+                <PlusCircle className="mr-2 h-4 w-4" />
+                Создать курс
+              </Link>
+            </Button>
+          }
+        />
+      ) : null}
     </section>
   );
 }

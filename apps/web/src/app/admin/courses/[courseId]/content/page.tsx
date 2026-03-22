@@ -4,6 +4,7 @@ import { LessonType, prisma } from "@academy/db";
 import {
   BookOpen,
   ChevronRight,
+  Eye,
   Film,
   Layers3,
   Link2,
@@ -409,6 +410,36 @@ export default async function CourseContentPage({
                   <input type="hidden" name="lessonId" value={selectedLesson.id} />
                   <input type="hidden" name="moduleId" value={selectedModule.id} />
                   <input type="hidden" name="courseId" value={course.id} />
+
+                  <article className="rounded-[28px] border border-[var(--border)] bg-white p-5 shadow-sm 2xl:col-span-2">
+                    <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+                      <div className="space-y-2">
+                        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
+                          Studio-режим урока
+                        </p>
+                        <h3 className="text-2xl font-semibold tracking-tight text-[var(--foreground)]">
+                          {selectedLesson.title}
+                        </h3>
+                        <p className="text-sm leading-7 text-[var(--muted)]">
+                          Здесь ты редактируешь контент урока, а справа управляешь
+                          доступом и основными параметрами. Видео, текст и файл
+                          живут в одном сценарии.
+                        </p>
+                      </div>
+
+                      <div className="flex flex-wrap gap-3">
+                        <Button asChild variant="outline">
+                          <Link
+                            href={`/learning/courses/${course.id}?lessonId=${selectedLesson.id}`}
+                          >
+                            <Eye className="mr-2 h-4 w-4" />
+                            Проверить как студент
+                          </Link>
+                        </Button>
+                        <Button type="submit">Сохранить урок</Button>
+                      </div>
+                    </div>
+                  </article>
 
                   <div className="space-y-6">
                     <article className="rounded-[28px] border border-[var(--border)] bg-white p-6 shadow-sm">
