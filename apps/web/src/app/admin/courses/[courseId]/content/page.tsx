@@ -1,25 +1,21 @@
-import Link from "next/link";
-
 import { LessonType, prisma } from "@academy/db";
-import {
-  BookOpen,
-  ChevronRight,
-  Eye,
-  Film,
-  Layers3,
-  Link2,
-  Paperclip,
-  Plus,
-  Sparkles,
-} from "lucide-react";
+import Link from "next/link";
 import { notFound } from "next/navigation";
+import {
+  ChevronRight,
+  CircleHelp,
+  Layers3,
+  MessageSquareMore,
+  Plus,
+  Save,
+  Trash2,
+} from "lucide-react";
 
-import { AdminLessonVideoManager } from "@/components/admin/admin-lesson-video-manager";
+import { LessonBlockStudio } from "@/components/admin/lesson-block-studio";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import {
   createLesson,
@@ -29,12 +25,10 @@ import {
   updateLesson,
   updateModule,
 } from "@/features/admin/course-actions";
-import { getCourseLessonCount } from "@/features/admin/course-page-data";
+import { extractLessonBlocks, type LessonBlock } from "@/lib/lesson-content";
 import {
-  extractLessonBody,
-  extractPrimaryLessonAttachment,
-} from "@/lib/lesson-content";
-import { lessonTypeLabelMap, mediaSourceTypeLabelMap } from "@/lib/labels";
+  lessonTypeLabelMap,
+} from "@/lib/labels";
 
 type CourseContentPageProps = {
   params: Promise<{
@@ -46,9 +40,143 @@ type CourseContentPageProps = {
   }>;
 };
 
-function buildModuleLink(courseId: string, moduleId: string, lessonId?: string) {
-  const query = lessonId ? `?moduleId=${moduleId}&lessonId=${lessonId}` : `?moduleId=${moduleId}`;
-  return `/admin/courses/${courseId}/content${query}`;
+function buildContentHref(courseId: string, moduleId?: string, lessonId?: string) {
+  const search = new URLSearchParams();
+
+  if (moduleId) {
+    search.set("moduleId", moduleId);
+  }
+
+  if (lessonId) {
+    search.set("lessonId", lessonId);
+  }
+
+  const query = search.toString();
+  return query
+    ? `/admin/courses/${courseId}/content?${query}`
+    : `/admin/courses/${courseId}/content`;
+}
+
+function getLessonBlocks(lesson: {
+  type: LessonType;
+  content: unknown;
+  videoAsset: unknown;
+  videoSourceType: unknown;
+  videoUrl: unknown;
+  videoPlaybackId: unknown;
+}): LessonBlock[] {
+  const extractedBlocks = extractLessonBlocks(lesson.content);
+
+  if (extractedBlocks.length > 0) {
+    return extractedBlocks;
+  }
+
+  if (lesson.videoAsset || lesson.videoSourceType || lesson.videoUrl || lesson.videoPlaybackId) {
+    return [
+      {
+        id: "legacy-video",
+        type: "VIDEO",
+        title: "Видео",
+        body: "",
+      },
+    ];
+  }
+
+  if (lesson.type === LessonType.HOMEWORK) {
+    return [
+      {
+        id: "legacy-homework",
+        type: "HOMEWORK",
+        title: "Домашняя работа",
+        body: "",
+        submissionHint: "",
+      },
+    ];
+  }
+
+  return [];
+}
+
+function ModuleTreeItem({
+  courseId,
+  moduleItem,
+  selectedModuleId,
+  selectedLessonId,
+}: {
+  courseId: string;
+  moduleItem: {
+    id: string;
+    title: string;
+    position: number;
+    lessons: Array<{
+      id: string;
+      title: string;
+      type: LessonType;
+    }>;
+  };
+  selectedModuleId: string | null;
+  selectedLessonId: string | null;
+}) {
+  const isActiveModule = selectedModuleId === moduleItem.id;
+
+  return (
+    <div
+      className={`rounded-[24px] border p-4 transition ${
+        isActiveModule
+          ? "border-[var(--primary)] bg-[var(--primary-soft)]/50"
+          : "border-[var(--border)] bg-white"
+      }`}
+    >
+      <Link
+        href={buildContentHref(courseId, moduleItem.id)}
+        className="flex items-start justify-between gap-3 rounded-2xl transition hover:text-[var(--foreground)]"
+      >
+        <div className="min-w-0">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
+            Модуль {moduleItem.position}
+          </p>
+          <p className="mt-2 truncate text-base font-semibold text-[var(--foreground)]">
+            {moduleItem.title}
+          </p>
+        </div>
+
+        <Badge variant="neutral">{moduleItem.lessons.length}</Badge>
+      </Link>
+
+      <div className="mt-4 space-y-2 border-t border-[var(--border)] pt-4">
+        {moduleItem.lessons.length === 0 ? (
+          <p className="text-sm leading-6 text-[var(--muted)]">
+            В этом модуле пока нет уроков.
+          </p>
+        ) : (
+          moduleItem.lessons.map((lesson) => {
+            const isActiveLesson = selectedLessonId === lesson.id;
+
+            return (
+              <Link
+                key={lesson.id}
+                href={buildContentHref(courseId, moduleItem.id, lesson.id)}
+                className={`flex items-center justify-between gap-3 rounded-2xl px-3 py-3 text-sm transition ${
+                  isActiveLesson
+                    ? "bg-white text-[var(--foreground)] shadow-sm ring-1 ring-[var(--primary)]"
+                    : "text-[var(--muted)] hover:bg-[var(--surface)] hover:text-[var(--foreground)]"
+                }`}
+              >
+                <div className="min-w-0">
+                  <p className="truncate font-medium">{lesson.title}</p>
+                  <p className="mt-1 text-[11px] uppercase tracking-[0.16em] text-[var(--muted)]">
+                    {lessonTypeLabelMap[lesson.type]}
+                  </p>
+                </div>
+
+                <ChevronRight className="h-4 w-4 shrink-0" />
+              </Link>
+            );
+          })
+        )}
+      </div>
+    </div>
+  );
 }
 
 export default async function CourseContentPage({
@@ -56,10 +184,7 @@ export default async function CourseContentPage({
   searchParams,
 }: CourseContentPageProps) {
   const { courseId } = await params;
-  const resolvedSearchParams = (searchParams ? await searchParams : {}) as {
-    moduleId?: string;
-    lessonId?: string;
-  };
+  const resolvedSearchParams = searchParams ? await searchParams : {};
 
   const course = await prisma.course.findUnique({
     where: {
@@ -71,13 +196,39 @@ export default async function CourseContentPage({
         orderBy: {
           position: "asc",
         },
-        include: {
+        select: {
+          id: true,
+          title: true,
+          position: true,
           lessons: {
             orderBy: {
               position: "asc",
             },
-            include: {
-              videoAsset: true,
+            select: {
+              id: true,
+              title: true,
+              position: true,
+              type: true,
+              excerpt: true,
+              isPreview: true,
+              accessAfterDays: true,
+              content: true,
+              videoSourceType: true,
+              videoUrl: true,
+              videoPlaybackId: true,
+              videoAsset: {
+                select: {
+                  id: true,
+                  provider: true,
+                  sourceType: true,
+                  status: true,
+                  originalFilename: true,
+                  sourceUrl: true,
+                  playerUrl: true,
+                  playbackId: true,
+                  errorMessage: true,
+                },
+              },
             },
           },
         },
@@ -89,394 +240,217 @@ export default async function CourseContentPage({
     notFound();
   }
 
-  const lessonCount = getCourseLessonCount(course.modules);
+  const lessonOwnerModule =
+    course.modules.find((moduleItem) =>
+      moduleItem.lessons.some((lesson) => lesson.id === resolvedSearchParams.lessonId),
+    ) ?? null;
+
   const selectedModule =
-    course.modules.find((module) => module.id === resolvedSearchParams.moduleId) ??
+    lessonOwnerModule ??
+    course.modules.find((moduleItem) => moduleItem.id === resolvedSearchParams.moduleId) ??
     course.modules[0] ??
     null;
+
   const selectedLesson =
-    selectedModule?.lessons.find(
-      (lesson) => lesson.id === resolvedSearchParams.lessonId,
-    ) ??
+    selectedModule?.lessons.find((lesson) => lesson.id === resolvedSearchParams.lessonId) ??
     selectedModule?.lessons[0] ??
     null;
-  const selectedAttachment = selectedLesson
-    ? extractPrimaryLessonAttachment(selectedLesson.content)
-    : null;
+
+  const selectedLessonBlocks = selectedLesson ? getLessonBlocks(selectedLesson) : [];
 
   return (
-    <section className="space-y-6">
-      <div className="grid gap-6 xl:grid-cols-[320px_minmax(0,1fr)]">
-        <aside className="space-y-4 xl:sticky xl:top-6 self-start">
+    <section className="grid gap-6 xl:grid-cols-[320px_minmax(0,1fr)_320px]">
+        <aside className="space-y-4 xl:sticky xl:top-6 xl:self-start">
           <article className="rounded-[28px] border border-[var(--border)] bg-white p-5 shadow-sm">
-            <div className="flex items-center gap-3">
-              <div className="rounded-2xl bg-[var(--primary-soft)] p-3">
-                <Layers3 className="h-5 w-5 text-[var(--primary)]" />
-              </div>
-              <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
-                  Программа
-                </p>
-                <h2 className="mt-1 text-xl font-semibold tracking-tight text-[var(--foreground)]">
-                  Модули курса
-                </h2>
-              </div>
-            </div>
-
-            <p className="mt-4 text-sm leading-7 text-[var(--muted)]">
-              Модули стоят слева как навигация по курсу. Внутри каждого модуля живут
-              уроки, а сам редактор выбранного урока открыт справа.
+            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
+              Структура курса
+            </p>
+            <h2 className="mt-2 text-2xl font-semibold tracking-tight text-[var(--foreground)]">
+              Модули и уроки
+            </h2>
+            <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
+              Добавляй модули вручную, внутри них создавай уроки и сразу открывай нужный урок в
+              центре для редактирования.
             </p>
 
-            <div className="mt-5 flex flex-wrap gap-2 text-sm text-[var(--muted)]">
-              <span className="rounded-full bg-[var(--surface)] px-3 py-2">
-                Модулей: {course.modules.length}
-              </span>
-              <span className="rounded-full bg-[var(--surface)] px-3 py-2">
-                Уроков: {lessonCount}
-              </span>
-            </div>
-          </article>
-
-          <form
-            action={createModule}
-            className="rounded-[28px] border border-[var(--border)] bg-white p-5 shadow-sm"
-          >
-            <input type="hidden" name="courseId" value={course.id} />
-
-            <div className="space-y-2">
-              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
-                Новый модуль
-              </p>
-              <h2 className="text-xl font-semibold tracking-tight text-[var(--foreground)]">
-                Добавить раздел
-              </h2>
-              <p className="text-sm leading-7 text-[var(--muted)]">
-                Название должно сразу объяснять, какой смысловой блок стоит внутри.
-              </p>
-            </div>
-
-            <div className="mt-4 space-y-3">
+            <form action={createModule} className="mt-5 space-y-3">
+              <input type="hidden" name="courseId" value={course.id} />
+              <Label htmlFor="new-module-title">Новый модуль</Label>
               <Input
+                id="new-module-title"
                 name="title"
                 placeholder="Например, Введение в профессию"
                 required
               />
               <Button type="submit" className="w-full">
                 <Plus className="mr-2 h-4 w-4" />
-                Создать модуль
+                Добавить модуль
               </Button>
-            </div>
-          </form>
+            </form>
+          </article>
+
+          {selectedModule ? (
+            <article className="rounded-[28px] border border-[var(--border)] bg-white p-5 shadow-sm">
+              <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
+                Выбранный модуль
+              </p>
+              <h3 className="mt-2 text-xl font-semibold tracking-tight text-[var(--foreground)]">
+                {selectedModule.title}
+              </h3>
+
+              <form action={updateModule} className="mt-5 space-y-3">
+                <input type="hidden" name="courseId" value={course.id} />
+                <input type="hidden" name="moduleId" value={selectedModule.id} />
+                <Label htmlFor="selected-module-title">Название модуля</Label>
+                <Input
+                  id="selected-module-title"
+                  name="title"
+                  defaultValue={selectedModule.title}
+                  required
+                />
+                <Button type="submit" variant="outline" className="w-full">
+                  Сохранить название
+                </Button>
+              </form>
+
+              <form action={createLesson} className="mt-5 space-y-3">
+                <input type="hidden" name="moduleId" value={selectedModule.id} />
+                <Label htmlFor="new-lesson-title">Новый урок</Label>
+                <Input
+                  id="new-lesson-title"
+                  name="title"
+                  placeholder="Например, Подготовка объекта к показу"
+                  required
+                />
+                <input type="hidden" name="type" value={LessonType.TEXT} />
+                <Button type="submit" className="w-full">
+                  <Plus className="mr-2 h-4 w-4" />
+                  Добавить урок
+                </Button>
+              </form>
+
+              <form action={deleteModule} className="mt-5">
+                <input type="hidden" name="courseId" value={course.id} />
+                <input type="hidden" name="moduleId" value={selectedModule.id} />
+                <Button
+                  type="submit"
+                  variant="outline"
+                  className="w-full border-red-300 text-red-600 hover:bg-red-50"
+                >
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  Удалить модуль
+                </Button>
+              </form>
+            </article>
+          ) : null}
 
           <div className="space-y-3">
             {course.modules.length === 0 ? (
-              <article className="rounded-[24px] border border-dashed border-[var(--border)] bg-white p-5 text-sm leading-7 text-[var(--muted)] shadow-sm">
-                Пока нет ни одного модуля. Создай первый раздел слева, и откроется
-                нормальный editor workflow.
+              <article className="rounded-[28px] border border-dashed border-[var(--border)] bg-white p-5 text-sm leading-7 text-[var(--muted)] shadow-sm">
+                В курсе пока нет модулей. Создай первый модуль, и структура курса появится здесь.
               </article>
             ) : (
-              course.modules.map((module) => {
-                const moduleActive = selectedModule?.id === module.id;
-
-                return (
-                  <article
-                    key={module.id}
-                    className={`rounded-[26px] border bg-white p-4 shadow-sm transition ${
-                      moduleActive
-                        ? "border-[var(--primary)] shadow-[0_18px_40px_rgba(111,139,251,0.12)]"
-                        : "border-[var(--border)]"
-                    }`}
-                  >
-                    <Link
-                      href={buildModuleLink(course.id, module.id)}
-                      className="block rounded-2xl"
-                    >
-                      <div className="flex items-start justify-between gap-3">
-                        <div>
-                          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
-                            Модуль {module.position}
-                          </p>
-                          <h3 className="mt-2 text-base font-semibold leading-6 text-[var(--foreground)]">
-                            {module.title}
-                          </h3>
-                        </div>
-                        <span className="rounded-full bg-[var(--surface)] px-3 py-2 text-xs font-medium text-[var(--muted)]">
-                          {module.lessons.length}
-                        </span>
-                      </div>
-                    </Link>
-
-                    <div className="mt-4 space-y-2 border-t border-[var(--border)] pt-4">
-                      {module.lessons.length === 0 ? (
-                        <p className="text-sm leading-6 text-[var(--muted)]">
-                          В этом модуле пока нет уроков.
-                        </p>
-                      ) : (
-                        module.lessons.map((lesson) => {
-                          const lessonActive = selectedLesson?.id === lesson.id;
-
-                          return (
-                            <Link
-                              key={lesson.id}
-                              href={buildModuleLink(course.id, module.id, lesson.id)}
-                              className={`flex items-center justify-between gap-3 rounded-2xl border px-3 py-3 text-sm transition ${
-                                lessonActive
-                                  ? "border-[var(--primary)] bg-[var(--primary-soft)]"
-                                  : "border-[var(--border)] bg-[var(--surface)] hover:border-[var(--primary)]"
-                              }`}
-                            >
-                              <div className="min-w-0">
-                                <p className="truncate font-medium text-[var(--foreground)]">
-                                  {lesson.title}
-                                </p>
-                                <p className="mt-1 text-xs uppercase tracking-[0.14em] text-[var(--muted)]">
-                                  {lessonTypeLabelMap[lesson.type]}
-                                </p>
-                              </div>
-                              <ChevronRight className="h-4 w-4 flex-none text-[var(--muted)]" />
-                            </Link>
-                          );
-                        })
-                      )}
-                    </div>
-                  </article>
-                );
-              })
+              course.modules.map((moduleItem) => (
+                <ModuleTreeItem
+                  key={moduleItem.id}
+                  courseId={course.id}
+                  moduleItem={moduleItem}
+                  selectedModuleId={selectedModule?.id ?? null}
+                  selectedLessonId={selectedLesson?.id ?? null}
+                />
+              ))
             )}
           </div>
         </aside>
 
-        <div className="space-y-6">
+        <div className="min-w-0 space-y-6">
           {!selectedModule ? (
             <article className="rounded-[28px] border border-dashed border-[var(--border)] bg-white p-8 shadow-sm">
-              <h2 className="text-2xl font-semibold tracking-tight text-[var(--foreground)]">
-                Создай первый модуль
+              <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
+                Пустой курс
+              </p>
+              <h2 className="mt-3 text-3xl font-semibold tracking-tight text-[var(--foreground)]">
+                Сначала создай первый модуль
               </h2>
-              <p className="mt-4 max-w-2xl text-sm leading-7 text-[var(--muted)]">
-                После этого слева появится структура программы, а справа откроется
-                рабочая область редактирования.
+              <p className="mt-3 max-w-2xl text-sm leading-7 text-[var(--muted)]">
+                После этого можно будет добавлять уроки и собирать их из блоков прямо в центральной
+                рабочей области.
+              </p>
+            </article>
+          ) : !selectedLesson ? (
+            <article className="rounded-[28px] border border-dashed border-[var(--border)] bg-white p-8 shadow-sm">
+              <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
+                Модуль без уроков
+              </p>
+              <h2 className="mt-3 text-3xl font-semibold tracking-tight text-[var(--foreground)]">
+                Добавь первый урок в модуль
+              </h2>
+              <p className="mt-3 max-w-2xl text-sm leading-7 text-[var(--muted)]">
+                Как только урок появится, здесь откроется его редактор. Внутри урока можно будет
+                собрать несколько блоков: текст, видео, файл и задание.
               </p>
             </article>
           ) : (
             <>
-              <div className="grid gap-6 2xl:grid-cols-[minmax(0,1fr)_360px]">
-                <form
-                  action={updateModule}
-                  className="rounded-[28px] border border-[var(--border)] bg-white p-6 shadow-sm"
-                >
-                  <input type="hidden" name="moduleId" value={selectedModule.id} />
-                  <input type="hidden" name="courseId" value={course.id} />
-
-                  <div className="space-y-2">
-                    <div className="flex flex-wrap items-center gap-3">
-                      <Badge variant="neutral">Модуль {selectedModule.position}</Badge>
-                      <span className="text-sm text-[var(--muted)]">
-                        Уроков: {selectedModule.lessons.length}
-                      </span>
+              <article className="rounded-[28px] border border-[var(--border)] bg-white p-6 shadow-sm">
+                <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                  <div className="space-y-3">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <Badge variant="neutral">{selectedModule.title}</Badge>
+                      <Badge>{lessonTypeLabelMap[selectedLesson.type]}</Badge>
+                      {selectedLesson.isPreview ? (
+                        <Badge variant="success">Открытый урок</Badge>
+                      ) : null}
                     </div>
-                    <h2 className="text-2xl font-semibold tracking-tight text-[var(--foreground)]">
-                      Настройки выбранного модуля
-                    </h2>
-                    <p className="text-sm leading-7 text-[var(--muted)]">
-                      Здесь меняется название текущего раздела. Сами уроки модуля
-                      редактируются ниже в центральной рабочей области.
-                    </p>
+
+                    <div>
+                      <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
+                        Редактор урока
+                      </p>
+                      <h2 className="mt-2 text-3xl font-semibold tracking-tight text-[var(--foreground)]">
+                        {selectedLesson.title}
+                      </h2>
+                    </div>
                   </div>
 
-                  <div className="mt-5 space-y-2">
-                    <Label htmlFor={`selected-module-${selectedModule.id}`}>
-                      Название модуля
-                    </Label>
-                    <Input
-                      id={`selected-module-${selectedModule.id}`}
-                      name="title"
-                      defaultValue={selectedModule.title}
-                      required
-                    />
-                  </div>
-
-                  <div className="mt-6 flex flex-wrap gap-3">
-                    <Button type="submit">Сохранить модуль</Button>
-                    <Button
-                      type="submit"
-                      formAction={deleteModule}
-                      variant="outline"
-                      className="border-red-300 text-red-600 hover:bg-red-50"
-                    >
-                      Удалить модуль
+                  <div className="flex flex-wrap gap-3">
+                    <Button asChild variant="outline">
+                      <Link href={`/learning/courses/${course.id}?lessonId=${selectedLesson.id}`}>
+                        Проверить как студент
+                      </Link>
                     </Button>
                   </div>
-                </form>
+                </div>
+              </article>
 
-                <form
-                  action={createLesson}
-                  className="rounded-[28px] border border-[var(--border)] bg-white p-6 shadow-sm"
-                >
-                  <input type="hidden" name="moduleId" value={selectedModule.id} />
+              <form action={updateLesson} className="space-y-6">
+                <input type="hidden" name="lessonId" value={selectedLesson.id} />
+                <input type="hidden" name="moduleId" value={selectedModule.id} />
+                <input type="hidden" name="type" value={selectedLesson.type} />
 
-                  <div className="space-y-2">
-                    <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
-                      Новый урок
-                    </p>
-                    <h2 className="text-2xl font-semibold tracking-tight text-[var(--foreground)]">
-                      Добавить материал в модуль
-                    </h2>
-                    <p className="text-sm leading-7 text-[var(--muted)]">
-                      Урок можно будет наполнить и текстом, и видео, и прикрепленным
-                      файлом. Тип здесь нужен только как основной формат, а не как
-                      ограничение.
-                    </p>
-                  </div>
-
-                  <div className="mt-5 grid gap-3 sm:grid-cols-2">
-                    <div className="rounded-2xl bg-[var(--surface)] p-4">
-                      <BookOpen className="h-5 w-5 text-[var(--primary)]" />
-                      <p className="mt-3 text-sm font-semibold text-[var(--foreground)]">
-                        Что писать в названии
-                      </p>
-                      <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
-                        Лучше писать результат урока: например, “Подготовка объекта к
-                        показу”.
-                      </p>
-                    </div>
-                    <div className="rounded-2xl bg-[var(--surface)] p-4">
-                      <Film className="h-5 w-5 text-[var(--primary)]" />
-                      <p className="mt-3 text-sm font-semibold text-[var(--foreground)]">
-                        Что будет внутри
-                      </p>
-                      <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
-                        После создания откроется карточка урока с текстом, видео,
-                        ссылкой на файл и настройками доступа.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="mt-5 grid gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor={`new-lesson-title-${selectedModule.id}`}>
-                        Название урока
-                      </Label>
-                      <Input
-                        id={`new-lesson-title-${selectedModule.id}`}
-                        name="title"
-                        placeholder="Например, Подготовка объекта к показу"
-                        required
-                      />
-                    </div>
-
-                    <div className="grid gap-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end">
+                <article className="rounded-[28px] border border-[var(--border)] bg-white shadow-sm">
+                  <details open className="group">
+                    <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-6 py-5">
                       <div className="space-y-2">
-                        <Label htmlFor={`new-lesson-type-${selectedModule.id}`}>
-                          Основной формат
-                        </Label>
-                        <Select
-                          id={`new-lesson-type-${selectedModule.id}`}
-                          name="type"
-                          defaultValue={LessonType.TEXT}
-                        >
-                          {Object.values(LessonType).map((type) => (
-                            <option key={type} value={type}>
-                              {lessonTypeLabelMap[type]}
-                            </option>
-                          ))}
-                        </Select>
-                      </div>
-
-                      <Button type="submit">
-                        <Plus className="mr-2 h-4 w-4" />
-                        Создать урок
-                      </Button>
-                    </div>
-                  </div>
-                </form>
-              </div>
-
-              {!selectedLesson ? (
-                <article className="rounded-[28px] border border-dashed border-[var(--border)] bg-white p-8 shadow-sm">
-                  <h2 className="text-2xl font-semibold tracking-tight text-[var(--foreground)]">
-                    В модуле пока нет уроков
-                  </h2>
-                  <p className="mt-4 max-w-2xl text-sm leading-7 text-[var(--muted)]">
-                    Создай первый урок в выбранном модуле. После этого справа откроется
-                    полноценный editor с текстом, видео и вложением.
-                  </p>
-                </article>
-              ) : (
-                <form
-                  action={updateLesson}
-                  className="grid gap-6 2xl:grid-cols-[minmax(0,1fr)_320px]"
-                >
-                  <input type="hidden" name="lessonId" value={selectedLesson.id} />
-                  <input type="hidden" name="moduleId" value={selectedModule.id} />
-                  <input type="hidden" name="courseId" value={course.id} />
-
-                  <article className="rounded-[28px] border border-[var(--border)] bg-white p-5 shadow-sm 2xl:col-span-2">
-                    <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-                      <div className="space-y-2">
-                        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
-                          Studio-режим урока
+                        <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
+                          Настройки урока
                         </p>
                         <h3 className="text-2xl font-semibold tracking-tight text-[var(--foreground)]">
-                          {selectedLesson.title}
+                          Основная информация
                         </h3>
-                        <p className="text-sm leading-7 text-[var(--muted)]">
-                          Здесь ты редактируешь контент урока, а справа управляешь
-                          доступом и основными параметрами. Видео, текст и файл
-                          живут в одном сценарии.
-                        </p>
                       </div>
 
-                      <div className="flex flex-wrap gap-3">
-                        <Button asChild variant="outline">
-                          <Link
-                            href={`/learning/courses/${course.id}?lessonId=${selectedLesson.id}`}
-                          >
-                            <Eye className="mr-2 h-4 w-4" />
-                            Проверить как студент
-                          </Link>
-                        </Button>
-                        <Button type="submit">Сохранить урок</Button>
+                      <div className="text-sm font-medium text-[var(--muted)] transition group-open:rotate-180">
+                        <ChevronRight className="h-5 w-5 rotate-90 group-open:-rotate-90" />
                       </div>
-                    </div>
-                  </article>
+                    </summary>
 
-                  <div className="space-y-6">
-                    <article className="rounded-[28px] border border-[var(--border)] bg-white p-6 shadow-sm">
-                      <div className="flex flex-col gap-4">
-                        <div className="flex flex-wrap items-center gap-2">
-                          <Badge>{lessonTypeLabelMap[selectedLesson.type]}</Badge>
-                          {selectedLesson.isPreview ? (
-                            <Badge variant="success">Открытый урок</Badge>
-                          ) : null}
-                          {selectedLesson.videoAsset ? (
-                            <Badge variant="neutral">
-                              {
-                                mediaSourceTypeLabelMap[
-                                  selectedLesson.videoAsset.sourceType
-                                ]
-                              }
-                            </Badge>
-                          ) : null}
-                        </div>
-
-                        <div>
-                          <p className="text-sm uppercase tracking-[0.2em] text-[var(--muted)]">
-                            {selectedModule.title}
-                          </p>
-                          <h2 className="mt-2 text-3xl font-semibold tracking-tight text-[var(--foreground)]">
-                            Редактор урока
-                          </h2>
-                        </div>
-                      </div>
-
-                      <div className="mt-6 grid gap-5">
+                    <div className="border-t border-[var(--border)] px-6 py-6">
+                      <div className="grid gap-5">
                         <div className="space-y-2">
-                          <Label htmlFor={`lesson-title-${selectedLesson.id}`}>
-                            Название урока
-                          </Label>
+                          <Label htmlFor="lesson-title">Название урока</Label>
                           <Input
-                            id={`lesson-title-${selectedLesson.id}`}
+                            id="lesson-title"
                             name="title"
                             defaultValue={selectedLesson.title}
                             required
@@ -484,228 +458,226 @@ export default async function CourseContentPage({
                         </div>
 
                         <div className="space-y-2">
-                          <Label htmlFor={`lesson-excerpt-${selectedLesson.id}`}>
-                            Краткое описание
-                          </Label>
+                          <Label htmlFor="lesson-excerpt">Краткое описание</Label>
                           <Textarea
-                            id={`lesson-excerpt-${selectedLesson.id}`}
+                            id="lesson-excerpt"
                             name="excerpt"
                             defaultValue={selectedLesson.excerpt ?? ""}
-                            className="min-h-24"
+                            className="min-h-[120px]"
+                            placeholder="Коротко объясни, что ученик получит в этом уроке."
                           />
-                          <p className="text-sm leading-6 text-[var(--muted)]">
-                            Короткая подводка к уроку. Здесь стоит объяснить, что
-                            именно ученик получит после просмотра и чтения этого
-                            материала.
-                          </p>
                         </div>
-                      </div>
-                    </article>
 
-                    <article className="rounded-[28px] border border-[var(--border)] bg-white p-6 shadow-sm">
-                      <div className="space-y-2">
-                        <h3 className="text-2xl font-semibold tracking-tight text-[var(--foreground)]">
-                          Текст урока
-                        </h3>
-                        <p className="text-sm leading-7 text-[var(--muted)]">
-                          Основной конспект, пошаговый план, чек-лист, домашнее
-                          задание или пояснения к видео.
-                        </p>
-                      </div>
-
-                      <div className="mt-5 space-y-2">
-                        <Textarea
-                          id={`lesson-content-${selectedLesson.id}`}
-                          name="contentText"
-                          defaultValue={extractLessonBody(selectedLesson.content)}
-                          className="min-h-56"
-                        />
-                      </div>
-                    </article>
-
-                    <article className="rounded-[28px] border border-[var(--border)] bg-white p-6 shadow-sm">
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-3">
-                          <div className="rounded-2xl bg-[var(--primary-soft)] p-3">
-                            <Paperclip className="h-5 w-5 text-[var(--primary)]" />
-                          </div>
-                          <div>
-                            <h3 className="text-2xl font-semibold tracking-tight text-[var(--foreground)]">
-                              Прикрепленный материал
-                            </h3>
+                        <div className="grid gap-5 md:grid-cols-[220px_1fr]">
+                          <div className="space-y-2">
+                            <Label htmlFor="lesson-access-after">Открыть через дней</Label>
+                            <Input
+                              id="lesson-access-after"
+                              name="accessAfterDays"
+                              type="number"
+                              min={0}
+                              defaultValue={selectedLesson.accessAfterDays ?? ""}
+                              placeholder="Например, 7"
+                            />
                             <p className="text-sm leading-6 text-[var(--muted)]">
-                              В одном уроке можно держать и текст, и видео, и
-                              дополнительный файл по ссылке.
+                              Если оставить пустым, урок доступен сразу.
                             </p>
                           </div>
-                        </div>
-                      </div>
 
-                      <div className="mt-5 grid gap-4 lg:grid-cols-[220px_minmax(0,1fr)]">
-                        <div className="space-y-2">
-                          <Label htmlFor={`attachment-title-${selectedLesson.id}`}>
-                            Название материала
-                          </Label>
-                          <Input
-                            id={`attachment-title-${selectedLesson.id}`}
-                            name="attachmentTitle"
-                            defaultValue={selectedAttachment?.title ?? ""}
-                            placeholder="Например, Шаблон договора"
-                          />
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor={`attachment-url-${selectedLesson.id}`}>
-                            Ссылка на файл
-                          </Label>
-                          <Input
-                            id={`attachment-url-${selectedLesson.id}`}
-                            name="attachmentUrl"
-                            defaultValue={selectedAttachment?.url ?? ""}
-                            placeholder="https://disk.yandex.ru/... или https://example.com/file.pdf"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="mt-4 rounded-2xl bg-[var(--surface)] p-4">
-                        <div className="flex items-start gap-3">
-                          <Link2 className="mt-1 h-5 w-5 flex-none text-[var(--primary)]" />
-                          <p className="text-sm leading-7 text-[var(--muted)]">
-                            На этом этапе прикрепление идет по ссылке. Это уже
-                            позволит приложить PDF, чек-лист, шаблон документа,
-                            таблицу или внешний материал. Если понадобится, потом
-                            добавим и собственное файловое хранилище.
-                          </p>
-                        </div>
-                      </div>
-                    </article>
-
-                    <AdminLessonVideoManager
-                      lessonId={selectedLesson.id}
-                      initialAsset={
-                        selectedLesson.videoAsset
-                          ? {
-                              id: selectedLesson.videoAsset.id,
-                              provider: selectedLesson.videoAsset.provider,
-                              sourceType: selectedLesson.videoAsset.sourceType,
-                              status: selectedLesson.videoAsset.status,
-                              originalFilename:
-                                selectedLesson.videoAsset.originalFilename ?? null,
-                              sourceUrl: selectedLesson.videoAsset.sourceUrl ?? null,
-                              playerUrl: selectedLesson.videoAsset.playerUrl ?? null,
-                              playbackId: selectedLesson.videoAsset.playbackId ?? null,
-                              errorMessage:
-                                selectedLesson.videoAsset.errorMessage ?? null,
-                            }
-                          : null
-                      }
-                      fallbackVideoSourceType={selectedLesson.videoSourceType}
-                      fallbackVideoUrl={selectedLesson.videoUrl}
-                      fallbackVideoPlaybackId={selectedLesson.videoPlaybackId}
-                    />
-                  </div>
-
-                  <div className="space-y-6">
-                    <article className="rounded-[28px] border border-[var(--border)] bg-white p-6 shadow-sm">
-                      <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
-                        Настройки урока
-                      </p>
-
-                      <div className="mt-5 space-y-5">
-                        <div className="space-y-2">
-                          <Label htmlFor={`lesson-type-${selectedLesson.id}`}>
-                            Основной формат
-                          </Label>
-                          <Select
-                            id={`lesson-type-${selectedLesson.id}`}
-                            name="type"
-                            defaultValue={selectedLesson.type}
-                          >
-                            {Object.values(LessonType).map((type) => (
-                              <option key={type} value={type}>
-                                {lessonTypeLabelMap[type]}
-                              </option>
-                            ))}
-                          </Select>
-                          <p className="text-sm leading-6 text-[var(--muted)]">
-                            Это не ограничивает содержимое. Урок все равно может
-                            содержать текст, видео и файл одновременно.
-                          </p>
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor={`lesson-delay-${selectedLesson.id}`}>
-                            Открыть через дней
-                          </Label>
-                          <Input
-                            id={`lesson-delay-${selectedLesson.id}`}
-                            name="accessAfterDays"
-                            type="number"
-                            min={0}
-                            defaultValue={selectedLesson.accessAfterDays ?? ""}
-                          />
-                          <p className="text-sm leading-6 text-[var(--muted)]">
-                            Если оставить пустым, урок будет доступен сразу после
-                            выдачи курса.
-                          </p>
-                        </div>
-
-                        <label className="flex items-start gap-3 rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-4 py-4 text-sm text-[var(--foreground)]">
-                          <input
-                            type="checkbox"
-                            name="isPreview"
-                            defaultChecked={selectedLesson.isPreview}
-                            className="mt-1 h-4 w-4 rounded border-[var(--border)] accent-[var(--primary)]"
-                          />
-                          <span>
-                            <span className="block font-medium">Открытый урок</span>
-                            <span className="mt-1 block leading-6 text-[var(--muted)]">
-                              Можно показывать без записи на курс как превью или
-                              прогревающий материал.
+                          <label className="flex items-start gap-3 rounded-[20px] border border-[var(--border)] bg-[var(--surface)] px-4 py-4">
+                            <input
+                              type="checkbox"
+                              name="isPreview"
+                              defaultChecked={selectedLesson.isPreview}
+                              className="mt-1 h-4 w-4 rounded border-[#cfd7f3] text-[var(--primary)] focus:ring-[var(--primary-soft)]"
+                            />
+                            <span className="space-y-1">
+                              <span className="block font-medium text-[var(--foreground)]">
+                                Открытый урок
+                              </span>
+                              <span className="block text-sm leading-6 text-[var(--muted)]">
+                                Можно показывать без записи как превью или прогревающий материал.
+                              </span>
                             </span>
-                          </span>
-                        </label>
-                      </div>
-
-                      <div className="mt-6 flex flex-col gap-3">
-                        <Button type="submit" className="w-full">
-                          Сохранить урок
-                        </Button>
-                        <Button
-                          type="submit"
-                          formAction={deleteLesson}
-                          variant="outline"
-                          className="w-full border-red-300 text-red-600 hover:bg-red-50"
-                        >
-                          Удалить урок
-                        </Button>
-                      </div>
-                    </article>
-
-                    <article className="rounded-[28px] border border-[var(--border)] bg-white p-6 shadow-sm">
-                      <div className="flex items-start gap-3">
-                        <div className="rounded-2xl bg-[var(--primary-soft)] p-3">
-                          <Sparkles className="h-5 w-5 text-[var(--primary)]" />
-                        </div>
-                        <div>
-                          <h3 className="text-xl font-semibold tracking-tight text-[var(--foreground)]">
-                            Как мыслить уроком
-                          </h3>
-                          <p className="mt-2 text-sm leading-7 text-[var(--muted)]">
-                            Хороший урок обычно состоит из трех слоев: краткая
-                            подводка, основное содержание и прикрепленный материал
-                            для действия после просмотра.
-                          </p>
+                          </label>
                         </div>
                       </div>
-                    </article>
-                  </div>
-                </form>
-              )}
+                    </div>
+                  </details>
+                </article>
+
+                <article className="rounded-[28px] border border-[var(--border)] bg-white shadow-sm">
+                  <details open className="group">
+                    <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-6 py-5">
+                      <div className="space-y-2">
+                        <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
+                          Контент урока
+                        </p>
+                        <h3 className="text-2xl font-semibold tracking-tight text-[var(--foreground)]">
+                          Блоки урока
+                        </h3>
+                      </div>
+
+                      <div className="text-sm font-medium text-[var(--muted)] transition group-open:rotate-180">
+                        <ChevronRight className="h-5 w-5 rotate-90 group-open:-rotate-90" />
+                      </div>
+                    </summary>
+
+                    <div className="border-t border-[var(--border)] px-6 py-6">
+                      <LessonBlockStudio
+                        lessonId={selectedLesson.id}
+                        initialBlocks={selectedLessonBlocks}
+                        initialAsset={selectedLesson.videoAsset}
+                        fallbackVideoSourceType={selectedLesson.videoSourceType}
+                        fallbackVideoUrl={selectedLesson.videoUrl}
+                        fallbackVideoPlaybackId={selectedLesson.videoPlaybackId}
+                      />
+                    </div>
+                  </details>
+                </article>
+
+                <div className="flex flex-wrap items-center gap-3">
+                  <Button type="submit">
+                    <Save className="mr-2 h-4 w-4" />
+                    Сохранить урок
+                  </Button>
+                </div>
+              </form>
+
+              <form action={deleteLesson} className="rounded-[28px] border border-[var(--border)] bg-white p-6 shadow-sm">
+                <input type="hidden" name="courseId" value={course.id} />
+                <input type="hidden" name="lessonId" value={selectedLesson.id} />
+                <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
+                  Опасная зона
+                </p>
+                <h3 className="mt-2 text-xl font-semibold tracking-tight text-[var(--foreground)]">
+                  Удаление урока
+                </h3>
+                <p className="mt-3 max-w-2xl text-sm leading-7 text-[var(--muted)]">
+                  Удали урок только если он больше не нужен. Если нужно просто спрятать материал,
+                  лучше изменить структуру модулей или оставить урок черновиком внутри курса.
+                </p>
+                <div className="mt-5">
+                  <Button
+                    type="submit"
+                    variant="outline"
+                    className="border-red-300 text-red-600 hover:bg-red-50"
+                  >
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    Удалить урок
+                  </Button>
+                </div>
+              </form>
             </>
           )}
         </div>
-      </div>
+
+        <aside className="space-y-4 xl:sticky xl:top-6 xl:self-start">
+          <article className="rounded-[28px] border border-[var(--border)] bg-white p-5 shadow-sm">
+            <div className="flex items-start gap-3">
+              <div className="rounded-2xl bg-[var(--primary-soft)] p-3 text-[var(--primary)]">
+                <CircleHelp className="h-5 w-5" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
+                  Поддержка редактора
+                </p>
+                <h3 className="mt-2 text-xl font-semibold tracking-tight text-[var(--foreground)]">
+                  Как собирать хороший урок
+                </h3>
+              </div>
+            </div>
+
+            <div className="mt-5 space-y-4 text-sm leading-7 text-[var(--muted)]">
+              <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4">
+                <p className="font-medium text-[var(--foreground)]">1. Начни с одного тезиса</p>
+                <p className="mt-1">
+                  Сначала коротко объясни, чему посвящен урок и какой результат должен получить
+                  студент.
+                </p>
+              </div>
+              <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4">
+                <p className="font-medium text-[var(--foreground)]">2. Собери блоки по логике</p>
+                <p className="mt-1">
+                  Обычно хороший сценарий выглядит так: вводный текст, видео или материал, затем
+                  действие и домашняя работа.
+                </p>
+              </div>
+              <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4">
+                <p className="font-medium text-[var(--foreground)]">3. Используй перестановку</p>
+                <p className="mt-1">
+                  Блоки можно перетаскивать между собой, поэтому сначала собери черновую структуру,
+                  а порядок уточни позже.
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <article className="rounded-[28px] border border-[var(--border)] bg-white p-5 shadow-sm">
+            <div className="flex items-start gap-3">
+              <div className="rounded-2xl bg-[var(--primary-soft)] p-3 text-[var(--primary)]">
+                <MessageSquareMore className="h-5 w-5" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
+                  Комментарии
+                </p>
+                <h3 className="mt-2 text-xl font-semibold tracking-tight text-[var(--foreground)]">
+                  Зона для команды
+                </h3>
+              </div>
+            </div>
+
+            <div className="mt-5 space-y-4 text-sm leading-7 text-[var(--muted)]">
+              <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4">
+                <p className="font-medium text-[var(--foreground)]">Что будет дальше</p>
+                <p className="mt-1">
+                  Следующим отдельным слоем сюда можно вынести inline-комментарии методиста и чат
+                  сопровождения без перегрузки редактора настройками.
+                </p>
+              </div>
+              <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4">
+                <p className="font-medium text-[var(--foreground)]">Пока используем этот ритм</p>
+                <p className="mt-1">
+                  Слева структура курса, в центре контент урока, справа только помощь и рабочие
+                  договоренности команды.
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <article className="rounded-[28px] border border-[var(--border)] bg-white p-5 shadow-sm">
+            <div className="flex items-start gap-3">
+              <div className="rounded-2xl bg-[var(--primary-soft)] p-3 text-[var(--primary)]">
+                <Layers3 className="h-5 w-5" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
+                  Типы блоков
+                </p>
+                <h3 className="mt-2 text-xl font-semibold tracking-tight text-[var(--foreground)]">
+                  Что можно добавить в урок
+                </h3>
+              </div>
+            </div>
+
+            <div className="mt-5 space-y-3">
+              {[
+                "Текст: конспект, инструкция, сценарий урока.",
+                "Видео: private RUTUBE, embed или файл с компьютера.",
+                "Файл: шаблон, PDF, чек-лист или рабочий документ.",
+                "Задание: домашняя работа с условиями и правилами сдачи.",
+              ].map((item) => (
+                <div
+                  key={item}
+                  className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-sm leading-6 text-[var(--muted)]"
+                >
+                  {item}
+                </div>
+              ))}
+            </div>
+          </article>
+        </aside>
     </section>
   );
 }

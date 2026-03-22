@@ -1,16 +1,14 @@
 import { EnrollmentStatus, prisma } from "@academy/db";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ClipboardCheck, FileText, PlayCircle } from "lucide-react";
 
 import { LessonEngagementTracker } from "@/components/learning/lesson-engagement-tracker";
 import { LessonVideoPlayer } from "@/components/learning/lesson-video-player";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { toggleLessonCompletion } from "@/features/learning/actions";
-import {
-  extractLessonAttachments,
-  extractLessonBody,
-} from "@/lib/lesson-content";
+import { extractLessonBlocks, type LessonBlock } from "@/lib/lesson-content";
 import {
   enrollmentStatusLabelMap,
   enrollmentStatusVariantMap,
@@ -23,6 +21,33 @@ function addDays(date: Date, days: number) {
   const result = new Date(date);
   result.setDate(result.getDate() + days);
   return result;
+}
+
+function getRenderableBlocks(lesson: {
+  content: unknown;
+  videoAsset: unknown;
+  videoSourceType: unknown;
+  videoUrl: unknown;
+  videoPlaybackId: unknown;
+}): LessonBlock[] {
+  const extractedBlocks = extractLessonBlocks(lesson.content);
+
+  if (extractedBlocks.length > 0) {
+    return extractedBlocks;
+  }
+
+  if (lesson.videoAsset || lesson.videoSourceType || lesson.videoUrl || lesson.videoPlaybackId) {
+    return [
+      {
+        id: "legacy-video",
+        type: "VIDEO",
+        title: "Видео",
+        body: "",
+      },
+    ];
+  }
+
+  return [];
 }
 
 type CourseLearningPageProps = {
@@ -154,6 +179,9 @@ export default async function CourseLearningPage({
     lessonEntries.length === 0
       ? 0
       : Math.round((completedLessons / lessonEntries.length) * 100);
+  const selectedLessonBlocks = selectedEntry
+    ? getRenderableBlocks(selectedEntry.lesson)
+    : [];
 
   return (
     <section className="space-y-6">
@@ -324,7 +352,8 @@ export default async function CourseLearningPage({
                     lessonId={selectedEntry.lesson.id}
                     entryPath={`/learning/courses/${course.id}?lessonId=${selectedEntry.lesson.id}`}
                     hasVideo={Boolean(
-                      selectedEntry.lesson.videoAsset ||
+                      selectedLessonBlocks.some((block) => block.type === "VIDEO") ||
+                        selectedEntry.lesson.videoAsset ||
                         selectedEntry.lesson.videoSourceType ||
                         selectedEntry.lesson.videoUrl ||
                         selectedEntry.lesson.videoPlaybackId,
@@ -336,68 +365,168 @@ export default async function CourseLearningPage({
                     }
                   />
 
-                  <LessonVideoPlayer
-                    title={selectedEntry.lesson.title}
-                    videoSourceType={selectedEntry.lesson.videoSourceType}
-                    videoUrl={selectedEntry.lesson.videoUrl}
-                    videoPlaybackId={selectedEntry.lesson.videoPlaybackId}
-                    videoAsset={
-                      selectedEntry.lesson.videoAsset
-                        ? {
-                            provider: selectedEntry.lesson.videoAsset.provider,
-                            sourceType: selectedEntry.lesson.videoAsset.sourceType,
-                            status: selectedEntry.lesson.videoAsset.status,
-                            playerUrl: selectedEntry.lesson.videoAsset.playerUrl,
-                            sourceUrl: selectedEntry.lesson.videoAsset.sourceUrl,
-                            playbackId: selectedEntry.lesson.videoAsset.playbackId,
-                            errorMessage: selectedEntry.lesson.videoAsset.errorMessage,
-                          }
-                        : null
-                    }
-                  />
+                  {selectedLessonBlocks.length > 0 ? (
+                    <div className="space-y-4">
+                      {selectedLessonBlocks.map((block, index) => {
+                        if (block.type === "TEXT") {
+                          return (
+                            <section
+                              key={block.id}
+                              className="rounded-[24px] border border-[var(--border)] bg-[var(--surface)] p-6"
+                            >
+                              <div className="flex items-start gap-3">
+                                <div className="rounded-2xl bg-white p-3 text-[var(--primary)] shadow-sm">
+                                  <FileText className="h-5 w-5" />
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                  <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
+                                    Блок {index + 1}
+                                  </p>
+                                  <h3 className="mt-2 text-xl font-semibold tracking-tight text-[var(--foreground)]">
+                                    {block.title}
+                                  </h3>
+                                </div>
+                              </div>
 
-                  {extractLessonBody(selectedEntry.lesson.content) ? (
-                    <div className="rounded-[24px] border border-[var(--border)] bg-[var(--surface)] p-6">
-                      <p className="whitespace-pre-wrap text-base leading-8 text-[var(--foreground)]">
-                        {extractLessonBody(selectedEntry.lesson.content)}
-                      </p>
+                              <p className="mt-5 whitespace-pre-wrap text-base leading-8 text-[var(--foreground)]">
+                                {block.body || "В этом блоке пока нет текста."}
+                              </p>
+                            </section>
+                          );
+                        }
+
+                        if (block.type === "VIDEO") {
+                          return (
+                            <section
+                              key={block.id}
+                              className="space-y-4 rounded-[24px] border border-[var(--border)] bg-[var(--surface)] p-6"
+                            >
+                              <div className="flex items-start gap-3">
+                                <div className="rounded-2xl bg-white p-3 text-[var(--primary)] shadow-sm">
+                                  <PlayCircle className="h-5 w-5" />
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                  <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
+                                    Видео
+                                  </p>
+                                  <h3 className="mt-2 text-xl font-semibold tracking-tight text-[var(--foreground)]">
+                                    {block.title}
+                                  </h3>
+                                  {block.body ? (
+                                    <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
+                                      {block.body}
+                                    </p>
+                                  ) : null}
+                                </div>
+                              </div>
+
+                              <LessonVideoPlayer
+                                title={block.title || selectedEntry.lesson.title}
+                                videoSourceType={selectedEntry.lesson.videoSourceType}
+                                videoUrl={selectedEntry.lesson.videoUrl}
+                                videoPlaybackId={selectedEntry.lesson.videoPlaybackId}
+                                videoAsset={
+                                  selectedEntry.lesson.videoAsset
+                                    ? {
+                                        provider: selectedEntry.lesson.videoAsset.provider,
+                                        sourceType: selectedEntry.lesson.videoAsset.sourceType,
+                                        status: selectedEntry.lesson.videoAsset.status,
+                                        playerUrl: selectedEntry.lesson.videoAsset.playerUrl,
+                                        sourceUrl: selectedEntry.lesson.videoAsset.sourceUrl,
+                                        playbackId: selectedEntry.lesson.videoAsset.playbackId,
+                                        errorMessage: selectedEntry.lesson.videoAsset.errorMessage,
+                                      }
+                                    : null
+                                }
+                              />
+                            </section>
+                          );
+                        }
+
+                        if (block.type === "FILE") {
+                          return (
+                            <section
+                              key={block.id}
+                              className="rounded-[24px] border border-[var(--border)] bg-[var(--surface)] p-6"
+                            >
+                              <div className="flex items-start justify-between gap-3">
+                                <div>
+                                  <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
+                                    Материал
+                                  </p>
+                                  <h3 className="mt-2 text-xl font-semibold tracking-tight text-[var(--foreground)]">
+                                    {block.title}
+                                  </h3>
+                                  {block.note ? (
+                                    <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
+                                      {block.note}
+                                    </p>
+                                  ) : null}
+                                </div>
+
+                                <Badge variant="neutral">Файл</Badge>
+                              </div>
+
+                              <a
+                                href={block.url}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="mt-5 flex items-center justify-between gap-3 rounded-2xl border border-[var(--border)] bg-white px-4 py-4 transition hover:border-[var(--primary)]"
+                              >
+                                <div className="min-w-0">
+                                  <p className="font-medium text-[var(--foreground)]">
+                                    Открыть материал
+                                  </p>
+                                  <p className="mt-1 break-all text-sm text-[var(--muted)]">
+                                    {block.url}
+                                  </p>
+                                </div>
+                                <Badge variant="default">Открыть</Badge>
+                              </a>
+                            </section>
+                          );
+                        }
+
+                        return (
+                          <section
+                            key={block.id}
+                            className="rounded-[24px] border border-[var(--border)] bg-[var(--surface)] p-6"
+                          >
+                            <div className="flex items-start gap-3">
+                              <div className="rounded-2xl bg-white p-3 text-[var(--primary)] shadow-sm">
+                                <ClipboardCheck className="h-5 w-5" />
+                              </div>
+                              <div className="min-w-0 flex-1">
+                                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
+                                  Задание
+                                </p>
+                                <h3 className="mt-2 text-xl font-semibold tracking-tight text-[var(--foreground)]">
+                                  {block.title}
+                                </h3>
+                              </div>
+                            </div>
+
+                            <p className="mt-5 whitespace-pre-wrap text-base leading-8 text-[var(--foreground)]">
+                              {block.body || "Инструкция к заданию пока не заполнена."}
+                            </p>
+
+                            {block.submissionHint ? (
+                              <div className="mt-5 rounded-2xl border border-[var(--border)] bg-white px-4 py-4 text-sm leading-7 text-[var(--muted)]">
+                                <p className="font-medium text-[var(--foreground)]">
+                                  Как сдавать работу
+                                </p>
+                                <p className="mt-2 whitespace-pre-wrap">{block.submissionHint}</p>
+                              </div>
+                            ) : null}
+                          </section>
+                        );
+                      })}
                     </div>
                   ) : (
                     <div className="rounded-[24px] border border-dashed border-[var(--border)] bg-[var(--surface)] p-6 text-sm leading-7 text-[var(--muted)]">
-                      Для этого урока пока не добавлен текстовый материал.
+                      Для этого урока пока не добавлены блоки контента.
                     </div>
                   )}
-
-                  {extractLessonAttachments(selectedEntry.lesson.content).length > 0 ? (
-                    <div className="rounded-[24px] border border-[var(--border)] bg-[var(--surface)] p-6">
-                      <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
-                        Материалы урока
-                      </p>
-                      <div className="mt-4 space-y-3">
-                        {extractLessonAttachments(selectedEntry.lesson.content).map(
-                          (attachment) => (
-                            <a
-                              key={`${attachment.title}-${attachment.url}`}
-                              href={attachment.url}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="flex items-center justify-between gap-3 rounded-2xl border border-[var(--border)] bg-white px-4 py-4 transition hover:border-[var(--primary)]"
-                            >
-                              <div>
-                                <p className="font-medium text-[var(--foreground)]">
-                                  {attachment.title}
-                                </p>
-                                <p className="mt-1 break-all text-sm text-[var(--muted)]">
-                                  {attachment.url}
-                                </p>
-                              </div>
-                              <Badge variant="neutral">Открыть</Badge>
-                            </a>
-                          ),
-                        )}
-                      </div>
-                    </div>
-                  ) : null}
 
                   {!isElevated ? (
                     <form action={toggleLessonCompletion}>
@@ -420,8 +549,8 @@ export default async function CourseLearningPage({
                     </form>
                   ) : (
                     <div className="rounded-[20px] border border-[var(--border)] bg-[var(--surface)] p-5 text-sm leading-7 text-[var(--muted)]">
-                      В режиме просмотра прогресс не записывается. Для проверки
-                      реального прохождения используй студенческую учетную запись.
+                      В режиме просмотра прогресс не записывается. Для проверки реального
+                      прохождения используй студенческую учетную запись.
                     </div>
                   )}
                 </>

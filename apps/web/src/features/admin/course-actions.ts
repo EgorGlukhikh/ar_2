@@ -12,7 +12,10 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 
 import { requireAdminUser } from "@/lib/admin";
-import { buildLessonContent } from "@/lib/lesson-content";
+import {
+  buildLessonContentFromBlocks,
+  type LessonBlock,
+} from "@/lib/lesson-content";
 
 const createCourseSchema = z.object({
   title: z.string().trim().min(3),
@@ -37,7 +40,7 @@ const updateModuleSchema = moduleSchema.extend({
 const lessonSchema = z.object({
   moduleId: z.string().trim().min(1),
   title: z.string().trim().min(2),
-  type: z.nativeEnum(LessonType),
+  type: z.nativeEnum(LessonType).default(LessonType.TEXT),
 });
 
 const updateLessonSchema = z.object({
@@ -45,16 +48,82 @@ const updateLessonSchema = z.object({
   moduleId: z.string().trim().min(1),
   title: z.string().trim().min(2),
   excerpt: z.string().trim().optional(),
-  type: z.nativeEnum(LessonType),
+  type: z.nativeEnum(LessonType).default(LessonType.TEXT),
   isPreview: z.boolean().default(false),
   accessAfterDays: z.number().int().min(0).nullable(),
-  contentText: z.string().trim().optional(),
-  attachmentTitle: z.string().trim().optional(),
-  attachmentUrl: z.string().trim().optional(),
+  blocksJson: z.string().trim().optional(),
   videoSourceType: z.nativeEnum(MediaSourceType).nullable(),
   videoUrl: z.string().trim().optional(),
   videoPlaybackId: z.string().trim().optional(),
 });
+
+const lessonBlockSchema = z.discriminatedUnion("type", [
+  z.object({
+    id: z.string().trim().min(1),
+    type: z.literal("TEXT"),
+    title: z.string(),
+    body: z.string(),
+  }),
+  z.object({
+    id: z.string().trim().min(1),
+    type: z.literal("VIDEO"),
+    title: z.string(),
+    body: z.string().optional().default(""),
+  }),
+  z.object({
+    id: z.string().trim().min(1),
+    type: z.literal("FILE"),
+    title: z.string(),
+    url: z.string(),
+    note: z.string().optional().default(""),
+  }),
+  z.object({
+    id: z.string().trim().min(1),
+    type: z.literal("HOMEWORK"),
+    title: z.string(),
+    body: z.string(),
+    submissionHint: z.string().optional().default(""),
+  }),
+]);
+
+function parseLessonBlocksJson(value?: string): LessonBlock[] {
+  if (!value) {
+    return [];
+  }
+
+  let parsedJson: unknown;
+
+  try {
+    parsedJson = JSON.parse(value);
+  } catch {
+    throw new Error("Не удалось прочитать структуру блоков урока.");
+  }
+
+  if (!Array.isArray(parsedJson)) {
+    throw new Error("Структура блоков урока должна быть списком.");
+  }
+
+  return parsedJson.map((item) => lessonBlockSchema.parse(item));
+}
+
+function resolveLessonTypeFromBlocks(blocks: LessonBlock[], fallback: LessonType) {
+  const priorityBlock = blocks[0];
+
+  if (!priorityBlock) {
+    return fallback;
+  }
+
+  switch (priorityBlock.type) {
+    case "VIDEO":
+      return LessonType.VIDEO;
+    case "FILE":
+      return LessonType.FILE;
+    case "HOMEWORK":
+      return LessonType.HOMEWORK;
+    default:
+      return LessonType.TEXT;
+  }
+}
 
 function getTrimmedValue(formData: FormData, key: string) {
   return String(formData.get(key) ?? "").trim();
@@ -283,7 +352,7 @@ export async function createLesson(formData: FormData) {
   const parsed = lessonSchema.parse({
     moduleId: getTrimmedValue(formData, "moduleId"),
     title: getTrimmedValue(formData, "title"),
-    type: getTrimmedValue(formData, "type"),
+    type: (getTrimmedValue(formData, "type") || LessonType.TEXT) as LessonType,
   });
 
   const [moduleRecord, lastLesson] = await Promise.all([
@@ -343,12 +412,10 @@ export async function updateLesson(formData: FormData) {
     moduleId: getTrimmedValue(formData, "moduleId"),
     title: getTrimmedValue(formData, "title"),
     excerpt: getOptionalValue(formData, "excerpt"),
-    type: getTrimmedValue(formData, "type"),
+    type: (getTrimmedValue(formData, "type") || LessonType.TEXT) as LessonType,
     isPreview: formData.get("isPreview") === "on",
     accessAfterDays: getOptionalNumber(formData, "accessAfterDays"),
-    contentText: getOptionalValue(formData, "contentText"),
-    attachmentTitle: getOptionalValue(formData, "attachmentTitle"),
-    attachmentUrl: getOptionalValue(formData, "attachmentUrl"),
+    blocksJson: getOptionalValue(formData, "blocksJson"),
     videoSourceType: getOptionalValue(formData, "videoSourceType") ?? null,
     videoUrl: getOptionalValue(formData, "videoUrl"),
     videoPlaybackId: getOptionalValue(formData, "videoPlaybackId"),
@@ -367,11 +434,9 @@ export async function updateLesson(formData: FormData) {
     throw new Error("Module not found");
   }
 
-  const contentPayload = buildLessonContent({
-    body: parsed.contentText,
-    attachmentTitle: parsed.attachmentTitle,
-    attachmentUrl: parsed.attachmentUrl,
-  });
+  const blocks = parseLessonBlocksJson(parsed.blocksJson);
+  const contentPayload = buildLessonContentFromBlocks(blocks);
+  const resolvedType = resolveLessonTypeFromBlocks(blocks, parsed.type);
 
   await prisma.lesson.update({
     where: {
@@ -380,7 +445,7 @@ export async function updateLesson(formData: FormData) {
     data: {
       title: parsed.title,
       excerpt: parsed.excerpt,
-      type: parsed.type,
+      type: resolvedType,
       isPreview: parsed.isPreview,
       accessAfterDays: parsed.accessAfterDays,
       content: contentPayload ? contentPayload : Prisma.JsonNull,
