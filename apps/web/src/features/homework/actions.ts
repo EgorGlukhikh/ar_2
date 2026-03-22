@@ -6,9 +6,10 @@ import {
   prisma,
 } from "@academy/db";
 import { revalidatePath } from "next/cache";
+import { USER_ROLES } from "@academy/shared";
 import { z } from "zod";
 
-import { requireAdminUser } from "@/lib/admin";
+import { requireRoleAccess } from "@/lib/admin";
 import { isElevatedUserRole, requireStudentOrElevatedUser } from "@/lib/user";
 
 const MAX_HOMEWORK_FILE_BYTES = 10 * 1024 * 1024;
@@ -207,7 +208,7 @@ export async function submitHomework(formData: FormData) {
 }
 
 export async function reviewHomeworkSubmission(formData: FormData) {
-  const reviewer = await requireAdminUser();
+  const reviewer = await requireRoleAccess([USER_ROLES.ADMIN, USER_ROLES.CURATOR]);
 
   const parsed = reviewHomeworkSchema.parse({
     submissionId: getTrimmedValue(formData, "submissionId"),

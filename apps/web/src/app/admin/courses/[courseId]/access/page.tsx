@@ -16,6 +16,7 @@ import {
   resetCourseProgress,
 } from "@/features/admin/user-actions";
 import { upsertCourseOffer } from "@/features/billing/actions";
+import { requireAdminUser } from "@/lib/admin";
 import { enrollmentStatusLabelMap, enrollmentStatusVariantMap } from "@/lib/labels";
 import { formatMinorUnits } from "@/lib/money";
 
@@ -28,6 +29,8 @@ type CourseAccessPageProps = {
 export default async function CourseAccessPage({
   params,
 }: CourseAccessPageProps) {
+  await requireAdminUser();
+
   const { courseId } = await params;
 
   const course = await prisma.course.findUnique({

@@ -70,7 +70,7 @@ export async function requireAdminViewer() {
     redirect("/sign-in");
   }
 
-  if (viewer.actualRole !== USER_ROLES.ADMIN) {
+  if (!ELEVATED_ROLES.includes(viewer.actualRole)) {
     redirect("/");
   }
 

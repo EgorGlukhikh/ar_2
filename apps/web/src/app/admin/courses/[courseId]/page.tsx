@@ -1,11 +1,13 @@
 import Link from "next/link";
 import { FileText, ShieldAlert, Sparkles, SlidersHorizontal } from "lucide-react";
+import { notFound } from "next/navigation";
 
 import { CourseStatus, prisma } from "@academy/db";
-import { notFound } from "next/navigation";
+import { USER_ROLES } from "@academy/shared";
 
 import { deleteCourse, updateCourse } from "@/features/admin/course-actions";
 import { courseStatusLabelMap } from "@/lib/labels";
+import { requireAdminUser } from "@/lib/admin";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -18,23 +20,39 @@ type CourseSettingsPageProps = {
   }>;
 };
 
-export default async function CourseSettingsPage({
-  params,
-}: CourseSettingsPageProps) {
+export default async function CourseSettingsPage({ params }: CourseSettingsPageProps) {
+  await requireAdminUser();
+
   const { courseId } = await params;
 
-  const course = await prisma.course.findUnique({
-    where: {
-      id: courseId,
-    },
-    select: {
-      id: true,
-      title: true,
-      slug: true,
-      description: true,
-      status: true,
-    },
-  });
+  const [course, authors] = await Promise.all([
+    prisma.course.findUnique({
+      where: {
+        id: courseId,
+      },
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        description: true,
+        status: true,
+        authorId: true,
+      },
+    }),
+    prisma.user.findMany({
+      where: {
+        role: USER_ROLES.AUTHOR,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+      },
+    }),
+  ]);
 
   if (!course) {
     notFound();
@@ -56,37 +74,30 @@ export default async function CourseSettingsPage({
             Основная информация
           </h2>
           <p className="text-sm leading-7 text-[var(--muted)]">
-            Здесь меняются карточка курса, slug и статус публикации. Программу
-            и уроки редактируй во вкладке «Программа».
+            Здесь меняются карточка курса, автор, slug и статус публикации. Программу и уроки редактируй во вкладке «Программа».
           </p>
         </div>
 
         <div className="mt-6 grid gap-3 md:grid-cols-3">
           <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4">
             <FileText className="h-5 w-5 text-[var(--primary)]" />
-            <p className="mt-3 text-sm font-semibold text-[var(--foreground)]">
-              Карточка курса
-            </p>
+            <p className="mt-3 text-sm font-semibold text-[var(--foreground)]">Карточка курса</p>
             <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
               Название и описание видит вся команда платформы.
             </p>
           </div>
           <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4">
             <SlidersHorizontal className="h-5 w-5 text-[var(--primary)]" />
-            <p className="mt-3 text-sm font-semibold text-[var(--foreground)]">
-              Публикация
-            </p>
+            <p className="mt-3 text-sm font-semibold text-[var(--foreground)]">Публикация</p>
             <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
               Статус определяет, виден курс в каталоге или еще собирается.
             </p>
           </div>
           <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4">
             <Sparkles className="h-5 w-5 text-[var(--primary)]" />
-            <p className="mt-3 text-sm font-semibold text-[var(--foreground)]">
-              Дальнейшая работа
-            </p>
+            <p className="mt-3 text-sm font-semibold text-[var(--foreground)]">Ответственный автор</p>
             <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
-              Наполнение и доступы вынесены в соседние вкладки.
+              За автором можно закрепить курс и открыть ему реальный доступ в редактор.
             </p>
           </div>
         </div>
@@ -95,19 +106,11 @@ export default async function CourseSettingsPage({
           <div className="space-y-2">
             <Label htmlFor="title">Название курса</Label>
             <Input id="title" name="title" defaultValue={course.title} required />
-            <p className="text-sm leading-6 text-[var(--muted)]">
-              Используй понятное рабочее название, по которому курс легко найти
-              в админке и каталоге.
-            </p>
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="slug">Slug</Label>
             <Input id="slug" name="slug" defaultValue={course.slug} />
-            <p className="text-sm leading-6 text-[var(--muted)]">
-              Аккуратный адрес страницы курса. Его можно менять, если нужен
-              более понятный URL.
-            </p>
           </div>
 
           <div className="space-y-2">
@@ -118,33 +121,38 @@ export default async function CourseSettingsPage({
               defaultValue={course.description ?? ""}
               className="min-h-36"
             />
-            <p className="text-sm leading-6 text-[var(--muted)]">
-              Коротко объясни, для кого курс и к какому результату он ведет.
-            </p>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="status">Статус публикации</Label>
-            <Select id="status" name="status" defaultValue={course.status}>
-              {Object.values(CourseStatus).map((status) => (
-                <option key={status} value={status}>
-                  {courseStatusLabelMap[status]}
-                </option>
-              ))}
-            </Select>
-            <p className="text-sm leading-6 text-[var(--muted)]">
-              Черновик скрыт от каталога. Опубликованный курс можно продавать и
-              выдавать студентам.
-            </p>
+          <div className="grid gap-5 md:grid-cols-2">
+            <div className="space-y-2">
+              <Label htmlFor="status">Статус публикации</Label>
+              <Select id="status" name="status" defaultValue={course.status}>
+                {Object.values(CourseStatus).map((status) => (
+                  <option key={status} value={status}>
+                    {courseStatusLabelMap[status]}
+                  </option>
+                ))}
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="authorId">Автор курса</Label>
+              <Select id="authorId" name="authorId" defaultValue={course.authorId ?? ""}>
+                <option value="">Не назначен</option>
+                {authors.map((author) => (
+                  <option key={author.id} value={author.id}>
+                    {author.name ? `${author.name} · ${author.email}` : author.email}
+                  </option>
+                ))}
+              </Select>
+            </div>
           </div>
         </div>
 
         <div className="mt-8 flex flex-wrap gap-3">
           <Button type="submit">Сохранить изменения</Button>
           <Button asChild variant="outline">
-            <Link href={`/admin/courses/${course.id}/content`}>
-              Открыть программу
-            </Link>
+            <Link href={`/admin/courses/${course.id}/content`}>Открыть программу</Link>
           </Button>
         </div>
       </form>
@@ -159,21 +167,17 @@ export default async function CourseSettingsPage({
           </h2>
 
           <div className="mt-5 space-y-3 text-sm leading-7 text-[var(--muted)]">
-            <p>1. Собирают модули и уроки во вкладке «Программа».</p>
-            <p>2. Выставляют цену и настраивают доступ во вкладке «Доступ и продажи».</p>
-            <p>3. После проверки переводят курс из черновика в опубликованный.</p>
+            <p>1. Назначают автора, если курс собирает внешний эксперт или преподаватель.</p>
+            <p>2. Собирают модули и уроки во вкладке «Программа».</p>
+            <p>3. Настраивают цену и доступ во вкладке «Доступ и продажи».</p>
           </div>
 
           <div className="mt-6 flex flex-col gap-3">
             <Button asChild>
-              <Link href={`/admin/courses/${course.id}/content`}>
-                Перейти к наполнению
-              </Link>
+              <Link href={`/admin/courses/${course.id}/content`}>Перейти к наполнению</Link>
             </Button>
             <Button asChild variant="outline">
-              <Link href={`/admin/courses/${course.id}/access`}>
-                Настроить доступ и цену
-              </Link>
+              <Link href={`/admin/courses/${course.id}/access`}>Настроить доступ и цену</Link>
             </Button>
           </div>
         </article>
@@ -194,8 +198,7 @@ export default async function CourseSettingsPage({
             <ShieldAlert className="h-5 w-5" />
           </div>
           <p className="mt-4 text-sm leading-7 text-[var(--muted)]">
-            Вместе с курсом удалятся модули, уроки, прогресс и доступы студентов.
-            Используй этот сценарий только если курс действительно больше не нужен.
+            Вместе с курсом удалятся модули, уроки, прогресс и доступы студентов. Используй этот сценарий только если курс действительно больше не нужен.
           </p>
 
           <div className="mt-8">

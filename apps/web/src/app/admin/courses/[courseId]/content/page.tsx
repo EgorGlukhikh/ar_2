@@ -15,10 +15,12 @@ import {
   createModule,
   deleteLesson,
   deleteModule,
+  moveLessonToModule,
   updateLesson,
   updateModule,
 } from "@/features/admin/course-actions";
 import { extractLessonBlocks, type LessonBlock } from "@/lib/lesson-content";
+import { canEditCourseContent, requireWorkspaceUser } from "@/lib/admin";
 
 type CourseContentPageProps = {
   params: Promise<{
@@ -193,6 +195,7 @@ export default async function CourseContentPage({
   params,
   searchParams,
 }: CourseContentPageProps) {
+  const viewer = await requireWorkspaceUser();
   const { courseId } = await params;
   const resolvedSearchParams = searchParams ? await searchParams : {};
 
@@ -202,6 +205,7 @@ export default async function CourseContentPage({
     },
     select: {
       id: true,
+      authorId: true,
       modules: {
         orderBy: {
           position: "asc",
@@ -257,6 +261,10 @@ export default async function CourseContentPage({
   });
 
   if (!course) {
+    notFound();
+  }
+
+  if (!canEditCourseContent(viewer, course.authorId)) {
     notFound();
   }
 
@@ -418,6 +426,10 @@ export default async function CourseContentPage({
               />
             ) : (
               <>
+                <form id="move-lesson-form" action={moveLessonToModule}>
+                  <input type="hidden" name="lessonId" value={selectedLesson.id} />
+                </form>
+
                 <form action={updateLesson} className="space-y-6">
                   <input type="hidden" name="lessonId" value={selectedLesson.id} />
                   <input type="hidden" name="moduleId" value={selectedModule.id} />
@@ -491,6 +503,35 @@ export default async function CourseContentPage({
                               </span>
                             </label>
                           </div>
+
+                          {course.modules.length > 1 ? (
+                            <div className="space-y-2 rounded-[20px] border border-[var(--border)] bg-[var(--surface)] p-4">
+                              <Label htmlFor="move-lesson-module">Модуль урока</Label>
+                              <div className="flex flex-col gap-3 sm:flex-row">
+                                <select
+                                  id="move-lesson-module"
+                                  name="targetModuleId"
+                                  form="move-lesson-form"
+                                  defaultValue={selectedModule.id}
+                                  className="h-11 min-w-0 rounded-[16px] border border-[var(--border)] bg-white px-4 text-sm text-[var(--foreground)] outline-none transition focus:border-[var(--primary)]"
+                                >
+                                  {course.modules.map((moduleItem) => (
+                                    <option key={moduleItem.id} value={moduleItem.id}>
+                                      Модуль {moduleItem.position}. {moduleItem.title}
+                                    </option>
+                                  ))}
+                                </select>
+                                <Button
+                                  type="submit"
+                                  form="move-lesson-form"
+                                  variant="outline"
+                                  className="sm:min-w-[180px]"
+                                >
+                                  Переместить урок
+                                </Button>
+                              </div>
+                            </div>
+                          ) : null}
                         </div>
                       </div>
                     </details>
@@ -596,10 +637,10 @@ export default async function CourseContentPage({
                     </article>
                   ) : null}
 
-                  <div className="flex flex-wrap items-center gap-3">
-                    <Button type="submit">
-                      <Save className="mr-2 h-4 w-4" />
-                      Сохранить урок
+                <div className="flex flex-wrap items-center gap-3">
+                  <Button type="submit">
+                    <Save className="mr-2 h-4 w-4" />
+                    Сохранить урок
                     </Button>
                     <Button asChild variant="outline">
                       <Link href={`/learning/courses/${course.id}?lessonId=${selectedLesson.id}`}>

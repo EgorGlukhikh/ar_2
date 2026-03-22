@@ -26,6 +26,13 @@ const enrollmentSchema = z.object({
   courseId: z.string().trim().min(1),
 });
 
+const createWorkspaceMemberSchema = z.object({
+  email: z.email().trim().toLowerCase(),
+  name: z.string().trim().min(2),
+  password: z.string().min(5),
+  role: z.enum([USER_ROLES.AUTHOR, USER_ROLES.CURATOR, USER_ROLES.SALES_MANAGER]),
+});
+
 function getTrimmedValue(formData: FormData, key: string) {
   return String(formData.get(key) ?? "").trim();
 }
@@ -34,6 +41,7 @@ function refreshStudentAdminRoutes(courseId?: string) {
   revalidatePath("/admin");
   revalidatePath("/admin/courses");
   revalidatePath("/admin/students");
+  revalidatePath("/admin/team");
   revalidatePath("/learning");
 
   if (courseId) {
@@ -42,6 +50,59 @@ function refreshStudentAdminRoutes(courseId?: string) {
     revalidatePath(`/admin/courses/${courseId}/access`);
     revalidatePath(`/learning/courses/${courseId}`);
   }
+}
+
+export async function createWorkspaceMember(formData: FormData) {
+  await requireAdminUser();
+
+  const parsed = createWorkspaceMemberSchema.parse({
+    email: getTrimmedValue(formData, "email"),
+    name: getTrimmedValue(formData, "name"),
+    password: getTrimmedValue(formData, "password"),
+    role: getTrimmedValue(formData, "role"),
+  });
+
+  const existingUser = await prisma.user.findUnique({
+    where: {
+      email: parsed.email,
+    },
+    select: {
+      id: true,
+      role: true,
+    },
+  });
+
+  if (existingUser && existingUser.role !== parsed.role) {
+    throw new Error("Пользователь с этим email уже существует с другой ролью.");
+  }
+
+  const passwordHash = await hashPassword(parsed.password);
+
+  if (existingUser) {
+    await prisma.user.update({
+      where: {
+        id: existingUser.id,
+      },
+      data: {
+        name: parsed.name,
+        passwordHash,
+      },
+    });
+  } else {
+    await prisma.user.create({
+      data: {
+        email: parsed.email,
+        name: parsed.name,
+        passwordHash,
+        emailVerified: new Date(),
+        role: parsed.role,
+      },
+    });
+  }
+
+  revalidatePath("/admin");
+  revalidatePath("/admin/team");
+  revalidatePath("/admin/courses");
 }
 
 export async function createStudent(formData: FormData) {

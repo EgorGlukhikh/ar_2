@@ -7,6 +7,7 @@ import {
   ClipboardCheck,
   LayoutDashboard,
   Mail,
+  Settings2,
   Users,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
@@ -22,6 +23,7 @@ const navItems = [
   { href: "/admin/homework", label: "Домашки", icon: ClipboardCheck },
   { href: "/admin/emails", label: "Письма", icon: Mail },
   { href: "/admin/analytics", label: "Аналитика", icon: BarChart3 },
+  { href: "/admin/team", label: "Команда", icon: Settings2 },
 ] as const;
 
 type AdminNavProps = {
@@ -30,10 +32,25 @@ type AdminNavProps = {
 
 export function AdminNav({ effectiveRole }: AdminNavProps) {
   const pathname = usePathname();
-  const visibleItems =
-    effectiveRole === USER_ROLES.AUTHOR
-      ? navItems.filter((item) => item.href === "/admin/courses")
-      : navItems;
+  const visibleItems = navItems.filter((item) => {
+    if (effectiveRole === USER_ROLES.AUTHOR) {
+      return item.href === "/admin/courses";
+    }
+
+    if (effectiveRole === USER_ROLES.CURATOR) {
+      return ["/admin/students", "/admin/homework", "/admin/analytics"].includes(
+        item.href,
+      );
+    }
+
+    if (effectiveRole === USER_ROLES.SALES_MANAGER) {
+      return ["/admin/students", "/admin/emails", "/admin/analytics"].includes(
+        item.href,
+      );
+    }
+
+    return true;
+  });
 
   return (
     <nav className="flex flex-wrap items-center gap-2">

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ClipboardCheck, Eye, GraduationCap, MessageSquareQuote } from "lucide-react";
 
 import { HomeworkSubmissionStatus, prisma } from "@academy/db";
+import { USER_ROLES } from "@academy/shared";
 
 import { reviewHomeworkSubmission } from "@/features/homework/actions";
 import { Badge } from "@/components/ui/badge";
@@ -13,6 +14,7 @@ import {
   WorkspacePanel,
   WorkspaceStatCard,
 } from "@/components/workspace/workspace-primitives";
+import { requireRoleAccess } from "@/lib/admin";
 import {
   homeworkSubmissionStatusLabelMap,
   homeworkSubmissionStatusVariantMap,
@@ -44,6 +46,8 @@ function formatBytes(sizeInBytes: number) {
 }
 
 export default async function AdminHomeworkPage() {
+  await requireRoleAccess([USER_ROLES.ADMIN, USER_ROLES.CURATOR]);
+
   const [submissions, submittedCount, revisionCount, approvedCount] =
     await Promise.all([
       prisma.homeworkSubmission.findMany({

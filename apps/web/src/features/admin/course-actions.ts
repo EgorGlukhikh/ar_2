@@ -11,7 +11,11 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
-import { requireAdminUser } from "@/lib/admin";
+import {
+  canEditCourseContent,
+  requireAdminUser,
+  requireWorkspaceUser,
+} from "@/lib/admin";
 import {
   buildLessonContentFromBlocks,
   type LessonBlock,
@@ -26,6 +30,7 @@ const createCourseSchema = z.object({
 
 const updateCourseSchema = createCourseSchema.extend({
   courseId: z.string().trim().min(1),
+  authorId: z.string().trim().optional(),
 });
 
 const moduleSchema = z.object({
@@ -41,6 +46,11 @@ const lessonSchema = z.object({
   moduleId: z.string().trim().min(1),
   title: z.string().trim().min(2),
   type: z.nativeEnum(LessonType).default(LessonType.TEXT),
+});
+
+const moveLessonSchema = z.object({
+  lessonId: z.string().trim().min(1),
+  targetModuleId: z.string().trim().min(1),
 });
 
 const updateLessonSchema = z.object({
@@ -197,12 +207,136 @@ async function ensureUniqueCourseSlug(baseValue: string, courseId?: string) {
 function refreshAdminRoutes(courseId?: string) {
   revalidatePath("/admin");
   revalidatePath("/admin/courses");
+  revalidatePath("/admin/team");
 
   if (courseId) {
     revalidatePath(`/admin/courses/${courseId}`);
     revalidatePath(`/admin/courses/${courseId}/content`);
     revalidatePath(`/admin/courses/${courseId}/access`);
   }
+}
+
+async function requireCourseContentEditor(courseId: string) {
+  const user = await requireWorkspaceUser();
+
+  const course = await prisma.course.findUnique({
+    where: {
+      id: courseId,
+    },
+    select: {
+      id: true,
+      authorId: true,
+    },
+  });
+
+  if (!course) {
+    throw new Error("Course not found");
+  }
+
+  if (!canEditCourseContent(user, course.authorId)) {
+    redirect("/admin/courses");
+  }
+
+  return { user, course };
+}
+
+async function requireModuleContentEditor(moduleId: string) {
+  const moduleRecord = await prisma.module.findUnique({
+    where: {
+      id: moduleId,
+    },
+    select: {
+      id: true,
+      courseId: true,
+      course: {
+        select: {
+          authorId: true,
+        },
+      },
+    },
+  });
+
+  if (!moduleRecord) {
+    throw new Error("Module not found");
+  }
+
+  const user = await requireWorkspaceUser();
+
+  if (!canEditCourseContent(user, moduleRecord.course.authorId)) {
+    redirect("/admin/courses");
+  }
+
+  return {
+    user,
+    moduleRecord,
+  };
+}
+
+async function requireLessonContentEditor(lessonId: string) {
+  const lessonRecord = await prisma.lesson.findUnique({
+    where: {
+      id: lessonId,
+    },
+    select: {
+      id: true,
+      moduleId: true,
+      module: {
+        select: {
+          courseId: true,
+          course: {
+            select: {
+              authorId: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  if (!lessonRecord) {
+    throw new Error("Lesson not found");
+  }
+
+  const user = await requireWorkspaceUser();
+
+  if (!canEditCourseContent(user, lessonRecord.module.course.authorId)) {
+    redirect("/admin/courses");
+  }
+
+  return {
+    user,
+    lessonRecord,
+  };
+}
+
+async function normalizeLessonPositions(
+  tx: Prisma.TransactionClient,
+  moduleId: string,
+) {
+  const lessons = await tx.lesson.findMany({
+    where: {
+      moduleId,
+    },
+    orderBy: {
+      position: "asc",
+    },
+    select: {
+      id: true,
+    },
+  });
+
+  await Promise.all(
+    lessons.map((lesson, index) =>
+      tx.lesson.update({
+        where: {
+          id: lesson.id,
+        },
+        data: {
+          position: index + 1,
+        },
+      }),
+    ),
+  );
 }
 
 export async function createCourse(formData: FormData) {
@@ -242,6 +376,7 @@ export async function updateCourse(formData: FormData) {
     slug: getOptionalValue(formData, "slug"),
     description: getOptionalValue(formData, "description"),
     status: getTrimmedValue(formData, "status"),
+    authorId: getOptionalValue(formData, "authorId"),
   });
 
   const slug = await ensureUniqueCourseSlug(
@@ -258,6 +393,7 @@ export async function updateCourse(formData: FormData) {
       slug,
       description: parsed.description,
       status: parsed.status,
+      authorId: parsed.authorId ?? null,
     },
   });
 
@@ -280,12 +416,12 @@ export async function deleteCourse(formData: FormData) {
 }
 
 export async function createModule(formData: FormData) {
-  await requireAdminUser();
-
   const parsed = moduleSchema.parse({
     courseId: getTrimmedValue(formData, "courseId"),
     title: getTrimmedValue(formData, "title"),
   });
+
+  await requireCourseContentEditor(parsed.courseId);
 
   const lastModule = await prisma.module.findFirst({
     where: {
@@ -317,13 +453,13 @@ export async function createModule(formData: FormData) {
 }
 
 export async function updateModule(formData: FormData) {
-  await requireAdminUser();
-
   const parsed = updateModuleSchema.parse({
     moduleId: getTrimmedValue(formData, "moduleId"),
     courseId: getTrimmedValue(formData, "courseId"),
     title: getTrimmedValue(formData, "title"),
   });
+
+  await requireCourseContentEditor(parsed.courseId);
 
   await prisma.module.update({
     where: {
@@ -338,10 +474,10 @@ export async function updateModule(formData: FormData) {
 }
 
 export async function deleteModule(formData: FormData) {
-  await requireAdminUser();
-
   const moduleId = getTrimmedValue(formData, "moduleId");
   const courseId = getTrimmedValue(formData, "courseId");
+
+  await requireCourseContentEditor(courseId);
 
   await prisma.module.delete({
     where: {
@@ -353,23 +489,14 @@ export async function deleteModule(formData: FormData) {
 }
 
 export async function createLesson(formData: FormData) {
-  await requireAdminUser();
-
   const parsed = lessonSchema.parse({
     moduleId: getTrimmedValue(formData, "moduleId"),
     title: getTrimmedValue(formData, "title"),
     type: (getTrimmedValue(formData, "type") || LessonType.TEXT) as LessonType,
   });
 
-  const [moduleRecord, lastLesson] = await Promise.all([
-    prisma.module.findUnique({
-      where: {
-        id: parsed.moduleId,
-      },
-      select: {
-        courseId: true,
-      },
-    }),
+  const [{ moduleRecord }, lastLesson] = await Promise.all([
+    requireModuleContentEditor(parsed.moduleId),
     prisma.lesson.findFirst({
       where: {
         moduleId: parsed.moduleId,
@@ -382,10 +509,6 @@ export async function createLesson(formData: FormData) {
       },
     }),
   ]);
-
-  if (!moduleRecord) {
-    throw new Error("Module not found");
-  }
 
   const lesson = await prisma.lesson.create({
     data: {
@@ -406,8 +529,6 @@ export async function createLesson(formData: FormData) {
 }
 
 export async function updateLesson(formData: FormData) {
-  await requireAdminUser();
-
   const hasVideoFields =
     formData.has("videoSourceType") ||
     formData.has("videoUrl") ||
@@ -432,18 +553,7 @@ export async function updateLesson(formData: FormData) {
     videoPlaybackId: getOptionalValue(formData, "videoPlaybackId"),
   });
 
-  const moduleRecord = await prisma.module.findUnique({
-    where: {
-      id: parsed.moduleId,
-    },
-    select: {
-      courseId: true,
-    },
-  });
-
-  if (!moduleRecord) {
-    throw new Error("Module not found");
-  }
+  const { moduleRecord } = await requireModuleContentEditor(parsed.moduleId);
 
   const blocks = parseLessonBlocksJson(parsed.blocksJson);
   const contentPayload = buildLessonContentFromBlocks(blocks);
@@ -508,10 +618,10 @@ export async function updateLesson(formData: FormData) {
 }
 
 export async function deleteLesson(formData: FormData) {
-  await requireAdminUser();
-
   const lessonId = getTrimmedValue(formData, "lessonId");
   const courseId = getTrimmedValue(formData, "courseId");
+
+  await requireCourseContentEditor(courseId);
 
   await prisma.lesson.delete({
     where: {
@@ -520,4 +630,56 @@ export async function deleteLesson(formData: FormData) {
   });
 
   refreshAdminRoutes(courseId);
+}
+
+export async function moveLessonToModule(formData: FormData) {
+  const parsed = moveLessonSchema.parse({
+    lessonId: getTrimmedValue(formData, "lessonId"),
+    targetModuleId: getTrimmedValue(formData, "targetModuleId"),
+  });
+
+  const { lessonRecord } = await requireLessonContentEditor(parsed.lessonId);
+  const { moduleRecord: targetModule } = await requireModuleContentEditor(parsed.targetModuleId);
+
+  if (lessonRecord.module.courseId !== targetModule.courseId) {
+    throw new Error("Нельзя переносить урок в модуль другого курса.");
+  }
+
+  if (lessonRecord.moduleId === targetModule.id) {
+    redirect(
+      `/admin/courses/${targetModule.courseId}/content?moduleId=${targetModule.id}&lessonId=${parsed.lessonId}`,
+    );
+  }
+
+  await prisma.$transaction(async (tx) => {
+    const lastTargetLesson = await tx.lesson.findFirst({
+      where: {
+        moduleId: targetModule.id,
+      },
+      orderBy: {
+        position: "desc",
+      },
+      select: {
+        position: true,
+      },
+    });
+
+    await tx.lesson.update({
+      where: {
+        id: parsed.lessonId,
+      },
+      data: {
+        moduleId: targetModule.id,
+        position: (lastTargetLesson?.position ?? 0) + 1,
+      },
+    });
+
+    await normalizeLessonPositions(tx, lessonRecord.moduleId);
+    await normalizeLessonPositions(tx, targetModule.id);
+  });
+
+  refreshAdminRoutes(targetModule.courseId);
+  redirect(
+    `/admin/courses/${targetModule.courseId}/content?moduleId=${targetModule.id}&lessonId=${parsed.lessonId}`,
+  );
 }

@@ -9,13 +9,16 @@ import { CourseStatus } from "@academy/db";
 
 import { createCourse } from "@/features/admin/course-actions";
 import { courseStatusLabelMap } from "@/lib/labels";
+import { requireAdminUser } from "@/lib/admin";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 
-export default function NewCoursePage() {
+export default async function NewCoursePage() {
+  await requireAdminUser();
+
   return (
     <section className="space-y-6">
       <header className="grid gap-6 rounded-[28px] border border-[var(--border)] bg-white p-8 shadow-sm xl:grid-cols-[1.1fr_0.9fr]">

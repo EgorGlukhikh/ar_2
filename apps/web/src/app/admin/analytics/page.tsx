@@ -13,6 +13,7 @@ import {
   WorkspaceStatCard,
 } from "@/components/workspace/workspace-primitives";
 import { getStudentAnalyticsSummary, getViewerRoleLabel } from "@/features/analytics/service";
+import { requireRoleAccess } from "@/lib/admin";
 
 const dateTimeFormatter = new Intl.DateTimeFormat("ru-RU", {
   dateStyle: "medium",
@@ -53,6 +54,8 @@ function getStateLabel(state?: string | null) {
 }
 
 export default async function AdminAnalyticsPage() {
+  await requireRoleAccess([USER_ROLES.ADMIN, USER_ROLES.CURATOR, USER_ROLES.SALES_MANAGER]);
+
   const [summary, playStateEvents, completionEvents] = await Promise.all([
     getStudentAnalyticsSummary(),
     prisma.lessonSessionEvent.count({
@@ -202,4 +205,3 @@ export default async function AdminAnalyticsPage() {
     </section>
   );
 }
-

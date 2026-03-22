@@ -2,6 +2,7 @@ import Link from "next/link";
 import { BookOpen, LayoutTemplate, PlusCircle, WalletCards } from "lucide-react";
 
 import { prisma } from "@academy/db";
+import { USER_ROLES } from "@academy/shared";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -12,13 +13,27 @@ import {
   WorkspacePanel,
 } from "@/components/workspace/workspace-primitives";
 import { courseStatusLabelMap, courseStatusVariantMap } from "@/lib/labels";
+import { requireAdminViewer } from "@/lib/viewer";
 
 export default async function CoursesPage() {
+  const viewer = await requireAdminViewer();
+  const isAuthorRole = viewer.actualRole === USER_ROLES.AUTHOR;
+  const isAuthorPreview = viewer.actualRole === USER_ROLES.ADMIN && viewer.effectiveRole === USER_ROLES.AUTHOR;
+  const isAuthorMode = isAuthorRole || isAuthorPreview;
+
   const courses = await prisma.course.findMany({
+    where: isAuthorRole ? { authorId: viewer.user.id } : undefined,
     orderBy: {
       updatedAt: "desc",
     },
     include: {
+      author: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
       modules: {
         select: {
           _count: {
@@ -40,29 +55,41 @@ export default async function CoursesPage() {
   return (
     <section className="space-y-6">
       <WorkspacePageHeader
-        eyebrow="Каталог курсов"
-        title="Все программы академии"
-        description="Здесь создаются новые курсы и открываются их рабочие разделы: карточка, программа, доступы и продажа."
+        eyebrow={isAuthorMode ? "Мои курсы" : "Каталог курсов"}
+        title={isAuthorMode ? "Программы автора" : "Все программы академии"}
+        description={
+          isAuthorMode
+            ? "Здесь собраны курсы, закрепленные за автором. Отсюда удобно открывать программу и наполнять уроки."
+            : "Здесь создаются новые курсы и открываются их рабочие разделы: карточка, программа, доступы и продажи."
+        }
         meta={
           <div className="rounded-full bg-[var(--surface)] px-4 py-3 text-sm text-[var(--muted)]">
             Всего курсов: {courses.length}
           </div>
         }
         actions={
-          <Button asChild>
-            <Link href="/admin/courses/new">Новый курс</Link>
-          </Button>
+          viewer.actualRole === USER_ROLES.ADMIN ? (
+            <Button asChild>
+              <Link href="/admin/courses/new">Новый курс</Link>
+            </Button>
+          ) : undefined
         }
       />
 
       {courses.length === 0 ? (
         <WorkspaceEmptyState
-          title="Пока нет ни одного курса"
-          description="Создай первую программу, затем открой вкладку «Программа» и собери внутри нее модули, уроки и материалы."
+          title={isAuthorMode ? "Пока нет закрепленных курсов" : "Пока нет ни одного курса"}
+          description={
+            isAuthorMode
+              ? "Как только администратор закрепит за автором курс, он появится здесь и будет доступен для наполнения."
+              : "Создай первую программу, затем открой вкладку «Программа» и собери внутри нее модули, уроки и материалы."
+          }
           action={
-            <Button asChild>
-              <Link href="/admin/courses/new">Создать курс</Link>
-            </Button>
+            viewer.actualRole === USER_ROLES.ADMIN ? (
+              <Button asChild>
+                <Link href="/admin/courses/new">Создать курс</Link>
+              </Button>
+            ) : undefined
           }
         />
       ) : (
@@ -89,9 +116,7 @@ export default async function CoursesPage() {
                         </Badge>
                         <Badge variant="neutral">Модулей {course._count.modules}</Badge>
                         <Badge variant="neutral">Уроков {lessonCount}</Badge>
-                        <Badge variant="neutral">
-                          Зачислений {course._count.enrollments}
-                        </Badge>
+                        <Badge variant="neutral">Зачислений {course._count.enrollments}</Badge>
                       </div>
 
                       <div>
@@ -132,22 +157,32 @@ export default async function CoursesPage() {
                           </p>
                         </div>
                       </div>
+
+                      {course.author ? (
+                        <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-sm text-[var(--muted)]">
+                          Автор:{" "}
+                          <span className="font-medium text-[var(--foreground)]">
+                            {course.author.name || course.author.email}
+                          </span>
+                        </div>
+                      ) : null}
                     </div>
 
                     <div className="flex flex-wrap gap-3">
                       <Button asChild>
-                        <Link href={`/admin/courses/${course.id}/content`}>
-                          Открыть программу
-                        </Link>
+                        <Link href={`/admin/courses/${course.id}/content`}>Открыть программу</Link>
                       </Button>
-                      <Button asChild variant="outline">
-                        <Link href={`/admin/courses/${course.id}`}>Настройки</Link>
-                      </Button>
-                      <Button asChild variant="outline">
-                        <Link href={`/admin/courses/${course.id}/access`}>
-                          Доступ и продажи
-                        </Link>
-                      </Button>
+
+                      {viewer.actualRole === USER_ROLES.ADMIN ? (
+                        <>
+                          <Button asChild variant="outline">
+                            <Link href={`/admin/courses/${course.id}`}>Настройки</Link>
+                          </Button>
+                          <Button asChild variant="outline">
+                            <Link href={`/admin/courses/${course.id}/access`}>Доступ и продажи</Link>
+                          </Button>
+                        </>
+                      ) : null}
                     </div>
                   </div>
                 </div>
@@ -157,7 +192,7 @@ export default async function CoursesPage() {
         </div>
       )}
 
-      {courses.length > 0 ? (
+      {courses.length > 0 && viewer.actualRole === USER_ROLES.ADMIN ? (
         <WorkspacePanel
           eyebrow="Быстрое действие"
           title="Нужен еще один курс?"

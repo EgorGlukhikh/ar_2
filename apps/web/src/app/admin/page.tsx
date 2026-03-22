@@ -20,9 +20,12 @@ import {
   WorkspaceStatCard,
 } from "@/components/workspace/workspace-primitives";
 import { getStudentAnalyticsSummary } from "@/features/analytics/service";
+import { requireAdminUser } from "@/lib/admin";
 import { courseStatusLabelMap, courseStatusVariantMap } from "@/lib/labels";
 
 export default async function AdminPage() {
+  await requireAdminUser();
+
   const [
     courseCount,
     studentCount,
@@ -271,4 +274,3 @@ export default async function AdminPage() {
     </section>
   );
 }
-
