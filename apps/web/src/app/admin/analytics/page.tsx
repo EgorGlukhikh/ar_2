@@ -83,7 +83,7 @@ export default async function AdminAnalyticsPage() {
       <WorkspacePageHeader
         eyebrow="Поведенческая аналитика"
         title="Как студенты реально проходят уроки"
-        description="Здесь видно, кто открыл урок, где остановился, были ли паузы, закрытие страницы и как часто студенты доходят до конца. Preview-сессии команды из этой статистики исключены."
+        description="Здесь видно, кто открыл урок, где остановился, были ли паузы, закрытие страницы и как часто студенты доходят до конца. Сессии команды в режиме просмотра из этой статистики исключены."
         actions={
           <Button asChild variant="outline">
             <Link href="/admin/students">Открыть студентов</Link>
@@ -95,7 +95,7 @@ export default async function AdminAnalyticsPage() {
         <WorkspaceStatCard
           label="Сессии уроков"
           value={summary.totalSessions}
-          hint="Все реальные открытия уроков студентами без preview-режимов команды."
+          hint="Все реальные открытия уроков студентами без режимов просмотра команды."
           icon={Activity}
         />
         <WorkspaceStatCard

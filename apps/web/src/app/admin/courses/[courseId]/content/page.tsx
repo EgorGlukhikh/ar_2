@@ -16,6 +16,7 @@ import {
   deleteLesson,
   deleteModule,
   repositionLesson,
+  repositionModule,
   updateLesson,
   updateModule,
 } from "@/features/admin/course-actions";
@@ -198,6 +199,7 @@ export default async function CourseContentPage({
           selectedLessonId={selectedLesson?.id ?? null}
           createModuleAction={createModule}
           repositionLessonAction={repositionLesson}
+          repositionModuleAction={repositionModule}
         />
       </aside>
 

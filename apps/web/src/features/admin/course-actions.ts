@@ -60,6 +60,12 @@ const repositionLessonSchema = z.object({
   placement: z.enum(["before", "after", "end"]).default("end"),
 });
 
+const repositionModuleSchema = z.object({
+  moduleId: z.string().trim().min(1),
+  targetModuleId: z.string().trim().optional(),
+  placement: z.enum(["before", "after", "end"]).default("end"),
+});
+
 const updateLessonSchema = z.object({
   lessonId: z.string().trim().min(1),
   moduleId: z.string().trim().min(1),
@@ -346,16 +352,46 @@ async function normalizeLessonPositions(
   );
 }
 
+async function normalizeModulePositions(
+  tx: Prisma.TransactionClient,
+  courseId: string,
+) {
+  const modules = await tx.module.findMany({
+    where: {
+      courseId,
+    },
+    orderBy: {
+      position: "asc",
+    },
+    select: {
+      id: true,
+    },
+  });
+
+  await Promise.all(
+    modules.map((moduleItem, index) =>
+      tx.module.update({
+        where: {
+          id: moduleItem.id,
+        },
+        data: {
+          position: index + 1,
+        },
+      }),
+    ),
+  );
+}
+
 function resolveInsertIndex(args: {
   orderedIds: string[];
-  targetLessonId?: string;
+  targetId?: string;
   placement: "before" | "after" | "end";
 }) {
-  if (!args.targetLessonId || args.placement === "end") {
+  if (!args.targetId || args.placement === "end") {
     return args.orderedIds.length;
   }
 
-  const targetIndex = args.orderedIds.findIndex((id) => id === args.targetLessonId);
+  const targetIndex = args.orderedIds.findIndex((id) => id === args.targetId);
 
   if (targetIndex === -1) {
     return args.orderedIds.length;
@@ -762,7 +798,7 @@ export async function repositionLesson(formData: FormData) {
 
       const insertIndex = resolveInsertIndex({
         orderedIds: nextOrder,
-        targetLessonId: parsed.targetLessonId,
+        targetId: parsed.targetLessonId,
         placement: parsed.placement,
       });
 
@@ -791,7 +827,7 @@ export async function repositionLesson(formData: FormData) {
 
     const insertIndex = resolveInsertIndex({
       orderedIds: nextTargetOrder,
-      targetLessonId: parsed.targetLessonId,
+      targetId: parsed.targetLessonId,
       placement: parsed.placement,
     });
 
@@ -839,5 +875,76 @@ export async function repositionLesson(formData: FormData) {
     courseId: targetModule.courseId,
     moduleId: targetModule.id,
     lessonId: parsed.lessonId,
+  };
+}
+
+export async function repositionModule(formData: FormData) {
+  const parsed = repositionModuleSchema.parse({
+    moduleId: getTrimmedValue(formData, "moduleId"),
+    targetModuleId: getOptionalValue(formData, "targetModuleId"),
+    placement: (getTrimmedValue(formData, "placement") || "end") as
+      | "before"
+      | "after"
+      | "end",
+  });
+
+  const { moduleRecord } = await requireModuleContentEditor(parsed.moduleId);
+
+  if (parsed.targetModuleId) {
+    const { moduleRecord: targetModule } = await requireModuleContentEditor(
+      parsed.targetModuleId,
+    );
+
+    if (targetModule.courseId !== moduleRecord.courseId) {
+      throw new Error("Нельзя переносить модуль в другой курс.");
+    }
+  }
+
+  await prisma.$transaction(async (tx) => {
+    const orderedModuleIds = (
+      await tx.module.findMany({
+        where: {
+          courseId: moduleRecord.courseId,
+        },
+        orderBy: {
+          position: "asc",
+        },
+        select: {
+          id: true,
+        },
+      })
+    )
+      .map((item) => item.id)
+      .filter((id) => id !== parsed.moduleId);
+
+    const insertIndex = resolveInsertIndex({
+      orderedIds: orderedModuleIds,
+      targetId: parsed.targetModuleId,
+      placement: parsed.placement,
+    });
+
+    orderedModuleIds.splice(insertIndex, 0, parsed.moduleId);
+
+    await Promise.all(
+      orderedModuleIds.map((moduleId, index) =>
+        tx.module.update({
+          where: {
+            id: moduleId,
+          },
+          data: {
+            position: index + 1,
+          },
+        }),
+      ),
+    );
+
+    await normalizeModulePositions(tx, moduleRecord.courseId);
+  });
+
+  refreshAdminRoutes(moduleRecord.courseId);
+
+  return {
+    courseId: moduleRecord.courseId,
+    moduleId: parsed.moduleId,
   };
 }

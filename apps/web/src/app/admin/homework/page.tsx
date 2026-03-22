@@ -117,7 +117,7 @@ export default async function AdminHomeworkPage() {
     <section className="space-y-6">
       <WorkspacePageHeader
         eyebrow="Проверка домашних заданий"
-        title="Review center студентов"
+        title="Центр проверки работ студентов"
         description="Здесь команда видит все сданные домашние работы, забирает их в проверку, принимает или возвращает на доработку с комментариями."
         actions={
           <Button asChild variant="outline">
@@ -130,7 +130,7 @@ export default async function AdminHomeworkPage() {
         <WorkspaceStatCard
           label="Ждут проверки"
           value={submittedCount}
-          hint="Сюда попадают новые сдачи и работы, которые уже взяли в review."
+          hint="Сюда попадают новые сдачи и работы, которые уже взяли в проверку."
           icon={ClipboardCheck}
         />
         <WorkspaceStatCard
