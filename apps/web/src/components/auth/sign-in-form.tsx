@@ -7,7 +7,11 @@ import { authenticate, type SignInState } from "@/features/auth/actions";
 
 const initialState: SignInState = {};
 
-export function SignInForm() {
+type SignInFormProps = {
+  defaultEmail?: string;
+};
+
+export function SignInForm({ defaultEmail }: SignInFormProps) {
   const [state, formAction, pending] = useActionState<SignInState, FormData>(
     authenticate,
     initialState,
@@ -24,7 +28,7 @@ export function SignInForm() {
           name="email"
           type="email"
           autoComplete="email"
-          defaultValue="test@mail.ru"
+          defaultValue={defaultEmail || "test@mail.ru"}
           className="h-12 w-full rounded-2xl border border-[#d9e1f2] bg-white px-4 text-[#1c2442] outline-none transition focus:border-[#2840db] focus:ring-4 focus:ring-[#2840db]/10"
           required
         />

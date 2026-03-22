@@ -152,6 +152,11 @@ export type EmailEvent = Prisma.EmailEventModel
  */
 export type EmailLinkClick = Prisma.EmailLinkClickModel
 /**
+ * Model WorkspaceInvite
+ * 
+ */
+export type WorkspaceInvite = Prisma.WorkspaceInviteModel
+/**
  * Model LessonSession
  * 
  */

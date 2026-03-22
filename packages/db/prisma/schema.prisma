@@ -133,6 +133,8 @@ model User {
   orders        Order[]
   emails        EmailMessage[]
   lessonSessions LessonSession[]
+  workspaceInvitesSent WorkspaceInvite[] @relation("WorkspaceInviteSender")
+  workspaceInvitesAccepted WorkspaceInvite[] @relation("WorkspaceInviteAccepter")
 }
 
 model Account {
@@ -472,6 +474,26 @@ model EmailLinkClick {
   emailMessage   EmailMessage  @relation(fields: [emailMessageId], references: [id], onDelete: Cascade)
 
   @@index([emailMessageId, createdAt])
+}
+
+model WorkspaceInvite {
+  id           String    @id @default(cuid())
+  email        String
+  role         UserRole
+  token        String    @unique
+  note         String?
+  invitedById  String
+  acceptedById String?
+  expiresAt    DateTime
+  acceptedAt   DateTime?
+  revokedAt    DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  invitedBy    User      @relation("WorkspaceInviteSender", fields: [invitedById], references: [id], onDelete: Cascade)
+  acceptedBy   User?     @relation("WorkspaceInviteAccepter", fields: [acceptedById], references: [id], onDelete: SetNull)
+
+  @@index([email, role, createdAt])
+  @@index([expiresAt, revokedAt, acceptedAt])
 }
 
 model LessonSession {

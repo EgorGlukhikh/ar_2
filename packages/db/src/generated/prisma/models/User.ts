@@ -225,6 +225,8 @@ export type UserWhereInput = {
   orders?: Prisma.OrderListRelationFilter
   emails?: Prisma.EmailMessageListRelationFilter
   lessonSessions?: Prisma.LessonSessionListRelationFilter
+  workspaceInvitesSent?: Prisma.WorkspaceInviteListRelationFilter
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -248,6 +250,8 @@ export type UserOrderByWithRelationInput = {
   orders?: Prisma.OrderOrderByRelationAggregateInput
   emails?: Prisma.EmailMessageOrderByRelationAggregateInput
   lessonSessions?: Prisma.LessonSessionOrderByRelationAggregateInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteOrderByRelationAggregateInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -274,6 +278,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   orders?: Prisma.OrderListRelationFilter
   emails?: Prisma.EmailMessageListRelationFilter
   lessonSessions?: Prisma.LessonSessionListRelationFilter
+  workspaceInvitesSent?: Prisma.WorkspaceInviteListRelationFilter
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -327,6 +333,8 @@ export type UserCreateInput = {
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
   emails?: Prisma.EmailMessageCreateNestedManyWithoutUserInput
   lessonSessions?: Prisma.LessonSessionCreateNestedManyWithoutUserInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteCreateNestedManyWithoutInvitedByInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteCreateNestedManyWithoutAcceptedByInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -350,6 +358,8 @@ export type UserUncheckedCreateInput = {
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
   emails?: Prisma.EmailMessageUncheckedCreateNestedManyWithoutUserInput
   lessonSessions?: Prisma.LessonSessionUncheckedCreateNestedManyWithoutUserInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteUncheckedCreateNestedManyWithoutInvitedByInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteUncheckedCreateNestedManyWithoutAcceptedByInput
 }
 
 export type UserUpdateInput = {
@@ -373,6 +383,8 @@ export type UserUpdateInput = {
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
   emails?: Prisma.EmailMessageUpdateManyWithoutUserNestedInput
   lessonSessions?: Prisma.LessonSessionUpdateManyWithoutUserNestedInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteUpdateManyWithoutInvitedByNestedInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteUpdateManyWithoutAcceptedByNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -396,6 +408,8 @@ export type UserUncheckedUpdateInput = {
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
   emails?: Prisma.EmailMessageUncheckedUpdateManyWithoutUserNestedInput
   lessonSessions?: Prisma.LessonSessionUncheckedUpdateManyWithoutUserNestedInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteUncheckedUpdateManyWithoutInvitedByNestedInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteUncheckedUpdateManyWithoutAcceptedByNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -650,6 +664,36 @@ export type UserUpdateOneWithoutEmailsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutEmailsInput, Prisma.UserUpdateWithoutEmailsInput>, Prisma.UserUncheckedUpdateWithoutEmailsInput>
 }
 
+export type UserCreateNestedOneWithoutWorkspaceInvitesSentInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutWorkspaceInvitesSentInput, Prisma.UserUncheckedCreateWithoutWorkspaceInvitesSentInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWorkspaceInvitesSentInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutWorkspaceInvitesAcceptedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutWorkspaceInvitesAcceptedInput, Prisma.UserUncheckedCreateWithoutWorkspaceInvitesAcceptedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWorkspaceInvitesAcceptedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutWorkspaceInvitesSentNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutWorkspaceInvitesSentInput, Prisma.UserUncheckedCreateWithoutWorkspaceInvitesSentInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWorkspaceInvitesSentInput
+  upsert?: Prisma.UserUpsertWithoutWorkspaceInvitesSentInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutWorkspaceInvitesSentInput, Prisma.UserUpdateWithoutWorkspaceInvitesSentInput>, Prisma.UserUncheckedUpdateWithoutWorkspaceInvitesSentInput>
+}
+
+export type UserUpdateOneWithoutWorkspaceInvitesAcceptedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutWorkspaceInvitesAcceptedInput, Prisma.UserUncheckedCreateWithoutWorkspaceInvitesAcceptedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWorkspaceInvitesAcceptedInput
+  upsert?: Prisma.UserUpsertWithoutWorkspaceInvitesAcceptedInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutWorkspaceInvitesAcceptedInput, Prisma.UserUpdateWithoutWorkspaceInvitesAcceptedInput>, Prisma.UserUncheckedUpdateWithoutWorkspaceInvitesAcceptedInput>
+}
+
 export type UserCreateNestedOneWithoutLessonSessionsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutLessonSessionsInput, Prisma.UserUncheckedCreateWithoutLessonSessionsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutLessonSessionsInput
@@ -684,6 +728,8 @@ export type UserCreateWithoutAccountsInput = {
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
   emails?: Prisma.EmailMessageCreateNestedManyWithoutUserInput
   lessonSessions?: Prisma.LessonSessionCreateNestedManyWithoutUserInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteCreateNestedManyWithoutInvitedByInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteCreateNestedManyWithoutAcceptedByInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -706,6 +752,8 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
   emails?: Prisma.EmailMessageUncheckedCreateNestedManyWithoutUserInput
   lessonSessions?: Prisma.LessonSessionUncheckedCreateNestedManyWithoutUserInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteUncheckedCreateNestedManyWithoutInvitedByInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteUncheckedCreateNestedManyWithoutAcceptedByInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -744,6 +792,8 @@ export type UserUpdateWithoutAccountsInput = {
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
   emails?: Prisma.EmailMessageUpdateManyWithoutUserNestedInput
   lessonSessions?: Prisma.LessonSessionUpdateManyWithoutUserNestedInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteUpdateManyWithoutInvitedByNestedInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteUpdateManyWithoutAcceptedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -766,6 +816,8 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
   emails?: Prisma.EmailMessageUncheckedUpdateManyWithoutUserNestedInput
   lessonSessions?: Prisma.LessonSessionUncheckedUpdateManyWithoutUserNestedInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteUncheckedUpdateManyWithoutInvitedByNestedInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteUncheckedUpdateManyWithoutAcceptedByNestedInput
 }
 
 export type UserCreateWithoutSessionsInput = {
@@ -788,6 +840,8 @@ export type UserCreateWithoutSessionsInput = {
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
   emails?: Prisma.EmailMessageCreateNestedManyWithoutUserInput
   lessonSessions?: Prisma.LessonSessionCreateNestedManyWithoutUserInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteCreateNestedManyWithoutInvitedByInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteCreateNestedManyWithoutAcceptedByInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -810,6 +864,8 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
   emails?: Prisma.EmailMessageUncheckedCreateNestedManyWithoutUserInput
   lessonSessions?: Prisma.LessonSessionUncheckedCreateNestedManyWithoutUserInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteUncheckedCreateNestedManyWithoutInvitedByInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteUncheckedCreateNestedManyWithoutAcceptedByInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -848,6 +904,8 @@ export type UserUpdateWithoutSessionsInput = {
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
   emails?: Prisma.EmailMessageUpdateManyWithoutUserNestedInput
   lessonSessions?: Prisma.LessonSessionUpdateManyWithoutUserNestedInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteUpdateManyWithoutInvitedByNestedInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteUpdateManyWithoutAcceptedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -870,6 +928,8 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
   emails?: Prisma.EmailMessageUncheckedUpdateManyWithoutUserNestedInput
   lessonSessions?: Prisma.LessonSessionUncheckedUpdateManyWithoutUserNestedInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteUncheckedUpdateManyWithoutInvitedByNestedInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteUncheckedUpdateManyWithoutAcceptedByNestedInput
 }
 
 export type UserCreateWithoutAuthoredInput = {
@@ -892,6 +952,8 @@ export type UserCreateWithoutAuthoredInput = {
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
   emails?: Prisma.EmailMessageCreateNestedManyWithoutUserInput
   lessonSessions?: Prisma.LessonSessionCreateNestedManyWithoutUserInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteCreateNestedManyWithoutInvitedByInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteCreateNestedManyWithoutAcceptedByInput
 }
 
 export type UserUncheckedCreateWithoutAuthoredInput = {
@@ -914,6 +976,8 @@ export type UserUncheckedCreateWithoutAuthoredInput = {
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
   emails?: Prisma.EmailMessageUncheckedCreateNestedManyWithoutUserInput
   lessonSessions?: Prisma.LessonSessionUncheckedCreateNestedManyWithoutUserInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteUncheckedCreateNestedManyWithoutInvitedByInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteUncheckedCreateNestedManyWithoutAcceptedByInput
 }
 
 export type UserCreateOrConnectWithoutAuthoredInput = {
@@ -952,6 +1016,8 @@ export type UserUpdateWithoutAuthoredInput = {
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
   emails?: Prisma.EmailMessageUpdateManyWithoutUserNestedInput
   lessonSessions?: Prisma.LessonSessionUpdateManyWithoutUserNestedInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteUpdateManyWithoutInvitedByNestedInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteUpdateManyWithoutAcceptedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAuthoredInput = {
@@ -974,6 +1040,8 @@ export type UserUncheckedUpdateWithoutAuthoredInput = {
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
   emails?: Prisma.EmailMessageUncheckedUpdateManyWithoutUserNestedInput
   lessonSessions?: Prisma.LessonSessionUncheckedUpdateManyWithoutUserNestedInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteUncheckedUpdateManyWithoutInvitedByNestedInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteUncheckedUpdateManyWithoutAcceptedByNestedInput
 }
 
 export type UserCreateWithoutEnrollmentsInput = {
@@ -996,6 +1064,8 @@ export type UserCreateWithoutEnrollmentsInput = {
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
   emails?: Prisma.EmailMessageCreateNestedManyWithoutUserInput
   lessonSessions?: Prisma.LessonSessionCreateNestedManyWithoutUserInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteCreateNestedManyWithoutInvitedByInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteCreateNestedManyWithoutAcceptedByInput
 }
 
 export type UserUncheckedCreateWithoutEnrollmentsInput = {
@@ -1018,6 +1088,8 @@ export type UserUncheckedCreateWithoutEnrollmentsInput = {
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
   emails?: Prisma.EmailMessageUncheckedCreateNestedManyWithoutUserInput
   lessonSessions?: Prisma.LessonSessionUncheckedCreateNestedManyWithoutUserInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteUncheckedCreateNestedManyWithoutInvitedByInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteUncheckedCreateNestedManyWithoutAcceptedByInput
 }
 
 export type UserCreateOrConnectWithoutEnrollmentsInput = {
@@ -1056,6 +1128,8 @@ export type UserUpdateWithoutEnrollmentsInput = {
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
   emails?: Prisma.EmailMessageUpdateManyWithoutUserNestedInput
   lessonSessions?: Prisma.LessonSessionUpdateManyWithoutUserNestedInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteUpdateManyWithoutInvitedByNestedInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteUpdateManyWithoutAcceptedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutEnrollmentsInput = {
@@ -1078,6 +1152,8 @@ export type UserUncheckedUpdateWithoutEnrollmentsInput = {
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
   emails?: Prisma.EmailMessageUncheckedUpdateManyWithoutUserNestedInput
   lessonSessions?: Prisma.LessonSessionUncheckedUpdateManyWithoutUserNestedInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteUncheckedUpdateManyWithoutInvitedByNestedInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteUncheckedUpdateManyWithoutAcceptedByNestedInput
 }
 
 export type UserCreateWithoutProgressInput = {
@@ -1100,6 +1176,8 @@ export type UserCreateWithoutProgressInput = {
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
   emails?: Prisma.EmailMessageCreateNestedManyWithoutUserInput
   lessonSessions?: Prisma.LessonSessionCreateNestedManyWithoutUserInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteCreateNestedManyWithoutInvitedByInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteCreateNestedManyWithoutAcceptedByInput
 }
 
 export type UserUncheckedCreateWithoutProgressInput = {
@@ -1122,6 +1200,8 @@ export type UserUncheckedCreateWithoutProgressInput = {
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
   emails?: Prisma.EmailMessageUncheckedCreateNestedManyWithoutUserInput
   lessonSessions?: Prisma.LessonSessionUncheckedCreateNestedManyWithoutUserInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteUncheckedCreateNestedManyWithoutInvitedByInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteUncheckedCreateNestedManyWithoutAcceptedByInput
 }
 
 export type UserCreateOrConnectWithoutProgressInput = {
@@ -1160,6 +1240,8 @@ export type UserUpdateWithoutProgressInput = {
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
   emails?: Prisma.EmailMessageUpdateManyWithoutUserNestedInput
   lessonSessions?: Prisma.LessonSessionUpdateManyWithoutUserNestedInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteUpdateManyWithoutInvitedByNestedInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteUpdateManyWithoutAcceptedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProgressInput = {
@@ -1182,6 +1264,8 @@ export type UserUncheckedUpdateWithoutProgressInput = {
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
   emails?: Prisma.EmailMessageUncheckedUpdateManyWithoutUserNestedInput
   lessonSessions?: Prisma.LessonSessionUncheckedUpdateManyWithoutUserNestedInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteUncheckedUpdateManyWithoutInvitedByNestedInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteUncheckedUpdateManyWithoutAcceptedByNestedInput
 }
 
 export type UserCreateWithoutHomeworkInput = {
@@ -1204,6 +1288,8 @@ export type UserCreateWithoutHomeworkInput = {
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
   emails?: Prisma.EmailMessageCreateNestedManyWithoutUserInput
   lessonSessions?: Prisma.LessonSessionCreateNestedManyWithoutUserInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteCreateNestedManyWithoutInvitedByInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteCreateNestedManyWithoutAcceptedByInput
 }
 
 export type UserUncheckedCreateWithoutHomeworkInput = {
@@ -1226,6 +1312,8 @@ export type UserUncheckedCreateWithoutHomeworkInput = {
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
   emails?: Prisma.EmailMessageUncheckedCreateNestedManyWithoutUserInput
   lessonSessions?: Prisma.LessonSessionUncheckedCreateNestedManyWithoutUserInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteUncheckedCreateNestedManyWithoutInvitedByInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteUncheckedCreateNestedManyWithoutAcceptedByInput
 }
 
 export type UserCreateOrConnectWithoutHomeworkInput = {
@@ -1264,6 +1352,8 @@ export type UserUpdateWithoutHomeworkInput = {
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
   emails?: Prisma.EmailMessageUpdateManyWithoutUserNestedInput
   lessonSessions?: Prisma.LessonSessionUpdateManyWithoutUserNestedInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteUpdateManyWithoutInvitedByNestedInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteUpdateManyWithoutAcceptedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutHomeworkInput = {
@@ -1286,6 +1376,8 @@ export type UserUncheckedUpdateWithoutHomeworkInput = {
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
   emails?: Prisma.EmailMessageUncheckedUpdateManyWithoutUserNestedInput
   lessonSessions?: Prisma.LessonSessionUncheckedUpdateManyWithoutUserNestedInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteUncheckedUpdateManyWithoutInvitedByNestedInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteUncheckedUpdateManyWithoutAcceptedByNestedInput
 }
 
 export type UserCreateWithoutHomeworkSubmissionsInput = {
@@ -1308,6 +1400,8 @@ export type UserCreateWithoutHomeworkSubmissionsInput = {
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
   emails?: Prisma.EmailMessageCreateNestedManyWithoutUserInput
   lessonSessions?: Prisma.LessonSessionCreateNestedManyWithoutUserInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteCreateNestedManyWithoutInvitedByInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteCreateNestedManyWithoutAcceptedByInput
 }
 
 export type UserUncheckedCreateWithoutHomeworkSubmissionsInput = {
@@ -1330,6 +1424,8 @@ export type UserUncheckedCreateWithoutHomeworkSubmissionsInput = {
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
   emails?: Prisma.EmailMessageUncheckedCreateNestedManyWithoutUserInput
   lessonSessions?: Prisma.LessonSessionUncheckedCreateNestedManyWithoutUserInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteUncheckedCreateNestedManyWithoutInvitedByInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteUncheckedCreateNestedManyWithoutAcceptedByInput
 }
 
 export type UserCreateOrConnectWithoutHomeworkSubmissionsInput = {
@@ -1357,6 +1453,8 @@ export type UserCreateWithoutReviewedHomeworkSubmissionsInput = {
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
   emails?: Prisma.EmailMessageCreateNestedManyWithoutUserInput
   lessonSessions?: Prisma.LessonSessionCreateNestedManyWithoutUserInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteCreateNestedManyWithoutInvitedByInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteCreateNestedManyWithoutAcceptedByInput
 }
 
 export type UserUncheckedCreateWithoutReviewedHomeworkSubmissionsInput = {
@@ -1379,6 +1477,8 @@ export type UserUncheckedCreateWithoutReviewedHomeworkSubmissionsInput = {
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
   emails?: Prisma.EmailMessageUncheckedCreateNestedManyWithoutUserInput
   lessonSessions?: Prisma.LessonSessionUncheckedCreateNestedManyWithoutUserInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteUncheckedCreateNestedManyWithoutInvitedByInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteUncheckedCreateNestedManyWithoutAcceptedByInput
 }
 
 export type UserCreateOrConnectWithoutReviewedHomeworkSubmissionsInput = {
@@ -1417,6 +1517,8 @@ export type UserUpdateWithoutHomeworkSubmissionsInput = {
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
   emails?: Prisma.EmailMessageUpdateManyWithoutUserNestedInput
   lessonSessions?: Prisma.LessonSessionUpdateManyWithoutUserNestedInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteUpdateManyWithoutInvitedByNestedInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteUpdateManyWithoutAcceptedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutHomeworkSubmissionsInput = {
@@ -1439,6 +1541,8 @@ export type UserUncheckedUpdateWithoutHomeworkSubmissionsInput = {
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
   emails?: Prisma.EmailMessageUncheckedUpdateManyWithoutUserNestedInput
   lessonSessions?: Prisma.LessonSessionUncheckedUpdateManyWithoutUserNestedInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteUncheckedUpdateManyWithoutInvitedByNestedInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteUncheckedUpdateManyWithoutAcceptedByNestedInput
 }
 
 export type UserUpsertWithoutReviewedHomeworkSubmissionsInput = {
@@ -1472,6 +1576,8 @@ export type UserUpdateWithoutReviewedHomeworkSubmissionsInput = {
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
   emails?: Prisma.EmailMessageUpdateManyWithoutUserNestedInput
   lessonSessions?: Prisma.LessonSessionUpdateManyWithoutUserNestedInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteUpdateManyWithoutInvitedByNestedInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteUpdateManyWithoutAcceptedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutReviewedHomeworkSubmissionsInput = {
@@ -1494,6 +1600,8 @@ export type UserUncheckedUpdateWithoutReviewedHomeworkSubmissionsInput = {
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
   emails?: Prisma.EmailMessageUncheckedUpdateManyWithoutUserNestedInput
   lessonSessions?: Prisma.LessonSessionUncheckedUpdateManyWithoutUserNestedInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteUncheckedUpdateManyWithoutInvitedByNestedInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteUncheckedUpdateManyWithoutAcceptedByNestedInput
 }
 
 export type UserCreateWithoutOrdersInput = {
@@ -1516,6 +1624,8 @@ export type UserCreateWithoutOrdersInput = {
   reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionCreateNestedManyWithoutReviewerInput
   emails?: Prisma.EmailMessageCreateNestedManyWithoutUserInput
   lessonSessions?: Prisma.LessonSessionCreateNestedManyWithoutUserInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteCreateNestedManyWithoutInvitedByInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteCreateNestedManyWithoutAcceptedByInput
 }
 
 export type UserUncheckedCreateWithoutOrdersInput = {
@@ -1538,6 +1648,8 @@ export type UserUncheckedCreateWithoutOrdersInput = {
   reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedCreateNestedManyWithoutReviewerInput
   emails?: Prisma.EmailMessageUncheckedCreateNestedManyWithoutUserInput
   lessonSessions?: Prisma.LessonSessionUncheckedCreateNestedManyWithoutUserInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteUncheckedCreateNestedManyWithoutInvitedByInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteUncheckedCreateNestedManyWithoutAcceptedByInput
 }
 
 export type UserCreateOrConnectWithoutOrdersInput = {
@@ -1576,6 +1688,8 @@ export type UserUpdateWithoutOrdersInput = {
   reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUpdateManyWithoutReviewerNestedInput
   emails?: Prisma.EmailMessageUpdateManyWithoutUserNestedInput
   lessonSessions?: Prisma.LessonSessionUpdateManyWithoutUserNestedInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteUpdateManyWithoutInvitedByNestedInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteUpdateManyWithoutAcceptedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutOrdersInput = {
@@ -1598,6 +1712,8 @@ export type UserUncheckedUpdateWithoutOrdersInput = {
   reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedUpdateManyWithoutReviewerNestedInput
   emails?: Prisma.EmailMessageUncheckedUpdateManyWithoutUserNestedInput
   lessonSessions?: Prisma.LessonSessionUncheckedUpdateManyWithoutUserNestedInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteUncheckedUpdateManyWithoutInvitedByNestedInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteUncheckedUpdateManyWithoutAcceptedByNestedInput
 }
 
 export type UserCreateWithoutEmailsInput = {
@@ -1620,6 +1736,8 @@ export type UserCreateWithoutEmailsInput = {
   reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionCreateNestedManyWithoutReviewerInput
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
   lessonSessions?: Prisma.LessonSessionCreateNestedManyWithoutUserInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteCreateNestedManyWithoutInvitedByInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteCreateNestedManyWithoutAcceptedByInput
 }
 
 export type UserUncheckedCreateWithoutEmailsInput = {
@@ -1642,6 +1760,8 @@ export type UserUncheckedCreateWithoutEmailsInput = {
   reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedCreateNestedManyWithoutReviewerInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
   lessonSessions?: Prisma.LessonSessionUncheckedCreateNestedManyWithoutUserInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteUncheckedCreateNestedManyWithoutInvitedByInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteUncheckedCreateNestedManyWithoutAcceptedByInput
 }
 
 export type UserCreateOrConnectWithoutEmailsInput = {
@@ -1680,6 +1800,8 @@ export type UserUpdateWithoutEmailsInput = {
   reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUpdateManyWithoutReviewerNestedInput
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
   lessonSessions?: Prisma.LessonSessionUpdateManyWithoutUserNestedInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteUpdateManyWithoutInvitedByNestedInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteUpdateManyWithoutAcceptedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutEmailsInput = {
@@ -1702,6 +1824,232 @@ export type UserUncheckedUpdateWithoutEmailsInput = {
   reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedUpdateManyWithoutReviewerNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
   lessonSessions?: Prisma.LessonSessionUncheckedUpdateManyWithoutUserNestedInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteUncheckedUpdateManyWithoutInvitedByNestedInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteUncheckedUpdateManyWithoutAcceptedByNestedInput
+}
+
+export type UserCreateWithoutWorkspaceInvitesSentInput = {
+  id?: string
+  email: string
+  name?: string | null
+  image?: string | null
+  emailVerified?: Date | string | null
+  passwordHash?: string | null
+  role?: $Enums.UserRole
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  authored?: Prisma.CourseCreateNestedManyWithoutAuthorInput
+  enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
+  progress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
+  homework?: Prisma.HomeworkReviewCreateNestedManyWithoutReviewerInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionCreateNestedManyWithoutStudentInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionCreateNestedManyWithoutReviewerInput
+  orders?: Prisma.OrderCreateNestedManyWithoutUserInput
+  emails?: Prisma.EmailMessageCreateNestedManyWithoutUserInput
+  lessonSessions?: Prisma.LessonSessionCreateNestedManyWithoutUserInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteCreateNestedManyWithoutAcceptedByInput
+}
+
+export type UserUncheckedCreateWithoutWorkspaceInvitesSentInput = {
+  id?: string
+  email: string
+  name?: string | null
+  image?: string | null
+  emailVerified?: Date | string | null
+  passwordHash?: string | null
+  role?: $Enums.UserRole
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  authored?: Prisma.CourseUncheckedCreateNestedManyWithoutAuthorInput
+  enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
+  progress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
+  homework?: Prisma.HomeworkReviewUncheckedCreateNestedManyWithoutReviewerInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedCreateNestedManyWithoutReviewerInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
+  emails?: Prisma.EmailMessageUncheckedCreateNestedManyWithoutUserInput
+  lessonSessions?: Prisma.LessonSessionUncheckedCreateNestedManyWithoutUserInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteUncheckedCreateNestedManyWithoutAcceptedByInput
+}
+
+export type UserCreateOrConnectWithoutWorkspaceInvitesSentInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutWorkspaceInvitesSentInput, Prisma.UserUncheckedCreateWithoutWorkspaceInvitesSentInput>
+}
+
+export type UserCreateWithoutWorkspaceInvitesAcceptedInput = {
+  id?: string
+  email: string
+  name?: string | null
+  image?: string | null
+  emailVerified?: Date | string | null
+  passwordHash?: string | null
+  role?: $Enums.UserRole
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  authored?: Prisma.CourseCreateNestedManyWithoutAuthorInput
+  enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
+  progress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
+  homework?: Prisma.HomeworkReviewCreateNestedManyWithoutReviewerInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionCreateNestedManyWithoutStudentInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionCreateNestedManyWithoutReviewerInput
+  orders?: Prisma.OrderCreateNestedManyWithoutUserInput
+  emails?: Prisma.EmailMessageCreateNestedManyWithoutUserInput
+  lessonSessions?: Prisma.LessonSessionCreateNestedManyWithoutUserInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteCreateNestedManyWithoutInvitedByInput
+}
+
+export type UserUncheckedCreateWithoutWorkspaceInvitesAcceptedInput = {
+  id?: string
+  email: string
+  name?: string | null
+  image?: string | null
+  emailVerified?: Date | string | null
+  passwordHash?: string | null
+  role?: $Enums.UserRole
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  authored?: Prisma.CourseUncheckedCreateNestedManyWithoutAuthorInput
+  enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
+  progress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
+  homework?: Prisma.HomeworkReviewUncheckedCreateNestedManyWithoutReviewerInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedCreateNestedManyWithoutReviewerInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
+  emails?: Prisma.EmailMessageUncheckedCreateNestedManyWithoutUserInput
+  lessonSessions?: Prisma.LessonSessionUncheckedCreateNestedManyWithoutUserInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteUncheckedCreateNestedManyWithoutInvitedByInput
+}
+
+export type UserCreateOrConnectWithoutWorkspaceInvitesAcceptedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutWorkspaceInvitesAcceptedInput, Prisma.UserUncheckedCreateWithoutWorkspaceInvitesAcceptedInput>
+}
+
+export type UserUpsertWithoutWorkspaceInvitesSentInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutWorkspaceInvitesSentInput, Prisma.UserUncheckedUpdateWithoutWorkspaceInvitesSentInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutWorkspaceInvitesSentInput, Prisma.UserUncheckedCreateWithoutWorkspaceInvitesSentInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutWorkspaceInvitesSentInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutWorkspaceInvitesSentInput, Prisma.UserUncheckedUpdateWithoutWorkspaceInvitesSentInput>
+}
+
+export type UserUpdateWithoutWorkspaceInvitesSentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  authored?: Prisma.CourseUpdateManyWithoutAuthorNestedInput
+  enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
+  progress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
+  homework?: Prisma.HomeworkReviewUpdateManyWithoutReviewerNestedInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionUpdateManyWithoutStudentNestedInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUpdateManyWithoutReviewerNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
+  emails?: Prisma.EmailMessageUpdateManyWithoutUserNestedInput
+  lessonSessions?: Prisma.LessonSessionUpdateManyWithoutUserNestedInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteUpdateManyWithoutAcceptedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutWorkspaceInvitesSentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  authored?: Prisma.CourseUncheckedUpdateManyWithoutAuthorNestedInput
+  enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
+  progress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
+  homework?: Prisma.HomeworkReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedUpdateManyWithoutReviewerNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
+  emails?: Prisma.EmailMessageUncheckedUpdateManyWithoutUserNestedInput
+  lessonSessions?: Prisma.LessonSessionUncheckedUpdateManyWithoutUserNestedInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteUncheckedUpdateManyWithoutAcceptedByNestedInput
+}
+
+export type UserUpsertWithoutWorkspaceInvitesAcceptedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutWorkspaceInvitesAcceptedInput, Prisma.UserUncheckedUpdateWithoutWorkspaceInvitesAcceptedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutWorkspaceInvitesAcceptedInput, Prisma.UserUncheckedCreateWithoutWorkspaceInvitesAcceptedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutWorkspaceInvitesAcceptedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutWorkspaceInvitesAcceptedInput, Prisma.UserUncheckedUpdateWithoutWorkspaceInvitesAcceptedInput>
+}
+
+export type UserUpdateWithoutWorkspaceInvitesAcceptedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  authored?: Prisma.CourseUpdateManyWithoutAuthorNestedInput
+  enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
+  progress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
+  homework?: Prisma.HomeworkReviewUpdateManyWithoutReviewerNestedInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionUpdateManyWithoutStudentNestedInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUpdateManyWithoutReviewerNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
+  emails?: Prisma.EmailMessageUpdateManyWithoutUserNestedInput
+  lessonSessions?: Prisma.LessonSessionUpdateManyWithoutUserNestedInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteUpdateManyWithoutInvitedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutWorkspaceInvitesAcceptedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  authored?: Prisma.CourseUncheckedUpdateManyWithoutAuthorNestedInput
+  enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
+  progress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
+  homework?: Prisma.HomeworkReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedUpdateManyWithoutReviewerNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
+  emails?: Prisma.EmailMessageUncheckedUpdateManyWithoutUserNestedInput
+  lessonSessions?: Prisma.LessonSessionUncheckedUpdateManyWithoutUserNestedInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteUncheckedUpdateManyWithoutInvitedByNestedInput
 }
 
 export type UserCreateWithoutLessonSessionsInput = {
@@ -1724,6 +2072,8 @@ export type UserCreateWithoutLessonSessionsInput = {
   reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionCreateNestedManyWithoutReviewerInput
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
   emails?: Prisma.EmailMessageCreateNestedManyWithoutUserInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteCreateNestedManyWithoutInvitedByInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteCreateNestedManyWithoutAcceptedByInput
 }
 
 export type UserUncheckedCreateWithoutLessonSessionsInput = {
@@ -1746,6 +2096,8 @@ export type UserUncheckedCreateWithoutLessonSessionsInput = {
   reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedCreateNestedManyWithoutReviewerInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
   emails?: Prisma.EmailMessageUncheckedCreateNestedManyWithoutUserInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteUncheckedCreateNestedManyWithoutInvitedByInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteUncheckedCreateNestedManyWithoutAcceptedByInput
 }
 
 export type UserCreateOrConnectWithoutLessonSessionsInput = {
@@ -1784,6 +2136,8 @@ export type UserUpdateWithoutLessonSessionsInput = {
   reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUpdateManyWithoutReviewerNestedInput
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
   emails?: Prisma.EmailMessageUpdateManyWithoutUserNestedInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteUpdateManyWithoutInvitedByNestedInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteUpdateManyWithoutAcceptedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLessonSessionsInput = {
@@ -1806,6 +2160,8 @@ export type UserUncheckedUpdateWithoutLessonSessionsInput = {
   reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedUpdateManyWithoutReviewerNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
   emails?: Prisma.EmailMessageUncheckedUpdateManyWithoutUserNestedInput
+  workspaceInvitesSent?: Prisma.WorkspaceInviteUncheckedUpdateManyWithoutInvitedByNestedInput
+  workspaceInvitesAccepted?: Prisma.WorkspaceInviteUncheckedUpdateManyWithoutAcceptedByNestedInput
 }
 
 
@@ -1825,6 +2181,8 @@ export type UserCountOutputType = {
   orders: number
   emails: number
   lessonSessions: number
+  workspaceInvitesSent: number
+  workspaceInvitesAccepted: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1839,6 +2197,8 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   orders?: boolean | UserCountOutputTypeCountOrdersArgs
   emails?: boolean | UserCountOutputTypeCountEmailsArgs
   lessonSessions?: boolean | UserCountOutputTypeCountLessonSessionsArgs
+  workspaceInvitesSent?: boolean | UserCountOutputTypeCountWorkspaceInvitesSentArgs
+  workspaceInvitesAccepted?: boolean | UserCountOutputTypeCountWorkspaceInvitesAcceptedArgs
 }
 
 /**
@@ -1928,6 +2288,20 @@ export type UserCountOutputTypeCountLessonSessionsArgs<ExtArgs extends runtime.T
   where?: Prisma.LessonSessionWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountWorkspaceInvitesSentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.WorkspaceInviteWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountWorkspaceInvitesAcceptedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.WorkspaceInviteWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1950,6 +2324,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   orders?: boolean | Prisma.User$ordersArgs<ExtArgs>
   emails?: boolean | Prisma.User$emailsArgs<ExtArgs>
   lessonSessions?: boolean | Prisma.User$lessonSessionsArgs<ExtArgs>
+  workspaceInvitesSent?: boolean | Prisma.User$workspaceInvitesSentArgs<ExtArgs>
+  workspaceInvitesAccepted?: boolean | Prisma.User$workspaceInvitesAcceptedArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -2002,6 +2378,8 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   orders?: boolean | Prisma.User$ordersArgs<ExtArgs>
   emails?: boolean | Prisma.User$emailsArgs<ExtArgs>
   lessonSessions?: boolean | Prisma.User$lessonSessionsArgs<ExtArgs>
+  workspaceInvitesSent?: boolean | Prisma.User$workspaceInvitesSentArgs<ExtArgs>
+  workspaceInvitesAccepted?: boolean | Prisma.User$workspaceInvitesAcceptedArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -2021,6 +2399,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     orders: Prisma.$OrderPayload<ExtArgs>[]
     emails: Prisma.$EmailMessagePayload<ExtArgs>[]
     lessonSessions: Prisma.$LessonSessionPayload<ExtArgs>[]
+    workspaceInvitesSent: Prisma.$WorkspaceInvitePayload<ExtArgs>[]
+    workspaceInvitesAccepted: Prisma.$WorkspaceInvitePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2437,6 +2817,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   orders<T extends Prisma.User$ordersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   emails<T extends Prisma.User$emailsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$emailsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EmailMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   lessonSessions<T extends Prisma.User$lessonSessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$lessonSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LessonSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  workspaceInvitesSent<T extends Prisma.User$workspaceInvitesSentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$workspaceInvitesSentArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkspaceInvitePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  workspaceInvitesAccepted<T extends Prisma.User$workspaceInvitesAcceptedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$workspaceInvitesAcceptedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkspaceInvitePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3129,6 +3511,54 @@ export type User$lessonSessionsArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.LessonSessionScalarFieldEnum | Prisma.LessonSessionScalarFieldEnum[]
+}
+
+/**
+ * User.workspaceInvitesSent
+ */
+export type User$workspaceInvitesSentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the WorkspaceInvite
+   */
+  select?: Prisma.WorkspaceInviteSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the WorkspaceInvite
+   */
+  omit?: Prisma.WorkspaceInviteOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WorkspaceInviteInclude<ExtArgs> | null
+  where?: Prisma.WorkspaceInviteWhereInput
+  orderBy?: Prisma.WorkspaceInviteOrderByWithRelationInput | Prisma.WorkspaceInviteOrderByWithRelationInput[]
+  cursor?: Prisma.WorkspaceInviteWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.WorkspaceInviteScalarFieldEnum | Prisma.WorkspaceInviteScalarFieldEnum[]
+}
+
+/**
+ * User.workspaceInvitesAccepted
+ */
+export type User$workspaceInvitesAcceptedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the WorkspaceInvite
+   */
+  select?: Prisma.WorkspaceInviteSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the WorkspaceInvite
+   */
+  omit?: Prisma.WorkspaceInviteOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WorkspaceInviteInclude<ExtArgs> | null
+  where?: Prisma.WorkspaceInviteWhereInput
+  orderBy?: Prisma.WorkspaceInviteOrderByWithRelationInput | Prisma.WorkspaceInviteOrderByWithRelationInput[]
+  cursor?: Prisma.WorkspaceInviteWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.WorkspaceInviteScalarFieldEnum | Prisma.WorkspaceInviteScalarFieldEnum[]
 }
 
 /**

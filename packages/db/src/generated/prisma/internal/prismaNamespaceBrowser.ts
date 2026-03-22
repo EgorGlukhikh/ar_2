@@ -73,6 +73,7 @@ export const ModelName = {
   EmailMessage: 'EmailMessage',
   EmailEvent: 'EmailEvent',
   EmailLinkClick: 'EmailLinkClick',
+  WorkspaceInvite: 'WorkspaceInvite',
   LessonSession: 'LessonSession',
   LessonSessionEvent: 'LessonSessionEvent'
 } as const
@@ -432,6 +433,24 @@ export const EmailLinkClickScalarFieldEnum = {
 } as const
 
 export type EmailLinkClickScalarFieldEnum = (typeof EmailLinkClickScalarFieldEnum)[keyof typeof EmailLinkClickScalarFieldEnum]
+
+
+export const WorkspaceInviteScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  role: 'role',
+  token: 'token',
+  note: 'note',
+  invitedById: 'invitedById',
+  acceptedById: 'acceptedById',
+  expiresAt: 'expiresAt',
+  acceptedAt: 'acceptedAt',
+  revokedAt: 'revokedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type WorkspaceInviteScalarFieldEnum = (typeof WorkspaceInviteScalarFieldEnum)[keyof typeof WorkspaceInviteScalarFieldEnum]
 
 
 export const LessonSessionScalarFieldEnum = {

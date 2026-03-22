@@ -53,6 +53,13 @@ const moveLessonSchema = z.object({
   targetModuleId: z.string().trim().min(1),
 });
 
+const repositionLessonSchema = z.object({
+  lessonId: z.string().trim().min(1),
+  targetModuleId: z.string().trim().min(1),
+  targetLessonId: z.string().trim().optional(),
+  placement: z.enum(["before", "after", "end"]).default("end"),
+});
+
 const updateLessonSchema = z.object({
   lessonId: z.string().trim().min(1),
   moduleId: z.string().trim().min(1),
@@ -337,6 +344,24 @@ async function normalizeLessonPositions(
       }),
     ),
   );
+}
+
+function resolveInsertIndex(args: {
+  orderedIds: string[];
+  targetLessonId?: string;
+  placement: "before" | "after" | "end";
+}) {
+  if (!args.targetLessonId || args.placement === "end") {
+    return args.orderedIds.length;
+  }
+
+  const targetIndex = args.orderedIds.findIndex((id) => id === args.targetLessonId);
+
+  if (targetIndex === -1) {
+    return args.orderedIds.length;
+  }
+
+  return args.placement === "after" ? targetIndex + 1 : targetIndex;
 }
 
 export async function createCourse(formData: FormData) {
@@ -682,4 +707,137 @@ export async function moveLessonToModule(formData: FormData) {
   redirect(
     `/admin/courses/${targetModule.courseId}/content?moduleId=${targetModule.id}&lessonId=${parsed.lessonId}`,
   );
+}
+
+export async function repositionLesson(formData: FormData) {
+  const parsed = repositionLessonSchema.parse({
+    lessonId: getTrimmedValue(formData, "lessonId"),
+    targetModuleId: getTrimmedValue(formData, "targetModuleId"),
+    targetLessonId: getOptionalValue(formData, "targetLessonId"),
+    placement: (getTrimmedValue(formData, "placement") || "end") as
+      | "before"
+      | "after"
+      | "end",
+  });
+
+  const { lessonRecord } = await requireLessonContentEditor(parsed.lessonId);
+  const { moduleRecord: targetModule } = await requireModuleContentEditor(parsed.targetModuleId);
+
+  if (lessonRecord.module.courseId !== targetModule.courseId) {
+    throw new Error("Нельзя переносить урок в модуль другого курса.");
+  }
+
+  await prisma.$transaction(async (tx) => {
+    const [sourceLessons, targetLessons] = await Promise.all([
+      tx.lesson.findMany({
+        where: {
+          moduleId: lessonRecord.moduleId,
+        },
+        orderBy: {
+          position: "asc",
+        },
+        select: {
+          id: true,
+        },
+      }),
+      lessonRecord.moduleId === targetModule.id
+        ? Promise.resolve([])
+        : tx.lesson.findMany({
+            where: {
+              moduleId: targetModule.id,
+            },
+            orderBy: {
+              position: "asc",
+            },
+            select: {
+              id: true,
+            },
+          }),
+    ]);
+
+    if (lessonRecord.moduleId === targetModule.id) {
+      const nextOrder = sourceLessons
+        .map((lesson) => lesson.id)
+        .filter((id) => id !== parsed.lessonId);
+
+      const insertIndex = resolveInsertIndex({
+        orderedIds: nextOrder,
+        targetLessonId: parsed.targetLessonId,
+        placement: parsed.placement,
+      });
+
+      nextOrder.splice(insertIndex, 0, parsed.lessonId);
+
+      await Promise.all(
+        nextOrder.map((lessonId, index) =>
+          tx.lesson.update({
+            where: {
+              id: lessonId,
+            },
+            data: {
+              position: index + 1,
+            },
+          }),
+        ),
+      );
+
+      return;
+    }
+
+    const nextSourceOrder = sourceLessons
+      .map((lesson) => lesson.id)
+      .filter((id) => id !== parsed.lessonId);
+    const nextTargetOrder = targetLessons.map((lesson) => lesson.id);
+
+    const insertIndex = resolveInsertIndex({
+      orderedIds: nextTargetOrder,
+      targetLessonId: parsed.targetLessonId,
+      placement: parsed.placement,
+    });
+
+    nextTargetOrder.splice(insertIndex, 0, parsed.lessonId);
+
+    await tx.lesson.update({
+      where: {
+        id: parsed.lessonId,
+      },
+      data: {
+        moduleId: targetModule.id,
+      },
+    });
+
+    await Promise.all(
+      nextSourceOrder.map((lessonId, index) =>
+        tx.lesson.update({
+          where: {
+            id: lessonId,
+          },
+          data: {
+            position: index + 1,
+          },
+        }),
+      ),
+    );
+
+    await Promise.all(
+      nextTargetOrder.map((lessonId, index) =>
+        tx.lesson.update({
+          where: {
+            id: lessonId,
+          },
+          data: {
+            position: index + 1,
+          },
+        }),
+      ),
+    );
+  });
+
+  refreshAdminRoutes(targetModule.courseId);
+
+  return {
+    courseId: targetModule.courseId,
+    moduleId: targetModule.id,
+    lessonId: parsed.lessonId,
+  };
 }

@@ -19,12 +19,23 @@ const accessPoints = [
   "Один логин для администратора, автора, куратора и студента.",
 ];
 
-export default async function SignInPage() {
+type SignInPageProps = {
+  searchParams?: Promise<{
+    email?: string;
+    invited?: string;
+  }>;
+};
+
+export default async function SignInPage({ searchParams }: SignInPageProps) {
   const session = await auth();
 
   if (session?.user) {
     redirect("/after-sign-in");
   }
+
+  const resolvedSearchParams = searchParams ? await searchParams : {};
+  const defaultEmail = resolvedSearchParams.email ?? "";
+  const showInviteSuccess = resolvedSearchParams.invited === "1";
 
   return (
     <main
@@ -114,8 +125,8 @@ export default async function SignInPage() {
                       Войти по email
                     </h2>
                     <p className="text-sm leading-7 text-[#596177]">
-                      Для теста можно использовать админскую учетку. После входа
-                      платформа сама отправит пользователя в нужный кабинет.
+                      Для теста можно использовать админскую учетку. После входа платформа сама
+                      отправит пользователя в нужный кабинет.
                     </p>
                   </div>
 
@@ -129,7 +140,13 @@ export default async function SignInPage() {
                   </div>
 
                   <div className="mt-6">
-                    <SignInForm />
+                    {showInviteSuccess ? (
+                      <div className="mb-4 rounded-[22px] border border-emerald-100 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+                        Приглашение активировано. Теперь можно войти в платформу.
+                      </div>
+                    ) : null}
+
+                    <SignInForm defaultEmail={defaultEmail} />
                   </div>
                 </div>
               </aside>

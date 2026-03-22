@@ -232,7 +232,7 @@ export default async function Home() {
               </div>
             </header>
 
-            <div className="grid gap-10 py-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+            <div className="grid gap-10 py-10 xl:grid-cols-[1fr_1.02fr] xl:items-center">
               <div className="space-y-8">
                 <div className="inline-flex items-center gap-2 rounded-full border border-[#dce4fb] bg-white px-4 py-2 text-sm text-[#5f677c] shadow-sm">
                   <Sparkles className="h-4 w-4 text-[#ff825f]" />
@@ -240,7 +240,7 @@ export default async function Home() {
                 </div>
 
                 <div className="space-y-5">
-                  <h1 className="max-w-3xl font-[family:var(--font-landing-display)] text-5xl font-semibold leading-[0.95] tracking-tight md:text-7xl">
+                  <h1 className="max-w-[11ch] text-balance font-[family:var(--font-landing-display)] text-[clamp(3.2rem,7vw,6.4rem)] font-semibold leading-[0.92] tracking-tight">
                     Учиться, публиковать свои курсы и проводить вебинары в одном месте.
                   </h1>
                   <p className="max-w-2xl text-lg leading-8 text-[#596177]">
@@ -264,11 +264,11 @@ export default async function Home() {
                 </div>
               </div>
 
-              <div className="relative min-h-[460px] lg:min-h-[560px]">
+              <div className="relative min-h-[460px] xl:min-h-[560px]">
                 <div className="absolute inset-0 rounded-[38px] bg-[linear-gradient(145deg,_#2037d2_0%,_#5a71ff_42%,_#ff8f6c_100%)] shadow-[0_45px_100px_rgba(64,76,173,0.34)]" />
                 <div className="absolute inset-4 rounded-[32px] border border-white/20 bg-[linear-gradient(180deg,_rgba(255,255,255,0.2)_0%,_rgba(255,255,255,0.08)_100%)] backdrop-blur-md" />
 
-                <div className="relative grid min-h-[460px] gap-4 p-5 md:p-7 lg:min-h-[560px]">
+                <div className="relative grid min-h-[460px] gap-4 p-5 md:p-7 xl:min-h-[560px]">
                   <div className="flex flex-wrap items-start justify-between gap-4">
                     <div className="max-w-[260px] rounded-[24px] bg-white px-4 py-4 shadow-xl">
                       <div className="flex items-center gap-3">
@@ -288,12 +288,12 @@ export default async function Home() {
                     </div>
                   </div>
 
-                  <div className="grid flex-1 items-end gap-4 md:grid-cols-[0.88fr_1.12fr]">
-                    <div className="max-w-[280px] rounded-[30px] border border-white/18 bg-white/12 p-5 text-white backdrop-blur-md">
+                  <div className="grid flex-1 items-end gap-4 xl:grid-cols-[0.94fr_1.06fr]">
+                    <div className="w-full rounded-[30px] border border-white/18 bg-white/12 p-5 text-white backdrop-blur-md">
                       <p className="text-xs uppercase tracking-[0.28em] text-white/62">
                         Сценарии платформы
                       </p>
-                      <p className="mt-4 font-[family:var(--font-landing-display)] text-3xl font-semibold leading-[1.02] md:text-[2.4rem]">
+                      <p className="mt-4 max-w-[12ch] text-balance font-[family:var(--font-landing-display)] text-[clamp(1.9rem,3vw,2.6rem)] font-semibold leading-[1.02]">
                         Курс, продажа и вебинар внутри одной системы.
                       </p>
                       <div className="mt-5 grid gap-3">
@@ -316,7 +316,7 @@ export default async function Home() {
                       </div>
                     </div>
 
-                    <div className="relative mx-auto flex w-full max-w-[360px] items-end justify-center lg:mr-0">
+                    <div className="relative mx-auto flex w-full max-w-[380px] items-end justify-center xl:mr-0">
                       <div className="relative h-[380px] w-[280px] overflow-hidden rounded-[34px] border border-white/25 shadow-[0_32px_80px_rgba(18,24,72,0.38)] md:h-[450px] md:w-[340px]">
                         <Image
                           src="https://images.unsplash.com/photo-1573497620053-ea5300f94f21?auto=format&fit=crop&w=1200&q=80"
@@ -329,10 +329,10 @@ export default async function Home() {
                           <p className="text-xs uppercase tracking-[0.28em] text-white/55">
                             Продуктовый маршрут
                           </p>
-                          <p className="mt-3 font-[family:var(--font-landing-display)] text-[2rem] font-semibold leading-[0.98]">
+                          <p className="mt-3 max-w-[10ch] text-balance font-[family:var(--font-landing-display)] text-[clamp(1.7rem,2.4vw,2.2rem)] font-semibold leading-[0.98]">
                             От курса к живому запуску.
                           </p>
-                          <p className="mt-3 text-sm leading-6 text-white/72">
+                          <p className="mt-3 text-[13px] leading-6 text-white/72">
                             Один и тот же контур держит материалы, оплату, доступ и
                             следующий шаг для ученика.
                           </p>
@@ -341,7 +341,7 @@ export default async function Home() {
                     </div>
                   </div>
 
-                  <div className="grid gap-4 md:grid-cols-[1.05fr_0.95fr]">
+                  <div className="grid gap-4 xl:grid-cols-[1.02fr_0.98fr]">
                     <div className="overflow-hidden rounded-[28px] border border-white/18 bg-white/12 shadow-2xl">
                       <Image
                         src="https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&w=1200&q=80"
@@ -424,7 +424,7 @@ export default async function Home() {
         </section>
 
         <SectionShell className="mt-16">
-          <div className="grid gap-10 lg:grid-cols-[0.92fr_1.08fr]">
+          <div className="grid gap-10 xl:grid-cols-[0.8fr_1.2fr]">
             <div className="space-y-6">
               <SectionLead
                 eyebrow="Каталог"
@@ -469,11 +469,11 @@ export default async function Home() {
               </div>
             </div>
 
-            <div id="courses" className="grid gap-5 lg:grid-cols-3">
+            <div id="courses" className="grid gap-5 sm:grid-cols-2 2xl:grid-cols-3">
               {featuredCourses.map((course) => (
                 <article
                   key={course.title}
-                  className="overflow-hidden rounded-[30px] border border-black/5 bg-white shadow-[0_18px_50px_rgba(28,36,66,0.08)]"
+                  className="flex h-full flex-col overflow-hidden rounded-[30px] border border-black/5 bg-white shadow-[0_18px_50px_rgba(28,36,66,0.08)]"
                 >
                   <div className="relative h-56">
                     <Image src={course.image} alt={course.title} fill className="object-cover" />
@@ -487,17 +487,19 @@ export default async function Home() {
                       </span>
                     </div>
                   </div>
-                  <div className="space-y-5 p-6">
+                  <div className="flex flex-1 flex-col justify-between space-y-5 p-6">
                     <div>
-                      <h3 className="text-xl font-semibold">{course.title}</h3>
-                      <p className="mt-2 text-sm leading-6 text-[#596177]">{course.meta}</p>
+                      <h3 className="text-balance text-[1.7rem] font-semibold leading-[1.04]">
+                        {course.title}
+                      </h3>
+                      <p className="mt-2 text-sm leading-7 text-[#596177]">{course.meta}</p>
                     </div>
                     <div className="space-y-3 border-t border-black/5 pt-4">
                       <div>
                         <p className="text-[11px] font-semibold uppercase tracking-[0.26em] text-[#7b8296]">
                           Стоимость доступа
                         </p>
-                        <p className="mt-3 text-4xl font-semibold leading-none tracking-tight">
+                        <p className="mt-3 text-[clamp(2.6rem,4vw,3.6rem)] font-semibold leading-none tracking-tight">
                           {course.priceAmount}
                         </p>
                         <p className="mt-1 text-sm font-semibold text-[#5d657a]">
@@ -554,7 +556,7 @@ export default async function Home() {
               light
             />
 
-            <div className="mt-8 grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
+            <div className="mt-8 grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
               <div className="space-y-3">
                 {creatorPoints.map((item) => (
                   <div
@@ -567,13 +569,13 @@ export default async function Home() {
                 ))}
               </div>
 
-              <div className="grid min-h-[340px] gap-4 overflow-hidden rounded-[30px] border border-white/10 bg-white/8 p-5 backdrop-blur">
+              <div className="grid min-h-[380px] gap-4 overflow-hidden rounded-[30px] border border-white/10 bg-white/8 p-5 backdrop-blur">
                 <div className="rounded-[24px] bg-white px-5 py-4 text-[#1c2442] shadow-xl">
                   <p className="text-sm text-[#697088]">Кабинет автора</p>
                   <p className="font-semibold">Редактор программы и продаж</p>
                 </div>
 
-                <div className="grid flex-1 gap-4 lg:grid-cols-[1.02fr_0.98fr]">
+                <div className="grid flex-1 gap-4 2xl:grid-cols-[0.98fr_1.02fr]">
                   <div className="space-y-4">
                     <div className="rounded-[24px] bg-white p-5 text-[#1c2442] shadow-lg">
                       <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#7b8296]">
@@ -582,18 +584,18 @@ export default async function Home() {
                       <p className="mt-3 text-2xl font-semibold">
                         Система агентства
                       </p>
-                      <p className="mt-3 text-sm leading-6 text-[#697088]">
+                      <p className="mt-3 text-sm leading-7 text-[#697088]">
                         Модули, уроки, цена, доступы и команда живут в одном
                         сценарии, а не расходятся по разным кабинетам.
                       </p>
                     </div>
 
-                    <div className="grid gap-3 sm:grid-cols-2">
+                    <div className="grid gap-3 2xl:grid-cols-2">
                       <div className="rounded-[22px] bg-white/10 p-4 text-white">
                         <p className="text-xs uppercase tracking-[0.2em] text-white/60">
                           Продажа
                         </p>
-                        <p className="mt-2 text-xl font-semibold">
+                        <p className="mt-2 text-balance text-xl font-semibold leading-tight">
                           Каталог + оплата
                         </p>
                       </div>
@@ -601,7 +603,7 @@ export default async function Home() {
                         <p className="text-xs uppercase tracking-[0.2em] text-white/60">
                           Команда
                         </p>
-                        <p className="mt-2 text-xl font-semibold">
+                        <p className="mt-2 text-balance text-xl font-semibold leading-tight">
                           Авторы и кураторы
                         </p>
                       </div>
@@ -620,7 +622,7 @@ export default async function Home() {
                       <p className="text-xs uppercase tracking-[0.22em] text-white/55">
                         Роль автора
                       </p>
-                      <p className="mt-2 text-lg font-semibold">
+                      <p className="mt-2 max-w-[16ch] text-balance text-lg font-semibold leading-tight">
                         Собрать программу, оформить продукт и передать доступы без
                         лишнего хаоса.
                       </p>
