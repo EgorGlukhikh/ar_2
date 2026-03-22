@@ -64,7 +64,7 @@ export function SectionLead({
       </p>
       <h2
         className={cn(
-          "max-w-[18ch] text-balance font-[family:var(--font-landing-display)] text-[clamp(2.2rem,4vw,3.7rem)] font-semibold leading-[0.98] tracking-tight",
+          "max-w-[20ch] text-balance font-[family:var(--font-landing-display)] text-[clamp(2.2rem,4vw,3.7rem)] font-semibold leading-[0.98] tracking-tight",
           light ? "text-white" : "text-[#1c2442]",
         )}
       >

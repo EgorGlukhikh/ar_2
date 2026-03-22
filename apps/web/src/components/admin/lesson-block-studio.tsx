@@ -61,7 +61,7 @@ const blockTypeOptions: BlockTypeOption[] = [
     type: "VIDEO",
     label: "Видео",
     icon: Video,
-    description: "Ссылка на видео или загрузка файла.",
+    description: "Ссылка или файл.",
   },
   {
     type: "FILE",
@@ -73,7 +73,7 @@ const blockTypeOptions: BlockTypeOption[] = [
     type: "HOMEWORK",
     label: "Задание",
     icon: ClipboardCheck,
-    description: "Домашняя работа с правилами сдачи.",
+    description: "Домашняя работа.",
   },
 ];
 
@@ -219,9 +219,7 @@ export function LessonBlockStudio({
           <h3 className="mt-2 text-2xl font-semibold tracking-tight text-[var(--foreground)]">
             Добавь первый блок
           </h3>
-          <p className="mt-2 text-sm leading-7 text-[var(--muted)]">
-            Начни с текста, видео, файла или задания.
-          </p>
+          <p className="mt-2 text-sm leading-7 text-[var(--muted)]">Здесь пока нет контента.</p>
         </div>
       ) : null}
 
@@ -309,7 +307,7 @@ export function LessonBlockStudio({
                         updateBlock(block.id, { body: event.target.value } as Partial<LessonBlock>)
                       }
                       placeholder="Основной текст блока"
-                      className="min-h-[220px]"
+                        className="min-h-[180px]"
                     />
                   </div>
                 ) : null}
@@ -377,7 +375,7 @@ export function LessonBlockStudio({
                           updateBlock(block.id, { body: event.target.value } as Partial<LessonBlock>)
                         }
                         placeholder="Что нужно сделать"
-                        className="min-h-[160px]"
+                        className="min-h-[140px]"
                       />
                     </div>
                     <div className="space-y-2">

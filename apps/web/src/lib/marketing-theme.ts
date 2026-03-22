@@ -16,7 +16,7 @@ export const marketingShellClassName =
   "min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(199,213,255,0.58),_transparent_26%),radial-gradient(circle_at_92%_18%,_rgba(255,215,199,0.64),_transparent_24%),linear-gradient(180deg,_#f8f4ff_0%,_#fffaf4_48%,_#eff5ff_100%)] font-[family:var(--font-landing-body)] text-[#1c2442]";
 
 export const marketingContainerClassName =
-  "mx-auto max-w-[1480px] px-4 py-5 md:px-8 md:py-8 xl:px-10";
+  "mx-auto max-w-[1560px] px-4 py-5 md:px-8 md:py-8 xl:px-12";
 
 export const marketingFrameClassName =
   "rounded-[40px] border border-white/70 bg-[rgba(255,255,255,0.78)] p-4 shadow-[0_40px_120px_rgba(48,52,109,0.12)] backdrop-blur md:p-6";

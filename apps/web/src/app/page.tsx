@@ -72,7 +72,8 @@ const featuredCourses = [
     title: "Старт в профессии риэлтора",
     meta: "12 уроков • практика с клиентом",
     priceAmount: "4 900",
-    priceCurrency: "₽ за курс",
+    priceCurrency: "₽",
+    priceSuffix: "за курс",
     image:
       "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1400&q=80",
   },
@@ -80,7 +81,8 @@ const featuredCourses = [
     title: "Сильные продажи объектов",
     meta: "9 уроков • скрипты и переговоры",
     priceAmount: "7 500",
-    priceCurrency: "₽ за курс",
+    priceCurrency: "₽",
+    priceSuffix: "за курс",
     image:
       "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1400&q=80",
   },
@@ -88,7 +90,8 @@ const featuredCourses = [
     title: "Система агентства",
     meta: "15 уроков • управление и команда",
     priceAmount: "12 000",
-    priceCurrency: "₽ за курс",
+    priceCurrency: "₽",
+    priceSuffix: "за курс",
     image:
       "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=1400&q=80",
   },
@@ -232,7 +235,7 @@ export default async function Home() {
               </div>
             </header>
 
-            <div className="grid gap-10 py-10 xl:grid-cols-[1fr_1.02fr] xl:items-center">
+            <div className="grid gap-10 py-10 xl:grid-cols-[1.08fr_0.92fr] xl:items-center">
               <div className="space-y-8">
                 <div className="inline-flex items-center gap-2 rounded-full border border-[#dce4fb] bg-white px-4 py-2 text-sm text-[#5f677c] shadow-sm">
                   <Sparkles className="h-4 w-4 text-[#ff825f]" />
@@ -240,7 +243,7 @@ export default async function Home() {
                 </div>
 
                 <div className="space-y-5">
-                  <h1 className="max-w-[11ch] text-balance font-[family:var(--font-landing-display)] text-[clamp(3.2rem,7vw,6.4rem)] font-semibold leading-[0.92] tracking-tight">
+                  <h1 className="max-w-[12.5ch] text-balance font-[family:var(--font-landing-display)] text-[clamp(3.1rem,6.2vw,6rem)] font-semibold leading-[0.92] tracking-tight">
                     Учиться, публиковать свои курсы и проводить вебинары в одном месте.
                   </h1>
                   <p className="max-w-2xl text-lg leading-8 text-[#596177]">
@@ -469,7 +472,10 @@ export default async function Home() {
               </div>
             </div>
 
-            <div id="courses" className="grid gap-5 sm:grid-cols-2 2xl:grid-cols-3">
+            <div
+              id="courses"
+              className="grid gap-5 [grid-template-columns:repeat(auto-fit,minmax(250px,1fr))]"
+            >
               {featuredCourses.map((course) => (
                 <article
                   key={course.title}
@@ -489,7 +495,7 @@ export default async function Home() {
                   </div>
                   <div className="flex flex-1 flex-col justify-between space-y-5 p-6">
                     <div>
-                      <h3 className="text-balance text-[1.7rem] font-semibold leading-[1.04]">
+                      <h3 className="text-balance text-[clamp(1.4rem,2vw,1.85rem)] font-semibold leading-[1.08]">
                         {course.title}
                       </h3>
                       <p className="mt-2 text-sm leading-7 text-[#596177]">{course.meta}</p>
@@ -499,12 +505,15 @@ export default async function Home() {
                         <p className="text-[11px] font-semibold uppercase tracking-[0.26em] text-[#7b8296]">
                           Стоимость доступа
                         </p>
-                        <p className="mt-3 text-[clamp(2.6rem,4vw,3.6rem)] font-semibold leading-none tracking-tight">
-                          {course.priceAmount}
-                        </p>
-                        <p className="mt-1 text-sm font-semibold text-[#5d657a]">
-                          {course.priceCurrency}
-                        </p>
+                        <div className="mt-3 flex items-end gap-3">
+                          <p className="text-[clamp(2.25rem,3vw,3rem)] font-semibold leading-none tracking-tight">
+                            {course.priceAmount}
+                          </p>
+                          <div className="pb-1 text-sm font-semibold leading-4 text-[#5d657a]">
+                            <span className="block">{course.priceCurrency}</span>
+                            <span className="block">{course.priceSuffix}</span>
+                          </div>
+                        </div>
                       </div>
                       <Link
                         href="/catalog"
@@ -556,7 +565,7 @@ export default async function Home() {
               light
             />
 
-            <div className="mt-8 grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
+            <div className="mt-8 grid gap-6 xl:grid-cols-[0.88fr_1.12fr]">
               <div className="space-y-3">
                 {creatorPoints.map((item) => (
                   <div
@@ -575,7 +584,7 @@ export default async function Home() {
                   <p className="font-semibold">Редактор программы и продаж</p>
                 </div>
 
-                <div className="grid flex-1 gap-4 2xl:grid-cols-[0.98fr_1.02fr]">
+                <div className="grid flex-1 gap-4 md:grid-cols-[minmax(0,1fr)_220px]">
                   <div className="space-y-4">
                     <div className="rounded-[24px] bg-white p-5 text-[#1c2442] shadow-lg">
                       <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#7b8296]">
@@ -590,7 +599,7 @@ export default async function Home() {
                       </p>
                     </div>
 
-                    <div className="grid gap-3 2xl:grid-cols-2">
+                    <div className="grid gap-3 sm:grid-cols-2">
                       <div className="rounded-[22px] bg-white/10 p-4 text-white">
                         <p className="text-xs uppercase tracking-[0.2em] text-white/60">
                           Продажа
@@ -610,7 +619,7 @@ export default async function Home() {
                     </div>
                   </div>
 
-                  <div className="relative min-h-[300px] overflow-hidden rounded-[28px] border border-white/10 shadow-2xl">
+                  <div className="relative min-h-[300px] overflow-hidden rounded-[28px] border border-white/10 shadow-2xl md:min-h-full">
                     <Image
                       src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1200&q=80"
                       alt="Автор курса"

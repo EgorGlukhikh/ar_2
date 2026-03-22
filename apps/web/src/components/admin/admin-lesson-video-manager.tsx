@@ -326,35 +326,16 @@ export function AdminLessonVideoManager({
       </div>
 
       {(initialAsset || hasVideo) ? (
-        <div className="rounded-[20px] border border-[var(--border)] bg-white px-4 py-3 text-sm text-[var(--muted)]">
-          <div className="flex flex-wrap gap-x-5 gap-y-2">
-            <span>
-              Источник:{" "}
-              <span className="font-medium text-[var(--foreground)]">
-                {initialAsset?.sourceType ?? fallbackVideoSourceType ?? "Не указан"}
-              </span>
+        <div className="rounded-[18px] border border-[var(--border)] bg-white px-4 py-3 text-sm text-[var(--muted)]">
+          <p>
+            Текущее видео:{" "}
+            <span className="font-medium text-[var(--foreground)]">
+              {initialAsset?.sourceType ?? fallbackVideoSourceType ?? "подключено"}
             </span>
-            {initialAsset?.provider ? (
-              <span>
-                Провайдер:{" "}
-                <span className="font-medium text-[var(--foreground)]">{initialAsset.provider}</span>
-              </span>
-            ) : null}
-            {initialAsset?.playbackId || fallbackVideoPlaybackId ? (
-              <span>
-                Playback ID:{" "}
-                <span className="font-medium text-[var(--foreground)]">
-                  {initialAsset?.playbackId ?? fallbackVideoPlaybackId}
-                </span>
-              </span>
-            ) : null}
-          </div>
+          </p>
           {initialAsset?.playerUrl || initialAsset?.sourceUrl || fallbackVideoUrl ? (
-            <p className="mt-2 break-all">
-              URL:{" "}
-              <span className="font-medium text-[var(--foreground)]">
-                {initialAsset?.playerUrl ?? initialAsset?.sourceUrl ?? fallbackVideoUrl}
-              </span>
+            <p className="mt-1 truncate">
+              {initialAsset?.playerUrl ?? initialAsset?.sourceUrl ?? fallbackVideoUrl}
             </p>
           ) : null}
           {initialAsset?.errorMessage ? (
@@ -393,7 +374,7 @@ export function AdminLessonVideoManager({
       <div className="rounded-[20px] border border-dashed border-[var(--border)] bg-white px-4 py-4">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="min-w-0">
-            <p className="text-sm font-medium text-[var(--foreground)]">Или загрузи файл с компьютера</p>
+            <p className="text-sm font-medium text-[var(--foreground)]">Или загрузи файл</p>
             <p className="mt-1 truncate text-sm text-[var(--muted)]">
               {managedFile ? `Выбран файл: ${managedFile.name}` : "Файл пока не выбран."}
             </p>
