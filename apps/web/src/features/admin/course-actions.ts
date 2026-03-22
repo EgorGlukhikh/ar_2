@@ -52,6 +52,11 @@ const updateLessonSchema = z.object({
   isPreview: z.boolean().default(false),
   accessAfterDays: z.number().int().min(0).nullable(),
   blocksJson: z.string().trim().optional(),
+  requiresCuratorReview: z.boolean().default(true),
+  unlockNextModuleOnApproval: z.boolean().default(true),
+  allowTextSubmission: z.boolean().default(true),
+  allowLinkSubmission: z.boolean().default(true),
+  allowFileUpload: z.boolean().default(true),
   videoSourceType: z.nativeEnum(MediaSourceType).nullable(),
   videoUrl: z.string().trim().optional(),
   videoPlaybackId: z.string().trim().optional(),
@@ -107,22 +112,23 @@ function parseLessonBlocksJson(value?: string): LessonBlock[] {
 }
 
 function resolveLessonTypeFromBlocks(blocks: LessonBlock[], fallback: LessonType) {
-  const priorityBlock = blocks[0];
-
-  if (!priorityBlock) {
+  if (blocks.length === 0) {
     return fallback;
   }
 
-  switch (priorityBlock.type) {
-    case "VIDEO":
-      return LessonType.VIDEO;
-    case "FILE":
-      return LessonType.FILE;
-    case "HOMEWORK":
-      return LessonType.HOMEWORK;
-    default:
-      return LessonType.TEXT;
+  if (blocks.some((block) => block.type === "HOMEWORK")) {
+    return LessonType.HOMEWORK;
   }
+
+  if (blocks.some((block) => block.type === "VIDEO")) {
+    return LessonType.VIDEO;
+  }
+
+  if (blocks.some((block) => block.type === "FILE")) {
+    return LessonType.FILE;
+  }
+
+  return LessonType.TEXT;
 }
 
 function getTrimmedValue(formData: FormData, key: string) {
@@ -416,6 +422,11 @@ export async function updateLesson(formData: FormData) {
     isPreview: formData.get("isPreview") === "on",
     accessAfterDays: getOptionalNumber(formData, "accessAfterDays"),
     blocksJson: getOptionalValue(formData, "blocksJson"),
+    requiresCuratorReview: formData.get("requiresCuratorReview") === "on",
+    unlockNextModuleOnApproval: formData.get("unlockNextModuleOnApproval") === "on",
+    allowTextSubmission: formData.get("allowTextSubmission") === "on",
+    allowLinkSubmission: formData.get("allowLinkSubmission") === "on",
+    allowFileUpload: formData.get("allowFileUpload") === "on",
     videoSourceType: getOptionalValue(formData, "videoSourceType") ?? null,
     videoUrl: getOptionalValue(formData, "videoUrl"),
     videoPlaybackId: getOptionalValue(formData, "videoPlaybackId"),
@@ -437,26 +448,60 @@ export async function updateLesson(formData: FormData) {
   const blocks = parseLessonBlocksJson(parsed.blocksJson);
   const contentPayload = buildLessonContentFromBlocks(blocks);
   const resolvedType = resolveLessonTypeFromBlocks(blocks, parsed.type);
+  const homeworkBlock = blocks.find((block) => block.type === "HOMEWORK");
 
-  await prisma.lesson.update({
-    where: {
-      id: parsed.lessonId,
-    },
-    data: {
-      title: parsed.title,
-      excerpt: parsed.excerpt,
-      type: resolvedType,
-      isPreview: parsed.isPreview,
-      accessAfterDays: parsed.accessAfterDays,
-      content: contentPayload ? contentPayload : Prisma.JsonNull,
-      ...(hasVideoFields
-        ? {
-            videoSourceType: parsed.videoSourceType,
-            videoUrl: parsed.videoUrl,
-            videoPlaybackId: parsed.videoPlaybackId,
-          }
-        : {}),
-    },
+  await prisma.$transaction(async (tx) => {
+    await tx.lesson.update({
+      where: {
+        id: parsed.lessonId,
+      },
+      data: {
+        title: parsed.title,
+        excerpt: parsed.excerpt,
+        type: resolvedType,
+        isPreview: parsed.isPreview,
+        accessAfterDays: parsed.accessAfterDays,
+        content: contentPayload ? contentPayload : Prisma.JsonNull,
+        ...(hasVideoFields
+          ? {
+              videoSourceType: parsed.videoSourceType,
+              videoUrl: parsed.videoUrl,
+              videoPlaybackId: parsed.videoPlaybackId,
+            }
+          : {}),
+      },
+    });
+
+    if (homeworkBlock) {
+      await tx.homeworkAssignment.upsert({
+        where: {
+          lessonId: parsed.lessonId,
+        },
+        create: {
+          lessonId: parsed.lessonId,
+          instructions: homeworkBlock.body || null,
+          requiresCuratorReview: parsed.requiresCuratorReview,
+          unlockNextModuleOnApproval: parsed.unlockNextModuleOnApproval,
+          allowTextSubmission: parsed.allowTextSubmission,
+          allowLinkSubmission: parsed.allowLinkSubmission,
+          allowFileUpload: parsed.allowFileUpload,
+        },
+        update: {
+          instructions: homeworkBlock.body || null,
+          requiresCuratorReview: parsed.requiresCuratorReview,
+          unlockNextModuleOnApproval: parsed.unlockNextModuleOnApproval,
+          allowTextSubmission: parsed.allowTextSubmission,
+          allowLinkSubmission: parsed.allowLinkSubmission,
+          allowFileUpload: parsed.allowFileUpload,
+        },
+      });
+    } else {
+      await tx.homeworkAssignment.deleteMany({
+        where: {
+          lessonId: parsed.lessonId,
+        },
+      });
+    }
   });
 
   refreshAdminRoutes(moduleRecord.courseId);

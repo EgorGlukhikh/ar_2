@@ -389,6 +389,40 @@ export type EnumEnrollmentStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumEnrollmentStatusFilter<$PrismaModel>
 }
 
+export type EnumHomeworkSubmissionStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.HomeworkSubmissionStatus | Prisma.EnumHomeworkSubmissionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.HomeworkSubmissionStatus[] | Prisma.ListEnumHomeworkSubmissionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HomeworkSubmissionStatus[] | Prisma.ListEnumHomeworkSubmissionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHomeworkSubmissionStatusFilter<$PrismaModel> | $Enums.HomeworkSubmissionStatus
+}
+
+export type EnumHomeworkSubmissionStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.HomeworkSubmissionStatus | Prisma.EnumHomeworkSubmissionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.HomeworkSubmissionStatus[] | Prisma.ListEnumHomeworkSubmissionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HomeworkSubmissionStatus[] | Prisma.ListEnumHomeworkSubmissionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHomeworkSubmissionStatusWithAggregatesFilter<$PrismaModel> | $Enums.HomeworkSubmissionStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumHomeworkSubmissionStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumHomeworkSubmissionStatusFilter<$PrismaModel>
+}
+
+export type BytesFilter<$PrismaModel = never> = {
+  equals?: runtime.Bytes | Prisma.BytesFieldRefInput<$PrismaModel>
+  in?: runtime.Bytes[] | Prisma.ListBytesFieldRefInput<$PrismaModel>
+  notIn?: runtime.Bytes[] | Prisma.ListBytesFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedBytesFilter<$PrismaModel> | runtime.Bytes
+}
+
+export type BytesWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: runtime.Bytes | Prisma.BytesFieldRefInput<$PrismaModel>
+  in?: runtime.Bytes[] | Prisma.ListBytesFieldRefInput<$PrismaModel>
+  notIn?: runtime.Bytes[] | Prisma.ListBytesFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedBytesWithAggregatesFilter<$PrismaModel> | runtime.Bytes
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedBytesFilter<$PrismaModel>
+  _max?: Prisma.NestedBytesFilter<$PrismaModel>
+}
+
 export type EnumOrderStatusFilter<$PrismaModel = never> = {
   equals?: $Enums.OrderStatus | Prisma.EnumOrderStatusFieldRefInput<$PrismaModel>
   in?: $Enums.OrderStatus[] | Prisma.ListEnumOrderStatusFieldRefInput<$PrismaModel>
@@ -884,6 +918,40 @@ export type NestedEnumEnrollmentStatusWithAggregatesFilter<$PrismaModel = never>
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumEnrollmentStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumEnrollmentStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumHomeworkSubmissionStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.HomeworkSubmissionStatus | Prisma.EnumHomeworkSubmissionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.HomeworkSubmissionStatus[] | Prisma.ListEnumHomeworkSubmissionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HomeworkSubmissionStatus[] | Prisma.ListEnumHomeworkSubmissionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHomeworkSubmissionStatusFilter<$PrismaModel> | $Enums.HomeworkSubmissionStatus
+}
+
+export type NestedEnumHomeworkSubmissionStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.HomeworkSubmissionStatus | Prisma.EnumHomeworkSubmissionStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.HomeworkSubmissionStatus[] | Prisma.ListEnumHomeworkSubmissionStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HomeworkSubmissionStatus[] | Prisma.ListEnumHomeworkSubmissionStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHomeworkSubmissionStatusWithAggregatesFilter<$PrismaModel> | $Enums.HomeworkSubmissionStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumHomeworkSubmissionStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumHomeworkSubmissionStatusFilter<$PrismaModel>
+}
+
+export type NestedBytesFilter<$PrismaModel = never> = {
+  equals?: runtime.Bytes | Prisma.BytesFieldRefInput<$PrismaModel>
+  in?: runtime.Bytes[] | Prisma.ListBytesFieldRefInput<$PrismaModel>
+  notIn?: runtime.Bytes[] | Prisma.ListBytesFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedBytesFilter<$PrismaModel> | runtime.Bytes
+}
+
+export type NestedBytesWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: runtime.Bytes | Prisma.BytesFieldRefInput<$PrismaModel>
+  in?: runtime.Bytes[] | Prisma.ListBytesFieldRefInput<$PrismaModel>
+  notIn?: runtime.Bytes[] | Prisma.ListBytesFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedBytesWithAggregatesFilter<$PrismaModel> | runtime.Bytes
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedBytesFilter<$PrismaModel>
+  _max?: Prisma.NestedBytesFilter<$PrismaModel>
 }
 
 export type NestedEnumOrderStatusFilter<$PrismaModel = never> = {

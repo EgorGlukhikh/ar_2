@@ -396,6 +396,8 @@ export const ModelName = {
   LessonProgress: 'LessonProgress',
   HomeworkAssignment: 'HomeworkAssignment',
   HomeworkReview: 'HomeworkReview',
+  HomeworkSubmission: 'HomeworkSubmission',
+  HomeworkSubmissionFile: 'HomeworkSubmissionFile',
   Product: 'Product',
   Price: 'Price',
   Order: 'Order',
@@ -421,7 +423,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "account" | "session" | "verificationToken" | "course" | "module" | "lesson" | "videoAsset" | "enrollment" | "lessonProgress" | "homeworkAssignment" | "homeworkReview" | "product" | "price" | "order" | "orderItem" | "payment" | "emailMessage" | "emailEvent" | "emailLinkClick" | "lessonSession" | "lessonSessionEvent"
+    modelProps: "user" | "account" | "session" | "verificationToken" | "course" | "module" | "lesson" | "videoAsset" | "enrollment" | "lessonProgress" | "homeworkAssignment" | "homeworkReview" | "homeworkSubmission" | "homeworkSubmissionFile" | "product" | "price" | "order" | "orderItem" | "payment" | "emailMessage" | "emailEvent" | "emailLinkClick" | "lessonSession" | "lessonSessionEvent"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1310,6 +1312,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.HomeworkReviewCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.HomeworkReviewCountAggregateOutputType> | number
+        }
+      }
+    }
+    HomeworkSubmission: {
+      payload: Prisma.$HomeworkSubmissionPayload<ExtArgs>
+      fields: Prisma.HomeworkSubmissionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.HomeworkSubmissionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HomeworkSubmissionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.HomeworkSubmissionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HomeworkSubmissionPayload>
+        }
+        findFirst: {
+          args: Prisma.HomeworkSubmissionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HomeworkSubmissionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.HomeworkSubmissionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HomeworkSubmissionPayload>
+        }
+        findMany: {
+          args: Prisma.HomeworkSubmissionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HomeworkSubmissionPayload>[]
+        }
+        create: {
+          args: Prisma.HomeworkSubmissionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HomeworkSubmissionPayload>
+        }
+        createMany: {
+          args: Prisma.HomeworkSubmissionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.HomeworkSubmissionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HomeworkSubmissionPayload>[]
+        }
+        delete: {
+          args: Prisma.HomeworkSubmissionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HomeworkSubmissionPayload>
+        }
+        update: {
+          args: Prisma.HomeworkSubmissionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HomeworkSubmissionPayload>
+        }
+        deleteMany: {
+          args: Prisma.HomeworkSubmissionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.HomeworkSubmissionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.HomeworkSubmissionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HomeworkSubmissionPayload>[]
+        }
+        upsert: {
+          args: Prisma.HomeworkSubmissionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HomeworkSubmissionPayload>
+        }
+        aggregate: {
+          args: Prisma.HomeworkSubmissionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateHomeworkSubmission>
+        }
+        groupBy: {
+          args: Prisma.HomeworkSubmissionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HomeworkSubmissionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.HomeworkSubmissionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HomeworkSubmissionCountAggregateOutputType> | number
+        }
+      }
+    }
+    HomeworkSubmissionFile: {
+      payload: Prisma.$HomeworkSubmissionFilePayload<ExtArgs>
+      fields: Prisma.HomeworkSubmissionFileFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.HomeworkSubmissionFileFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HomeworkSubmissionFilePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.HomeworkSubmissionFileFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HomeworkSubmissionFilePayload>
+        }
+        findFirst: {
+          args: Prisma.HomeworkSubmissionFileFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HomeworkSubmissionFilePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.HomeworkSubmissionFileFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HomeworkSubmissionFilePayload>
+        }
+        findMany: {
+          args: Prisma.HomeworkSubmissionFileFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HomeworkSubmissionFilePayload>[]
+        }
+        create: {
+          args: Prisma.HomeworkSubmissionFileCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HomeworkSubmissionFilePayload>
+        }
+        createMany: {
+          args: Prisma.HomeworkSubmissionFileCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.HomeworkSubmissionFileCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HomeworkSubmissionFilePayload>[]
+        }
+        delete: {
+          args: Prisma.HomeworkSubmissionFileDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HomeworkSubmissionFilePayload>
+        }
+        update: {
+          args: Prisma.HomeworkSubmissionFileUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HomeworkSubmissionFilePayload>
+        }
+        deleteMany: {
+          args: Prisma.HomeworkSubmissionFileDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.HomeworkSubmissionFileUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.HomeworkSubmissionFileUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HomeworkSubmissionFilePayload>[]
+        }
+        upsert: {
+          args: Prisma.HomeworkSubmissionFileUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HomeworkSubmissionFilePayload>
+        }
+        aggregate: {
+          args: Prisma.HomeworkSubmissionFileAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateHomeworkSubmissionFile>
+        }
+        groupBy: {
+          args: Prisma.HomeworkSubmissionFileGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HomeworkSubmissionFileGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.HomeworkSubmissionFileCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HomeworkSubmissionFileCountAggregateOutputType> | number
         }
       }
     }
@@ -2249,6 +2399,10 @@ export const HomeworkAssignmentScalarFieldEnum = {
   lessonId: 'lessonId',
   instructions: 'instructions',
   requiresCuratorReview: 'requiresCuratorReview',
+  unlockNextModuleOnApproval: 'unlockNextModuleOnApproval',
+  allowTextSubmission: 'allowTextSubmission',
+  allowLinkSubmission: 'allowLinkSubmission',
+  allowFileUpload: 'allowFileUpload',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -2269,6 +2423,39 @@ export const HomeworkReviewScalarFieldEnum = {
 } as const
 
 export type HomeworkReviewScalarFieldEnum = (typeof HomeworkReviewScalarFieldEnum)[keyof typeof HomeworkReviewScalarFieldEnum]
+
+
+export const HomeworkSubmissionScalarFieldEnum = {
+  id: 'id',
+  assignmentId: 'assignmentId',
+  studentId: 'studentId',
+  reviewerId: 'reviewerId',
+  status: 'status',
+  submissionText: 'submissionText',
+  submissionUrl: 'submissionUrl',
+  feedback: 'feedback',
+  submittedAt: 'submittedAt',
+  reviewedAt: 'reviewedAt',
+  approvedAt: 'approvedAt',
+  revisionRequestedAt: 'revisionRequestedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HomeworkSubmissionScalarFieldEnum = (typeof HomeworkSubmissionScalarFieldEnum)[keyof typeof HomeworkSubmissionScalarFieldEnum]
+
+
+export const HomeworkSubmissionFileScalarFieldEnum = {
+  id: 'id',
+  submissionId: 'submissionId',
+  filename: 'filename',
+  mimeType: 'mimeType',
+  sizeInBytes: 'sizeInBytes',
+  data: 'data',
+  createdAt: 'createdAt'
+} as const
+
+export type HomeworkSubmissionFileScalarFieldEnum = (typeof HomeworkSubmissionFileScalarFieldEnum)[keyof typeof HomeworkSubmissionFileScalarFieldEnum]
 
 
 export const ProductScalarFieldEnum = {
@@ -2647,6 +2834,34 @@ export type ListEnumEnrollmentStatusFieldRefInput<$PrismaModel> = FieldRefInputT
 
 
 /**
+ * Reference to a field of type 'HomeworkSubmissionStatus'
+ */
+export type EnumHomeworkSubmissionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HomeworkSubmissionStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'HomeworkSubmissionStatus[]'
+ */
+export type ListEnumHomeworkSubmissionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HomeworkSubmissionStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Bytes'
+ */
+export type BytesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Bytes'>
+    
+
+
+/**
+ * Reference to a field of type 'Bytes[]'
+ */
+export type ListBytesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Bytes[]'>
+    
+
+
+/**
  * Reference to a field of type 'OrderStatus'
  */
 export type EnumOrderStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrderStatus'>
@@ -2850,6 +3065,8 @@ export type GlobalOmitConfig = {
   lessonProgress?: Prisma.LessonProgressOmit
   homeworkAssignment?: Prisma.HomeworkAssignmentOmit
   homeworkReview?: Prisma.HomeworkReviewOmit
+  homeworkSubmission?: Prisma.HomeworkSubmissionOmit
+  homeworkSubmissionFile?: Prisma.HomeworkSubmissionFileOmit
   product?: Prisma.ProductOmit
   price?: Prisma.PriceOmit
   order?: Prisma.OrderOmit

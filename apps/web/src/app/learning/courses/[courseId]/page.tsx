@@ -1,17 +1,27 @@
-import { EnrollmentStatus, prisma } from "@academy/db";
+import {
+  EnrollmentStatus,
+  HomeworkSubmissionStatus,
+  prisma,
+} from "@academy/db";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ClipboardCheck, FileText, PlayCircle } from "lucide-react";
+import { ClipboardCheck, FileText, Link2, Paperclip, PlayCircle } from "lucide-react";
 
 import { LessonEngagementTracker } from "@/components/learning/lesson-engagement-tracker";
 import { LessonVideoPlayer } from "@/components/learning/lesson-video-player";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { toggleLessonCompletion } from "@/features/learning/actions";
+import { submitHomework } from "@/features/homework/actions";
 import { extractLessonBlocks, type LessonBlock } from "@/lib/lesson-content";
 import {
   enrollmentStatusLabelMap,
   enrollmentStatusVariantMap,
+  homeworkSubmissionStatusLabelMap,
+  homeworkSubmissionStatusVariantMap,
   lessonTypeLabelMap,
 } from "@/lib/labels";
 import { isElevatedUserRole } from "@/lib/user";
@@ -21,6 +31,18 @@ function addDays(date: Date, days: number) {
   const result = new Date(date);
   result.setDate(result.getDate() + days);
   return result;
+}
+
+function formatBytes(sizeInBytes: number) {
+  if (sizeInBytes < 1024) {
+    return `${sizeInBytes} Б`;
+  }
+
+  if (sizeInBytes < 1024 * 1024) {
+    return `${Math.round(sizeInBytes / 1024)} КБ`;
+  }
+
+  return `${(sizeInBytes / (1024 * 1024)).toFixed(1)} МБ`;
 }
 
 function getRenderableBlocks(lesson: {
@@ -48,6 +70,10 @@ function getRenderableBlocks(lesson: {
   }
 
   return [];
+}
+
+function getHomeworkGateReason(moduleTitle: string, lessonTitle: string) {
+  return `Следующий модуль откроется после принятия домашней работы «${lessonTitle}» в модуле «${moduleTitle}».`;
 }
 
 type CourseLearningPageProps = {
@@ -108,6 +134,29 @@ export default async function CourseLearningPage({
                   },
                 },
                 videoAsset: true,
+                homeworkAssignment: {
+                  include: {
+                    submissions: {
+                      where: {
+                        studentId: user.id,
+                      },
+                      include: {
+                        files: {
+                          select: {
+                            id: true,
+                            filename: true,
+                            sizeInBytes: true,
+                            mimeType: true,
+                          },
+                        },
+                      },
+                      orderBy: {
+                        updatedAt: "desc",
+                      },
+                      take: 1,
+                    },
+                  },
+                },
               },
             },
           },
@@ -146,21 +195,68 @@ export default async function CourseLearningPage({
     year: "numeric",
   });
 
-  const lessonEntries = course.modules.flatMap((module) =>
-    module.lessons.map((lesson) => {
+  const moduleGateMap = new Map<
+    string,
+    {
+      unlocked: boolean;
+      blockedByHomeworkReason: string | null;
+    }
+  >();
+  let previousModulesSatisfied = true;
+  let previousHomeworkReason: string | null = null;
+
+  for (const courseModule of course.modules) {
+    moduleGateMap.set(courseModule.id, {
+      unlocked: isElevated || previousModulesSatisfied,
+      blockedByHomeworkReason: !isElevated && !previousModulesSatisfied ? previousHomeworkReason : null,
+    });
+
+    const blockingHomeworkLesson = courseModule.lessons.find((lesson) => {
+      const assignment = lesson.homeworkAssignment;
+
+      if (!assignment || !assignment.unlockNextModuleOnApproval) {
+        return false;
+      }
+
+      const submission = assignment.submissions[0];
+
+      if (!assignment.requiresCuratorReview) {
+        return !submission;
+      }
+
+      return submission?.status !== HomeworkSubmissionStatus.APPROVED;
+    });
+
+    if (blockingHomeworkLesson) {
+      previousModulesSatisfied = false;
+      previousHomeworkReason = getHomeworkGateReason(
+        courseModule.title,
+        blockingHomeworkLesson.title,
+      );
+    }
+  }
+
+  const lessonEntries = course.modules.flatMap((courseModule) =>
+    courseModule.lessons.map((lesson) => {
       const completed = lesson.progress.some((progress) => Boolean(progress.completedAt));
       const unlockAt =
         !isElevated && lesson.accessAfterDays !== null && lesson.accessAfterDays !== undefined
           ? addDays(courseStartDate, lesson.accessAfterDays)
           : null;
-      const unlocked = isElevated || !unlockAt || unlockAt <= new Date();
+      const moduleGate = moduleGateMap.get(courseModule.id) ?? {
+        unlocked: true,
+        blockedByHomeworkReason: null,
+      };
+      const unlocked =
+        moduleGate.unlocked && (isElevated || !unlockAt || unlockAt <= new Date());
 
       return {
-        module,
+        module: courseModule,
         lesson,
         completed,
         unlockAt,
         unlocked,
+        blockedByHomeworkReason: moduleGate.blockedByHomeworkReason,
       };
     }),
   );
@@ -182,6 +278,11 @@ export default async function CourseLearningPage({
   const selectedLessonBlocks = selectedEntry
     ? getRenderableBlocks(selectedEntry.lesson)
     : [];
+  const selectedHomeworkAssignment = selectedEntry?.lesson.homeworkAssignment ?? null;
+  const selectedHomeworkSubmission = selectedHomeworkAssignment?.submissions[0] ?? null;
+  const canSubmitHomework =
+    !selectedHomeworkSubmission ||
+    selectedHomeworkSubmission.status === HomeworkSubmissionStatus.REVISION_REQUESTED;
 
   return (
     <section className="space-y-6">
@@ -528,7 +629,186 @@ export default async function CourseLearningPage({
                     </div>
                   )}
 
-                  {!isElevated ? (
+                  {selectedHomeworkAssignment ? (
+                    <section className="rounded-[24px] border border-[var(--border)] bg-[var(--surface)] p-6">
+                      <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                        <div>
+                          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
+                            Сдача домашней работы
+                          </p>
+                          <h3 className="mt-2 text-2xl font-semibold tracking-tight text-[var(--foreground)]">
+                            Отправь решение на проверку
+                          </h3>
+                          <p className="mt-3 max-w-2xl text-sm leading-7 text-[var(--muted)]">
+                            Следующий модуль откроется после принятия домашней работы, если автор
+                            включил блокировку по проверке.
+                          </p>
+                        </div>
+
+                        {selectedHomeworkSubmission ? (
+                          <Badge
+                            variant={
+                              homeworkSubmissionStatusVariantMap[selectedHomeworkSubmission.status]
+                            }
+                          >
+                            {homeworkSubmissionStatusLabelMap[selectedHomeworkSubmission.status]}
+                          </Badge>
+                        ) : (
+                          <Badge variant="neutral">Пока не сдано</Badge>
+                        )}
+                      </div>
+
+                      {selectedHomeworkSubmission ? (
+                        <div className="mt-5 rounded-[22px] border border-[var(--border)] bg-white p-5">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <Badge
+                              variant={
+                                homeworkSubmissionStatusVariantMap[selectedHomeworkSubmission.status]
+                              }
+                            >
+                              {homeworkSubmissionStatusLabelMap[selectedHomeworkSubmission.status]}
+                            </Badge>
+                            <span className="text-sm text-[var(--muted)]">
+                              Обновлено {dateFormatter.format(selectedHomeworkSubmission.updatedAt)}
+                            </span>
+                          </div>
+
+                          {selectedHomeworkSubmission.submissionText ? (
+                            <div className="mt-4">
+                              <p className="text-sm font-medium text-[var(--foreground)]">
+                                Текстовый ответ
+                              </p>
+                              <p className="mt-2 whitespace-pre-wrap text-sm leading-7 text-[var(--muted)]">
+                                {selectedHomeworkSubmission.submissionText}
+                              </p>
+                            </div>
+                          ) : null}
+
+                          {selectedHomeworkSubmission.submissionUrl ? (
+                            <div className="mt-4">
+                              <p className="text-sm font-medium text-[var(--foreground)]">Ссылка</p>
+                              <a
+                                href={selectedHomeworkSubmission.submissionUrl}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="mt-2 inline-flex items-center gap-2 text-sm text-[var(--primary)] underline-offset-4 hover:underline"
+                              >
+                                <Link2 className="h-4 w-4" />
+                                {selectedHomeworkSubmission.submissionUrl}
+                              </a>
+                            </div>
+                          ) : null}
+
+                          {selectedHomeworkSubmission.files.length > 0 ? (
+                            <div className="mt-4 space-y-2">
+                              <p className="text-sm font-medium text-[var(--foreground)]">Файлы</p>
+                              {selectedHomeworkSubmission.files.map((file) => (
+                                <a
+                                  key={file.id}
+                                  href={`/api/homework/files/${file.id}`}
+                                  className="flex items-center justify-between gap-3 rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-sm transition hover:border-[var(--primary)]"
+                                >
+                                  <span className="flex items-center gap-2 text-[var(--foreground)]">
+                                    <Paperclip className="h-4 w-4 text-[var(--primary)]" />
+                                    {file.filename}
+                                  </span>
+                                  <span className="text-[var(--muted)]">
+                                    {formatBytes(file.sizeInBytes)}
+                                  </span>
+                                </a>
+                              ))}
+                            </div>
+                          ) : null}
+
+                          {selectedHomeworkSubmission.feedback ? (
+                            <div className="mt-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-4 py-4">
+                              <p className="text-sm font-medium text-[var(--foreground)]">
+                                Комментарий проверяющего
+                              </p>
+                              <p className="mt-2 whitespace-pre-wrap text-sm leading-7 text-[var(--muted)]">
+                                {selectedHomeworkSubmission.feedback}
+                              </p>
+                            </div>
+                          ) : null}
+                        </div>
+                      ) : null}
+
+                      {isElevated ? (
+                        <div className="mt-5 rounded-2xl border border-[var(--border)] bg-white px-4 py-4 text-sm leading-7 text-[var(--muted)]">
+                          В режиме просмотра форма сдачи не активируется. Для реальной проверки
+                          сценария нужна студенческая учетная запись.
+                        </div>
+                      ) : canSubmitHomework ? (
+                        <form action={submitHomework} className="mt-5 space-y-4">
+                          <input
+                            type="hidden"
+                            name="assignmentId"
+                            value={selectedHomeworkAssignment.id}
+                          />
+                          <input type="hidden" name="courseId" value={course.id} />
+                          <input
+                            type="hidden"
+                            name="lessonId"
+                            value={selectedEntry.lesson.id}
+                          />
+
+                          {selectedHomeworkAssignment.allowTextSubmission ? (
+                            <div className="space-y-2">
+                              <Label htmlFor="submission-text">Текстовый ответ</Label>
+                              <Textarea
+                                id="submission-text"
+                                name="submissionText"
+                                defaultValue={selectedHomeworkSubmission?.submissionText ?? ""}
+                                className="min-h-[160px]"
+                                placeholder="Опиши решение, шаги выполнения или комментарий к домашней работе."
+                              />
+                            </div>
+                          ) : null}
+
+                          {selectedHomeworkAssignment.allowLinkSubmission ? (
+                            <div className="space-y-2">
+                              <Label htmlFor="submission-url">Ссылка на выполненную работу</Label>
+                              <Input
+                                id="submission-url"
+                                name="submissionUrl"
+                                type="url"
+                                defaultValue={selectedHomeworkSubmission?.submissionUrl ?? ""}
+                                placeholder="https://disk.yandex.ru/... или https://docs.google.com/..."
+                              />
+                            </div>
+                          ) : null}
+
+                          {selectedHomeworkAssignment.allowFileUpload ? (
+                            <div className="space-y-2">
+                              <Label htmlFor="submission-file">Файл</Label>
+                              <Input
+                                id="submission-file"
+                                name="submissionFile"
+                                type="file"
+                              />
+                              <p className="text-sm leading-6 text-[var(--muted)]">
+                                Для первого этапа ограничиваем размер файла 10 МБ.
+                              </p>
+                            </div>
+                          ) : null}
+
+                          <Button type="submit">
+                            {selectedHomeworkSubmission?.status ===
+                            HomeworkSubmissionStatus.REVISION_REQUESTED
+                              ? "Отправить доработанную версию"
+                              : "Сдать домашнюю работу"}
+                          </Button>
+                        </form>
+                      ) : (
+                        <div className="mt-5 rounded-2xl border border-[var(--border)] bg-white px-4 py-4 text-sm leading-7 text-[var(--muted)]">
+                          Работа уже отправлена. Новая отправка откроется, если проверяющий вернет
+                          ее на доработку.
+                        </div>
+                      )}
+                    </section>
+                  ) : null}
+
+                  {!isElevated && !selectedHomeworkAssignment ? (
                     <form action={toggleLessonCompletion}>
                       <input
                         type="hidden"

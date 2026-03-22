@@ -1,27 +1,26 @@
 "use client";
 
 import {
+  ChevronDown,
+  ChevronUp,
   ClipboardCheck,
   GripVertical,
+  Paperclip,
   Plus,
   Trash2,
   Type,
   Video,
-  Paperclip,
-  ChevronDown,
-  ChevronUp,
-  Sparkles,
   X,
 } from "lucide-react";
 import { useMemo, useState } from "react";
 
-import type { LessonBlock } from "@/lib/lesson-content";
 import { AdminLessonVideoManager } from "@/components/admin/admin-lesson-video-manager";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import type { LessonBlock } from "@/lib/lesson-content";
 
 type VideoAssetState = {
   id: string;
@@ -49,7 +48,6 @@ type BlockTypeOption = {
   label: string;
   icon: typeof Type;
   description: string;
-  tone: string;
 };
 
 const blockTypeOptions: BlockTypeOption[] = [
@@ -57,29 +55,25 @@ const blockTypeOptions: BlockTypeOption[] = [
     type: "TEXT",
     label: "Текст",
     icon: Type,
-    description: "Конспект, инструкция, пояснение или сценарий урока.",
-    tone: "from-[#edf1ff] via-white to-[#f8faff]",
+    description: "Конспект, инструкция или пояснение.",
   },
   {
     type: "VIDEO",
     label: "Видео",
     icon: Video,
-    description: "Private RUTUBE, embed или загрузка видеофайла.",
-    tone: "from-[#eef8ff] via-white to-[#f4fbff]",
+    description: "Ссылка на видео или загрузка файла.",
   },
   {
     type: "FILE",
     label: "Файл",
     icon: Paperclip,
-    description: "PDF, чек-лист, шаблон договора или ссылка на материал.",
-    tone: "from-[#fff5e9] via-white to-[#fffaf4]",
+    description: "PDF, шаблон или внешний материал.",
   },
   {
     type: "HOMEWORK",
     label: "Задание",
     icon: ClipboardCheck,
-    description: "Описание домашки, формат сдачи и критерии проверки.",
-    tone: "from-[#f2eefc] via-white to-[#fbf8ff]",
+    description: "Домашняя работа с правилами сдачи.",
   },
 ];
 
@@ -102,7 +96,7 @@ function createBlock(type: LessonBlock["type"], order: number): LessonBlock {
     return {
       id,
       type,
-      title: "Видео-блок",
+      title: "Видео",
       body: "",
     };
   }
@@ -152,8 +146,9 @@ export function LessonBlockStudio({
   );
   const [isPickerOpen, setIsPickerOpen] = useState(false);
 
-  const hasVideoBlock = useMemo(
-    () => blocks.some((block) => block.type === "VIDEO"),
+  const hasVideoBlock = useMemo(() => blocks.some((block) => block.type === "VIDEO"), [blocks]);
+  const hasHomeworkBlock = useMemo(
+    () => blocks.some((block) => block.type === "HOMEWORK"),
     [blocks],
   );
 
@@ -163,14 +158,16 @@ export function LessonBlockStudio({
 
   function toggleExpanded(id: string) {
     setExpandedIds((current) =>
-      current.includes(id)
-        ? current.filter((item) => item !== id)
-        : [...current, id],
+      current.includes(id) ? current.filter((item) => item !== id) : [...current, id],
     );
   }
 
   function addBlock(type: LessonBlock["type"]) {
     if (type === "VIDEO" && hasVideoBlock) {
+      return;
+    }
+
+    if (type === "HOMEWORK" && hasHomeworkBlock) {
       return;
     }
 
@@ -182,7 +179,7 @@ export function LessonBlockStudio({
 
   function updateBlock(id: string, patch: Partial<LessonBlock>) {
     setBlocks((current) =>
-      current.map((block) => (block.id === id ? { ...block, ...patch } as LessonBlock : block)),
+      current.map((block) => (block.id === id ? ({ ...block, ...patch } as LessonBlock) : block)),
     );
   }
 
@@ -215,15 +212,15 @@ export function LessonBlockStudio({
       <input type="hidden" name="blocksJson" value={JSON.stringify(blocks)} />
 
       {blocks.length === 0 ? (
-        <div className="rounded-[28px] border border-dashed border-[var(--border)] bg-[var(--surface)] p-8 text-center">
+        <div className="rounded-[24px] border border-dashed border-[var(--border)] bg-[var(--surface)] p-6">
           <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
             Пустой урок
           </p>
-          <h3 className="mt-3 text-2xl font-semibold tracking-tight text-[var(--foreground)]">
+          <h3 className="mt-2 text-2xl font-semibold tracking-tight text-[var(--foreground)]">
             Добавь первый блок
           </h3>
-          <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-[var(--muted)]">
-            Урок собирается как конструктор. Сначала добавь блок 1, выбери тип и заполни содержимое.
+          <p className="mt-2 text-sm leading-7 text-[var(--muted)]">
+            Начни с текста, видео, файла или задания.
           </p>
         </div>
       ) : null}
@@ -239,7 +236,7 @@ export function LessonBlockStudio({
             onDragStart={() => setDraggedId(block.id)}
             onDragOver={(event) => event.preventDefault()}
             onDrop={() => handleDrop(block.id)}
-            className="overflow-hidden rounded-[28px] border border-[var(--border)] bg-white shadow-sm"
+            className="overflow-hidden rounded-[24px] border border-[var(--border)] bg-white shadow-sm"
           >
             <header className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--border)] px-5 py-4">
               <button
@@ -283,11 +280,7 @@ export function LessonBlockStudio({
                   className="rounded-2xl border border-[var(--border)] bg-white p-2 text-[var(--muted)] transition hover:border-[var(--primary)] hover:text-[var(--foreground)]"
                   aria-label={isExpanded ? "Свернуть блок" : "Развернуть блок"}
                 >
-                  {isExpanded ? (
-                    <ChevronUp className="h-4 w-4" />
-                  ) : (
-                    <ChevronDown className="h-4 w-4" />
-                  )}
+                  {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
                 </button>
               </div>
             </header>
@@ -302,7 +295,7 @@ export function LessonBlockStudio({
                     onChange={(event) =>
                       updateBlock(block.id, { title: event.target.value } as Partial<LessonBlock>)
                     }
-                    placeholder="Например, разбор, видео или полезный файл"
+                    placeholder="Название блока"
                   />
                 </div>
 
@@ -315,24 +308,24 @@ export function LessonBlockStudio({
                       onChange={(event) =>
                         updateBlock(block.id, { body: event.target.value } as Partial<LessonBlock>)
                       }
-                      placeholder="Напиши основной текст, пояснение, задание или инструкцию."
+                      placeholder="Основной текст блока"
                       className="min-h-[220px]"
                     />
                   </div>
                 ) : null}
 
                 {block.type === "VIDEO" ? (
-                  <div className="space-y-5">
+                  <div className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor={`block-video-note-${block.id}`}>Подводка к видео</Label>
+                      <Label htmlFor={`block-video-note-${block.id}`}>Короткая подводка</Label>
                       <Textarea
                         id={`block-video-note-${block.id}`}
                         value={block.body ?? ""}
                         onChange={(event) =>
                           updateBlock(block.id, { body: event.target.value } as Partial<LessonBlock>)
                         }
-                        placeholder="Опиши, что студент должен вынести из этого видео."
-                        className="min-h-[120px]"
+                        placeholder="Что студенту важно вынести из этого видео"
+                        className="min-h-[100px]"
                       />
                     </div>
 
@@ -347,30 +340,28 @@ export function LessonBlockStudio({
                 ) : null}
 
                 {block.type === "FILE" ? (
-                  <div className="grid gap-4">
-                    <div className="grid gap-4 md:grid-cols-2">
-                      <div className="space-y-2">
-                        <Label htmlFor={`block-file-url-${block.id}`}>Ссылка на файл</Label>
-                        <Input
-                          id={`block-file-url-${block.id}`}
-                          value={block.url}
-                          onChange={(event) =>
-                            updateBlock(block.id, { url: event.target.value } as Partial<LessonBlock>)
-                          }
-                          placeholder="https://disk.yandex.ru/... или https://example.com/file.pdf"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor={`block-file-note-${block.id}`}>Комментарий к файлу</Label>
-                        <Input
-                          id={`block-file-note-${block.id}`}
-                          value={block.note ?? ""}
-                          onChange={(event) =>
-                            updateBlock(block.id, { note: event.target.value } as Partial<LessonBlock>)
-                          }
-                          placeholder="Что студенту сделать с этим материалом"
-                        />
-                      </div>
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label htmlFor={`block-file-url-${block.id}`}>Ссылка на файл</Label>
+                      <Input
+                        id={`block-file-url-${block.id}`}
+                        value={block.url}
+                        onChange={(event) =>
+                          updateBlock(block.id, { url: event.target.value } as Partial<LessonBlock>)
+                        }
+                        placeholder="https://disk.yandex.ru/... или https://example.com/file.pdf"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor={`block-file-note-${block.id}`}>Комментарий</Label>
+                      <Input
+                        id={`block-file-note-${block.id}`}
+                        value={block.note ?? ""}
+                        onChange={(event) =>
+                          updateBlock(block.id, { note: event.target.value } as Partial<LessonBlock>)
+                        }
+                        placeholder="Короткий комментарий к файлу"
+                      />
                     </div>
                   </div>
                 ) : null}
@@ -378,23 +369,19 @@ export function LessonBlockStudio({
                 {block.type === "HOMEWORK" ? (
                   <div className="grid gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor={`block-homework-body-${block.id}`}>
-                        Описание задания
-                      </Label>
+                      <Label htmlFor={`block-homework-body-${block.id}`}>Описание задания</Label>
                       <Textarea
                         id={`block-homework-body-${block.id}`}
                         value={block.body}
                         onChange={(event) =>
                           updateBlock(block.id, { body: event.target.value } as Partial<LessonBlock>)
                         }
-                        placeholder="Что нужно сделать, в каком объеме и какой результат нужен."
-                        className="min-h-[180px]"
+                        placeholder="Что нужно сделать"
+                        className="min-h-[160px]"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor={`block-homework-hint-${block.id}`}>
-                        Как сдавать работу
-                      </Label>
+                      <Label htmlFor={`block-homework-hint-${block.id}`}>Как сдавать работу</Label>
                       <Textarea
                         id={`block-homework-hint-${block.id}`}
                         value={block.submissionHint ?? ""}
@@ -404,8 +391,8 @@ export function LessonBlockStudio({
                             { submissionHint: event.target.value } as Partial<LessonBlock>,
                           )
                         }
-                        placeholder="Например: загрузить файл, вставить ссылку на выполненную работу и дождаться проверки куратора."
-                        className="min-h-[120px]"
+                        placeholder="Например: прикрепить файл или вставить ссылку"
+                        className="min-h-[100px]"
                       />
                     </div>
                   </div>
@@ -416,37 +403,24 @@ export function LessonBlockStudio({
         );
       })}
 
-      <div className="rounded-[28px] border border-dashed border-[var(--border)] bg-[var(--surface)] p-5">
-        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
+      <div className="rounded-[24px] border border-dashed border-[var(--border)] bg-[var(--surface)] p-4">
+        <Button type="button" onClick={() => setIsPickerOpen(true)}>
+          <Plus className="mr-2 h-4 w-4" />
           Добавить блок {blocks.length + 1}
-        </p>
-        <div className="mt-4 flex flex-wrap gap-3">
-          <Button type="button" onClick={() => setIsPickerOpen(true)}>
-            <Plus className="mr-2 h-4 w-4" />
-            Добавить блок {blocks.length + 1}
-          </Button>
-        </div>
-        {hasVideoBlock ? (
-          <p className="mt-3 text-sm leading-6 text-[var(--muted)]">
-            Видео-блок в уроке сейчас один. Его можно переставлять внутри урока, но не дублировать.
-          </p>
-        ) : null}
+        </Button>
       </div>
 
       {isPickerOpen ? (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#18203b]/35 p-4 backdrop-blur-sm">
-          <div className="w-full max-w-4xl rounded-[32px] border border-[var(--border)] bg-white p-6 shadow-[0_32px_100px_rgba(28,36,66,0.18)]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#18203b]/30 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-3xl rounded-[28px] border border-[var(--border)] bg-white p-5 shadow-[0_32px_100px_rgba(28,36,66,0.18)]">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--muted)]">
                   Добавить блок {blocks.length + 1}
                 </p>
-                <h3 className="mt-2 text-3xl font-semibold tracking-tight text-[var(--foreground)]">
-                  Выберите блок
+                <h3 className="mt-2 text-2xl font-semibold tracking-tight text-[var(--foreground)]">
+                  Выбери тип блока
                 </h3>
-                <p className="mt-3 max-w-2xl text-sm leading-7 text-[var(--muted)]">
-                  Каждый блок живет как отдельная часть урока. Их можно сворачивать, редактировать и перетаскивать между собой.
-                </p>
               </div>
               <button
                 type="button"
@@ -458,10 +432,12 @@ export function LessonBlockStudio({
               </button>
             </div>
 
-            <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <div className="mt-5 grid gap-3 sm:grid-cols-2">
               {blockTypeOptions.map((option) => {
                 const Icon = option.icon;
-                const disabled = option.type === "VIDEO" && hasVideoBlock;
+                const disabled =
+                  (option.type === "VIDEO" && hasVideoBlock) ||
+                  (option.type === "HOMEWORK" && hasHomeworkBlock);
 
                 return (
                   <button
@@ -469,21 +445,17 @@ export function LessonBlockStudio({
                     type="button"
                     disabled={disabled}
                     onClick={() => addBlock(option.type)}
-                    className={`group rounded-[28px] border border-[var(--border)] bg-gradient-to-br ${option.tone} p-5 text-left transition hover:-translate-y-[1px] hover:border-[var(--primary)] hover:shadow-[0_20px_40px_rgba(40,64,219,0.08)] disabled:cursor-not-allowed disabled:opacity-50`}
+                    className="rounded-[24px] border border-[var(--border)] bg-[var(--surface)] p-4 text-left transition hover:border-[var(--primary)] hover:bg-white disabled:cursor-not-allowed disabled:opacity-50"
                   >
-                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-[var(--primary)] shadow-sm">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white text-[var(--primary)] shadow-sm">
                       <Icon className="h-5 w-5" />
                     </div>
-                    <h4 className="mt-5 text-xl font-semibold tracking-tight text-[var(--foreground)]">
+                    <h4 className="mt-4 text-lg font-semibold text-[var(--foreground)]">
                       {option.label}
                     </h4>
-                    <p className="mt-2 text-sm leading-7 text-[var(--muted)]">
-                      {option.description}
+                    <p className="mt-1 text-sm leading-6 text-[var(--muted)]">
+                      {disabled ? "Этот блок уже добавлен в урок." : option.description}
                     </p>
-                    <div className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-[var(--foreground)]">
-                      <Sparkles className="h-4 w-4 text-[var(--primary)]" />
-                      {disabled ? "Уже добавлен" : "Добавить в урок"}
-                    </div>
                   </button>
                 );
               })}

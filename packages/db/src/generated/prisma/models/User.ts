@@ -220,6 +220,8 @@ export type UserWhereInput = {
   enrollments?: Prisma.EnrollmentListRelationFilter
   progress?: Prisma.LessonProgressListRelationFilter
   homework?: Prisma.HomeworkReviewListRelationFilter
+  homeworkSubmissions?: Prisma.HomeworkSubmissionListRelationFilter
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionListRelationFilter
   orders?: Prisma.OrderListRelationFilter
   emails?: Prisma.EmailMessageListRelationFilter
   lessonSessions?: Prisma.LessonSessionListRelationFilter
@@ -241,6 +243,8 @@ export type UserOrderByWithRelationInput = {
   enrollments?: Prisma.EnrollmentOrderByRelationAggregateInput
   progress?: Prisma.LessonProgressOrderByRelationAggregateInput
   homework?: Prisma.HomeworkReviewOrderByRelationAggregateInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionOrderByRelationAggregateInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionOrderByRelationAggregateInput
   orders?: Prisma.OrderOrderByRelationAggregateInput
   emails?: Prisma.EmailMessageOrderByRelationAggregateInput
   lessonSessions?: Prisma.LessonSessionOrderByRelationAggregateInput
@@ -265,6 +269,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   enrollments?: Prisma.EnrollmentListRelationFilter
   progress?: Prisma.LessonProgressListRelationFilter
   homework?: Prisma.HomeworkReviewListRelationFilter
+  homeworkSubmissions?: Prisma.HomeworkSubmissionListRelationFilter
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionListRelationFilter
   orders?: Prisma.OrderListRelationFilter
   emails?: Prisma.EmailMessageListRelationFilter
   lessonSessions?: Prisma.LessonSessionListRelationFilter
@@ -316,6 +322,8 @@ export type UserCreateInput = {
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
   progress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
   homework?: Prisma.HomeworkReviewCreateNestedManyWithoutReviewerInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionCreateNestedManyWithoutStudentInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionCreateNestedManyWithoutReviewerInput
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
   emails?: Prisma.EmailMessageCreateNestedManyWithoutUserInput
   lessonSessions?: Prisma.LessonSessionCreateNestedManyWithoutUserInput
@@ -337,6 +345,8 @@ export type UserUncheckedCreateInput = {
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
   progress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
   homework?: Prisma.HomeworkReviewUncheckedCreateNestedManyWithoutReviewerInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedCreateNestedManyWithoutReviewerInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
   emails?: Prisma.EmailMessageUncheckedCreateNestedManyWithoutUserInput
   lessonSessions?: Prisma.LessonSessionUncheckedCreateNestedManyWithoutUserInput
@@ -358,6 +368,8 @@ export type UserUpdateInput = {
   enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
   progress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
   homework?: Prisma.HomeworkReviewUpdateManyWithoutReviewerNestedInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionUpdateManyWithoutStudentNestedInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUpdateManyWithoutReviewerNestedInput
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
   emails?: Prisma.EmailMessageUpdateManyWithoutUserNestedInput
   lessonSessions?: Prisma.LessonSessionUpdateManyWithoutUserNestedInput
@@ -379,6 +391,8 @@ export type UserUncheckedUpdateInput = {
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
   progress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
   homework?: Prisma.HomeworkReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedUpdateManyWithoutReviewerNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
   emails?: Prisma.EmailMessageUncheckedUpdateManyWithoutUserNestedInput
   lessonSessions?: Prisma.LessonSessionUncheckedUpdateManyWithoutUserNestedInput
@@ -574,6 +588,36 @@ export type UserUpdateOneWithoutHomeworkNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutHomeworkInput, Prisma.UserUpdateWithoutHomeworkInput>, Prisma.UserUncheckedUpdateWithoutHomeworkInput>
 }
 
+export type UserCreateNestedOneWithoutHomeworkSubmissionsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutHomeworkSubmissionsInput, Prisma.UserUncheckedCreateWithoutHomeworkSubmissionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutHomeworkSubmissionsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutReviewedHomeworkSubmissionsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReviewedHomeworkSubmissionsInput, Prisma.UserUncheckedCreateWithoutReviewedHomeworkSubmissionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReviewedHomeworkSubmissionsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutHomeworkSubmissionsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutHomeworkSubmissionsInput, Prisma.UserUncheckedCreateWithoutHomeworkSubmissionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutHomeworkSubmissionsInput
+  upsert?: Prisma.UserUpsertWithoutHomeworkSubmissionsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutHomeworkSubmissionsInput, Prisma.UserUpdateWithoutHomeworkSubmissionsInput>, Prisma.UserUncheckedUpdateWithoutHomeworkSubmissionsInput>
+}
+
+export type UserUpdateOneWithoutReviewedHomeworkSubmissionsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReviewedHomeworkSubmissionsInput, Prisma.UserUncheckedCreateWithoutReviewedHomeworkSubmissionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReviewedHomeworkSubmissionsInput
+  upsert?: Prisma.UserUpsertWithoutReviewedHomeworkSubmissionsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutReviewedHomeworkSubmissionsInput, Prisma.UserUpdateWithoutReviewedHomeworkSubmissionsInput>, Prisma.UserUncheckedUpdateWithoutReviewedHomeworkSubmissionsInput>
+}
+
 export type UserCreateNestedOneWithoutOrdersInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutOrdersInput, Prisma.UserUncheckedCreateWithoutOrdersInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutOrdersInput
@@ -635,6 +679,8 @@ export type UserCreateWithoutAccountsInput = {
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
   progress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
   homework?: Prisma.HomeworkReviewCreateNestedManyWithoutReviewerInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionCreateNestedManyWithoutStudentInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionCreateNestedManyWithoutReviewerInput
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
   emails?: Prisma.EmailMessageCreateNestedManyWithoutUserInput
   lessonSessions?: Prisma.LessonSessionCreateNestedManyWithoutUserInput
@@ -655,6 +701,8 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
   progress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
   homework?: Prisma.HomeworkReviewUncheckedCreateNestedManyWithoutReviewerInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedCreateNestedManyWithoutReviewerInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
   emails?: Prisma.EmailMessageUncheckedCreateNestedManyWithoutUserInput
   lessonSessions?: Prisma.LessonSessionUncheckedCreateNestedManyWithoutUserInput
@@ -691,6 +739,8 @@ export type UserUpdateWithoutAccountsInput = {
   enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
   progress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
   homework?: Prisma.HomeworkReviewUpdateManyWithoutReviewerNestedInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionUpdateManyWithoutStudentNestedInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUpdateManyWithoutReviewerNestedInput
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
   emails?: Prisma.EmailMessageUpdateManyWithoutUserNestedInput
   lessonSessions?: Prisma.LessonSessionUpdateManyWithoutUserNestedInput
@@ -711,6 +761,8 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
   progress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
   homework?: Prisma.HomeworkReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedUpdateManyWithoutReviewerNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
   emails?: Prisma.EmailMessageUncheckedUpdateManyWithoutUserNestedInput
   lessonSessions?: Prisma.LessonSessionUncheckedUpdateManyWithoutUserNestedInput
@@ -731,6 +783,8 @@ export type UserCreateWithoutSessionsInput = {
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
   progress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
   homework?: Prisma.HomeworkReviewCreateNestedManyWithoutReviewerInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionCreateNestedManyWithoutStudentInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionCreateNestedManyWithoutReviewerInput
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
   emails?: Prisma.EmailMessageCreateNestedManyWithoutUserInput
   lessonSessions?: Prisma.LessonSessionCreateNestedManyWithoutUserInput
@@ -751,6 +805,8 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
   progress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
   homework?: Prisma.HomeworkReviewUncheckedCreateNestedManyWithoutReviewerInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedCreateNestedManyWithoutReviewerInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
   emails?: Prisma.EmailMessageUncheckedCreateNestedManyWithoutUserInput
   lessonSessions?: Prisma.LessonSessionUncheckedCreateNestedManyWithoutUserInput
@@ -787,6 +843,8 @@ export type UserUpdateWithoutSessionsInput = {
   enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
   progress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
   homework?: Prisma.HomeworkReviewUpdateManyWithoutReviewerNestedInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionUpdateManyWithoutStudentNestedInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUpdateManyWithoutReviewerNestedInput
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
   emails?: Prisma.EmailMessageUpdateManyWithoutUserNestedInput
   lessonSessions?: Prisma.LessonSessionUpdateManyWithoutUserNestedInput
@@ -807,6 +865,8 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
   progress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
   homework?: Prisma.HomeworkReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedUpdateManyWithoutReviewerNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
   emails?: Prisma.EmailMessageUncheckedUpdateManyWithoutUserNestedInput
   lessonSessions?: Prisma.LessonSessionUncheckedUpdateManyWithoutUserNestedInput
@@ -827,6 +887,8 @@ export type UserCreateWithoutAuthoredInput = {
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
   progress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
   homework?: Prisma.HomeworkReviewCreateNestedManyWithoutReviewerInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionCreateNestedManyWithoutStudentInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionCreateNestedManyWithoutReviewerInput
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
   emails?: Prisma.EmailMessageCreateNestedManyWithoutUserInput
   lessonSessions?: Prisma.LessonSessionCreateNestedManyWithoutUserInput
@@ -847,6 +909,8 @@ export type UserUncheckedCreateWithoutAuthoredInput = {
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
   progress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
   homework?: Prisma.HomeworkReviewUncheckedCreateNestedManyWithoutReviewerInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedCreateNestedManyWithoutReviewerInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
   emails?: Prisma.EmailMessageUncheckedCreateNestedManyWithoutUserInput
   lessonSessions?: Prisma.LessonSessionUncheckedCreateNestedManyWithoutUserInput
@@ -883,6 +947,8 @@ export type UserUpdateWithoutAuthoredInput = {
   enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
   progress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
   homework?: Prisma.HomeworkReviewUpdateManyWithoutReviewerNestedInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionUpdateManyWithoutStudentNestedInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUpdateManyWithoutReviewerNestedInput
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
   emails?: Prisma.EmailMessageUpdateManyWithoutUserNestedInput
   lessonSessions?: Prisma.LessonSessionUpdateManyWithoutUserNestedInput
@@ -903,6 +969,8 @@ export type UserUncheckedUpdateWithoutAuthoredInput = {
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
   progress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
   homework?: Prisma.HomeworkReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedUpdateManyWithoutReviewerNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
   emails?: Prisma.EmailMessageUncheckedUpdateManyWithoutUserNestedInput
   lessonSessions?: Prisma.LessonSessionUncheckedUpdateManyWithoutUserNestedInput
@@ -923,6 +991,8 @@ export type UserCreateWithoutEnrollmentsInput = {
   authored?: Prisma.CourseCreateNestedManyWithoutAuthorInput
   progress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
   homework?: Prisma.HomeworkReviewCreateNestedManyWithoutReviewerInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionCreateNestedManyWithoutStudentInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionCreateNestedManyWithoutReviewerInput
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
   emails?: Prisma.EmailMessageCreateNestedManyWithoutUserInput
   lessonSessions?: Prisma.LessonSessionCreateNestedManyWithoutUserInput
@@ -943,6 +1013,8 @@ export type UserUncheckedCreateWithoutEnrollmentsInput = {
   authored?: Prisma.CourseUncheckedCreateNestedManyWithoutAuthorInput
   progress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
   homework?: Prisma.HomeworkReviewUncheckedCreateNestedManyWithoutReviewerInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedCreateNestedManyWithoutReviewerInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
   emails?: Prisma.EmailMessageUncheckedCreateNestedManyWithoutUserInput
   lessonSessions?: Prisma.LessonSessionUncheckedCreateNestedManyWithoutUserInput
@@ -979,6 +1051,8 @@ export type UserUpdateWithoutEnrollmentsInput = {
   authored?: Prisma.CourseUpdateManyWithoutAuthorNestedInput
   progress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
   homework?: Prisma.HomeworkReviewUpdateManyWithoutReviewerNestedInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionUpdateManyWithoutStudentNestedInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUpdateManyWithoutReviewerNestedInput
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
   emails?: Prisma.EmailMessageUpdateManyWithoutUserNestedInput
   lessonSessions?: Prisma.LessonSessionUpdateManyWithoutUserNestedInput
@@ -999,6 +1073,8 @@ export type UserUncheckedUpdateWithoutEnrollmentsInput = {
   authored?: Prisma.CourseUncheckedUpdateManyWithoutAuthorNestedInput
   progress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
   homework?: Prisma.HomeworkReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedUpdateManyWithoutReviewerNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
   emails?: Prisma.EmailMessageUncheckedUpdateManyWithoutUserNestedInput
   lessonSessions?: Prisma.LessonSessionUncheckedUpdateManyWithoutUserNestedInput
@@ -1019,6 +1095,8 @@ export type UserCreateWithoutProgressInput = {
   authored?: Prisma.CourseCreateNestedManyWithoutAuthorInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
   homework?: Prisma.HomeworkReviewCreateNestedManyWithoutReviewerInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionCreateNestedManyWithoutStudentInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionCreateNestedManyWithoutReviewerInput
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
   emails?: Prisma.EmailMessageCreateNestedManyWithoutUserInput
   lessonSessions?: Prisma.LessonSessionCreateNestedManyWithoutUserInput
@@ -1039,6 +1117,8 @@ export type UserUncheckedCreateWithoutProgressInput = {
   authored?: Prisma.CourseUncheckedCreateNestedManyWithoutAuthorInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
   homework?: Prisma.HomeworkReviewUncheckedCreateNestedManyWithoutReviewerInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedCreateNestedManyWithoutReviewerInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
   emails?: Prisma.EmailMessageUncheckedCreateNestedManyWithoutUserInput
   lessonSessions?: Prisma.LessonSessionUncheckedCreateNestedManyWithoutUserInput
@@ -1075,6 +1155,8 @@ export type UserUpdateWithoutProgressInput = {
   authored?: Prisma.CourseUpdateManyWithoutAuthorNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
   homework?: Prisma.HomeworkReviewUpdateManyWithoutReviewerNestedInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionUpdateManyWithoutStudentNestedInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUpdateManyWithoutReviewerNestedInput
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
   emails?: Prisma.EmailMessageUpdateManyWithoutUserNestedInput
   lessonSessions?: Prisma.LessonSessionUpdateManyWithoutUserNestedInput
@@ -1095,6 +1177,8 @@ export type UserUncheckedUpdateWithoutProgressInput = {
   authored?: Prisma.CourseUncheckedUpdateManyWithoutAuthorNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
   homework?: Prisma.HomeworkReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedUpdateManyWithoutReviewerNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
   emails?: Prisma.EmailMessageUncheckedUpdateManyWithoutUserNestedInput
   lessonSessions?: Prisma.LessonSessionUncheckedUpdateManyWithoutUserNestedInput
@@ -1115,6 +1199,8 @@ export type UserCreateWithoutHomeworkInput = {
   authored?: Prisma.CourseCreateNestedManyWithoutAuthorInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
   progress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionCreateNestedManyWithoutStudentInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionCreateNestedManyWithoutReviewerInput
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
   emails?: Prisma.EmailMessageCreateNestedManyWithoutUserInput
   lessonSessions?: Prisma.LessonSessionCreateNestedManyWithoutUserInput
@@ -1135,6 +1221,8 @@ export type UserUncheckedCreateWithoutHomeworkInput = {
   authored?: Prisma.CourseUncheckedCreateNestedManyWithoutAuthorInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
   progress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedCreateNestedManyWithoutReviewerInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
   emails?: Prisma.EmailMessageUncheckedCreateNestedManyWithoutUserInput
   lessonSessions?: Prisma.LessonSessionUncheckedCreateNestedManyWithoutUserInput
@@ -1171,6 +1259,8 @@ export type UserUpdateWithoutHomeworkInput = {
   authored?: Prisma.CourseUpdateManyWithoutAuthorNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
   progress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionUpdateManyWithoutStudentNestedInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUpdateManyWithoutReviewerNestedInput
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
   emails?: Prisma.EmailMessageUpdateManyWithoutUserNestedInput
   lessonSessions?: Prisma.LessonSessionUpdateManyWithoutUserNestedInput
@@ -1191,6 +1281,216 @@ export type UserUncheckedUpdateWithoutHomeworkInput = {
   authored?: Prisma.CourseUncheckedUpdateManyWithoutAuthorNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
   progress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedUpdateManyWithoutReviewerNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
+  emails?: Prisma.EmailMessageUncheckedUpdateManyWithoutUserNestedInput
+  lessonSessions?: Prisma.LessonSessionUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutHomeworkSubmissionsInput = {
+  id?: string
+  email: string
+  name?: string | null
+  image?: string | null
+  emailVerified?: Date | string | null
+  passwordHash?: string | null
+  role?: $Enums.UserRole
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  authored?: Prisma.CourseCreateNestedManyWithoutAuthorInput
+  enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
+  progress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
+  homework?: Prisma.HomeworkReviewCreateNestedManyWithoutReviewerInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionCreateNestedManyWithoutReviewerInput
+  orders?: Prisma.OrderCreateNestedManyWithoutUserInput
+  emails?: Prisma.EmailMessageCreateNestedManyWithoutUserInput
+  lessonSessions?: Prisma.LessonSessionCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutHomeworkSubmissionsInput = {
+  id?: string
+  email: string
+  name?: string | null
+  image?: string | null
+  emailVerified?: Date | string | null
+  passwordHash?: string | null
+  role?: $Enums.UserRole
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  authored?: Prisma.CourseUncheckedCreateNestedManyWithoutAuthorInput
+  enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
+  progress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
+  homework?: Prisma.HomeworkReviewUncheckedCreateNestedManyWithoutReviewerInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedCreateNestedManyWithoutReviewerInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
+  emails?: Prisma.EmailMessageUncheckedCreateNestedManyWithoutUserInput
+  lessonSessions?: Prisma.LessonSessionUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutHomeworkSubmissionsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutHomeworkSubmissionsInput, Prisma.UserUncheckedCreateWithoutHomeworkSubmissionsInput>
+}
+
+export type UserCreateWithoutReviewedHomeworkSubmissionsInput = {
+  id?: string
+  email: string
+  name?: string | null
+  image?: string | null
+  emailVerified?: Date | string | null
+  passwordHash?: string | null
+  role?: $Enums.UserRole
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  authored?: Prisma.CourseCreateNestedManyWithoutAuthorInput
+  enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
+  progress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
+  homework?: Prisma.HomeworkReviewCreateNestedManyWithoutReviewerInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionCreateNestedManyWithoutStudentInput
+  orders?: Prisma.OrderCreateNestedManyWithoutUserInput
+  emails?: Prisma.EmailMessageCreateNestedManyWithoutUserInput
+  lessonSessions?: Prisma.LessonSessionCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutReviewedHomeworkSubmissionsInput = {
+  id?: string
+  email: string
+  name?: string | null
+  image?: string | null
+  emailVerified?: Date | string | null
+  passwordHash?: string | null
+  role?: $Enums.UserRole
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  authored?: Prisma.CourseUncheckedCreateNestedManyWithoutAuthorInput
+  enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
+  progress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
+  homework?: Prisma.HomeworkReviewUncheckedCreateNestedManyWithoutReviewerInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
+  emails?: Prisma.EmailMessageUncheckedCreateNestedManyWithoutUserInput
+  lessonSessions?: Prisma.LessonSessionUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutReviewedHomeworkSubmissionsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutReviewedHomeworkSubmissionsInput, Prisma.UserUncheckedCreateWithoutReviewedHomeworkSubmissionsInput>
+}
+
+export type UserUpsertWithoutHomeworkSubmissionsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutHomeworkSubmissionsInput, Prisma.UserUncheckedUpdateWithoutHomeworkSubmissionsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutHomeworkSubmissionsInput, Prisma.UserUncheckedCreateWithoutHomeworkSubmissionsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutHomeworkSubmissionsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutHomeworkSubmissionsInput, Prisma.UserUncheckedUpdateWithoutHomeworkSubmissionsInput>
+}
+
+export type UserUpdateWithoutHomeworkSubmissionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  authored?: Prisma.CourseUpdateManyWithoutAuthorNestedInput
+  enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
+  progress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
+  homework?: Prisma.HomeworkReviewUpdateManyWithoutReviewerNestedInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUpdateManyWithoutReviewerNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
+  emails?: Prisma.EmailMessageUpdateManyWithoutUserNestedInput
+  lessonSessions?: Prisma.LessonSessionUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutHomeworkSubmissionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  authored?: Prisma.CourseUncheckedUpdateManyWithoutAuthorNestedInput
+  enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
+  progress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
+  homework?: Prisma.HomeworkReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedUpdateManyWithoutReviewerNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
+  emails?: Prisma.EmailMessageUncheckedUpdateManyWithoutUserNestedInput
+  lessonSessions?: Prisma.LessonSessionUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserUpsertWithoutReviewedHomeworkSubmissionsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutReviewedHomeworkSubmissionsInput, Prisma.UserUncheckedUpdateWithoutReviewedHomeworkSubmissionsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutReviewedHomeworkSubmissionsInput, Prisma.UserUncheckedCreateWithoutReviewedHomeworkSubmissionsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutReviewedHomeworkSubmissionsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutReviewedHomeworkSubmissionsInput, Prisma.UserUncheckedUpdateWithoutReviewedHomeworkSubmissionsInput>
+}
+
+export type UserUpdateWithoutReviewedHomeworkSubmissionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  authored?: Prisma.CourseUpdateManyWithoutAuthorNestedInput
+  enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
+  progress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
+  homework?: Prisma.HomeworkReviewUpdateManyWithoutReviewerNestedInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionUpdateManyWithoutStudentNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
+  emails?: Prisma.EmailMessageUpdateManyWithoutUserNestedInput
+  lessonSessions?: Prisma.LessonSessionUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutReviewedHomeworkSubmissionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  authored?: Prisma.CourseUncheckedUpdateManyWithoutAuthorNestedInput
+  enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
+  progress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
+  homework?: Prisma.HomeworkReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedUpdateManyWithoutStudentNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
   emails?: Prisma.EmailMessageUncheckedUpdateManyWithoutUserNestedInput
   lessonSessions?: Prisma.LessonSessionUncheckedUpdateManyWithoutUserNestedInput
@@ -1212,6 +1512,8 @@ export type UserCreateWithoutOrdersInput = {
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
   progress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
   homework?: Prisma.HomeworkReviewCreateNestedManyWithoutReviewerInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionCreateNestedManyWithoutStudentInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionCreateNestedManyWithoutReviewerInput
   emails?: Prisma.EmailMessageCreateNestedManyWithoutUserInput
   lessonSessions?: Prisma.LessonSessionCreateNestedManyWithoutUserInput
 }
@@ -1232,6 +1534,8 @@ export type UserUncheckedCreateWithoutOrdersInput = {
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
   progress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
   homework?: Prisma.HomeworkReviewUncheckedCreateNestedManyWithoutReviewerInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedCreateNestedManyWithoutReviewerInput
   emails?: Prisma.EmailMessageUncheckedCreateNestedManyWithoutUserInput
   lessonSessions?: Prisma.LessonSessionUncheckedCreateNestedManyWithoutUserInput
 }
@@ -1268,6 +1572,8 @@ export type UserUpdateWithoutOrdersInput = {
   enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
   progress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
   homework?: Prisma.HomeworkReviewUpdateManyWithoutReviewerNestedInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionUpdateManyWithoutStudentNestedInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUpdateManyWithoutReviewerNestedInput
   emails?: Prisma.EmailMessageUpdateManyWithoutUserNestedInput
   lessonSessions?: Prisma.LessonSessionUpdateManyWithoutUserNestedInput
 }
@@ -1288,6 +1594,8 @@ export type UserUncheckedUpdateWithoutOrdersInput = {
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
   progress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
   homework?: Prisma.HomeworkReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedUpdateManyWithoutReviewerNestedInput
   emails?: Prisma.EmailMessageUncheckedUpdateManyWithoutUserNestedInput
   lessonSessions?: Prisma.LessonSessionUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -1308,6 +1616,8 @@ export type UserCreateWithoutEmailsInput = {
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
   progress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
   homework?: Prisma.HomeworkReviewCreateNestedManyWithoutReviewerInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionCreateNestedManyWithoutStudentInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionCreateNestedManyWithoutReviewerInput
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
   lessonSessions?: Prisma.LessonSessionCreateNestedManyWithoutUserInput
 }
@@ -1328,6 +1638,8 @@ export type UserUncheckedCreateWithoutEmailsInput = {
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
   progress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
   homework?: Prisma.HomeworkReviewUncheckedCreateNestedManyWithoutReviewerInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedCreateNestedManyWithoutReviewerInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
   lessonSessions?: Prisma.LessonSessionUncheckedCreateNestedManyWithoutUserInput
 }
@@ -1364,6 +1676,8 @@ export type UserUpdateWithoutEmailsInput = {
   enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
   progress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
   homework?: Prisma.HomeworkReviewUpdateManyWithoutReviewerNestedInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionUpdateManyWithoutStudentNestedInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUpdateManyWithoutReviewerNestedInput
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
   lessonSessions?: Prisma.LessonSessionUpdateManyWithoutUserNestedInput
 }
@@ -1384,6 +1698,8 @@ export type UserUncheckedUpdateWithoutEmailsInput = {
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
   progress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
   homework?: Prisma.HomeworkReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedUpdateManyWithoutReviewerNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
   lessonSessions?: Prisma.LessonSessionUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -1404,6 +1720,8 @@ export type UserCreateWithoutLessonSessionsInput = {
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutUserInput
   progress?: Prisma.LessonProgressCreateNestedManyWithoutUserInput
   homework?: Prisma.HomeworkReviewCreateNestedManyWithoutReviewerInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionCreateNestedManyWithoutStudentInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionCreateNestedManyWithoutReviewerInput
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
   emails?: Prisma.EmailMessageCreateNestedManyWithoutUserInput
 }
@@ -1424,6 +1742,8 @@ export type UserUncheckedCreateWithoutLessonSessionsInput = {
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutUserInput
   progress?: Prisma.LessonProgressUncheckedCreateNestedManyWithoutUserInput
   homework?: Prisma.HomeworkReviewUncheckedCreateNestedManyWithoutReviewerInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedCreateNestedManyWithoutStudentInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedCreateNestedManyWithoutReviewerInput
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
   emails?: Prisma.EmailMessageUncheckedCreateNestedManyWithoutUserInput
 }
@@ -1460,6 +1780,8 @@ export type UserUpdateWithoutLessonSessionsInput = {
   enrollments?: Prisma.EnrollmentUpdateManyWithoutUserNestedInput
   progress?: Prisma.LessonProgressUpdateManyWithoutUserNestedInput
   homework?: Prisma.HomeworkReviewUpdateManyWithoutReviewerNestedInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionUpdateManyWithoutStudentNestedInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUpdateManyWithoutReviewerNestedInput
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
   emails?: Prisma.EmailMessageUpdateManyWithoutUserNestedInput
 }
@@ -1480,6 +1802,8 @@ export type UserUncheckedUpdateWithoutLessonSessionsInput = {
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutUserNestedInput
   progress?: Prisma.LessonProgressUncheckedUpdateManyWithoutUserNestedInput
   homework?: Prisma.HomeworkReviewUncheckedUpdateManyWithoutReviewerNestedInput
+  homeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedUpdateManyWithoutStudentNestedInput
+  reviewedHomeworkSubmissions?: Prisma.HomeworkSubmissionUncheckedUpdateManyWithoutReviewerNestedInput
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
   emails?: Prisma.EmailMessageUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -1496,6 +1820,8 @@ export type UserCountOutputType = {
   enrollments: number
   progress: number
   homework: number
+  homeworkSubmissions: number
+  reviewedHomeworkSubmissions: number
   orders: number
   emails: number
   lessonSessions: number
@@ -1508,6 +1834,8 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   enrollments?: boolean | UserCountOutputTypeCountEnrollmentsArgs
   progress?: boolean | UserCountOutputTypeCountProgressArgs
   homework?: boolean | UserCountOutputTypeCountHomeworkArgs
+  homeworkSubmissions?: boolean | UserCountOutputTypeCountHomeworkSubmissionsArgs
+  reviewedHomeworkSubmissions?: boolean | UserCountOutputTypeCountReviewedHomeworkSubmissionsArgs
   orders?: boolean | UserCountOutputTypeCountOrdersArgs
   emails?: boolean | UserCountOutputTypeCountEmailsArgs
   lessonSessions?: boolean | UserCountOutputTypeCountLessonSessionsArgs
@@ -1568,6 +1896,20 @@ export type UserCountOutputTypeCountHomeworkArgs<ExtArgs extends runtime.Types.E
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountHomeworkSubmissionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HomeworkSubmissionWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountReviewedHomeworkSubmissionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HomeworkSubmissionWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountOrdersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.OrderWhereInput
 }
@@ -1603,6 +1945,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   enrollments?: boolean | Prisma.User$enrollmentsArgs<ExtArgs>
   progress?: boolean | Prisma.User$progressArgs<ExtArgs>
   homework?: boolean | Prisma.User$homeworkArgs<ExtArgs>
+  homeworkSubmissions?: boolean | Prisma.User$homeworkSubmissionsArgs<ExtArgs>
+  reviewedHomeworkSubmissions?: boolean | Prisma.User$reviewedHomeworkSubmissionsArgs<ExtArgs>
   orders?: boolean | Prisma.User$ordersArgs<ExtArgs>
   emails?: boolean | Prisma.User$emailsArgs<ExtArgs>
   lessonSessions?: boolean | Prisma.User$lessonSessionsArgs<ExtArgs>
@@ -1653,6 +1997,8 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   enrollments?: boolean | Prisma.User$enrollmentsArgs<ExtArgs>
   progress?: boolean | Prisma.User$progressArgs<ExtArgs>
   homework?: boolean | Prisma.User$homeworkArgs<ExtArgs>
+  homeworkSubmissions?: boolean | Prisma.User$homeworkSubmissionsArgs<ExtArgs>
+  reviewedHomeworkSubmissions?: boolean | Prisma.User$reviewedHomeworkSubmissionsArgs<ExtArgs>
   orders?: boolean | Prisma.User$ordersArgs<ExtArgs>
   emails?: boolean | Prisma.User$emailsArgs<ExtArgs>
   lessonSessions?: boolean | Prisma.User$lessonSessionsArgs<ExtArgs>
@@ -1670,6 +2016,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     enrollments: Prisma.$EnrollmentPayload<ExtArgs>[]
     progress: Prisma.$LessonProgressPayload<ExtArgs>[]
     homework: Prisma.$HomeworkReviewPayload<ExtArgs>[]
+    homeworkSubmissions: Prisma.$HomeworkSubmissionPayload<ExtArgs>[]
+    reviewedHomeworkSubmissions: Prisma.$HomeworkSubmissionPayload<ExtArgs>[]
     orders: Prisma.$OrderPayload<ExtArgs>[]
     emails: Prisma.$EmailMessagePayload<ExtArgs>[]
     lessonSessions: Prisma.$LessonSessionPayload<ExtArgs>[]
@@ -2084,6 +2432,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   enrollments<T extends Prisma.User$enrollmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   progress<T extends Prisma.User$progressArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$progressArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LessonProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   homework<T extends Prisma.User$homeworkArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$homeworkArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HomeworkReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  homeworkSubmissions<T extends Prisma.User$homeworkSubmissionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$homeworkSubmissionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HomeworkSubmissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  reviewedHomeworkSubmissions<T extends Prisma.User$reviewedHomeworkSubmissionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reviewedHomeworkSubmissionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HomeworkSubmissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   orders<T extends Prisma.User$ordersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   emails<T extends Prisma.User$emailsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$emailsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EmailMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   lessonSessions<T extends Prisma.User$lessonSessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$lessonSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LessonSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2659,6 +3009,54 @@ export type User$homeworkArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.HomeworkReviewScalarFieldEnum | Prisma.HomeworkReviewScalarFieldEnum[]
+}
+
+/**
+ * User.homeworkSubmissions
+ */
+export type User$homeworkSubmissionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HomeworkSubmission
+   */
+  select?: Prisma.HomeworkSubmissionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HomeworkSubmission
+   */
+  omit?: Prisma.HomeworkSubmissionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HomeworkSubmissionInclude<ExtArgs> | null
+  where?: Prisma.HomeworkSubmissionWhereInput
+  orderBy?: Prisma.HomeworkSubmissionOrderByWithRelationInput | Prisma.HomeworkSubmissionOrderByWithRelationInput[]
+  cursor?: Prisma.HomeworkSubmissionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HomeworkSubmissionScalarFieldEnum | Prisma.HomeworkSubmissionScalarFieldEnum[]
+}
+
+/**
+ * User.reviewedHomeworkSubmissions
+ */
+export type User$reviewedHomeworkSubmissionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HomeworkSubmission
+   */
+  select?: Prisma.HomeworkSubmissionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HomeworkSubmission
+   */
+  omit?: Prisma.HomeworkSubmissionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HomeworkSubmissionInclude<ExtArgs> | null
+  where?: Prisma.HomeworkSubmissionWhereInput
+  orderBy?: Prisma.HomeworkSubmissionOrderByWithRelationInput | Prisma.HomeworkSubmissionOrderByWithRelationInput[]
+  cursor?: Prisma.HomeworkSubmissionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HomeworkSubmissionScalarFieldEnum | Prisma.HomeworkSubmissionScalarFieldEnum[]
 }
 
 /**

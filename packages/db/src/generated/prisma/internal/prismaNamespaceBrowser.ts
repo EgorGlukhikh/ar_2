@@ -63,6 +63,8 @@ export const ModelName = {
   LessonProgress: 'LessonProgress',
   HomeworkAssignment: 'HomeworkAssignment',
   HomeworkReview: 'HomeworkReview',
+  HomeworkSubmission: 'HomeworkSubmission',
+  HomeworkSubmissionFile: 'HomeworkSubmissionFile',
   Product: 'Product',
   Price: 'Price',
   Order: 'Order',
@@ -248,6 +250,10 @@ export const HomeworkAssignmentScalarFieldEnum = {
   lessonId: 'lessonId',
   instructions: 'instructions',
   requiresCuratorReview: 'requiresCuratorReview',
+  unlockNextModuleOnApproval: 'unlockNextModuleOnApproval',
+  allowTextSubmission: 'allowTextSubmission',
+  allowLinkSubmission: 'allowLinkSubmission',
+  allowFileUpload: 'allowFileUpload',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -268,6 +274,39 @@ export const HomeworkReviewScalarFieldEnum = {
 } as const
 
 export type HomeworkReviewScalarFieldEnum = (typeof HomeworkReviewScalarFieldEnum)[keyof typeof HomeworkReviewScalarFieldEnum]
+
+
+export const HomeworkSubmissionScalarFieldEnum = {
+  id: 'id',
+  assignmentId: 'assignmentId',
+  studentId: 'studentId',
+  reviewerId: 'reviewerId',
+  status: 'status',
+  submissionText: 'submissionText',
+  submissionUrl: 'submissionUrl',
+  feedback: 'feedback',
+  submittedAt: 'submittedAt',
+  reviewedAt: 'reviewedAt',
+  approvedAt: 'approvedAt',
+  revisionRequestedAt: 'revisionRequestedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HomeworkSubmissionScalarFieldEnum = (typeof HomeworkSubmissionScalarFieldEnum)[keyof typeof HomeworkSubmissionScalarFieldEnum]
+
+
+export const HomeworkSubmissionFileScalarFieldEnum = {
+  id: 'id',
+  submissionId: 'submissionId',
+  filename: 'filename',
+  mimeType: 'mimeType',
+  sizeInBytes: 'sizeInBytes',
+  data: 'data',
+  createdAt: 'createdAt'
+} as const
+
+export type HomeworkSubmissionFileScalarFieldEnum = (typeof HomeworkSubmissionFileScalarFieldEnum)[keyof typeof HomeworkSubmissionFileScalarFieldEnum]
 
 
 export const ProductScalarFieldEnum = {

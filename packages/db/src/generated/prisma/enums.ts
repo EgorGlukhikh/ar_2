@@ -144,3 +144,13 @@ export const EmailStatus = {
 } as const
 
 export type EmailStatus = (typeof EmailStatus)[keyof typeof EmailStatus]
+
+
+export const HomeworkSubmissionStatus = {
+  SUBMITTED: 'SUBMITTED',
+  IN_REVIEW: 'IN_REVIEW',
+  REVISION_REQUESTED: 'REVISION_REQUESTED',
+  APPROVED: 'APPROVED'
+} as const
+
+export type HomeworkSubmissionStatus = (typeof HomeworkSubmissionStatus)[keyof typeof HomeworkSubmissionStatus]

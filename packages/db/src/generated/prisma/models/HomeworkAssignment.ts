@@ -29,6 +29,10 @@ export type HomeworkAssignmentMinAggregateOutputType = {
   lessonId: string | null
   instructions: string | null
   requiresCuratorReview: boolean | null
+  unlockNextModuleOnApproval: boolean | null
+  allowTextSubmission: boolean | null
+  allowLinkSubmission: boolean | null
+  allowFileUpload: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -38,6 +42,10 @@ export type HomeworkAssignmentMaxAggregateOutputType = {
   lessonId: string | null
   instructions: string | null
   requiresCuratorReview: boolean | null
+  unlockNextModuleOnApproval: boolean | null
+  allowTextSubmission: boolean | null
+  allowLinkSubmission: boolean | null
+  allowFileUpload: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -47,6 +55,10 @@ export type HomeworkAssignmentCountAggregateOutputType = {
   lessonId: number
   instructions: number
   requiresCuratorReview: number
+  unlockNextModuleOnApproval: number
+  allowTextSubmission: number
+  allowLinkSubmission: number
+  allowFileUpload: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -58,6 +70,10 @@ export type HomeworkAssignmentMinAggregateInputType = {
   lessonId?: true
   instructions?: true
   requiresCuratorReview?: true
+  unlockNextModuleOnApproval?: true
+  allowTextSubmission?: true
+  allowLinkSubmission?: true
+  allowFileUpload?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -67,6 +83,10 @@ export type HomeworkAssignmentMaxAggregateInputType = {
   lessonId?: true
   instructions?: true
   requiresCuratorReview?: true
+  unlockNextModuleOnApproval?: true
+  allowTextSubmission?: true
+  allowLinkSubmission?: true
+  allowFileUpload?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -76,6 +96,10 @@ export type HomeworkAssignmentCountAggregateInputType = {
   lessonId?: true
   instructions?: true
   requiresCuratorReview?: true
+  unlockNextModuleOnApproval?: true
+  allowTextSubmission?: true
+  allowLinkSubmission?: true
+  allowFileUpload?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -158,6 +182,10 @@ export type HomeworkAssignmentGroupByOutputType = {
   lessonId: string
   instructions: string | null
   requiresCuratorReview: boolean
+  unlockNextModuleOnApproval: boolean
+  allowTextSubmission: boolean
+  allowLinkSubmission: boolean
+  allowFileUpload: boolean
   createdAt: Date
   updatedAt: Date
   _count: HomeworkAssignmentCountAggregateOutputType | null
@@ -188,10 +216,15 @@ export type HomeworkAssignmentWhereInput = {
   lessonId?: Prisma.StringFilter<"HomeworkAssignment"> | string
   instructions?: Prisma.StringNullableFilter<"HomeworkAssignment"> | string | null
   requiresCuratorReview?: Prisma.BoolFilter<"HomeworkAssignment"> | boolean
+  unlockNextModuleOnApproval?: Prisma.BoolFilter<"HomeworkAssignment"> | boolean
+  allowTextSubmission?: Prisma.BoolFilter<"HomeworkAssignment"> | boolean
+  allowLinkSubmission?: Prisma.BoolFilter<"HomeworkAssignment"> | boolean
+  allowFileUpload?: Prisma.BoolFilter<"HomeworkAssignment"> | boolean
   createdAt?: Prisma.DateTimeFilter<"HomeworkAssignment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"HomeworkAssignment"> | Date | string
   lesson?: Prisma.XOR<Prisma.LessonScalarRelationFilter, Prisma.LessonWhereInput>
   reviews?: Prisma.HomeworkReviewListRelationFilter
+  submissions?: Prisma.HomeworkSubmissionListRelationFilter
 }
 
 export type HomeworkAssignmentOrderByWithRelationInput = {
@@ -199,10 +232,15 @@ export type HomeworkAssignmentOrderByWithRelationInput = {
   lessonId?: Prisma.SortOrder
   instructions?: Prisma.SortOrderInput | Prisma.SortOrder
   requiresCuratorReview?: Prisma.SortOrder
+  unlockNextModuleOnApproval?: Prisma.SortOrder
+  allowTextSubmission?: Prisma.SortOrder
+  allowLinkSubmission?: Prisma.SortOrder
+  allowFileUpload?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   lesson?: Prisma.LessonOrderByWithRelationInput
   reviews?: Prisma.HomeworkReviewOrderByRelationAggregateInput
+  submissions?: Prisma.HomeworkSubmissionOrderByRelationAggregateInput
 }
 
 export type HomeworkAssignmentWhereUniqueInput = Prisma.AtLeast<{
@@ -213,10 +251,15 @@ export type HomeworkAssignmentWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.HomeworkAssignmentWhereInput | Prisma.HomeworkAssignmentWhereInput[]
   instructions?: Prisma.StringNullableFilter<"HomeworkAssignment"> | string | null
   requiresCuratorReview?: Prisma.BoolFilter<"HomeworkAssignment"> | boolean
+  unlockNextModuleOnApproval?: Prisma.BoolFilter<"HomeworkAssignment"> | boolean
+  allowTextSubmission?: Prisma.BoolFilter<"HomeworkAssignment"> | boolean
+  allowLinkSubmission?: Prisma.BoolFilter<"HomeworkAssignment"> | boolean
+  allowFileUpload?: Prisma.BoolFilter<"HomeworkAssignment"> | boolean
   createdAt?: Prisma.DateTimeFilter<"HomeworkAssignment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"HomeworkAssignment"> | Date | string
   lesson?: Prisma.XOR<Prisma.LessonScalarRelationFilter, Prisma.LessonWhereInput>
   reviews?: Prisma.HomeworkReviewListRelationFilter
+  submissions?: Prisma.HomeworkSubmissionListRelationFilter
 }, "id" | "lessonId">
 
 export type HomeworkAssignmentOrderByWithAggregationInput = {
@@ -224,6 +267,10 @@ export type HomeworkAssignmentOrderByWithAggregationInput = {
   lessonId?: Prisma.SortOrder
   instructions?: Prisma.SortOrderInput | Prisma.SortOrder
   requiresCuratorReview?: Prisma.SortOrder
+  unlockNextModuleOnApproval?: Prisma.SortOrder
+  allowTextSubmission?: Prisma.SortOrder
+  allowLinkSubmission?: Prisma.SortOrder
+  allowFileUpload?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.HomeworkAssignmentCountOrderByAggregateInput
@@ -239,6 +286,10 @@ export type HomeworkAssignmentScalarWhereWithAggregatesInput = {
   lessonId?: Prisma.StringWithAggregatesFilter<"HomeworkAssignment"> | string
   instructions?: Prisma.StringNullableWithAggregatesFilter<"HomeworkAssignment"> | string | null
   requiresCuratorReview?: Prisma.BoolWithAggregatesFilter<"HomeworkAssignment"> | boolean
+  unlockNextModuleOnApproval?: Prisma.BoolWithAggregatesFilter<"HomeworkAssignment"> | boolean
+  allowTextSubmission?: Prisma.BoolWithAggregatesFilter<"HomeworkAssignment"> | boolean
+  allowLinkSubmission?: Prisma.BoolWithAggregatesFilter<"HomeworkAssignment"> | boolean
+  allowFileUpload?: Prisma.BoolWithAggregatesFilter<"HomeworkAssignment"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"HomeworkAssignment"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"HomeworkAssignment"> | Date | string
 }
@@ -247,10 +298,15 @@ export type HomeworkAssignmentCreateInput = {
   id?: string
   instructions?: string | null
   requiresCuratorReview?: boolean
+  unlockNextModuleOnApproval?: boolean
+  allowTextSubmission?: boolean
+  allowLinkSubmission?: boolean
+  allowFileUpload?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   lesson: Prisma.LessonCreateNestedOneWithoutHomeworkAssignmentInput
   reviews?: Prisma.HomeworkReviewCreateNestedManyWithoutAssignmentInput
+  submissions?: Prisma.HomeworkSubmissionCreateNestedManyWithoutAssignmentInput
 }
 
 export type HomeworkAssignmentUncheckedCreateInput = {
@@ -258,19 +314,29 @@ export type HomeworkAssignmentUncheckedCreateInput = {
   lessonId: string
   instructions?: string | null
   requiresCuratorReview?: boolean
+  unlockNextModuleOnApproval?: boolean
+  allowTextSubmission?: boolean
+  allowLinkSubmission?: boolean
+  allowFileUpload?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   reviews?: Prisma.HomeworkReviewUncheckedCreateNestedManyWithoutAssignmentInput
+  submissions?: Prisma.HomeworkSubmissionUncheckedCreateNestedManyWithoutAssignmentInput
 }
 
 export type HomeworkAssignmentUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   instructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requiresCuratorReview?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  unlockNextModuleOnApproval?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowTextSubmission?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowLinkSubmission?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowFileUpload?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lesson?: Prisma.LessonUpdateOneRequiredWithoutHomeworkAssignmentNestedInput
   reviews?: Prisma.HomeworkReviewUpdateManyWithoutAssignmentNestedInput
+  submissions?: Prisma.HomeworkSubmissionUpdateManyWithoutAssignmentNestedInput
 }
 
 export type HomeworkAssignmentUncheckedUpdateInput = {
@@ -278,9 +344,14 @@ export type HomeworkAssignmentUncheckedUpdateInput = {
   lessonId?: Prisma.StringFieldUpdateOperationsInput | string
   instructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requiresCuratorReview?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  unlockNextModuleOnApproval?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowTextSubmission?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowLinkSubmission?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowFileUpload?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reviews?: Prisma.HomeworkReviewUncheckedUpdateManyWithoutAssignmentNestedInput
+  submissions?: Prisma.HomeworkSubmissionUncheckedUpdateManyWithoutAssignmentNestedInput
 }
 
 export type HomeworkAssignmentCreateManyInput = {
@@ -288,6 +359,10 @@ export type HomeworkAssignmentCreateManyInput = {
   lessonId: string
   instructions?: string | null
   requiresCuratorReview?: boolean
+  unlockNextModuleOnApproval?: boolean
+  allowTextSubmission?: boolean
+  allowLinkSubmission?: boolean
+  allowFileUpload?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -296,6 +371,10 @@ export type HomeworkAssignmentUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   instructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requiresCuratorReview?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  unlockNextModuleOnApproval?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowTextSubmission?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowLinkSubmission?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowFileUpload?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -305,6 +384,10 @@ export type HomeworkAssignmentUncheckedUpdateManyInput = {
   lessonId?: Prisma.StringFieldUpdateOperationsInput | string
   instructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requiresCuratorReview?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  unlockNextModuleOnApproval?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowTextSubmission?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowLinkSubmission?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowFileUpload?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -319,6 +402,10 @@ export type HomeworkAssignmentCountOrderByAggregateInput = {
   lessonId?: Prisma.SortOrder
   instructions?: Prisma.SortOrder
   requiresCuratorReview?: Prisma.SortOrder
+  unlockNextModuleOnApproval?: Prisma.SortOrder
+  allowTextSubmission?: Prisma.SortOrder
+  allowLinkSubmission?: Prisma.SortOrder
+  allowFileUpload?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -328,6 +415,10 @@ export type HomeworkAssignmentMaxOrderByAggregateInput = {
   lessonId?: Prisma.SortOrder
   instructions?: Prisma.SortOrder
   requiresCuratorReview?: Prisma.SortOrder
+  unlockNextModuleOnApproval?: Prisma.SortOrder
+  allowTextSubmission?: Prisma.SortOrder
+  allowLinkSubmission?: Prisma.SortOrder
+  allowFileUpload?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -337,6 +428,10 @@ export type HomeworkAssignmentMinOrderByAggregateInput = {
   lessonId?: Prisma.SortOrder
   instructions?: Prisma.SortOrder
   requiresCuratorReview?: Prisma.SortOrder
+  unlockNextModuleOnApproval?: Prisma.SortOrder
+  allowTextSubmission?: Prisma.SortOrder
+  allowLinkSubmission?: Prisma.SortOrder
+  allowFileUpload?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -392,22 +487,46 @@ export type HomeworkAssignmentUpdateOneRequiredWithoutReviewsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.HomeworkAssignmentUpdateToOneWithWhereWithoutReviewsInput, Prisma.HomeworkAssignmentUpdateWithoutReviewsInput>, Prisma.HomeworkAssignmentUncheckedUpdateWithoutReviewsInput>
 }
 
+export type HomeworkAssignmentCreateNestedOneWithoutSubmissionsInput = {
+  create?: Prisma.XOR<Prisma.HomeworkAssignmentCreateWithoutSubmissionsInput, Prisma.HomeworkAssignmentUncheckedCreateWithoutSubmissionsInput>
+  connectOrCreate?: Prisma.HomeworkAssignmentCreateOrConnectWithoutSubmissionsInput
+  connect?: Prisma.HomeworkAssignmentWhereUniqueInput
+}
+
+export type HomeworkAssignmentUpdateOneRequiredWithoutSubmissionsNestedInput = {
+  create?: Prisma.XOR<Prisma.HomeworkAssignmentCreateWithoutSubmissionsInput, Prisma.HomeworkAssignmentUncheckedCreateWithoutSubmissionsInput>
+  connectOrCreate?: Prisma.HomeworkAssignmentCreateOrConnectWithoutSubmissionsInput
+  upsert?: Prisma.HomeworkAssignmentUpsertWithoutSubmissionsInput
+  connect?: Prisma.HomeworkAssignmentWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.HomeworkAssignmentUpdateToOneWithWhereWithoutSubmissionsInput, Prisma.HomeworkAssignmentUpdateWithoutSubmissionsInput>, Prisma.HomeworkAssignmentUncheckedUpdateWithoutSubmissionsInput>
+}
+
 export type HomeworkAssignmentCreateWithoutLessonInput = {
   id?: string
   instructions?: string | null
   requiresCuratorReview?: boolean
+  unlockNextModuleOnApproval?: boolean
+  allowTextSubmission?: boolean
+  allowLinkSubmission?: boolean
+  allowFileUpload?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   reviews?: Prisma.HomeworkReviewCreateNestedManyWithoutAssignmentInput
+  submissions?: Prisma.HomeworkSubmissionCreateNestedManyWithoutAssignmentInput
 }
 
 export type HomeworkAssignmentUncheckedCreateWithoutLessonInput = {
   id?: string
   instructions?: string | null
   requiresCuratorReview?: boolean
+  unlockNextModuleOnApproval?: boolean
+  allowTextSubmission?: boolean
+  allowLinkSubmission?: boolean
+  allowFileUpload?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   reviews?: Prisma.HomeworkReviewUncheckedCreateNestedManyWithoutAssignmentInput
+  submissions?: Prisma.HomeworkSubmissionUncheckedCreateNestedManyWithoutAssignmentInput
 }
 
 export type HomeworkAssignmentCreateOrConnectWithoutLessonInput = {
@@ -430,27 +549,42 @@ export type HomeworkAssignmentUpdateWithoutLessonInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   instructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requiresCuratorReview?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  unlockNextModuleOnApproval?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowTextSubmission?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowLinkSubmission?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowFileUpload?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reviews?: Prisma.HomeworkReviewUpdateManyWithoutAssignmentNestedInput
+  submissions?: Prisma.HomeworkSubmissionUpdateManyWithoutAssignmentNestedInput
 }
 
 export type HomeworkAssignmentUncheckedUpdateWithoutLessonInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   instructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requiresCuratorReview?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  unlockNextModuleOnApproval?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowTextSubmission?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowLinkSubmission?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowFileUpload?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reviews?: Prisma.HomeworkReviewUncheckedUpdateManyWithoutAssignmentNestedInput
+  submissions?: Prisma.HomeworkSubmissionUncheckedUpdateManyWithoutAssignmentNestedInput
 }
 
 export type HomeworkAssignmentCreateWithoutReviewsInput = {
   id?: string
   instructions?: string | null
   requiresCuratorReview?: boolean
+  unlockNextModuleOnApproval?: boolean
+  allowTextSubmission?: boolean
+  allowLinkSubmission?: boolean
+  allowFileUpload?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   lesson: Prisma.LessonCreateNestedOneWithoutHomeworkAssignmentInput
+  submissions?: Prisma.HomeworkSubmissionCreateNestedManyWithoutAssignmentInput
 }
 
 export type HomeworkAssignmentUncheckedCreateWithoutReviewsInput = {
@@ -458,8 +592,13 @@ export type HomeworkAssignmentUncheckedCreateWithoutReviewsInput = {
   lessonId: string
   instructions?: string | null
   requiresCuratorReview?: boolean
+  unlockNextModuleOnApproval?: boolean
+  allowTextSubmission?: boolean
+  allowLinkSubmission?: boolean
+  allowFileUpload?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  submissions?: Prisma.HomeworkSubmissionUncheckedCreateNestedManyWithoutAssignmentInput
 }
 
 export type HomeworkAssignmentCreateOrConnectWithoutReviewsInput = {
@@ -482,9 +621,14 @@ export type HomeworkAssignmentUpdateWithoutReviewsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   instructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requiresCuratorReview?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  unlockNextModuleOnApproval?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowTextSubmission?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowLinkSubmission?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowFileUpload?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lesson?: Prisma.LessonUpdateOneRequiredWithoutHomeworkAssignmentNestedInput
+  submissions?: Prisma.HomeworkSubmissionUpdateManyWithoutAssignmentNestedInput
 }
 
 export type HomeworkAssignmentUncheckedUpdateWithoutReviewsInput = {
@@ -492,8 +636,85 @@ export type HomeworkAssignmentUncheckedUpdateWithoutReviewsInput = {
   lessonId?: Prisma.StringFieldUpdateOperationsInput | string
   instructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requiresCuratorReview?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  unlockNextModuleOnApproval?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowTextSubmission?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowLinkSubmission?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowFileUpload?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  submissions?: Prisma.HomeworkSubmissionUncheckedUpdateManyWithoutAssignmentNestedInput
+}
+
+export type HomeworkAssignmentCreateWithoutSubmissionsInput = {
+  id?: string
+  instructions?: string | null
+  requiresCuratorReview?: boolean
+  unlockNextModuleOnApproval?: boolean
+  allowTextSubmission?: boolean
+  allowLinkSubmission?: boolean
+  allowFileUpload?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lesson: Prisma.LessonCreateNestedOneWithoutHomeworkAssignmentInput
+  reviews?: Prisma.HomeworkReviewCreateNestedManyWithoutAssignmentInput
+}
+
+export type HomeworkAssignmentUncheckedCreateWithoutSubmissionsInput = {
+  id?: string
+  lessonId: string
+  instructions?: string | null
+  requiresCuratorReview?: boolean
+  unlockNextModuleOnApproval?: boolean
+  allowTextSubmission?: boolean
+  allowLinkSubmission?: boolean
+  allowFileUpload?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  reviews?: Prisma.HomeworkReviewUncheckedCreateNestedManyWithoutAssignmentInput
+}
+
+export type HomeworkAssignmentCreateOrConnectWithoutSubmissionsInput = {
+  where: Prisma.HomeworkAssignmentWhereUniqueInput
+  create: Prisma.XOR<Prisma.HomeworkAssignmentCreateWithoutSubmissionsInput, Prisma.HomeworkAssignmentUncheckedCreateWithoutSubmissionsInput>
+}
+
+export type HomeworkAssignmentUpsertWithoutSubmissionsInput = {
+  update: Prisma.XOR<Prisma.HomeworkAssignmentUpdateWithoutSubmissionsInput, Prisma.HomeworkAssignmentUncheckedUpdateWithoutSubmissionsInput>
+  create: Prisma.XOR<Prisma.HomeworkAssignmentCreateWithoutSubmissionsInput, Prisma.HomeworkAssignmentUncheckedCreateWithoutSubmissionsInput>
+  where?: Prisma.HomeworkAssignmentWhereInput
+}
+
+export type HomeworkAssignmentUpdateToOneWithWhereWithoutSubmissionsInput = {
+  where?: Prisma.HomeworkAssignmentWhereInput
+  data: Prisma.XOR<Prisma.HomeworkAssignmentUpdateWithoutSubmissionsInput, Prisma.HomeworkAssignmentUncheckedUpdateWithoutSubmissionsInput>
+}
+
+export type HomeworkAssignmentUpdateWithoutSubmissionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  instructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requiresCuratorReview?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  unlockNextModuleOnApproval?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowTextSubmission?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowLinkSubmission?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowFileUpload?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lesson?: Prisma.LessonUpdateOneRequiredWithoutHomeworkAssignmentNestedInput
+  reviews?: Prisma.HomeworkReviewUpdateManyWithoutAssignmentNestedInput
+}
+
+export type HomeworkAssignmentUncheckedUpdateWithoutSubmissionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  lessonId?: Prisma.StringFieldUpdateOperationsInput | string
+  instructions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requiresCuratorReview?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  unlockNextModuleOnApproval?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowTextSubmission?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowLinkSubmission?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  allowFileUpload?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reviews?: Prisma.HomeworkReviewUncheckedUpdateManyWithoutAssignmentNestedInput
 }
 
 
@@ -503,10 +724,12 @@ export type HomeworkAssignmentUncheckedUpdateWithoutReviewsInput = {
 
 export type HomeworkAssignmentCountOutputType = {
   reviews: number
+  submissions: number
 }
 
 export type HomeworkAssignmentCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   reviews?: boolean | HomeworkAssignmentCountOutputTypeCountReviewsArgs
+  submissions?: boolean | HomeworkAssignmentCountOutputTypeCountSubmissionsArgs
 }
 
 /**
@@ -526,16 +749,28 @@ export type HomeworkAssignmentCountOutputTypeCountReviewsArgs<ExtArgs extends ru
   where?: Prisma.HomeworkReviewWhereInput
 }
 
+/**
+ * HomeworkAssignmentCountOutputType without action
+ */
+export type HomeworkAssignmentCountOutputTypeCountSubmissionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HomeworkSubmissionWhereInput
+}
+
 
 export type HomeworkAssignmentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   lessonId?: boolean
   instructions?: boolean
   requiresCuratorReview?: boolean
+  unlockNextModuleOnApproval?: boolean
+  allowTextSubmission?: boolean
+  allowLinkSubmission?: boolean
+  allowFileUpload?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   lesson?: boolean | Prisma.LessonDefaultArgs<ExtArgs>
   reviews?: boolean | Prisma.HomeworkAssignment$reviewsArgs<ExtArgs>
+  submissions?: boolean | Prisma.HomeworkAssignment$submissionsArgs<ExtArgs>
   _count?: boolean | Prisma.HomeworkAssignmentCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["homeworkAssignment"]>
 
@@ -544,6 +779,10 @@ export type HomeworkAssignmentSelectCreateManyAndReturn<ExtArgs extends runtime.
   lessonId?: boolean
   instructions?: boolean
   requiresCuratorReview?: boolean
+  unlockNextModuleOnApproval?: boolean
+  allowTextSubmission?: boolean
+  allowLinkSubmission?: boolean
+  allowFileUpload?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   lesson?: boolean | Prisma.LessonDefaultArgs<ExtArgs>
@@ -554,6 +793,10 @@ export type HomeworkAssignmentSelectUpdateManyAndReturn<ExtArgs extends runtime.
   lessonId?: boolean
   instructions?: boolean
   requiresCuratorReview?: boolean
+  unlockNextModuleOnApproval?: boolean
+  allowTextSubmission?: boolean
+  allowLinkSubmission?: boolean
+  allowFileUpload?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   lesson?: boolean | Prisma.LessonDefaultArgs<ExtArgs>
@@ -564,14 +807,19 @@ export type HomeworkAssignmentSelectScalar = {
   lessonId?: boolean
   instructions?: boolean
   requiresCuratorReview?: boolean
+  unlockNextModuleOnApproval?: boolean
+  allowTextSubmission?: boolean
+  allowLinkSubmission?: boolean
+  allowFileUpload?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type HomeworkAssignmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "lessonId" | "instructions" | "requiresCuratorReview" | "createdAt" | "updatedAt", ExtArgs["result"]["homeworkAssignment"]>
+export type HomeworkAssignmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "lessonId" | "instructions" | "requiresCuratorReview" | "unlockNextModuleOnApproval" | "allowTextSubmission" | "allowLinkSubmission" | "allowFileUpload" | "createdAt" | "updatedAt", ExtArgs["result"]["homeworkAssignment"]>
 export type HomeworkAssignmentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   lesson?: boolean | Prisma.LessonDefaultArgs<ExtArgs>
   reviews?: boolean | Prisma.HomeworkAssignment$reviewsArgs<ExtArgs>
+  submissions?: boolean | Prisma.HomeworkAssignment$submissionsArgs<ExtArgs>
   _count?: boolean | Prisma.HomeworkAssignmentCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type HomeworkAssignmentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -586,12 +834,17 @@ export type $HomeworkAssignmentPayload<ExtArgs extends runtime.Types.Extensions.
   objects: {
     lesson: Prisma.$LessonPayload<ExtArgs>
     reviews: Prisma.$HomeworkReviewPayload<ExtArgs>[]
+    submissions: Prisma.$HomeworkSubmissionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     lessonId: string
     instructions: string | null
     requiresCuratorReview: boolean
+    unlockNextModuleOnApproval: boolean
+    allowTextSubmission: boolean
+    allowLinkSubmission: boolean
+    allowFileUpload: boolean
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["homeworkAssignment"]>
@@ -990,6 +1243,7 @@ export interface Prisma__HomeworkAssignmentClient<T, Null = never, ExtArgs exten
   readonly [Symbol.toStringTag]: "PrismaPromise"
   lesson<T extends Prisma.LessonDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LessonDefaultArgs<ExtArgs>>): Prisma.Prisma__LessonClient<runtime.Types.Result.GetResult<Prisma.$LessonPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   reviews<T extends Prisma.HomeworkAssignment$reviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.HomeworkAssignment$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HomeworkReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  submissions<T extends Prisma.HomeworkAssignment$submissionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.HomeworkAssignment$submissionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HomeworkSubmissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1023,6 +1277,10 @@ export interface HomeworkAssignmentFieldRefs {
   readonly lessonId: Prisma.FieldRef<"HomeworkAssignment", 'String'>
   readonly instructions: Prisma.FieldRef<"HomeworkAssignment", 'String'>
   readonly requiresCuratorReview: Prisma.FieldRef<"HomeworkAssignment", 'Boolean'>
+  readonly unlockNextModuleOnApproval: Prisma.FieldRef<"HomeworkAssignment", 'Boolean'>
+  readonly allowTextSubmission: Prisma.FieldRef<"HomeworkAssignment", 'Boolean'>
+  readonly allowLinkSubmission: Prisma.FieldRef<"HomeworkAssignment", 'Boolean'>
+  readonly allowFileUpload: Prisma.FieldRef<"HomeworkAssignment", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"HomeworkAssignment", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"HomeworkAssignment", 'DateTime'>
 }
@@ -1447,6 +1705,30 @@ export type HomeworkAssignment$reviewsArgs<ExtArgs extends runtime.Types.Extensi
   take?: number
   skip?: number
   distinct?: Prisma.HomeworkReviewScalarFieldEnum | Prisma.HomeworkReviewScalarFieldEnum[]
+}
+
+/**
+ * HomeworkAssignment.submissions
+ */
+export type HomeworkAssignment$submissionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HomeworkSubmission
+   */
+  select?: Prisma.HomeworkSubmissionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HomeworkSubmission
+   */
+  omit?: Prisma.HomeworkSubmissionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HomeworkSubmissionInclude<ExtArgs> | null
+  where?: Prisma.HomeworkSubmissionWhereInput
+  orderBy?: Prisma.HomeworkSubmissionOrderByWithRelationInput | Prisma.HomeworkSubmissionOrderByWithRelationInput[]
+  cursor?: Prisma.HomeworkSubmissionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HomeworkSubmissionScalarFieldEnum | Prisma.HomeworkSubmissionScalarFieldEnum[]
 }
 
 /**

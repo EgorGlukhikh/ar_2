@@ -40,10 +40,7 @@ type LinkStrategy =
       successMessage: string;
     };
 
-const statusVariantMap: Record<
-  string,
-  "default" | "neutral" | "success" | "warning"
-> = {
+const statusVariantMap: Record<string, "default" | "neutral" | "success" | "warning"> = {
   DRAFT: "neutral",
   PENDING_UPLOAD: "warning",
   IMPORTING: "warning",
@@ -138,10 +135,7 @@ export function AdminLessonVideoManager({
   const [error, setError] = useState<string | null>(null);
 
   const hasVideo = Boolean(
-    initialAsset ||
-      fallbackVideoSourceType ||
-      fallbackVideoUrl ||
-      fallbackVideoPlaybackId,
+    initialAsset || fallbackVideoSourceType || fallbackVideoUrl || fallbackVideoPlaybackId,
   );
 
   async function runAction(
@@ -158,9 +152,7 @@ export function AdminLessonVideoManager({
       setMessage(successMessage);
       router.refresh();
     } catch (actionError) {
-      setError(
-        actionError instanceof Error ? actionError.message : "Unexpected error.",
-      );
+      setError(actionError instanceof Error ? actionError.message : "Unexpected error.");
     } finally {
       setPendingAction(null);
     }
@@ -284,217 +276,158 @@ export function AdminLessonVideoManager({
   }
 
   return (
-    <section className="space-y-4 rounded-2xl border border-[var(--border)] bg-white p-5">
-      <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+    <section className="space-y-4 rounded-[24px] border border-[var(--border)] bg-[var(--surface)] p-4">
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
-            Видео урока
+            Видео
           </p>
-          <h3 className="mt-2 text-xl font-semibold text-[var(--foreground)]">
+          <h3 className="mt-1 text-lg font-semibold text-[var(--foreground)]">
             Ссылка или файл
           </h3>
-          <p className="mt-2 max-w-2xl text-sm leading-7 text-[var(--muted)]">
-            Вставь ссылку на private/public RUTUBE, embed-плеер или прямой
-            видеофайл. Если видео лежит на компьютере, просто нажми на плюс и
-            загрузи файл.
-          </p>
         </div>
 
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           {initialAsset ? (
             <Badge variant={statusVariantMap[initialAsset.status] ?? "neutral"}>
               {statusLabelMap[initialAsset.status] ?? initialAsset.status}
             </Badge>
           ) : hasVideo ? (
-            <Badge variant="neutral">Видео из старой схемы</Badge>
+            <Badge variant="neutral">Подключено</Badge>
           ) : (
             <Badge variant="neutral">Без видео</Badge>
           )}
+
+          {initialAsset?.id ? (
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={handleRefreshAsset}
+              disabled={pendingAction !== null}
+            >
+              Обновить
+            </Button>
+          ) : null}
+
+          {hasVideo ? (
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="border-red-300 text-red-600 hover:bg-red-50"
+              onClick={handleClearVideo}
+              disabled={pendingAction !== null}
+            >
+              Очистить
+            </Button>
+          ) : null}
         </div>
       </div>
 
-      {(initialAsset || hasVideo) && (
-        <div className="rounded-2xl bg-[var(--surface)] p-4">
-          <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
-            <div className="space-y-2 text-sm text-[var(--muted)]">
-              <p>
-                Источник:{" "}
+      {(initialAsset || hasVideo) ? (
+        <div className="rounded-[20px] border border-[var(--border)] bg-white px-4 py-3 text-sm text-[var(--muted)]">
+          <div className="flex flex-wrap gap-x-5 gap-y-2">
+            <span>
+              Источник:{" "}
+              <span className="font-medium text-[var(--foreground)]">
+                {initialAsset?.sourceType ?? fallbackVideoSourceType ?? "Не указан"}
+              </span>
+            </span>
+            {initialAsset?.provider ? (
+              <span>
+                Провайдер:{" "}
+                <span className="font-medium text-[var(--foreground)]">{initialAsset.provider}</span>
+              </span>
+            ) : null}
+            {initialAsset?.playbackId || fallbackVideoPlaybackId ? (
+              <span>
+                Playback ID:{" "}
                 <span className="font-medium text-[var(--foreground)]">
-                  {initialAsset?.sourceType ??
-                    fallbackVideoSourceType ??
-                    "Не указан"}
+                  {initialAsset?.playbackId ?? fallbackVideoPlaybackId}
                 </span>
-              </p>
-              {initialAsset?.provider ? (
-                <p>
-                  Провайдер:{" "}
-                  <span className="font-medium text-[var(--foreground)]">
-                    {initialAsset.provider}
-                  </span>
-                </p>
-              ) : null}
-              {initialAsset?.originalFilename ? (
-                <p>
-                  Файл:{" "}
-                  <span className="font-medium text-[var(--foreground)]">
-                    {initialAsset.originalFilename}
-                  </span>
-                </p>
-              ) : null}
-              {initialAsset?.playbackId || fallbackVideoPlaybackId ? (
-                <p>
-                  Playback ID:{" "}
-                  <span className="font-medium text-[var(--foreground)]">
-                    {initialAsset?.playbackId ?? fallbackVideoPlaybackId}
-                  </span>
-                </p>
-              ) : null}
-              {initialAsset?.playerUrl || initialAsset?.sourceUrl || fallbackVideoUrl ? (
-                <p className="break-all">
-                  URL:{" "}
-                  <span className="font-medium text-[var(--foreground)]">
-                    {initialAsset?.playerUrl ??
-                      initialAsset?.sourceUrl ??
-                      fallbackVideoUrl}
-                  </span>
-                </p>
-              ) : null}
-            </div>
-
-            <div className="flex flex-wrap gap-2">
-              {initialAsset?.id ? (
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={handleRefreshAsset}
-                  disabled={pendingAction !== null}
-                >
-                  Обновить статус
-                </Button>
-              ) : null}
-              <Button
-                type="button"
-                variant="outline"
-                className="border-red-300 text-red-600 hover:bg-red-50"
-                onClick={handleClearVideo}
-                disabled={pendingAction !== null}
-              >
-                Очистить видео
-              </Button>
-            </div>
+              </span>
+            ) : null}
           </div>
-
+          {initialAsset?.playerUrl || initialAsset?.sourceUrl || fallbackVideoUrl ? (
+            <p className="mt-2 break-all">
+              URL:{" "}
+              <span className="font-medium text-[var(--foreground)]">
+                {initialAsset?.playerUrl ?? initialAsset?.sourceUrl ?? fallbackVideoUrl}
+              </span>
+            </p>
+          ) : null}
           {initialAsset?.errorMessage ? (
-            <p className="mt-3 text-sm text-red-600">{initialAsset.errorMessage}</p>
+            <p className="mt-2 text-red-600">{initialAsset.errorMessage}</p>
           ) : null}
         </div>
-      )}
+      ) : null}
 
       {message ? (
-        <p className="rounded-xl bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
-          {message}
-        </p>
+        <p className="rounded-xl bg-emerald-50 px-4 py-3 text-sm text-emerald-700">{message}</p>
       ) : null}
 
       {error ? (
-        <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">
-          {error}
-        </p>
+        <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p>
       ) : null}
 
-      <div className="grid gap-4 xl:grid-cols-2">
-        <div className="space-y-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4">
-          <div className="flex items-start gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#eef2ff] text-[#2840db]">
-              <Link2 className="h-5 w-5" />
-            </div>
-            <div className="space-y-1">
-              <p className="font-semibold text-[var(--foreground)]">
-                Вставить ссылку на видео
-              </p>
-              <p className="text-sm leading-6 text-[var(--muted)]">
-                Поддерживаются private RUTUBE, прямые ссылки на видеофайл и
-                embed-плееры. Режим подключится автоматически.
-              </p>
-            </div>
-          </div>
-
-          <div className="space-y-3">
-            <Label htmlFor={`video-link-${lessonId}`}>Ссылка на видео</Label>
-            <Input
-              id={`video-link-${lessonId}`}
-              value={videoUrl}
-              onChange={(event) => setVideoUrl(event.target.value)}
-              placeholder="https://rutube.ru/video/private/... или https://storage..."
-            />
-          </div>
-
-          <Button
-            type="button"
-            onClick={handleVideoLink}
-            disabled={pendingAction !== null}
-          >
-            {pendingAction === "video-link"
-              ? "Подключаем..."
-              : "Подключить видео"}
-          </Button>
+      <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_auto]">
+        <div className="space-y-2">
+          <Label htmlFor={`video-link-${lessonId}`}>Ссылка на видео</Label>
+          <Input
+            id={`video-link-${lessonId}`}
+            value={videoUrl}
+            onChange={(event) => setVideoUrl(event.target.value)}
+            placeholder="RUTUBE private/public, embed или прямая ссылка"
+          />
         </div>
 
-        <div className="space-y-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4">
-          <div className="flex items-start gap-4">
-            <button
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-              className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#eef2ff] text-[#2840db] transition hover:bg-[#dfe7ff]"
-            >
-              <Plus className="h-5 w-5" />
-            </button>
-            <div className="space-y-1">
-              <p className="font-semibold text-[var(--foreground)]">
-                Загрузить файл с компьютера
-              </p>
-              <p className="text-sm leading-6 text-[var(--muted)]">
-                Если видео лежит локально, выбери файл и отправь его в урок.
-              </p>
-            </div>
-          </div>
-
-          <input
-            ref={fileInputRef}
-            id={`managed-video-${lessonId}`}
-            type="file"
-            accept="video/*"
-            className="hidden"
-            onChange={(event) => {
-              const file = event.target.files?.[0] ?? null;
-              setManagedFile(file);
-            }}
-          />
-
-          <div className="rounded-2xl border border-dashed border-[#cfd7f3] bg-white px-4 py-3 text-sm text-[var(--muted)]">
-            {managedFile ? (
-              <span>
-                Выбран файл:{" "}
-                <span className="font-medium text-[var(--foreground)]">
-                  {managedFile.name}
-                </span>
-              </span>
-            ) : (
-              "Файл пока не выбран."
-            )}
-          </div>
-
-          <Button
-            type="button"
-            onClick={handleManagedUpload}
-            disabled={pendingAction !== null}
-            className="inline-flex items-center gap-2"
-          >
-            <Upload className="h-4 w-4" />
-            {pendingAction === "managed-upload"
-              ? "Загружаем..."
-              : "Загрузить видео"}
+        <div className="flex items-end">
+          <Button type="button" onClick={handleVideoLink} disabled={pendingAction !== null}>
+            <Link2 className="mr-2 h-4 w-4" />
+            {pendingAction === "video-link" ? "Подключаем..." : "Подключить"}
           </Button>
+        </div>
+      </div>
+
+      <div className="rounded-[20px] border border-dashed border-[var(--border)] bg-white px-4 py-4">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="min-w-0">
+            <p className="text-sm font-medium text-[var(--foreground)]">Или загрузи файл с компьютера</p>
+            <p className="mt-1 truncate text-sm text-[var(--muted)]">
+              {managedFile ? `Выбран файл: ${managedFile.name}` : "Файл пока не выбран."}
+            </p>
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            <input
+              ref={fileInputRef}
+              id={`managed-video-${lessonId}`}
+              type="file"
+              accept="video/*"
+              className="hidden"
+              onChange={(event) => {
+                const file = event.target.files?.[0] ?? null;
+                setManagedFile(file);
+              }}
+            />
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => fileInputRef.current?.click()}
+            >
+              <Plus className="mr-2 h-4 w-4" />
+              Выбрать файл
+            </Button>
+            <Button
+              type="button"
+              onClick={handleManagedUpload}
+              disabled={pendingAction !== null}
+            >
+              <Upload className="mr-2 h-4 w-4" />
+              {pendingAction === "managed-upload" ? "Загружаем..." : "Загрузить"}
+            </Button>
+          </div>
         </div>
       </div>
     </section>

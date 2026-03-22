@@ -102,6 +102,16 @@ export type HomeworkAssignment = Prisma.HomeworkAssignmentModel
  */
 export type HomeworkReview = Prisma.HomeworkReviewModel
 /**
+ * Model HomeworkSubmission
+ * 
+ */
+export type HomeworkSubmission = Prisma.HomeworkSubmissionModel
+/**
+ * Model HomeworkSubmissionFile
+ * 
+ */
+export type HomeworkSubmissionFile = Prisma.HomeworkSubmissionFileModel
+/**
  * Model Product
  * 
  */

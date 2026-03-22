@@ -1,7 +1,14 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
-import { BarChart3, BookOpen, LayoutDashboard, Mail, Users } from "lucide-react";
+import {
+  BarChart3,
+  BookOpen,
+  ClipboardCheck,
+  LayoutDashboard,
+  Mail,
+  Users,
+} from "lucide-react";
 import { usePathname } from "next/navigation";
 
 import { USER_ROLES, type UserRole } from "@academy/shared";
@@ -12,6 +19,7 @@ const navItems = [
   { href: "/admin", label: "Обзор", icon: LayoutDashboard },
   { href: "/admin/courses", label: "Курсы", icon: BookOpen },
   { href: "/admin/students", label: "Студенты", icon: Users },
+  { href: "/admin/homework", label: "Домашки", icon: ClipboardCheck },
   { href: "/admin/emails", label: "Письма", icon: Mail },
   { href: "/admin/analytics", label: "Аналитика", icon: BarChart3 },
 ] as const;
@@ -53,4 +61,3 @@ export function AdminNav({ effectiveRole }: AdminNavProps) {
     </nav>
   );
 }
-

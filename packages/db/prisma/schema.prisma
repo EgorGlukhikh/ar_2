@@ -105,6 +105,13 @@ enum EmailStatus {
   CANCELED
 }
 
+enum HomeworkSubmissionStatus {
+  SUBMITTED
+  IN_REVIEW
+  REVISION_REQUESTED
+  APPROVED
+}
+
 model User {
   id            String           @id @default(cuid())
   email         String           @unique
@@ -121,6 +128,8 @@ model User {
   enrollments   Enrollment[]
   progress      LessonProgress[]
   homework      HomeworkReview[] @relation("Reviewer")
+  homeworkSubmissions HomeworkSubmission[] @relation("HomeworkStudentSubmissions")
+  reviewedHomeworkSubmissions HomeworkSubmission[] @relation("HomeworkSubmissionReviewer")
   orders        Order[]
   emails        EmailMessage[]
   lessonSessions LessonSession[]
@@ -272,11 +281,16 @@ model HomeworkAssignment {
   id                    String           @id @default(cuid())
   lessonId              String           @unique
   instructions          String?
-  requiresCuratorReview Boolean          @default(false)
+  requiresCuratorReview Boolean          @default(true)
+  unlockNextModuleOnApproval Boolean     @default(true)
+  allowTextSubmission   Boolean          @default(true)
+  allowLinkSubmission   Boolean          @default(true)
+  allowFileUpload       Boolean          @default(true)
   createdAt             DateTime         @default(now())
   updatedAt             DateTime         @updatedAt
   lesson                Lesson           @relation(fields: [lessonId], references: [id], onDelete: Cascade)
   reviews               HomeworkReview[]
+  submissions           HomeworkSubmission[]
 }
 
 model HomeworkReview {
@@ -293,6 +307,44 @@ model HomeworkReview {
   reviewer     User?              @relation("Reviewer", fields: [reviewerId], references: [id], onDelete: SetNull)
 
   @@index([studentId])
+}
+
+model HomeworkSubmission {
+  id                String                   @id @default(cuid())
+  assignmentId      String
+  studentId         String
+  reviewerId        String?
+  status            HomeworkSubmissionStatus @default(SUBMITTED)
+  submissionText    String?
+  submissionUrl     String?
+  feedback          String?
+  submittedAt       DateTime                 @default(now())
+  reviewedAt        DateTime?
+  approvedAt        DateTime?
+  revisionRequestedAt DateTime?
+  createdAt         DateTime                 @default(now())
+  updatedAt         DateTime                 @updatedAt
+  assignment        HomeworkAssignment       @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  student           User                     @relation("HomeworkStudentSubmissions", fields: [studentId], references: [id], onDelete: Cascade)
+  reviewer          User?                    @relation("HomeworkSubmissionReviewer", fields: [reviewerId], references: [id], onDelete: SetNull)
+  files             HomeworkSubmissionFile[]
+
+  @@unique([assignmentId, studentId])
+  @@index([status, updatedAt])
+  @@index([studentId, updatedAt])
+}
+
+model HomeworkSubmissionFile {
+  id          String               @id @default(cuid())
+  submissionId String
+  filename    String
+  mimeType    String?
+  sizeInBytes Int
+  data        Bytes
+  createdAt   DateTime             @default(now())
+  submission  HomeworkSubmission   @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+
+  @@index([submissionId, createdAt])
 }
 
 model Product {

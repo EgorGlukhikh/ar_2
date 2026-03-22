@@ -8,6 +8,7 @@ import {
   PaymentStatus,
   EmailProviderType,
   EmailStatus,
+  HomeworkSubmissionStatus,
 } from "@academy/db";
 
 type BadgeVariant = "default" | "neutral" | "success" | "warning";
@@ -126,4 +127,24 @@ export const emailStatusVariantMap: Record<EmailStatus, BadgeVariant> = {
   BOUNCED: "warning",
   COMPLAINED: "warning",
   CANCELED: "warning",
+};
+
+export const homeworkSubmissionStatusLabelMap: Record<
+  HomeworkSubmissionStatus,
+  string
+> = {
+  SUBMITTED: "Отправлено",
+  IN_REVIEW: "На проверке",
+  REVISION_REQUESTED: "Нужно доработать",
+  APPROVED: "Принято",
+};
+
+export const homeworkSubmissionStatusVariantMap: Record<
+  HomeworkSubmissionStatus,
+  BadgeVariant
+> = {
+  SUBMITTED: "warning",
+  IN_REVIEW: "warning",
+  REVISION_REQUESTED: "warning",
+  APPROVED: "success",
 };
