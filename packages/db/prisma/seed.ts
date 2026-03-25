@@ -1,6 +1,7 @@
 import { hash } from "bcryptjs";
 
 import { prisma, UserRole } from "../src/index.js";
+import { seedShowcaseAcademy } from "./showcase-seed.js";
 
 const adminEmail = process.env.ADMIN_EMAIL ?? "test@mail.ru";
 const adminPassword = process.env.ADMIN_PASSWORD ?? "12345";
@@ -50,6 +51,8 @@ async function main() {
 
   if (!bootstrapUserEmail && !bootstrapUserPassword) {
     console.log("[seed] No bootstrap workspace user configured. Skipping.");
+    await seedShowcaseAcademy(null);
+    console.log("[seed] Showcase academy catalog ensured.");
     return;
   }
 
@@ -88,6 +91,9 @@ async function main() {
   console.log(
     `[seed] Bootstrap workspace user ensured for ${bootstrapUserEmail} with role ${role}`,
   );
+
+  await seedShowcaseAcademy(bootstrapUserEmail);
+  console.log("[seed] Showcase academy catalog ensured.");
 }
 
 main()

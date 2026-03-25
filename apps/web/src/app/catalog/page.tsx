@@ -191,6 +191,7 @@ export default async function CatalogPage() {
                   courses.map((course, index) => {
                     const defaultProduct = course.products[0];
                     const defaultPrice = defaultProduct?.prices[0];
+                    const isFreeCourse = Boolean(defaultPrice && defaultPrice.amount === 0);
                     const lessonCount = course.modules.reduce(
                       (sum, module) => sum + module.lessons.length,
                       0,
@@ -239,7 +240,9 @@ export default async function CatalogPage() {
                             </p>
                             <p className="mt-3 text-3xl font-semibold tracking-tight text-[#1c2442]">
                               {defaultPrice
-                                ? formatMinorUnits(defaultPrice.amount, defaultPrice.currency)
+                                ? isFreeCourse
+                                  ? "Бесплатно"
+                                  : formatMinorUnits(defaultPrice.amount, defaultPrice.currency)
                                 : "Цена не задана"}
                             </p>
                             <p className="mt-3 text-sm leading-7 text-[#596177]">
