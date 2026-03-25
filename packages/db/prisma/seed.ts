@@ -26,6 +26,7 @@ function resolveBootstrapUserRole() {
 }
 
 async function main() {
+  console.log(`[seed] Starting database seed at ${new Date().toISOString()}`);
   const passwordHash = await hash(adminPassword, 10);
 
   await prisma.user.upsert({
@@ -45,7 +46,10 @@ async function main() {
     },
   });
 
+  console.log(`[seed] Admin user ensured for ${adminEmail}`);
+
   if (!bootstrapUserEmail && !bootstrapUserPassword) {
+    console.log("[seed] No bootstrap workspace user configured. Skipping.");
     return;
   }
 
@@ -80,6 +84,10 @@ async function main() {
       passwordHash: bootstrapPasswordHash,
     },
   });
+
+  console.log(
+    `[seed] Bootstrap workspace user ensured for ${bootstrapUserEmail} with role ${role}`,
+  );
 }
 
 main()
