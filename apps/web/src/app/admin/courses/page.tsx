@@ -23,7 +23,10 @@ export default async function CoursesPage() {
     viewer.actualRole === USER_ROLES.ADMIN &&
     viewer.effectiveRole === USER_ROLES.AUTHOR;
   const isAuthorMode = isAuthorRole || isAuthorPreview;
-  const canCreateCourse = canCreateCourses(viewer.user);
+  const canCreateCourse = canCreateCourses({
+    ...viewer.user,
+    role: viewer.effectiveRole,
+  });
 
   const courses = await prisma.course.findMany({
     where: isAuthorRole ? { authorId: viewer.user.id } : undefined,

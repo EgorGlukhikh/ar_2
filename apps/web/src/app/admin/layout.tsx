@@ -1,5 +1,8 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
+import { redirect } from "next/navigation";
+
+import { USER_ROLES } from "@academy/shared";
 
 import { LogoutButton } from "@/components/auth/logout-button";
 import { AdminNav } from "@/components/admin/admin-nav";
@@ -17,7 +20,15 @@ export default async function AdminLayout({
   children: ReactNode;
 }) {
   const viewer = await requireAdminViewer();
-  const canCreateCourse = canCreateCourses(viewer.user);
+
+  if (viewer.effectiveRole === USER_ROLES.STUDENT) {
+    redirect("/learning");
+  }
+
+  const canCreateCourse = canCreateCourses({
+    ...viewer.user,
+    role: viewer.effectiveRole,
+  });
 
   return (
     <main className="min-h-screen bg-[linear-gradient(180deg,_#f7f9ff_0%,_#f1f5ff_100%)] px-4 py-4 md:px-6 md:py-6">
