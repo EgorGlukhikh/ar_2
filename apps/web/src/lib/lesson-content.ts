@@ -1,4 +1,7 @@
-import type { Prisma } from "@academy/db";
+import type {
+  LessonContentBlockType as DbLessonContentBlockType,
+  Prisma,
+} from "@academy/db";
 
 export type LessonAttachment = {
   title: string;
@@ -36,6 +39,17 @@ export type LessonBlock =
       submissionHint?: string;
     };
 
+export type PersistedLessonBlockRecord = {
+  blockKey: string;
+  type: DbLessonContentBlockType | LessonBlockType;
+  position: number;
+  title: string;
+  body: string | null;
+  url: string | null;
+  note: string | null;
+  submissionHint: string | null;
+};
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
 }
@@ -46,70 +60,163 @@ function normalizeBlockId(rawId: unknown, index: number) {
     : `block-${index + 1}`;
 }
 
+function getDefaultTitle(type: LessonBlockType, index: number) {
+  if (type === "TEXT") {
+    return `Текстовый блок ${index + 1}`;
+  }
+
+  if (type === "VIDEO") {
+    return "Видео";
+  }
+
+  if (type === "HOMEWORK") {
+    return "Домашнее задание";
+  }
+
+  return `Материал ${index + 1}`;
+}
+
+function normalizeLessonBlock(block: LessonBlock, index: number): LessonBlock | null {
+  const id = normalizeBlockId(block.id, index);
+  const title = block.title.trim() || getDefaultTitle(block.type, index);
+
+  if (block.type === "TEXT") {
+    const body = block.body.trim();
+
+    if (!title && !body) {
+      return null;
+    }
+
+    return {
+      id,
+      type: "TEXT",
+      title,
+      body,
+    };
+  }
+
+  if (block.type === "VIDEO") {
+    const body = block.body?.trim() || "";
+
+    if (!title && !body) {
+      return null;
+    }
+
+    return {
+      id,
+      type: "VIDEO",
+      title,
+      body,
+    };
+  }
+
+  if (block.type === "HOMEWORK") {
+    const body = block.body.trim();
+    const submissionHint = block.submissionHint?.trim() || "";
+
+    if (!title && !body && !submissionHint) {
+      return null;
+    }
+
+    return {
+      id,
+      type: "HOMEWORK",
+      title,
+      body,
+      submissionHint,
+    };
+  }
+
+  const url = block.url.trim();
+  const note = block.note?.trim() || "";
+
+  if (!url) {
+    return null;
+  }
+
+  return {
+    id,
+    type: "FILE",
+    title,
+    url,
+    note,
+  };
+}
+
+export function normalizeLessonBlocks(blocks: LessonBlock[]) {
+  return blocks.flatMap((block, index) => {
+    const normalizedBlock = normalizeLessonBlock(block, index);
+    return normalizedBlock ? [normalizedBlock] : [];
+  });
+}
+
+function parseStructuredContentBlock(
+  item: Record<string, unknown>,
+  index: number,
+): LessonBlock | null {
+  if (item.type === "TEXT") {
+    return normalizeLessonBlock(
+      {
+        id: normalizeBlockId(item.id, index),
+        type: "TEXT",
+        title: typeof item.title === "string" ? item.title : "",
+        body: typeof item.body === "string" ? item.body : "",
+      },
+      index,
+    );
+  }
+
+  if (item.type === "VIDEO") {
+    return normalizeLessonBlock(
+      {
+        id: normalizeBlockId(item.id, index),
+        type: "VIDEO",
+        title: typeof item.title === "string" ? item.title : "",
+        body: typeof item.body === "string" ? item.body : "",
+      },
+      index,
+    );
+  }
+
+  if (item.type === "FILE") {
+    return normalizeLessonBlock(
+      {
+        id: normalizeBlockId(item.id, index),
+        type: "FILE",
+        title: typeof item.title === "string" ? item.title : "",
+        url: typeof item.url === "string" ? item.url : "",
+        note: typeof item.note === "string" ? item.note : "",
+      },
+      index,
+    );
+  }
+
+  if (item.type === "HOMEWORK") {
+    return normalizeLessonBlock(
+      {
+        id: normalizeBlockId(item.id, index),
+        type: "HOMEWORK",
+        title: typeof item.title === "string" ? item.title : "",
+        body: typeof item.body === "string" ? item.body : "",
+        submissionHint:
+          typeof item.submissionHint === "string" ? item.submissionHint : "",
+      },
+      index,
+    );
+  }
+
+  return null;
+}
+
 export function extractLessonBlocks(content: unknown): LessonBlock[] {
   if (isRecord(content) && Array.isArray(content.blocks)) {
-    return content.blocks.flatMap<LessonBlock>((item, index) => {
+    return content.blocks.flatMap((item, index) => {
       if (!isRecord(item) || typeof item.type !== "string") {
         return [];
       }
 
-      const id = normalizeBlockId(item.id, index);
-      const title = typeof item.title === "string" ? item.title.trim() : "";
-
-      if (item.type === "TEXT") {
-        return [
-          {
-            id,
-            type: "TEXT",
-            title: title || `Текстовый блок ${index + 1}`,
-            body: typeof item.body === "string" ? item.body : "",
-          } satisfies LessonBlock,
-        ];
-      }
-
-      if (item.type === "VIDEO") {
-        return [
-          {
-            id,
-            type: "VIDEO",
-            title: title || "Видео",
-            body: typeof item.body === "string" ? item.body : "",
-          } satisfies LessonBlock,
-        ];
-      }
-
-      if (item.type === "FILE") {
-        const url = typeof item.url === "string" ? item.url.trim() : "";
-
-        if (!url) {
-          return [];
-        }
-
-        return [
-          {
-            id,
-            type: "FILE",
-            title: title || `Материал ${index + 1}`,
-            url,
-            note: typeof item.note === "string" ? item.note : "",
-          } satisfies LessonBlock,
-        ];
-      }
-
-      if (item.type === "HOMEWORK") {
-        return [
-          {
-            id,
-            type: "HOMEWORK",
-            title: title || "Домашняя работа",
-            body: typeof item.body === "string" ? item.body : "",
-            submissionHint:
-              typeof item.submissionHint === "string" ? item.submissionHint : "",
-          } satisfies LessonBlock,
-        ];
-      }
-
-      return [];
+      const block = parseStructuredContentBlock(item, index);
+      return block ? [block] : [];
     });
   }
 
@@ -149,7 +256,88 @@ export function extractLessonBlocks(content: unknown): LessonBlock[] {
     });
   }
 
-  return fallbackBlocks;
+  return normalizeLessonBlocks(fallbackBlocks);
+}
+
+export function extractLessonBlocksFromRecords(
+  lessonBlocks?: readonly PersistedLessonBlockRecord[] | null,
+): LessonBlock[] {
+  if (!lessonBlocks || lessonBlocks.length === 0) {
+    return [];
+  }
+
+  const normalizedBlocks: LessonBlock[] = [];
+
+  lessonBlocks
+    .slice()
+    .sort((left, right) => left.position - right.position)
+    .forEach((block, index) => {
+      if (block.type === "TEXT") {
+        normalizedBlocks.push({
+          id: block.blockKey,
+          type: "TEXT",
+          title: block.title,
+          body: block.body ?? "",
+        });
+        return;
+      }
+
+      if (block.type === "VIDEO") {
+        normalizedBlocks.push({
+          id: block.blockKey,
+          type: "VIDEO",
+          title: block.title,
+          body: block.body ?? "",
+        });
+        return;
+      }
+
+      if (block.type === "FILE") {
+        if (block.url) {
+          normalizedBlocks.push({
+            id: block.blockKey,
+            type: "FILE",
+            title: block.title,
+            url: block.url,
+            note: block.note ?? "",
+          });
+        }
+        return;
+      }
+
+      if (block.type === "HOMEWORK") {
+        normalizedBlocks.push({
+          id: block.blockKey,
+          type: "HOMEWORK",
+          title: block.title,
+          body: block.body ?? "",
+          submissionHint: block.submissionHint ?? "",
+        });
+        return;
+      }
+
+      normalizedBlocks.push({
+        id: normalizeBlockId(block.blockKey, index),
+        type: "TEXT",
+        title: block.title,
+        body: block.body ?? "",
+      });
+    });
+
+  return normalizedBlocks;
+}
+
+export function resolveLessonBlocks(args: {
+  content: unknown;
+  lessonBlocks?: readonly PersistedLessonBlockRecord[] | null;
+}) {
+  const persistedBlocks = extractLessonBlocksFromRecords(args.lessonBlocks);
+
+  if (persistedBlocks.length > 0) {
+    return persistedBlocks;
+  }
+
+  return extractLessonBlocks(args.content);
 }
 
 export function extractLessonBody(content: unknown) {
@@ -189,68 +377,42 @@ export function hasLessonVideoBlock(content: unknown) {
 export function buildLessonContentFromBlocks(
   blocks: LessonBlock[],
 ): Prisma.InputJsonObject | null {
-  const normalizedBlocks = blocks.flatMap<Prisma.InputJsonObject>((block, index) => {
-    const title = block.title.trim();
-
+  const normalizedBlocks = normalizeLessonBlocks(blocks).map((block) => {
     if (block.type === "TEXT") {
-      if (!title && !block.body.trim()) {
-        return [];
-      }
-
-      return [
-        {
-          id: normalizeBlockId(block.id, index),
-          type: "TEXT" as const,
-          title: title || `Текстовый блок ${index + 1}`,
-          body: block.body.trim(),
-        },
-      ];
+      return {
+        id: block.id,
+        type: "TEXT" as const,
+        title: block.title,
+        body: block.body,
+      };
     }
 
     if (block.type === "VIDEO") {
-      if (!title && !block.body?.trim()) {
-        return [];
-      }
-
-      return [
-        {
-          id: normalizeBlockId(block.id, index),
-          type: "VIDEO" as const,
-          title: title || "Видео",
-          body: block.body?.trim() || "",
-        },
-      ];
+      return {
+        id: block.id,
+        type: "VIDEO" as const,
+        title: block.title,
+        body: block.body ?? "",
+      };
     }
 
     if (block.type === "HOMEWORK") {
-      if (!title && !block.body.trim() && !block.submissionHint?.trim()) {
-        return [];
-      }
-
-      return [
-        {
-          id: normalizeBlockId(block.id, index),
-          type: "HOMEWORK" as const,
-          title: title || "Домашняя работа",
-          body: block.body.trim(),
-          submissionHint: block.submissionHint?.trim() || "",
-        },
-      ];
+      return {
+        id: block.id,
+        type: "HOMEWORK" as const,
+        title: block.title,
+        body: block.body,
+        submissionHint: block.submissionHint ?? "",
+      };
     }
 
-    if (!block.url.trim()) {
-      return [];
-    }
-
-    return [
-      {
-        id: normalizeBlockId(block.id, index),
-        type: "FILE" as const,
-        title: title || `Материал ${index + 1}`,
-        url: block.url.trim(),
-        note: block.note?.trim() || "",
-      },
-    ];
+    return {
+      id: block.id,
+      type: "FILE" as const,
+      title: block.title,
+      url: block.url,
+      note: block.note ?? "",
+    };
   });
 
   return normalizedBlocks.length > 0
@@ -258,4 +420,20 @@ export function buildLessonContentFromBlocks(
         blocks: normalizedBlocks as Prisma.InputJsonArray,
       }
     : null;
+}
+
+export function buildPersistedLessonBlocks(blocks: LessonBlock[]) {
+  return normalizeLessonBlocks(blocks).map((block, index) => ({
+    blockKey: block.id,
+    type: block.type as DbLessonContentBlockType,
+    position: index + 1,
+    title: block.title,
+    body:
+      block.type === "TEXT" || block.type === "VIDEO" || block.type === "HOMEWORK"
+        ? block.body ?? ""
+        : null,
+    url: block.type === "FILE" ? block.url : null,
+    note: block.type === "FILE" ? block.note ?? "" : null,
+    submissionHint: block.type === "HOMEWORK" ? block.submissionHint ?? "" : null,
+  }));
 }

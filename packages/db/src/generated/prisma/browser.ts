@@ -53,6 +53,11 @@ export type Module = Prisma.ModuleModel
  */
 export type Lesson = Prisma.LessonModel
 /**
+ * Model LessonBlock
+ * 
+ */
+export type LessonBlock = Prisma.LessonBlockModel
+/**
  * Model VideoAsset
  * 
  */

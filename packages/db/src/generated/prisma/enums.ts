@@ -41,6 +41,16 @@ export const LessonType = {
 export type LessonType = (typeof LessonType)[keyof typeof LessonType]
 
 
+export const LessonContentBlockType = {
+  TEXT: 'TEXT',
+  VIDEO: 'VIDEO',
+  FILE: 'FILE',
+  HOMEWORK: 'HOMEWORK'
+} as const
+
+export type LessonContentBlockType = (typeof LessonContentBlockType)[keyof typeof LessonContentBlockType]
+
+
 export const MediaSourceType = {
   MANAGED_UPLOAD: 'MANAGED_UPLOAD',
   RUTUBE_EMBED: 'RUTUBE_EMBED',

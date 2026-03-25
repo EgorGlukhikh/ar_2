@@ -321,6 +321,23 @@ export type EnumMediaSourceTypeNullableWithAggregatesFilter<$PrismaModel = never
   _max?: Prisma.NestedEnumMediaSourceTypeNullableFilter<$PrismaModel>
 }
 
+export type EnumLessonContentBlockTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.LessonContentBlockType | Prisma.EnumLessonContentBlockTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.LessonContentBlockType[] | Prisma.ListEnumLessonContentBlockTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LessonContentBlockType[] | Prisma.ListEnumLessonContentBlockTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLessonContentBlockTypeFilter<$PrismaModel> | $Enums.LessonContentBlockType
+}
+
+export type EnumLessonContentBlockTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.LessonContentBlockType | Prisma.EnumLessonContentBlockTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.LessonContentBlockType[] | Prisma.ListEnumLessonContentBlockTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LessonContentBlockType[] | Prisma.ListEnumLessonContentBlockTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLessonContentBlockTypeWithAggregatesFilter<$PrismaModel> | $Enums.LessonContentBlockType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumLessonContentBlockTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumLessonContentBlockTypeFilter<$PrismaModel>
+}
+
 export type EnumVideoProviderTypeFilter<$PrismaModel = never> = {
   equals?: $Enums.VideoProviderType | Prisma.EnumVideoProviderTypeFieldRefInput<$PrismaModel>
   in?: $Enums.VideoProviderType[] | Prisma.ListEnumVideoProviderTypeFieldRefInput<$PrismaModel>
@@ -850,6 +867,23 @@ export type NestedEnumMediaSourceTypeNullableWithAggregatesFilter<$PrismaModel =
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedEnumMediaSourceTypeNullableFilter<$PrismaModel>
   _max?: Prisma.NestedEnumMediaSourceTypeNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumLessonContentBlockTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.LessonContentBlockType | Prisma.EnumLessonContentBlockTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.LessonContentBlockType[] | Prisma.ListEnumLessonContentBlockTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LessonContentBlockType[] | Prisma.ListEnumLessonContentBlockTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLessonContentBlockTypeFilter<$PrismaModel> | $Enums.LessonContentBlockType
+}
+
+export type NestedEnumLessonContentBlockTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.LessonContentBlockType | Prisma.EnumLessonContentBlockTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.LessonContentBlockType[] | Prisma.ListEnumLessonContentBlockTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.LessonContentBlockType[] | Prisma.ListEnumLessonContentBlockTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumLessonContentBlockTypeWithAggregatesFilter<$PrismaModel> | $Enums.LessonContentBlockType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumLessonContentBlockTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumLessonContentBlockTypeFilter<$PrismaModel>
 }
 
 export type NestedEnumVideoProviderTypeFilter<$PrismaModel = never> = {

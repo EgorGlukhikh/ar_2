@@ -20,7 +20,11 @@ import {
   updateLesson,
   updateModule,
 } from "@/features/admin/course-actions";
-import { extractLessonBlocks, type LessonBlock } from "@/lib/lesson-content";
+import {
+  resolveLessonBlocks,
+  type LessonBlock,
+  type PersistedLessonBlockRecord,
+} from "@/lib/lesson-content";
 import { canEditCourseContent, requireWorkspaceUser } from "@/lib/admin";
 
 type CourseContentPageProps = {
@@ -33,15 +37,32 @@ type CourseContentPageProps = {
   }>;
 };
 
+type LessonBlockStoreRecord = PersistedLessonBlockRecord & {
+  lessonId: string;
+};
+
 function getLessonBlocks(lesson: {
   type: LessonType;
   content: unknown;
+  lessonBlocks?: {
+    blockKey: string;
+    type: "TEXT" | "VIDEO" | "FILE" | "HOMEWORK";
+    position: number;
+    title: string;
+    body: string | null;
+    url: string | null;
+    note: string | null;
+    submissionHint: string | null;
+  }[];
   videoAsset: unknown;
   videoSourceType: unknown;
   videoUrl: unknown;
   videoPlaybackId: unknown;
 }): LessonBlock[] {
-  const extractedBlocks = extractLessonBlocks(lesson.content);
+  const extractedBlocks = resolveLessonBlocks({
+    content: lesson.content,
+    lessonBlocks: lesson.lessonBlocks,
+  });
 
   if (extractedBlocks.length > 0) {
     return extractedBlocks;
@@ -170,6 +191,44 @@ export default async function CourseContentPage({
     notFound();
   }
 
+  const lessonIds = course.modules.flatMap((moduleItem) =>
+    moduleItem.lessons.map((lesson) => lesson.id),
+  );
+  const lessonBlockPrisma = prisma as typeof prisma & {
+    lessonBlock: {
+      findMany(args: unknown): Promise<LessonBlockStoreRecord[]>;
+    };
+  };
+  const persistedLessonBlocks =
+    lessonIds.length > 0
+      ? await lessonBlockPrisma.lessonBlock.findMany({
+          where: {
+            lessonId: {
+              in: lessonIds,
+            },
+          },
+          orderBy: [{ lessonId: "asc" }, { position: "asc" }],
+          select: {
+            lessonId: true,
+            blockKey: true,
+            type: true,
+            position: true,
+            title: true,
+            body: true,
+            url: true,
+            note: true,
+            submissionHint: true,
+          },
+        })
+      : [];
+  const lessonBlocksByLessonId = new Map<string, (typeof persistedLessonBlocks)[number][]>();
+
+  persistedLessonBlocks.forEach((block) => {
+    const blocks = lessonBlocksByLessonId.get(block.lessonId) ?? [];
+    blocks.push(block);
+    lessonBlocksByLessonId.set(block.lessonId, blocks);
+  });
+
   const lessonOwnerModule =
     course.modules.find((moduleItem) =>
       moduleItem.lessons.some((lesson) => lesson.id === resolvedSearchParams.lessonId),
@@ -186,7 +245,12 @@ export default async function CourseContentPage({
     selectedModule?.lessons[0] ??
     null;
 
-  const selectedLessonBlocks = selectedLesson ? getLessonBlocks(selectedLesson) : [];
+  const selectedLessonBlocks = selectedLesson
+    ? getLessonBlocks({
+        ...selectedLesson,
+        lessonBlocks: lessonBlocksByLessonId.get(selectedLesson.id),
+      })
+    : [];
   const hasHomeworkBlock = selectedLessonBlocks.some((block) => block.type === "HOMEWORK");
 
   return (

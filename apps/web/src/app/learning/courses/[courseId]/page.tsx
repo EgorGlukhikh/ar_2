@@ -16,7 +16,11 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toggleLessonCompletion } from "@/features/learning/actions";
 import { submitHomework } from "@/features/homework/actions";
-import { extractLessonBlocks, type LessonBlock } from "@/lib/lesson-content";
+import {
+  resolveLessonBlocks,
+  type LessonBlock,
+  type PersistedLessonBlockRecord,
+} from "@/lib/lesson-content";
 import {
   enrollmentStatusLabelMap,
   enrollmentStatusVariantMap,
@@ -47,12 +51,25 @@ function formatBytes(sizeInBytes: number) {
 
 function getRenderableBlocks(lesson: {
   content: unknown;
+  lessonBlocks?: {
+    blockKey: string;
+    type: "TEXT" | "VIDEO" | "FILE" | "HOMEWORK";
+    position: number;
+    title: string;
+    body: string | null;
+    url: string | null;
+    note: string | null;
+    submissionHint: string | null;
+  }[];
   videoAsset: unknown;
   videoSourceType: unknown;
   videoUrl: unknown;
   videoPlaybackId: unknown;
 }): LessonBlock[] {
-  const extractedBlocks = extractLessonBlocks(lesson.content);
+  const extractedBlocks = resolveLessonBlocks({
+    content: lesson.content,
+    lessonBlocks: lesson.lessonBlocks,
+  });
 
   if (extractedBlocks.length > 0) {
     return extractedBlocks;
@@ -94,6 +111,10 @@ type CourseLearningPageProps = {
   searchParams?: Promise<{
     lessonId?: string;
   }>;
+};
+
+type LessonBlockStoreRecord = PersistedLessonBlockRecord & {
+  lessonId: string;
 };
 
 export default async function CourseLearningPage({
@@ -215,6 +236,44 @@ export default async function CourseLearningPage({
     notFound();
   }
 
+  const lessonIds = course.modules.flatMap((moduleItem) =>
+    moduleItem.lessons.map((lesson) => lesson.id),
+  );
+  const lessonBlockPrisma = prisma as typeof prisma & {
+    lessonBlock: {
+      findMany(args: unknown): Promise<LessonBlockStoreRecord[]>;
+    };
+  };
+  const persistedLessonBlocks =
+    lessonIds.length > 0
+      ? await lessonBlockPrisma.lessonBlock.findMany({
+          where: {
+            lessonId: {
+              in: lessonIds,
+            },
+          },
+          orderBy: [{ lessonId: "asc" }, { position: "asc" }],
+          select: {
+            lessonId: true,
+            blockKey: true,
+            type: true,
+            position: true,
+            title: true,
+            body: true,
+            url: true,
+            note: true,
+            submissionHint: true,
+          },
+        })
+      : [];
+  const lessonBlocksByLessonId = new Map<string, (typeof persistedLessonBlocks)[number][]>();
+
+  persistedLessonBlocks.forEach((block) => {
+    const blocks = lessonBlocksByLessonId.get(block.lessonId) ?? [];
+    blocks.push(block);
+    lessonBlocksByLessonId.set(block.lessonId, blocks);
+  });
+
   const courseStartDate = enrollment?.startedAt ?? enrollment?.createdAt ?? new Date();
   const dateFormatter = new Intl.DateTimeFormat("ru-RU", {
     day: "2-digit",
@@ -303,7 +362,10 @@ export default async function CourseLearningPage({
       ? 0
       : Math.round((completedLessons / lessonEntries.length) * 100);
   const selectedLessonBlocks = selectedEntry
-    ? getRenderableBlocks(selectedEntry.lesson)
+    ? getRenderableBlocks({
+        ...selectedEntry.lesson,
+        lessonBlocks: lessonBlocksByLessonId.get(selectedEntry.lesson.id),
+      })
     : [];
   const selectedHomeworkAssignment = selectedEntry?.lesson.homeworkAssignment ?? null;
   const selectedHomeworkSubmission = selectedHomeworkAssignment?.submissions[0] ?? null;

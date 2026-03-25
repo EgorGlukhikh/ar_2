@@ -30,6 +30,13 @@ enum LessonType {
   FILE
 }
 
+enum LessonContentBlockType {
+  TEXT
+  VIDEO
+  FILE
+  HOMEWORK
+}
+
 enum MediaSourceType {
   MANAGED_UPLOAD
   RUTUBE_EMBED
@@ -222,11 +229,32 @@ model Lesson {
   updatedAt          DateTime         @updatedAt
   module             Module           @relation(fields: [moduleId], references: [id], onDelete: Cascade)
   progress           LessonProgress[]
+  lessonBlocks       LessonBlock[]
   homeworkAssignment HomeworkAssignment?
   videoAsset         VideoAsset?
   lessonSessions     LessonSession[]
 
   @@unique([moduleId, position])
+}
+
+model LessonBlock {
+  id             String                 @id @default(cuid())
+  lessonId       String
+  blockKey       String
+  type           LessonContentBlockType
+  position       Int
+  title          String
+  body           String?
+  url            String?
+  note           String?
+  submissionHint String?
+  createdAt      DateTime               @default(now())
+  updatedAt      DateTime               @updatedAt
+  lesson         Lesson                 @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([lessonId, position])
+  @@unique([lessonId, blockKey])
+  @@index([lessonId, type])
 }
 
 model VideoAsset {

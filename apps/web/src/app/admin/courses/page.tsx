@@ -12,14 +12,18 @@ import {
   WorkspacePageHeader,
   WorkspacePanel,
 } from "@/components/workspace/workspace-primitives";
+import { canCreateCourses } from "@/lib/admin";
 import { courseStatusLabelMap, courseStatusVariantMap } from "@/lib/labels";
 import { requireAdminViewer } from "@/lib/viewer";
 
 export default async function CoursesPage() {
   const viewer = await requireAdminViewer();
   const isAuthorRole = viewer.actualRole === USER_ROLES.AUTHOR;
-  const isAuthorPreview = viewer.actualRole === USER_ROLES.ADMIN && viewer.effectiveRole === USER_ROLES.AUTHOR;
+  const isAuthorPreview =
+    viewer.actualRole === USER_ROLES.ADMIN &&
+    viewer.effectiveRole === USER_ROLES.AUTHOR;
   const isAuthorMode = isAuthorRole || isAuthorPreview;
+  const canCreateCourse = canCreateCourses(viewer.user);
 
   const courses = await prisma.course.findMany({
     where: isAuthorRole ? { authorId: viewer.user.id } : undefined,
@@ -59,7 +63,7 @@ export default async function CoursesPage() {
         title={isAuthorMode ? "Программы автора" : "Все программы академии"}
         description={
           isAuthorMode
-            ? "Здесь собраны курсы, закрепленные за автором. Отсюда удобно открывать программу и наполнять уроки."
+            ? "Здесь автор создает свои программы, открывает структуру курса и наполняет уроки контентом."
             : "Здесь создаются новые курсы и открываются их рабочие разделы: карточка, программа, доступы и продажи."
         }
         meta={
@@ -68,9 +72,11 @@ export default async function CoursesPage() {
           </div>
         }
         actions={
-          viewer.actualRole === USER_ROLES.ADMIN ? (
+          canCreateCourse ? (
             <Button asChild>
-              <Link href="/admin/courses/new">Новый курс</Link>
+              <Link href="/admin/courses/new">
+                {isAuthorMode ? "Создать курс" : "Новый курс"}
+              </Link>
             </Button>
           ) : undefined
         }
@@ -78,14 +84,14 @@ export default async function CoursesPage() {
 
       {courses.length === 0 ? (
         <WorkspaceEmptyState
-          title={isAuthorMode ? "Пока нет закрепленных курсов" : "Пока нет ни одного курса"}
+          title={isAuthorMode ? "Пока нет ваших курсов" : "Пока нет ни одного курса"}
           description={
             isAuthorMode
-              ? "Как только администратор закрепит за автором курс, он появится здесь и будет доступен для наполнения."
+              ? "Создай первый курс и сразу переходи к программе: внутри можно собирать модули, уроки и материалы."
               : "Создай первую программу, затем открой вкладку «Программа» и собери внутри нее модули, уроки и материалы."
           }
           action={
-            viewer.actualRole === USER_ROLES.ADMIN ? (
+            canCreateCourse ? (
               <Button asChild>
                 <Link href="/admin/courses/new">Создать курс</Link>
               </Button>
@@ -116,7 +122,9 @@ export default async function CoursesPage() {
                         </Badge>
                         <Badge variant="neutral">Модулей {course._count.modules}</Badge>
                         <Badge variant="neutral">Уроков {lessonCount}</Badge>
-                        <Badge variant="neutral">Зачислений {course._count.enrollments}</Badge>
+                        <Badge variant="neutral">
+                          Зачислений {course._count.enrollments}
+                        </Badge>
                       </div>
 
                       <div>
@@ -170,7 +178,9 @@ export default async function CoursesPage() {
 
                     <div className="flex flex-wrap gap-3">
                       <Button asChild>
-                        <Link href={`/admin/courses/${course.id}/content`}>Открыть программу</Link>
+                        <Link href={`/admin/courses/${course.id}/content`}>
+                          Открыть программу
+                        </Link>
                       </Button>
 
                       {viewer.actualRole === USER_ROLES.ADMIN ? (
@@ -179,7 +189,9 @@ export default async function CoursesPage() {
                             <Link href={`/admin/courses/${course.id}`}>Настройки</Link>
                           </Button>
                           <Button asChild variant="outline">
-                            <Link href={`/admin/courses/${course.id}/access`}>Доступ и продажи</Link>
+                            <Link href={`/admin/courses/${course.id}/access`}>
+                              Доступ и продажи
+                            </Link>
                           </Button>
                         </>
                       ) : null}
@@ -192,11 +204,15 @@ export default async function CoursesPage() {
         </div>
       )}
 
-      {courses.length > 0 && viewer.actualRole === USER_ROLES.ADMIN ? (
+      {courses.length > 0 && canCreateCourse ? (
         <WorkspacePanel
           eyebrow="Быстрое действие"
           title="Нужен еще один курс?"
-          description="Если методисты начинают новую программу, лучше сразу заводить отдельный курс, а не смешивать материалы внутри существующего."
+          description={
+            isAuthorMode
+              ? "Создай отдельную программу под новый поток или продукт, а не смешивай материалы в одном курсе."
+              : "Если методисты начинают новую программу, лучше сразу заводить отдельный курс, а не смешивать материалы внутри существующего."
+          }
           actions={
             <Button asChild>
               <Link href="/admin/courses/new">

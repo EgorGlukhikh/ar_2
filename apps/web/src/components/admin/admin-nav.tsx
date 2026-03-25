@@ -64,13 +64,13 @@ export function AdminNav({ effectiveRole }: AdminNavProps) {
             key={item.href}
             href={item.href}
             className={cn(
-              "inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium transition",
+              "inline-flex h-11 items-center gap-2 rounded-full border px-5 text-sm font-semibold transition",
               isActive
-                ? "bg-[#2840db] text-white shadow-[0_14px_28px_rgba(40,64,219,0.2)]"
-                : "border border-[var(--border)] bg-white text-[var(--muted)] hover:border-[var(--primary)] hover:text-[var(--foreground)]",
+                ? "border-transparent bg-[#2840db] text-white shadow-[0_14px_28px_rgba(40,64,219,0.2)] [&_svg]:text-white"
+                : "border-[var(--border)] bg-white text-[var(--muted)] hover:border-[var(--primary)] hover:text-[var(--foreground)]",
             )}
           >
-            <Icon className="h-4 w-4" />
+            <Icon className="h-4 w-4 shrink-0" />
             {item.label}
           </Link>
         );

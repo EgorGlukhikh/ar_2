@@ -391,6 +391,7 @@ export const ModelName = {
   Course: 'Course',
   Module: 'Module',
   Lesson: 'Lesson',
+  LessonBlock: 'LessonBlock',
   VideoAsset: 'VideoAsset',
   Enrollment: 'Enrollment',
   LessonProgress: 'LessonProgress',
@@ -424,7 +425,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "account" | "session" | "verificationToken" | "course" | "module" | "lesson" | "videoAsset" | "enrollment" | "lessonProgress" | "homeworkAssignment" | "homeworkReview" | "homeworkSubmission" | "homeworkSubmissionFile" | "product" | "price" | "order" | "orderItem" | "payment" | "emailMessage" | "emailEvent" | "emailLinkClick" | "workspaceInvite" | "lessonSession" | "lessonSessionEvent"
+    modelProps: "user" | "account" | "session" | "verificationToken" | "course" | "module" | "lesson" | "lessonBlock" | "videoAsset" | "enrollment" | "lessonProgress" | "homeworkAssignment" | "homeworkReview" | "homeworkSubmission" | "homeworkSubmissionFile" | "product" | "price" | "order" | "orderItem" | "payment" | "emailMessage" | "emailEvent" | "emailLinkClick" | "workspaceInvite" | "lessonSession" | "lessonSessionEvent"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -943,6 +944,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.LessonCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.LessonCountAggregateOutputType> | number
+        }
+      }
+    }
+    LessonBlock: {
+      payload: Prisma.$LessonBlockPayload<ExtArgs>
+      fields: Prisma.LessonBlockFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.LessonBlockFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonBlockPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.LessonBlockFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonBlockPayload>
+        }
+        findFirst: {
+          args: Prisma.LessonBlockFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonBlockPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.LessonBlockFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonBlockPayload>
+        }
+        findMany: {
+          args: Prisma.LessonBlockFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonBlockPayload>[]
+        }
+        create: {
+          args: Prisma.LessonBlockCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonBlockPayload>
+        }
+        createMany: {
+          args: Prisma.LessonBlockCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.LessonBlockCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonBlockPayload>[]
+        }
+        delete: {
+          args: Prisma.LessonBlockDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonBlockPayload>
+        }
+        update: {
+          args: Prisma.LessonBlockUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonBlockPayload>
+        }
+        deleteMany: {
+          args: Prisma.LessonBlockDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.LessonBlockUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.LessonBlockUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonBlockPayload>[]
+        }
+        upsert: {
+          args: Prisma.LessonBlockUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonBlockPayload>
+        }
+        aggregate: {
+          args: Prisma.LessonBlockAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateLessonBlock>
+        }
+        groupBy: {
+          args: Prisma.LessonBlockGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LessonBlockGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.LessonBlockCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LessonBlockCountAggregateOutputType> | number
         }
       }
     }
@@ -2419,6 +2494,24 @@ export const LessonScalarFieldEnum = {
 export type LessonScalarFieldEnum = (typeof LessonScalarFieldEnum)[keyof typeof LessonScalarFieldEnum]
 
 
+export const LessonBlockScalarFieldEnum = {
+  id: 'id',
+  lessonId: 'lessonId',
+  blockKey: 'blockKey',
+  type: 'type',
+  position: 'position',
+  title: 'title',
+  body: 'body',
+  url: 'url',
+  note: 'note',
+  submissionHint: 'submissionHint',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LessonBlockScalarFieldEnum = (typeof LessonBlockScalarFieldEnum)[keyof typeof LessonBlockScalarFieldEnum]
+
+
 export const VideoAssetScalarFieldEnum = {
   id: 'id',
   lessonId: 'lessonId',
@@ -2885,6 +2978,20 @@ export type ListEnumMediaSourceTypeFieldRefInput<$PrismaModel> = FieldRefInputTy
 
 
 /**
+ * Reference to a field of type 'LessonContentBlockType'
+ */
+export type EnumLessonContentBlockTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LessonContentBlockType'>
+    
+
+
+/**
+ * Reference to a field of type 'LessonContentBlockType[]'
+ */
+export type ListEnumLessonContentBlockTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LessonContentBlockType[]'>
+    
+
+
+/**
  * Reference to a field of type 'VideoProviderType'
  */
 export type EnumVideoProviderTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'VideoProviderType'>
@@ -3153,6 +3260,7 @@ export type GlobalOmitConfig = {
   course?: Prisma.CourseOmit
   module?: Prisma.ModuleOmit
   lesson?: Prisma.LessonOmit
+  lessonBlock?: Prisma.LessonBlockOmit
   videoAsset?: Prisma.VideoAssetOmit
   enrollment?: Prisma.EnrollmentOmit
   lessonProgress?: Prisma.LessonProgressOmit

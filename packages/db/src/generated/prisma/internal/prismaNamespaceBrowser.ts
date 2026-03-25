@@ -58,6 +58,7 @@ export const ModelName = {
   Course: 'Course',
   Module: 'Module',
   Lesson: 'Lesson',
+  LessonBlock: 'LessonBlock',
   VideoAsset: 'VideoAsset',
   Enrollment: 'Enrollment',
   LessonProgress: 'LessonProgress',
@@ -194,6 +195,24 @@ export const LessonScalarFieldEnum = {
 } as const
 
 export type LessonScalarFieldEnum = (typeof LessonScalarFieldEnum)[keyof typeof LessonScalarFieldEnum]
+
+
+export const LessonBlockScalarFieldEnum = {
+  id: 'id',
+  lessonId: 'lessonId',
+  blockKey: 'blockKey',
+  type: 'type',
+  position: 'position',
+  title: 'title',
+  body: 'body',
+  url: 'url',
+  note: 'note',
+  submissionHint: 'submissionHint',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LessonBlockScalarFieldEnum = (typeof LessonBlockScalarFieldEnum)[keyof typeof LessonBlockScalarFieldEnum]
 
 
 export const VideoAssetScalarFieldEnum = {

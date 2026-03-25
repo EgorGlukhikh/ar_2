@@ -18,7 +18,8 @@
     "db:generate": "dotenv -e .env -- npm run db:generate --workspace @academy/db",
     "db:push": "dotenv -e .env -- npm run db:push --workspace @academy/db",
     "db:migrate": "dotenv -e .env -- npm run db:migrate --workspace @academy/db",
-    "db:seed": "dotenv -e .env -- npm run db:seed --workspace @academy/db"
+    "db:seed": "dotenv -e .env -- npm run db:seed --workspace @academy/db",
+    "db:sync-lesson-blocks": "dotenv -e .env -- npm run db:sync-lesson-blocks --workspace @academy/db"
   },
   "devDependencies": {
     "dotenv-cli": "^8.0.0"

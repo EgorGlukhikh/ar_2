@@ -8,8 +8,8 @@ import {
 import { CourseStatus } from "@academy/db";
 
 import { createCourse } from "@/features/admin/course-actions";
+import { requireCourseCreator } from "@/lib/admin";
 import { courseStatusLabelMap } from "@/lib/labels";
-import { requireAdminUser } from "@/lib/admin";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -17,7 +17,7 @@ import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 
 export default async function NewCoursePage() {
-  await requireAdminUser();
+  await requireCourseCreator();
 
   return (
     <section className="space-y-6">

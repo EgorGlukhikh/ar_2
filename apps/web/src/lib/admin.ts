@@ -17,6 +17,10 @@ export function canEditCourseContent(user: WorkspaceUser, authorId?: string | nu
   return user.role === USER_ROLES.ADMIN || (user.role === USER_ROLES.AUTHOR && authorId === user.id);
 }
 
+export function canCreateCourses(user: WorkspaceUser) {
+  return user.role === USER_ROLES.ADMIN || user.role === USER_ROLES.AUTHOR;
+}
+
 export function canManageHomework(user: WorkspaceUser) {
   return user.role === USER_ROLES.ADMIN || user.role === USER_ROLES.CURATOR;
 }
@@ -76,4 +80,14 @@ export async function requireRoleAccess(allowedRoles: UserRole[]) {
 
 export async function requireAdminUser() {
   return requireRoleAccess([USER_ROLES.ADMIN]);
+}
+
+export async function requireCourseCreator() {
+  const user = await requireWorkspaceUser();
+
+  if (!canCreateCourses(user)) {
+    redirect(getWorkspaceHomePath(user.role));
+  }
+
+  return user;
 }

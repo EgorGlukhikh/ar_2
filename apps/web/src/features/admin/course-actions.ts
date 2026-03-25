@@ -14,9 +14,11 @@ import { z } from "zod";
 import {
   canEditCourseContent,
   requireAdminUser,
+  requireCourseCreator,
   requireWorkspaceUser,
 } from "@/lib/admin";
 import {
+  buildPersistedLessonBlocks,
   buildLessonContentFromBlocks,
   type LessonBlock,
 } from "@/lib/lesson-content";
@@ -401,7 +403,7 @@ function resolveInsertIndex(args: {
 }
 
 export async function createCourse(formData: FormData) {
-  await requireAdminUser();
+  const user = await requireCourseCreator();
 
   const parsed = createCourseSchema.parse({
     title: getTrimmedValue(formData, "title"),
@@ -418,6 +420,7 @@ export async function createCourse(formData: FormData) {
       slug,
       description: parsed.description,
       status: parsed.status,
+      authorId: user.role === "AUTHOR" ? user.id : null,
     },
     select: {
       id: true,
@@ -617,11 +620,19 @@ export async function updateLesson(formData: FormData) {
   const { moduleRecord } = await requireModuleContentEditor(parsed.moduleId);
 
   const blocks = parseLessonBlocksJson(parsed.blocksJson);
+  const persistedBlocks = buildPersistedLessonBlocks(blocks);
   const contentPayload = buildLessonContentFromBlocks(blocks);
   const resolvedType = resolveLessonTypeFromBlocks(blocks, parsed.type);
   const homeworkBlock = blocks.find((block) => block.type === "HOMEWORK");
 
   await prisma.$transaction(async (tx) => {
+    const lessonBlockTx = tx as Prisma.TransactionClient & {
+      lessonBlock: {
+        deleteMany(args: unknown): Promise<unknown>;
+        createMany(args: unknown): Promise<unknown>;
+      };
+    };
+
     await tx.lesson.update({
       where: {
         id: parsed.lessonId,
@@ -642,6 +653,28 @@ export async function updateLesson(formData: FormData) {
           : {}),
       },
     });
+
+    await lessonBlockTx.lessonBlock.deleteMany({
+      where: {
+        lessonId: parsed.lessonId,
+      },
+    });
+
+    if (persistedBlocks.length > 0) {
+      await lessonBlockTx.lessonBlock.createMany({
+        data: persistedBlocks.map((block) => ({
+          lessonId: parsed.lessonId,
+          blockKey: block.blockKey,
+          type: block.type,
+          position: block.position,
+          title: block.title,
+          body: block.body,
+          url: block.url,
+          note: block.note,
+          submissionHint: block.submissionHint,
+        })),
+      });
+    }
 
     if (homeworkBlock) {
       await tx.homeworkAssignment.upsert({
