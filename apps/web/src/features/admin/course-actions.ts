@@ -77,7 +77,6 @@ const updateLessonSchema = z.object({
   type: z.nativeEnum(LessonType).default(LessonType.TEXT),
   isPreview: z.boolean().default(false),
   accessAfterDays: z.number().int().min(0).nullable(),
-  blocksJson: z.string().trim().optional(),
   requiresCuratorReview: z.boolean().default(true),
   unlockNextModuleOnApproval: z.boolean().default(true),
   allowTextSubmission: z.boolean().default(true),
@@ -135,6 +134,67 @@ function parseLessonBlocksJson(value?: string): LessonBlock[] {
   }
 
   return parsedJson.map((item) => lessonBlockSchema.parse(item));
+}
+
+function parseLessonBlocks(formData: FormData): LessonBlock[] {
+  const ids = formData.getAll("lessonBlockId").map((value) => String(value));
+  const types = formData.getAll("lessonBlockType").map((value) => String(value));
+  const titles = formData.getAll("lessonBlockTitle").map((value) => String(value));
+  const bodies = formData.getAll("lessonBlockBody").map((value) => String(value));
+  const urls = formData.getAll("lessonBlockUrl").map((value) => String(value));
+  const notes = formData.getAll("lessonBlockNote").map((value) => String(value));
+  const submissionHints = formData
+    .getAll("lessonBlockSubmissionHint")
+    .map((value) => String(value));
+  const positions = formData
+    .getAll("lessonBlockPosition")
+    .map((value) => Number(String(value)));
+
+  if (ids.length === 0) {
+    return parseLessonBlocksJson(getOptionalValue(formData, "blocksJson"));
+  }
+
+  const lengths = [
+    types.length,
+    titles.length,
+    bodies.length,
+    urls.length,
+    notes.length,
+    submissionHints.length,
+    positions.length,
+  ];
+
+  if (lengths.some((length) => length !== ids.length)) {
+    throw new Error("Структура блоков урока повреждена: поля блоков пришли неполностью.");
+  }
+
+  const blocksWithPosition = ids.map((id, index) => {
+    const type = types[index];
+    const position = positions[index];
+
+    if (!Number.isFinite(position)) {
+      throw new Error("Не удалось определить порядок блоков урока.");
+    }
+
+    const parsedBlock = lessonBlockSchema.parse({
+      id,
+      type,
+      title: titles[index],
+      body: bodies[index],
+      url: urls[index],
+      note: notes[index],
+      submissionHint: submissionHints[index],
+    });
+
+    return {
+      position,
+      block: parsedBlock,
+    };
+  });
+
+  return blocksWithPosition
+    .sort((left, right) => left.position - right.position)
+    .map((entry) => entry.block);
 }
 
 function resolveLessonTypeFromBlocks(blocks: LessonBlock[], fallback: LessonType) {
@@ -628,7 +688,6 @@ export async function updateLesson(formData: FormData) {
     type: (getTrimmedValue(formData, "type") || LessonType.TEXT) as LessonType,
     isPreview: formData.get("isPreview") === "on",
     accessAfterDays: getOptionalNumber(formData, "accessAfterDays"),
-    blocksJson: getOptionalValue(formData, "blocksJson"),
     requiresCuratorReview: formData.get("requiresCuratorReview") === "on",
     unlockNextModuleOnApproval: formData.get("unlockNextModuleOnApproval") === "on",
     allowTextSubmission: formData.get("allowTextSubmission") === "on",
@@ -641,7 +700,7 @@ export async function updateLesson(formData: FormData) {
 
   const { moduleRecord } = await requireModuleContentEditor(parsed.moduleId);
 
-  const blocks = parseLessonBlocksJson(parsed.blocksJson);
+  const blocks = parseLessonBlocks(formData);
   const persistedBlocks = buildPersistedLessonBlocks(blocks);
   const contentPayload = buildLessonContentFromBlocks(blocks);
   const resolvedType = resolveLessonTypeFromBlocks(blocks, parsed.type);

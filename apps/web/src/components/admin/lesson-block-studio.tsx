@@ -11,7 +11,7 @@ import {
   Video,
   X,
 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 
 import { AdminLessonVideoManager } from "@/components/admin/admin-lesson-video-manager";
 import { Badge } from "@/components/ui/badge";
@@ -233,7 +233,34 @@ export function LessonBlockStudio({
 
   return (
     <div className="space-y-5">
-      <input type="hidden" name="blocksJson" value={JSON.stringify(blocks)} />
+      {blocks.map((block, index) => (
+        <Fragment key={`persisted-${block.id}`}>
+          <input type="hidden" name="lessonBlockId" value={block.id} />
+          <input type="hidden" name="lessonBlockType" value={block.type} />
+          <input type="hidden" name="lessonBlockPosition" value={index + 1} />
+          <input type="hidden" name="lessonBlockTitle" value={block.title} />
+          <input
+            type="hidden"
+            name="lessonBlockBody"
+            value={"body" in block ? (block.body ?? "") : ""}
+          />
+          <input
+            type="hidden"
+            name="lessonBlockUrl"
+            value={"url" in block ? (block.url ?? "") : ""}
+          />
+          <input
+            type="hidden"
+            name="lessonBlockNote"
+            value={"note" in block ? (block.note ?? "") : ""}
+          />
+          <input
+            type="hidden"
+            name="lessonBlockSubmissionHint"
+            value={"submissionHint" in block ? (block.submissionHint ?? "") : ""}
+          />
+        </Fragment>
+      ))}
 
       <div className="rounded-[28px] border border-[var(--border)] bg-[linear-gradient(180deg,_#fbfcff_0%,_#f5f7ff_100%)] p-5">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
