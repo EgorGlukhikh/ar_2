@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { JetBrains_Mono, Manrope } from "next/font/google";
+
 import "./globals.css";
 
-const inter = Inter({
+const sans = Manrope({
   variable: "--font-geist-sans",
   subsets: ["latin", "cyrillic"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 const mono = JetBrains_Mono({
@@ -23,10 +25,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="ru"
-      className={`${inter.variable} ${mono.variable} h-full antialiased`}
-    >
+    <html lang="ru" className={`${sans.variable} ${mono.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );

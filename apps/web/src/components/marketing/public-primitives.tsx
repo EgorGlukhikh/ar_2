@@ -25,18 +25,18 @@ export function publicButtonClassName(
   tone: "primary" | "secondary" | "ghost" | "dark" = "primary",
 ) {
   if (tone === "secondary") {
-    return "inline-flex min-h-12 items-center justify-center rounded-full border border-[#cfd7f3] bg-white px-6 py-3 text-sm font-semibold text-[#1c2442] transition hover:border-[#2840db] hover:text-[#2840db] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2840db] focus-visible:ring-offset-2";
+    return "inline-flex min-h-12 items-center justify-center rounded-full border border-[#cfd7e8] bg-[rgba(255,255,255,0.88)] px-6 py-3 text-sm font-semibold text-[#182036] shadow-[0_10px_24px_rgba(24,32,54,0.06)] transition hover:-translate-y-[1px] hover:border-[#2650d8] hover:text-[#2650d8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2650d8] focus-visible:ring-offset-2";
   }
 
   if (tone === "ghost") {
-    return "inline-flex min-h-12 items-center justify-center rounded-full border border-white/20 bg-white/10 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/16 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#1c2442]";
+    return "inline-flex min-h-12 items-center justify-center rounded-full border border-white/18 bg-white/10 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/16 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#182036]";
   }
 
   if (tone === "dark") {
-    return "inline-flex min-h-12 items-center justify-center rounded-full bg-[#1c2442] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#141a31] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c2442] focus-visible:ring-offset-2";
+    return "inline-flex min-h-12 items-center justify-center rounded-full bg-[#182036] px-6 py-3 text-sm font-semibold text-white shadow-[0_16px_36px_rgba(24,32,54,0.24)] transition hover:-translate-y-[1px] hover:bg-[#10182c] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#182036] focus-visible:ring-offset-2";
   }
 
-  return "inline-flex min-h-12 items-center justify-center rounded-full bg-[#2840db] px-6 py-3 text-sm font-semibold text-white shadow-[0_18px_36px_rgba(40,64,219,0.24)] transition hover:bg-[#1f34bf] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2840db] focus-visible:ring-offset-2";
+  return "inline-flex min-h-12 items-center justify-center rounded-full bg-[linear-gradient(135deg,_#2650d8_0%,_#4f6ff0_55%,_#7893ff_100%)] px-6 py-3 text-sm font-semibold text-white shadow-[0_18px_40px_rgba(38,80,216,0.24)] transition hover:-translate-y-[1px] hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2650d8] focus-visible:ring-offset-2";
 }
 
 export function SectionLead({
@@ -57,7 +57,7 @@ export function SectionLead({
       <p
         className={cn(
           "text-xs font-semibold uppercase tracking-[0.34em]",
-          light ? "text-white/60" : "text-[#697088]",
+          light ? "text-white/60" : "text-[#7a6548]",
         )}
       >
         {eyebrow}
@@ -65,7 +65,7 @@ export function SectionLead({
       <h2
         className={cn(
           "max-w-[24ch] text-balance font-[family:var(--font-landing-display)] text-[clamp(2.2rem,4vw,3.7rem)] font-semibold leading-[0.98] tracking-tight",
-          light ? "text-white" : "text-[#1c2442]",
+          light ? "text-white" : "text-[#182036]",
         )}
       >
         {title}
@@ -73,7 +73,7 @@ export function SectionLead({
       <p
         className={cn(
           "max-w-2xl text-base leading-8",
-          light ? "text-white/82" : "text-[#596177]",
+          light ? "text-white/82" : "text-[#5f6982]",
         )}
       >
         {text}
@@ -90,9 +90,9 @@ export function MetricChip({
   value: string;
 }) {
   return (
-    <div className="rounded-[24px] border border-black/5 bg-white p-4 shadow-sm">
-      <p className="text-sm text-[#697088]">{label}</p>
-      <p className="mt-2 max-w-[14ch] text-balance text-xl font-semibold leading-tight md:text-2xl">
+    <div className="rounded-[26px] border border-white/80 bg-[linear-gradient(180deg,_rgba(255,255,255,0.96)_0%,_rgba(248,250,255,0.94)_100%)] p-4 shadow-[0_18px_45px_rgba(24,32,54,0.08)]">
+      <p className="text-sm uppercase tracking-[0.18em] text-[#7a6548]">{label}</p>
+      <p className="mt-3 max-w-[14ch] text-balance text-xl font-semibold leading-tight text-[#182036] md:text-2xl">
         {value}
       </p>
     </div>

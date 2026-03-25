@@ -83,7 +83,7 @@ export function AdminNav({ effectiveRole }: AdminNavProps) {
   }
 
   return (
-    <nav className="flex flex-wrap items-center gap-2">
+    <nav className="flex flex-wrap items-center gap-2 self-start">
       {visibleItems.map((item) => {
         const Icon = item.icon;
         const isActive =
@@ -94,10 +94,10 @@ export function AdminNav({ effectiveRole }: AdminNavProps) {
             key={item.href}
             href={item.href}
             className={cn(
-              "inline-flex h-11 items-center gap-2 rounded-full border px-5 text-sm font-semibold transition",
+              "inline-flex h-12 items-center gap-2 rounded-full border px-5 text-sm font-semibold leading-none transition",
               isActive
-                ? "border-transparent bg-[#2840db] text-white shadow-[0_14px_28px_rgba(40,64,219,0.2)] [&_svg]:text-white"
-                : "border-[var(--border)] bg-white text-[var(--muted)] hover:border-[var(--primary)] hover:text-[var(--foreground)]",
+                ? "border-transparent bg-[linear-gradient(135deg,_#2650d8_0%,_#4f6ff0_58%,_#7893ff_100%)] text-white shadow-[0_16px_32px_rgba(38,80,216,0.24)] [&_svg]:text-white"
+                : "border-[var(--border)] bg-[rgba(255,255,255,0.92)] text-[var(--muted)] shadow-[0_10px_22px_rgba(24,32,54,0.05)] hover:border-[var(--primary)] hover:text-[var(--foreground)]",
             )}
           >
             <Icon className="h-4 w-4 shrink-0" />

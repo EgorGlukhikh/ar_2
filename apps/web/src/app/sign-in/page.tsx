@@ -14,9 +14,9 @@ import {
 } from "@/lib/marketing-theme";
 
 const accessPoints = [
-  "Вход по почте и паролю без лишнего сценария регистрации.",
-  "Автоматический переход в нужный кабинет в зависимости от роли.",
   "Один логин для администратора, автора, куратора и студента.",
+  "Автоматический перевод в нужный кабинет в зависимости от роли.",
+  "Вход выглядит как часть продукта, а не как отдельный технический экран.",
 ];
 
 type SignInPageProps = {
@@ -44,17 +44,17 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
       <div className={marketingContainerClassName}>
         <section className={marketingFrameClassName}>
           <div className={marketingInnerFrameClassName}>
-            <header className="flex flex-col gap-4 border-b border-black/5 pb-6 md:flex-row md:items-center md:justify-between">
+            <header className="flex flex-col gap-5 border-b border-black/5 pb-6 lg:flex-row lg:items-center lg:justify-between">
               <div className="flex items-center gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#1c2442] text-sm font-semibold text-white">
+                <div className="flex h-12 w-12 items-center justify-center rounded-[18px] bg-[linear-gradient(145deg,_#182036_0%,_#2c4279_100%)] text-sm font-semibold text-white shadow-[0_16px_34px_rgba(24,32,54,0.2)]">
                   AR
                 </div>
                 <div>
-                  <p className="font-[family:var(--font-landing-display)] text-lg font-semibold">
-                    Академия риэлторов
+                  <p className="font-[family:var(--font-landing-display)] text-lg font-semibold text-[#182036]">
+                    Вход в платформу
                   </p>
-                  <p className="text-sm leading-6 text-[#667087]">
-                    Вход в платформу для команды, авторов и студентов.
+                  <p className="max-w-sm text-sm leading-6 text-[#5f6982]">
+                    Один экран авторизации для команды, авторов и студентов.
                   </p>
                 </div>
               </div>
@@ -67,38 +67,43 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
               </div>
             </header>
 
-            <div className="grid gap-8 py-10 lg:grid-cols-[1.02fr_0.98fr] lg:items-start">
+            <section className="grid gap-8 py-10 xl:grid-cols-[0.9fr_1.1fr] xl:items-start">
               <div className="space-y-8">
                 <SectionLead
-                  eyebrow="Вход"
-                  title="Открытый доступ в академию без лишнего служебного шума."
-                  text="Страница авторизации должна ощущаться частью продукта, а не отдельным техническим экраном. Поэтому вход сохраняет тот же визуальный язык, что и лендинг."
+                  eyebrow="Авторизация"
+                  title="Войти в академию без ощущения служебного экрана."
+                  text="Страница входа сохраняет тот же визуальный язык, что и публичная витрина. Это мелочь, но именно она делает продукт цельным на демонстрации."
                 />
 
-                <div className="grid gap-4 md:grid-cols-3">
+                <div className="grid gap-4 sm:grid-cols-3">
                   {[
-                    { icon: Mail, label: "Формат", value: "Почта + пароль" },
-                    { icon: ShieldCheck, label: "Роли", value: "Админ, автор, студент" },
-                    { icon: KeyRound, label: "Маршрут", value: "Авто-редирект по роли" },
+                    { icon: Mail, label: "Формат", value: "Почта и пароль" },
+                    { icon: ShieldCheck, label: "Роли", value: "Автор, админ, студент" },
+                    { icon: KeyRound, label: "Маршрут", value: "Редирект по роли" },
                   ].map((item) => {
                     const Icon = item.icon;
+
                     return (
                       <article
                         key={item.label}
-                        className="rounded-[24px] border border-black/5 bg-white p-5 shadow-sm"
+                        className="rounded-[28px] border border-white/85 bg-[linear-gradient(180deg,_rgba(255,255,255,0.97)_0%,_rgba(249,250,253,0.94)_100%)] p-5 shadow-[0_18px_50px_rgba(24,32,54,0.07)]"
                       >
-                        <div className="inline-flex rounded-2xl bg-[#eef2ff] p-3">
-                          <Icon className="h-5 w-5 text-[#2840db]" />
+                        <div className="inline-flex rounded-[18px] bg-[linear-gradient(135deg,_rgba(38,80,216,0.16)_0%,_rgba(79,111,240,0.08)_100%)] p-3">
+                          <Icon className="h-5 w-5 text-[#2650d8]" />
                         </div>
-                        <p className="mt-4 text-sm text-[#697088]">{item.label}</p>
-                        <p className="mt-2 text-xl font-semibold text-[#1c2442]">{item.value}</p>
+                        <p className="mt-4 text-xs font-semibold uppercase tracking-[0.24em] text-[#7a6548]">
+                          {item.label}
+                        </p>
+                        <p className="mt-3 text-lg font-semibold leading-tight text-[#182036]">
+                          {item.value}
+                        </p>
                       </article>
                     );
                   })}
                 </div>
 
-                <div className="rounded-[32px] bg-[linear-gradient(135deg,_#18213d_0%,_#3146b6_56%,_#ff8f6d_100%)] p-6 text-white shadow-[0_30px_90px_rgba(38,43,101,0.22)] md:p-8">
-                  <p className="text-xs font-semibold uppercase tracking-[0.34em] text-white/60">
+                <div className="rounded-[34px] bg-[linear-gradient(145deg,_#182036_0%,_#2240a3_54%,_#f08f68_100%)] p-6 text-white shadow-[0_32px_90px_rgba(24,32,54,0.2)] md:p-8">
+                  <p className="text-xs font-semibold uppercase tracking-[0.34em] text-white/58">
                     Что важно
                   </p>
                   <div className="mt-5 space-y-3">
@@ -107,7 +112,7 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
                         key={item}
                         className="flex items-start gap-3 rounded-[22px] border border-white/10 bg-white/8 p-4"
                       >
-                        <CheckCircle2 className="mt-1 h-5 w-5 flex-none text-[#ffd6be]" />
+                        <CheckCircle2 className="mt-1 h-5 w-5 flex-none text-[#ffd7b5]" />
                         <p className="text-sm leading-7 text-white/84">{item}</p>
                       </div>
                     ))}
@@ -115,33 +120,48 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
                 </div>
               </div>
 
-              <aside className="rounded-[32px] border border-black/5 bg-white p-5 shadow-[0_24px_80px_rgba(28,36,66,0.1)] md:p-6">
-                <div className="rounded-[28px] border border-black/5 bg-[linear-gradient(180deg,_#f6f8ff_0%,_#fffaf7_100%)] p-6">
+              <aside className="rounded-[34px] border border-white/85 bg-white p-5 shadow-[0_26px_80px_rgba(24,32,54,0.1)] md:p-6">
+                <div className="rounded-[28px] bg-[linear-gradient(180deg,_#f6efe7_0%,_#eef2ff_100%)] p-6">
                   <div className="space-y-3">
-                    <p className="text-xs font-semibold uppercase tracking-[0.34em] text-[#7b8296]">
-                      Авторизация
+                    <p className="text-xs font-semibold uppercase tracking-[0.34em] text-[#7a6548]">
+                      Доступ
                     </p>
-                    <h2 className="font-[family:var(--font-landing-display)] text-3xl font-semibold tracking-tight text-[#1c2442]">
+                    <h2 className="font-[family:var(--font-landing-display)] text-3xl font-semibold leading-[0.98] tracking-tight text-[#182036]">
                       Войти по почте
                     </h2>
-                    <p className="text-sm leading-7 text-[#596177]">
-                      Для теста можно использовать админскую учетку. После входа платформа сама
-                      отправит пользователя в нужный кабинет.
+                    <p className="text-sm leading-7 text-[#5f6982]">
+                      Для теста можно использовать админский аккаунт или авторский аккаунт
+                      Юры. После входа система сама отправит пользователя в нужный кабинет.
                     </p>
                   </div>
 
-                  <div className="mt-6 rounded-[24px] border border-[#dfe5f7] bg-white p-5 shadow-sm">
-                    <p className="text-sm text-[#697088]">Тестовый администратор</p>
-                    <p className="mt-3 text-sm leading-7 text-[#1c2442]">
-                      Почта: <span className="font-semibold">test@mail.ru</span>
-                      <br />
-                      Пароль: <span className="font-semibold">12345</span>
-                    </p>
+                  <div className="mt-6 grid gap-4 md:grid-cols-2">
+                    <div className="rounded-[24px] border border-[#e5dacc] bg-white p-5 shadow-[0_12px_28px_rgba(24,32,54,0.05)]">
+                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#7a6548]">
+                        Администратор
+                      </p>
+                      <p className="mt-3 text-sm leading-7 text-[#182036]">
+                        Почта: <span className="font-semibold">test@mail.ru</span>
+                        <br />
+                        Пароль: <span className="font-semibold">12345</span>
+                      </p>
+                    </div>
+
+                    <div className="rounded-[24px] border border-[#dbe3fb] bg-white p-5 shadow-[0_12px_28px_rgba(24,32,54,0.05)]">
+                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#7a6548]">
+                        Автор
+                      </p>
+                      <p className="mt-3 text-sm leading-7 text-[#182036]">
+                        Почта: <span className="font-semibold">hp@mail.ru</span>
+                        <br />
+                        Пароль: <span className="font-semibold">123456789</span>
+                      </p>
+                    </div>
                   </div>
 
-                  <div className="mt-6">
+                  <div className="mt-6 rounded-[24px] border border-white/80 bg-white p-5 shadow-[0_14px_32px_rgba(24,32,54,0.06)]">
                     {showInviteSuccess ? (
-                      <div className="mb-4 rounded-[22px] border border-emerald-100 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+                      <div className="mb-4 rounded-[18px] border border-emerald-100 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
                         Приглашение активировано. Теперь можно войти в платформу.
                       </div>
                     ) : null}
@@ -150,7 +170,7 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
                   </div>
                 </div>
               </aside>
-            </div>
+            </section>
           </div>
         </section>
       </div>

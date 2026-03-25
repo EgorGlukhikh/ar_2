@@ -13,23 +13,23 @@ export const marketingBody = Manrope({
 });
 
 export const marketingShellClassName =
-  "min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(199,213,255,0.58),_transparent_26%),radial-gradient(circle_at_92%_18%,_rgba(255,215,199,0.64),_transparent_24%),linear-gradient(180deg,_#f8f4ff_0%,_#fffaf4_48%,_#eff5ff_100%)] font-[family:var(--font-landing-body)] text-[#1c2442]";
+  "min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(255,196,147,0.26),_transparent_20%),radial-gradient(circle_at_88%_16%,_rgba(38,80,216,0.18),_transparent_22%),linear-gradient(180deg,_#f4efe7_0%,_#edf1f7_54%,_#e9eef6_100%)] font-[family:var(--font-landing-body)] text-[#182036]";
 
 export const marketingContainerClassName =
-  "mx-auto max-w-[1720px] px-4 py-5 md:px-8 md:py-8 xl:px-14";
+  "mx-auto max-w-[1540px] px-4 py-5 md:px-8 md:py-8 xl:px-12";
 
 export const marketingFrameClassName =
-  "rounded-[40px] border border-white/70 bg-[rgba(255,255,255,0.82)] p-4 shadow-[0_40px_120px_rgba(48,52,109,0.12)] backdrop-blur md:p-6 xl:p-7";
+  "rounded-[42px] border border-white/75 bg-[rgba(255,255,255,0.76)] p-4 shadow-[0_36px_110px_rgba(24,32,54,0.12)] backdrop-blur md:p-6 xl:p-7";
 
 export const marketingInnerFrameClassName =
-  "rounded-[34px] border border-white/80 bg-[#fffdfb] p-5 md:p-8 xl:p-10";
+  "rounded-[34px] border border-white/90 bg-[linear-gradient(180deg,_rgba(255,252,247,0.98)_0%,_rgba(255,255,255,0.95)_100%)] p-5 md:p-8 xl:p-10";
 
 export const publicCourseCoverPool = [
-  "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1400&q=80",
-  "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1400&q=80",
-  "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=1400&q=80",
-  "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1400&q=80",
-  "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1400&q=80",
+  "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1400&q=80",
+  "https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1400&q=80",
+  "https://images.unsplash.com/photo-1501183638710-841dd1904471?auto=format&fit=crop&w=1400&q=80",
+  "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1400&q=80",
+  "https://images.unsplash.com/photo-1560185007-c5ca9d2c014d?auto=format&fit=crop&w=1400&q=80",
 ];
 
 export function getPublicCourseCover(index: number) {

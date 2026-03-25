@@ -1,19 +1,14 @@
 import { auth } from "@academy/auth";
-import type { LucideIcon } from "lucide-react";
+import { CourseStatus, prisma } from "@academy/db";
+import { USER_ROLES } from "@academy/shared";
 import {
-  BadgeRussianRuble,
+  ArrowUpRight,
   BookOpenText,
-  CalendarDays,
   CheckCircle2,
-  ChevronRight,
-  Clapperboard,
   GraduationCap,
-  LayoutTemplate,
-  MonitorPlay,
-  PlayCircle,
+  LayoutPanelLeft,
+  ShieldCheck,
   Sparkles,
-  UploadCloud,
-  Users,
   WalletCards,
 } from "lucide-react";
 import Image from "next/image";
@@ -26,6 +21,7 @@ import {
   SectionLead,
 } from "@/components/marketing/public-primitives";
 import {
+  getPublicCourseCover,
   marketingBody,
   marketingContainerClassName,
   marketingDisplay,
@@ -34,171 +30,50 @@ import {
   marketingShellClassName,
 } from "@/lib/marketing-theme";
 
-const useCases: Array<{
-  title: string;
-  text: string;
-  image: string;
-  icon: LucideIcon;
-  tone: string;
-}> = [
+const roleCards = [
   {
-    title: "Учиться",
-    text: "Студент проходит программу, открывает уроки по расписанию, смотрит видео и видит понятный маршрут обучения без перегруженного кабинета.",
-    image:
-      "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1400&q=80",
+    eyebrow: "Автор",
+    title: "Собирает и публикует свои программы",
+    text: "Курсы, модули, уроки, тесты и материалы живут в одном рабочем контуре без хаоса между сервисами.",
+    icon: LayoutPanelLeft,
+  },
+  {
+    eyebrow: "Студент",
+    title: "Проходит обучение без лишнего служебного шума",
+    text: "Открывает программу, идет по маршруту уроков и видит только учебный путь, а не административные инструменты.",
     icon: GraduationCap,
-    tone: "from-[#fff1cb]/95 via-[#ffe7bf]/72 to-transparent",
   },
   {
-    title: "Публиковать свои курсы",
-    text: "Автор собирает структуру, загружает уроки, настраивает цену и выводит программу в каталог как полноценный продукт, а не как список файлов.",
-    image:
-      "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1400&q=80",
-    icon: UploadCloud,
-    tone: "from-[#dceaff]/95 via-[#c6dbff]/72 to-transparent",
-  },
-  {
-    title: "Проводить вебинары",
-    text: "Запуски, эфиры, встречи с группой и продажа записи после события живут рядом с курсами и не требуют отдельного сервиса для каждого сценария.",
-    image:
-      "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1400&q=80",
-    icon: Clapperboard,
-    tone: "from-[#ffe2da]/95 via-[#ffd0c4]/70 to-transparent",
+    eyebrow: "Администратор",
+    title: "Управляет системой, доступами и статистикой",
+    text: "Видит каталог целиком, контролирует продажи, структуру, аналитику и качество наполнения академии.",
+    icon: ShieldCheck,
   },
 ];
 
-const featuredCourses = [
-  {
-    title: "Старт в профессии риэлтора",
-    meta: "12 уроков • практика с клиентом",
-    priceAmount: "4 900",
-    priceCurrency: "₽",
-    priceSuffix: "за курс",
-    image:
-      "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1400&q=80",
-  },
-  {
-    title: "Сильные продажи объектов",
-    meta: "9 уроков • скрипты и переговоры",
-    priceAmount: "7 500",
-    priceCurrency: "₽",
-    priceSuffix: "за курс",
-    image:
-      "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1400&q=80",
-  },
-  {
-    title: "Система агентства",
-    meta: "15 уроков • управление и команда",
-    priceAmount: "12 000",
-    priceCurrency: "₽",
-    priceSuffix: "за курс",
-    image:
-      "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=1400&q=80",
-  },
-];
-
-const creatorPoints = [
-  "Собирать программу и уроки без помощи разработчика.",
-  "Управлять ценой, каталогом и доступами к курсу из одного контура.",
-  "Приглашать авторов, кураторов и менеджеров по продажам по ролям.",
-];
-
-const webinarPoints = [
-  "Страница эфира с описанием, датой и ролями доступа.",
-  "Материалы до и после эфира: конспекты, файлы и запись.",
-  "Продажа доступа к записи после завершения события.",
-];
-
-const platformDirections = [
-  {
-    title: "Продажи и сделки",
-    text: "Программы по переговорам, показам, упаковке объекта и работе с клиентом.",
-  },
-  {
-    title: "Управление агентством",
-    text: "Внутреннее обучение команды, онбординг сотрудников и методическая база агентства.",
-  },
-  {
-    title: "Авторские школы",
-    text: "Личный бренд эксперта, платные интенсивы, кураторские форматы и вебинарные линейки.",
-  },
-  {
-    title: "Разборы и эфиры",
-    text: "Живые запуски, закрытые комнаты, запись эфира и продажа доступа после события.",
-  },
-];
-
-const storyCards = [
-  {
-    title: "Для школы продаж",
-    text: "Собрать каталог курсов, оплату, личный кабинет и методический контур в одной системе без зоопарка сервисов.",
-  },
-  {
-    title: "Для автора курса",
-    text: "Запустить собственную программу, пригласить куратора и продавать продукт как оформленную цифровую школу.",
-  },
-  {
-    title: "Для команды агентства",
-    text: "Держать обучение сотрудников, разборы, базу материалов и проверку домашних работ в одном рабочем контуре.",
-  },
-];
-
-const buildFlow = [
+const processSteps = [
   {
     step: "01",
-    title: "Собрать продукт",
-    text: "Название, обложка, описание, программа и визуальная упаковка курса.",
+    title: "Собрать курс как продукт",
+    text: "Название, программа, материалы, тесты, цена и публикация не разъезжаются по разным кабинетам.",
   },
   {
     step: "02",
-    title: "Запустить продажи",
-    text: "Каталог, цена, оплата и выдача доступа после покупки.",
+    title: "Открыть каталог и продажи",
+    text: "Платный и бесплатный доступ живут в одной витрине, поэтому демонстрация для автора выглядит цельно.",
   },
   {
     step: "03",
-    title: "Масштабировать сценарий",
-    text: "Авторы, кураторы, вебинары, сопровождение и повторные продажи.",
+    title: "Довести студента до результата",
+    text: "Учебный кабинет отрезан от лишних системных действий и остается ясным даже на длинных программах.",
   },
 ];
 
-const faqItems = [
-  {
-    question: "Можно ли использовать платформу только как витрину курсов?",
-    answer:
-      "Да. Каталог, карточки программ, доступы и оплата могут работать как отдельный контур даже без сложных учебных сценариев.",
-  },
-  {
-    question: "Подходит ли платформа под приглашение авторов и кураторов?",
-    answer:
-      "Да. Архитектура уже разделена по ролям, а следующий слой развития как раз идет в сторону авторов, кураторов и проверки домашних заданий.",
-  },
-  {
-    question: "Можно ли вырасти из курсов в вебинары и запуски?",
-    answer:
-      "Да. Один из главных замыслов платформы в том, чтобы не плодить отдельные сервисы, а держать курсы, эфиры и продажи в одном продукте.",
-  },
-  {
-    question: "Платежи уже настоящие?",
-    answer:
-      "Пока оплата работает в демонстрационном режиме для показа сценария. Реальные интеграции будут подключены поверх уже готового платежного слоя.",
-  },
+const qualityPoints = [
+  "Единая платформа вместо набора разрозненных экранов.",
+  "Роли разделены по логике продукта, а не только по правам.",
+  "Курс воспринимается как продаваемый цифровой продукт, а не папка с файлами.",
 ];
-
-function SectionShell({
-  children,
-  className = "",
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) {
-  return (
-    <section
-      className={`rounded-[38px] border border-white/70 bg-[rgba(255,255,255,0.8)] p-6 shadow-[0_30px_100px_rgba(44,40,84,0.08)] backdrop-blur md:p-8 ${className}`}
-    >
-      {children}
-    </section>
-  );
-}
 
 export default async function Home() {
   const session = await auth();
@@ -206,6 +81,44 @@ export default async function Home() {
   if (session?.user) {
     redirect("/after-sign-in");
   }
+
+  const [publishedCourses, authorCount, studentCount, showcaseCourses] = await Promise.all([
+    prisma.course.count({
+      where: {
+        status: CourseStatus.PUBLISHED,
+      },
+    }),
+    prisma.user.count({
+      where: {
+        role: USER_ROLES.AUTHOR,
+      },
+    }),
+    prisma.user.count({
+      where: {
+        role: USER_ROLES.STUDENT,
+      },
+    }),
+    prisma.course.findMany({
+      where: {
+        status: CourseStatus.PUBLISHED,
+      },
+      orderBy: {
+        updatedAt: "desc",
+      },
+      take: 3,
+      include: {
+        modules: {
+          include: {
+            lessons: {
+              select: {
+                id: true,
+              },
+            },
+          },
+        },
+      },
+    }),
+  ]);
 
   return (
     <main
@@ -216,31 +129,29 @@ export default async function Home() {
           <div className={marketingInnerFrameClassName}>
             <header className="flex flex-col gap-5 border-b border-black/5 pb-6 lg:flex-row lg:items-center lg:justify-between">
               <div className="flex items-center gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#1c2442] text-sm font-semibold text-white">
+                <div className="flex h-12 w-12 items-center justify-center rounded-[18px] bg-[linear-gradient(145deg,_#182036_0%,_#2c4279_100%)] text-sm font-semibold text-white shadow-[0_16px_34px_rgba(24,32,54,0.2)]">
                   AR
                 </div>
                 <div>
-                  <p className="font-[family:var(--font-landing-display)] text-lg font-semibold">
+                  <p className="font-[family:var(--font-landing-display)] text-lg font-semibold text-[#182036]">
                     Академия риэлторов
                   </p>
-                  <p className="max-w-xs text-sm leading-6 text-[#667087]">
-                    Обучение, свои курсы и вебинары внутри одного продукта.
+                  <p className="max-w-sm text-sm leading-6 text-[#5f6982]">
+                    LMS-платформа для авторов, команды и студентов в недвижимости.
                   </p>
                 </div>
               </div>
 
-              <nav className="hidden flex-wrap items-center gap-1 text-sm text-[#5f677c] md:flex">
+              <nav className="hidden flex-wrap items-center gap-1 rounded-full border border-white/80 bg-white/70 p-1 text-sm text-[#5f6982] shadow-[0_12px_30px_rgba(24,32,54,0.05)] md:flex">
                 {[
-                  ["#scenarios", "Возможности"],
-                  ["#directions", "Направления"],
+                  ["#roles", "Роли"],
                   ["#courses", "Курсы"],
-                  ["#creators", "Авторы"],
-                  ["#webinars", "Вебинары"],
+                  ["#process", "Процесс"],
                 ].map(([href, label]) => (
                   <a
                     key={href}
                     href={href}
-                    className="rounded-full px-4 py-2 transition hover:bg-[#eef2ff] hover:text-[#1c2442]"
+                    className="rounded-full px-4 py-2 transition hover:bg-[#edf2ff] hover:text-[#182036]"
                   >
                     {label}
                   </a>
@@ -255,21 +166,21 @@ export default async function Home() {
               </div>
             </header>
 
-            <div className="grid gap-10 py-10 xl:grid-cols-[minmax(0,1.02fr)_minmax(520px,0.98fr)] xl:items-center">
+            <section className="grid gap-8 py-10 xl:grid-cols-[minmax(0,1.02fr)_minmax(460px,0.98fr)] xl:items-center">
               <div className="space-y-8">
-                <div className="inline-flex items-center gap-2 rounded-full border border-[#dce4fb] bg-white px-4 py-2 text-sm text-[#5f677c] shadow-sm">
-                  <Sparkles className="h-4 w-4 text-[#ff825f]" />
-                  Одна платформа для обучения, продаж и живых запусков
+                <div className="inline-flex items-center gap-2 rounded-full border border-[#e2d7c8] bg-[rgba(255,250,241,0.92)] px-4 py-2 text-sm font-medium text-[#7a6548] shadow-[0_12px_28px_rgba(24,32,54,0.05)]">
+                  <Sparkles className="h-4 w-4 text-[#d27d45]" />
+                  Спокойный и взрослый интерфейс для школы по недвижимости
                 </div>
 
                 <div className="space-y-5">
-                  <h1 className="max-w-[11.5ch] text-balance font-[family:var(--font-landing-display)] text-[clamp(3.4rem,6.3vw,6.2rem)] font-semibold leading-[0.9] tracking-tight">
-                    Учиться, публиковать свои курсы и проводить вебинары в одном месте.
+                  <h1 className="max-w-[11ch] text-balance font-[family:var(--font-landing-display)] text-[clamp(3.2rem,6vw,6.3rem)] font-semibold leading-[0.9] tracking-tight text-[#182036]">
+                    Курсы, роли и обучение внутри одного продукта.
                   </h1>
-                  <p className="max-w-2xl text-lg leading-8 text-[#596177]">
-                    Платформа собирает каталог, оплату, учебный кабинет и авторский
-                    контур в одну архитектуру. Это уже не набор экранов, а база для
-                    школы, авторских программ и живых эфиров.
+                  <p className="max-w-2xl text-lg leading-8 text-[#5f6982]">
+                    Платформа уже разделяет авторский, учебный и административный контуры:
+                    автор создает курсы, студент только учится, администратор управляет
+                    системой и смотрит статистику.
                   </p>
                 </div>
 
@@ -279,546 +190,223 @@ export default async function Home() {
                     Открыть платформу
                   </PublicButton>
                   <PublicButton href="/sign-in" tone="dark">
-                    Стать автором
+                    Показать кабинет автора
                   </PublicButton>
                 </div>
 
                 <div className="grid gap-3 sm:grid-cols-3">
-                  <MetricChip label="Формат" value="Курсы + эфиры" />
-                  <MetricChip label="Монетизация" value="Каталог + оплата" />
-                  <MetricChip label="Роли" value="Админ, автор, студент" />
+                  <MetricChip label="Публикация" value={`${publishedCourses} программ`} />
+                  <MetricChip label="Авторы" value={`${authorCount} аккаунтов`} />
+                  <MetricChip label="Студенты" value={`${studentCount} профилей`} />
                 </div>
               </div>
 
-              <div className="relative min-h-[500px] xl:min-h-[600px]">
-                <div className="absolute inset-0 rounded-[38px] bg-[linear-gradient(145deg,_#2037d2_0%,_#5a71ff_42%,_#ff8f6c_100%)] shadow-[0_45px_100px_rgba(64,76,173,0.34)]" />
-                <div className="absolute inset-4 rounded-[32px] border border-white/20 bg-[linear-gradient(180deg,_rgba(255,255,255,0.2)_0%,_rgba(255,255,255,0.08)_100%)] backdrop-blur-md" />
-
-                <div className="relative grid min-h-[500px] gap-4 p-5 md:p-7 xl:min-h-[600px]">
-                  <div className="flex flex-wrap items-start justify-between gap-4">
-                    <div className="max-w-[260px] rounded-[24px] bg-white px-4 py-4 shadow-xl">
-                      <div className="flex items-center gap-3">
-                        <div className="rounded-2xl bg-[#eef2ff] p-3">
-                          <BookOpenText className="h-5 w-5 text-[#2940dd]" />
-                        </div>
-                        <div>
-                          <p className="text-sm text-[#697088]">Курсы</p>
-                          <p className="font-semibold">Программы и траектории</p>
-                        </div>
-                      </div>
+              <div className="relative min-h-[560px] overflow-hidden rounded-[38px] bg-[linear-gradient(145deg,_#182036_0%,_#2240a3_54%,_#f08f68_100%)] p-5 shadow-[0_42px_110px_rgba(24,32,54,0.24)]">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(255,255,255,0.18),_transparent_34%)]" />
+                <div className="relative grid h-full gap-4 md:grid-cols-[1.1fr_0.9fr]">
+                  <div className="flex flex-col justify-between rounded-[30px] border border-white/14 bg-white/10 p-5 text-white backdrop-blur-sm">
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-[0.3em] text-white/62">
+                        Кабинет автора
+                      </p>
+                      <h2 className="mt-4 max-w-[10ch] font-[family:var(--font-landing-display)] text-4xl font-semibold leading-[0.94]">
+                        Создавать курсы без ощущения админки из 2016 года.
+                      </h2>
                     </div>
 
-                    <div className="inline-flex items-center gap-2 rounded-full bg-[#1c2442] px-4 py-3 text-sm font-medium text-white shadow-2xl">
-                      <PlayCircle className="h-4 w-4" />
-                      Живой эфир открыт
+                    <div className="space-y-3">
+                      {qualityPoints.map((point) => (
+                        <div
+                          key={point}
+                          className="flex items-start gap-3 rounded-[22px] border border-white/10 bg-white/8 p-4"
+                        >
+                          <CheckCircle2 className="mt-1 h-5 w-5 flex-none text-[#ffd7b5]" />
+                          <p className="text-sm leading-7 text-white/84">{point}</p>
+                        </div>
+                      ))}
                     </div>
                   </div>
 
-                  <div className="grid flex-1 items-end gap-4 xl:grid-cols-[0.98fr_1.02fr]">
-                    <div className="w-full rounded-[30px] border border-white/18 bg-white/12 p-5 text-white backdrop-blur-md">
-                      <p className="text-xs uppercase tracking-[0.28em] text-white/62">
-                        Сценарии платформы
+                  <div className="grid gap-4">
+                    <div className="rounded-[28px] bg-[rgba(255,248,239,0.96)] p-5 text-[#182036] shadow-[0_22px_50px_rgba(24,32,54,0.16)]">
+                      <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#7a6548]">
+                        Маршрут продукта
                       </p>
-                      <p className="mt-4 max-w-[12ch] text-balance font-[family:var(--font-landing-display)] text-[clamp(1.9rem,3vw,2.6rem)] font-semibold leading-[1.02]">
-                        Курс, продажа и вебинар внутри одной системы.
-                      </p>
-                      <div className="mt-5 grid gap-3">
-                        <div className="rounded-[22px] bg-white/12 px-4 py-3">
-                          <p className="text-xs uppercase tracking-[0.2em] text-white/60">
-                            Студентам
-                          </p>
-                          <p className="mt-2 text-base font-semibold">
-                            Личный кабинет и прогресс
-                          </p>
-                        </div>
-                        <div className="rounded-[22px] bg-white/12 px-4 py-3">
-                          <p className="text-xs uppercase tracking-[0.2em] text-white/60">
-                            Авторам
-                          </p>
-                          <p className="mt-2 text-base font-semibold">
-                            Контент, каталог и продажи
-                          </p>
-                        </div>
+                      <div className="mt-4 space-y-4">
+                        {[
+                          ["Автор", "Создает и публикует программы"],
+                          ["Студент", "Видит только обучение и прогресс"],
+                          ["Админ", "Контролирует систему и аналитику"],
+                        ].map(([role, text]) => (
+                          <div key={role} className="rounded-[22px] border border-[#ebe0d2] bg-white px-4 py-4">
+                            <p className="text-sm font-semibold text-[#182036]">{role}</p>
+                            <p className="mt-1 text-sm leading-6 text-[#5f6982]">{text}</p>
+                          </div>
+                        ))}
                       </div>
                     </div>
 
-                    <div className="relative mx-auto flex w-full max-w-[420px] items-end justify-center xl:mr-0">
-                      <div className="relative h-[400px] w-[300px] overflow-hidden rounded-[34px] border border-white/25 shadow-[0_32px_80px_rgba(18,24,72,0.38)] md:h-[470px] md:w-[360px]">
-                        <Image
-                          src="https://images.unsplash.com/photo-1573497620053-ea5300f94f21?auto=format&fit=crop&w=1200&q=80"
-                          alt="Автор онлайн-курса"
-                          fill
-                          className="object-cover"
-                        />
-                        <div className="absolute inset-0 bg-[linear-gradient(180deg,_rgba(18,24,72,0.02)_0%,_rgba(18,24,72,0.82)_100%)]" />
-                        <div className="absolute inset-x-5 bottom-5 rounded-[28px] border border-white/12 bg-[#1b2143]/72 p-5 text-white backdrop-blur-md">
-                          <p className="text-xs uppercase tracking-[0.28em] text-white/55">
-                            Продуктовый маршрут
-                          </p>
-                          <p className="mt-3 max-w-[10ch] text-balance font-[family:var(--font-landing-display)] text-[clamp(1.7rem,2.4vw,2.2rem)] font-semibold leading-[0.98]">
-                            От курса к живому запуску.
-                          </p>
-                          <p className="mt-3 text-[13px] leading-6 text-white/72">
-                            Один и тот же контур держит материалы, оплату, доступ и
-                            следующий шаг для ученика.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="grid gap-4 xl:grid-cols-[1.02fr_0.98fr]">
-                    <div className="overflow-hidden rounded-[28px] border border-white/18 bg-white/12 shadow-2xl">
-                      <Image
-                        src="https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&w=1200&q=80"
-                        alt="Рабочее место для эфира"
-                        width={560}
-                        height={240}
-                        className="h-[190px] w-full object-cover"
-                      />
-                    </div>
-
-                    <div className="rounded-[28px] bg-[#fff7f1] px-5 py-5 text-[#1c2442] shadow-xl">
-                      <div className="flex items-center gap-3">
-                        <div className="rounded-2xl bg-white p-3">
-                          <WalletCards className="h-5 w-5 text-[#ff825f]" />
-                        </div>
+                    <div className="rounded-[28px] border border-white/14 bg-white/10 p-5 text-white backdrop-blur-sm">
+                      <div className="flex items-center justify-between gap-4">
                         <div>
-                          <p className="text-sm text-[#7a6d65]">Продажи</p>
-                          <p className="font-semibold">оплата и выдача доступа</p>
+                          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-white/58">
+                            Публичный слой
+                          </p>
+                          <p className="mt-2 text-2xl font-semibold">Каталог и продажи</p>
                         </div>
+                        <WalletCards className="h-6 w-6 text-[#ffd7b5]" />
                       </div>
-                      <p className="mt-4 text-sm leading-6 text-[#6e625b]">
-                        Когда курс красиво упакован, переход от интереса к оплате
-                        считывается мгновенно и не ломает доверие.
+                      <p className="mt-4 text-sm leading-7 text-white/80">
+                        Витрина должна смотреться как продукт для бизнеса в недвижимости, а не
+                        как учебный шаблон.
                       </p>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
+            </section>
 
-            <div className="grid gap-3 rounded-[28px] border border-black/5 bg-[linear-gradient(90deg,_#263bd6_0%,_#5970ff_46%,_#ff906f_100%)] p-4 text-white md:grid-cols-5">
-              {[
-                "Каталог курсов",
-                "Кабинет студента",
-                "Свои программы",
-                "Вебинарные сценарии",
-                "Авторские школы",
-              ].map((item) => (
-                <div
-                  key={item}
-                  className="rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-center text-sm font-medium"
-                >
-                  {item}
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section id="scenarios" className="mt-16 space-y-8">
-          <SectionLead
-            eyebrow="Сценарии платформы"
-            title="Один продукт под три понятные роли."
-            text="Лендинг должен сразу объяснять, что платформой можно пользоваться как ученик, как автор курса и как организатор живых обучающих форматов."
-          />
-
-          <div className="grid gap-5 lg:grid-cols-3">
-            {useCases.map((item) => {
-              const Icon = item.icon;
-
-              return (
-                <article
-                  key={item.title}
-                  className="overflow-hidden rounded-[30px] border border-black/5 bg-white shadow-[0_20px_55px_rgba(28,36,66,0.08)] transition hover:-translate-y-1 hover:shadow-[0_26px_70px_rgba(28,36,66,0.12)]"
-                >
-                  <div className="relative h-56">
-                    <Image src={item.image} alt={item.title} fill className="object-cover" />
-                    <div className={`absolute inset-0 bg-gradient-to-br ${item.tone}`} />
-                    <div className="absolute left-5 top-5 rounded-2xl bg-white/92 p-3 shadow-sm">
-                      <Icon className="h-5 w-5 text-[#1c2442]" />
-                    </div>
-                  </div>
-                  <div className="space-y-3 p-6">
-                    <h3 className="text-2xl font-semibold">{item.title}</h3>
-                    <p className="text-sm leading-7 text-[#596177]">{item.text}</p>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-        </section>
-
-        <SectionShell className="mt-16">
-          <div className="grid gap-8 xl:grid-cols-[0.84fr_1.16fr] xl:items-start">
-            <SectionLead
-              eyebrow="Направления"
-              title="Не одна витрина курсов, а база под несколько форматов обучения."
-              text="По духу это уже ближе к сильным edtech-продуктам: у платформы есть не один сценарий, а линейка направлений, которые можно запускать внутри одного бренда."
-              className="max-w-2xl"
-            />
-
-            <div
-              id="directions"
-              className="grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(240px,1fr))]"
-            >
-              {platformDirections.map((item, index) => (
-                <article
-                  key={item.title}
-                  className="rounded-[30px] border border-black/5 bg-white p-6 shadow-[0_18px_50px_rgba(28,36,66,0.06)]"
-                >
-                  <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#7b8296]">
-                    0{index + 1}
-                  </p>
-                  <h3 className="mt-4 text-2xl font-semibold leading-tight text-[#1c2442]">
-                    {item.title}
-                  </h3>
-                  <p className="mt-3 text-sm leading-7 text-[#596177]">{item.text}</p>
-                </article>
-              ))}
-            </div>
-          </div>
-        </SectionShell>
-
-        <SectionShell className="mt-16">
-          <div className="space-y-8">
-            <div className="grid gap-8 xl:grid-cols-[0.9fr_1.1fr] xl:items-end">
+            <section id="roles" className="space-y-8 border-t border-black/5 pt-10">
               <SectionLead
-                eyebrow="Каталог"
-                title="Курс нужно продавать как продукт, а не как набор уроков."
-                text="Карточка программы должна объяснять ценность, формат, цену и следующий шаг. Тогда каталог работает как витрина, а не как технический список."
+                eyebrow="Роли"
+                title="Логика продукта уже разложена по настоящим сценариям."
+                text="Автор наполняет программы, студент проходит обучение, администратор управляет системой, доступами и статистикой. Дальше дизайн должен только усиливать эту логику, а не запутывать ее."
               />
 
-              <div className="grid gap-3 md:grid-cols-3">
-                {[
-                  {
-                    icon: LayoutTemplate,
-                    title: "Визуальная упаковка",
-                    text: "Обложка, описание и структура курса считываются мгновенно.",
-                  },
-                  {
-                    icon: BadgeRussianRuble,
-                    title: "Покупка доступа",
-                    text: "Витрина и шаг оплаты ведут к покупке без лишних переходов и путаницы.",
-                  },
-                  {
-                    icon: Users,
-                    title: "Понятный маршрут",
-                    text: "Пользователь понимает, что покупает и как будет проходить программу.",
-                  },
-                ].map((item) => {
-                  const Icon = item.icon;
+              <div className="grid gap-5 lg:grid-cols-3">
+                {roleCards.map((card) => {
+                  const Icon = card.icon;
 
                   return (
-                    <div
-                      key={item.title}
-                      className="rounded-[24px] border border-black/5 bg-white p-5 shadow-sm"
+                    <article
+                      key={card.title}
+                      className="rounded-[30px] border border-white/85 bg-[linear-gradient(180deg,_rgba(255,255,255,0.97)_0%,_rgba(249,250,253,0.94)_100%)] p-6 shadow-[0_20px_55px_rgba(24,32,54,0.07)]"
                     >
-                      <div className="rounded-2xl bg-[#eef2ff] p-3 text-[#2940dd]">
-                        <Icon className="h-5 w-5" />
+                      <div className="inline-flex rounded-[18px] bg-[linear-gradient(135deg,_rgba(38,80,216,0.16)_0%,_rgba(79,111,240,0.08)_100%)] p-3">
+                        <Icon className="h-5 w-5 text-[#2650d8]" />
                       </div>
-                      <p className="mt-4 font-semibold text-[#1c2442]">{item.title}</p>
-                      <p className="mt-2 text-sm leading-7 text-[#596177]">{item.text}</p>
-                    </div>
+                      <p className="mt-5 text-xs font-semibold uppercase tracking-[0.28em] text-[#7a6548]">
+                        {card.eyebrow}
+                      </p>
+                      <h3 className="mt-3 text-2xl font-semibold leading-tight text-[#182036]">
+                        {card.title}
+                      </h3>
+                      <p className="mt-4 text-sm leading-7 text-[#5f6982]">{card.text}</p>
+                    </article>
                   );
                 })}
               </div>
-            </div>
+            </section>
 
-            <div
-              id="courses"
-              className="grid gap-5 [grid-template-columns:repeat(auto-fit,minmax(320px,1fr))]"
-            >
-              {featuredCourses.map((course) => (
-                <article
-                  key={course.title}
-                  className="flex h-full flex-col overflow-hidden rounded-[32px] border border-black/5 bg-white shadow-[0_18px_50px_rgba(28,36,66,0.08)]"
-                >
-                  <div className="relative h-64">
-                    <Image src={course.image} alt={course.title} fill className="object-cover" />
-                    <div className="absolute inset-0 bg-[linear-gradient(180deg,_rgba(23,31,80,0.04)_0%,_rgba(23,31,80,0.58)_100%)]" />
-                    <div className="absolute left-5 right-5 top-5 flex items-center justify-between">
-                      <span className="rounded-full bg-white/16 px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white backdrop-blur">
-                        Премиум
-                      </span>
-                      <span className="rounded-full bg-white/16 p-2 text-white backdrop-blur">
-                        <BadgeRussianRuble className="h-4 w-4" />
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-1 flex-col justify-between p-6">
-                    <div>
-                      <h3 className="max-w-[16ch] text-balance text-[clamp(1.6rem,2vw,2.1rem)] font-semibold leading-[1.04]">
-                        {course.title}
-                      </h3>
-                      <p className="mt-3 text-sm leading-7 text-[#596177]">{course.meta}</p>
-                    </div>
-
-                    <div className="mt-6 space-y-3 border-t border-black/5 pt-5">
-                      <div className="flex items-end gap-3">
-                        <p className="text-[clamp(2.4rem,3vw,3.25rem)] font-semibold leading-none tracking-tight">
-                          {course.priceAmount}
-                        </p>
-                        <div className="pb-1 text-sm font-semibold leading-4 text-[#5d657a]">
-                          <span className="block">{course.priceCurrency}</span>
-                          <span className="block">{course.priceSuffix}</span>
-                        </div>
-                      </div>
-                      <Link
-                        href="/catalog"
-                        className="inline-flex items-center gap-2 text-sm font-semibold text-[#1c2442]"
-                      >
-                        Открыть программу
-                        <ChevronRight className="h-4 w-4" />
-                      </Link>
-                    </div>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </div>
-        </SectionShell>
-
-        <SectionShell className="mt-16">
-          <SectionLead
-            eyebrow="Как это растет"
-            title="Сначала курс, потом продажи, потом большая учебная экосистема."
-            text="У платформы должен быть понятный путь развития. Это важно не только для разработки, но и для того, как сам продукт воспринимается на первом экране."
-          />
-
-          <div className="mt-8 grid gap-4 lg:grid-cols-3">
-            {buildFlow.map((item) => (
-              <article
-                key={item.step}
-                className="rounded-[30px] border border-black/5 bg-white p-6 shadow-[0_18px_50px_rgba(28,36,66,0.06)]"
-              >
-                <p className="text-sm font-semibold uppercase tracking-[0.34em] text-[#7b8296]">
-                  {item.step}
-                </p>
-                <h3 className="mt-5 text-2xl font-semibold text-[#1c2442]">{item.title}</h3>
-                <p className="mt-3 text-sm leading-7 text-[#596177]">{item.text}</p>
-              </article>
-            ))}
-          </div>
-        </SectionShell>
-
-        <section className="mt-16 space-y-6">
-          <article
-            id="creators"
-            className="overflow-hidden rounded-[38px] border border-white/70 bg-[linear-gradient(160deg,_#18213d_0%,_#25346d_52%,_#3550ac_100%)] p-6 shadow-[0_36px_110px_rgba(26,32,72,0.2)] md:p-8"
-          >
-            <SectionLead
-              eyebrow="Для авторов"
-              title="Загрузить свою программу и превратить ее в продукт."
-              text="Автору нужен не просто редактор уроков, а понятный путь от структуры курса до продаж и сопровождения студентов."
-              light
-            />
-
-            <div className="mt-8 grid gap-6 xl:grid-cols-[0.82fr_1.18fr]">
-              <div className="space-y-3">
-                {creatorPoints.map((item) => (
-                  <div
-                    key={item}
-                    className="flex items-start gap-3 rounded-[24px] border border-white/10 bg-white/8 p-4"
-                  >
-                    <CheckCircle2 className="mt-1 h-5 w-5 flex-none text-[#ffd6be]" />
-                    <p className="text-sm leading-7 text-white/82">{item}</p>
-                  </div>
-                ))}
-              </div>
-
-              <div className="grid min-h-[420px] gap-5 overflow-hidden rounded-[30px] border border-white/10 bg-white/8 p-5 backdrop-blur">
-                <div className="rounded-[24px] bg-white px-5 py-4 text-[#1c2442] shadow-xl">
-                  <p className="text-sm text-[#697088]">Кабинет автора</p>
-                  <p className="font-semibold">Редактор программы и продаж</p>
-                </div>
-
-                <div className="grid flex-1 gap-5 lg:grid-cols-[minmax(0,1fr)_320px]">
-                  <div className="grid gap-4 lg:grid-rows-[auto_auto]">
-                    <div className="rounded-[24px] bg-white p-5 text-[#1c2442] shadow-lg">
-                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#7b8296]">
-                        Курс
-                      </p>
-                      <p className="mt-3 text-2xl font-semibold">
-                        Система агентства
-                      </p>
-                      <p className="mt-3 text-sm leading-7 text-[#697088]">
-                        Модули, уроки, цена, доступы и команда живут в одном
-                        сценарии, а не расходятся по разным кабинетам.
-                      </p>
-                    </div>
-
-                    <div className="grid gap-3 sm:grid-cols-2">
-                      <div className="rounded-[22px] bg-white/10 p-4 text-white">
-                        <p className="text-xs uppercase tracking-[0.2em] text-white/60">
-                          Продажа
-                        </p>
-                        <p className="mt-2 text-balance text-xl font-semibold leading-tight">
-                          Каталог + оплата
-                        </p>
-                      </div>
-                      <div className="rounded-[22px] bg-white/10 p-4 text-white">
-                        <p className="text-xs uppercase tracking-[0.2em] text-white/60">
-                          Команда
-                        </p>
-                        <p className="mt-2 text-balance text-xl font-semibold leading-tight">
-                          Авторы и кураторы
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="relative min-h-[360px] overflow-hidden rounded-[28px] border border-white/10 shadow-2xl lg:min-h-full">
-                    <Image
-                      src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1200&q=80"
-                      alt="Автор курса"
-                      fill
-                      className="object-cover"
-                    />
-                    <div className="absolute inset-0 bg-[linear-gradient(180deg,_rgba(19,27,60,0.08)_0%,_rgba(19,27,60,0.72)_100%)]" />
-                    <div className="absolute inset-x-4 bottom-4 rounded-[24px] border border-white/12 bg-[#1c2442]/70 p-4 text-white backdrop-blur-md">
-                      <p className="text-xs uppercase tracking-[0.22em] text-white/55">
-                        Роль автора
-                      </p>
-                      <p className="mt-2 max-w-[18ch] text-balance text-xl font-semibold leading-tight">
-                        Собрать программу, оформить продукт и передать доступы без
-                        лишнего хаоса.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <SectionShell className="p-6 md:p-8">
-            <div id="webinars">
+            <section id="courses" className="space-y-8 border-t border-black/5 pt-10">
               <SectionLead
-                eyebrow="Вебинары"
-                title="Ту же платформу можно использовать как базу для живых эфиров."
-                text="Запуски, вебинары, разборы, созвоны с группой и продажа записи после события могут жить рядом с курсами, а не отдельно от них."
+                eyebrow="Каталог"
+                title="Опубликованные программы должны выглядеть как линейка продуктов."
+                text="Ниже уже не декоративные мокапы, а реальные курсы из текущей базы. Это важно: визуальная упаковка должна держаться на настоящем контенте."
               />
 
-              <div className="mt-8 grid gap-5 lg:grid-cols-[1fr_0.92fr]">
-                <div className="overflow-hidden rounded-[30px] border border-black/5 bg-[#f6f7ff] p-4 shadow-sm">
-                  <div className="rounded-[26px] bg-[#1c2442] p-5 text-white">
-                    <div className="flex items-center justify-between gap-4">
+              <div className="grid gap-5 lg:grid-cols-3">
+                {showcaseCourses.map((course, index) => {
+                  const lessonCount = course.modules.reduce(
+                    (sum, module) => sum + module.lessons.length,
+                    0,
+                  );
+
+                  return (
+                    <article
+                      key={course.id}
+                      className="overflow-hidden rounded-[32px] border border-white/85 bg-white shadow-[0_22px_60px_rgba(24,32,54,0.08)]"
+                    >
+                      <div className="relative h-64">
+                        <Image
+                          src={getPublicCourseCover(index)}
+                          alt={course.title}
+                          fill
+                          className="object-cover"
+                        />
+                        <div className="absolute inset-0 bg-[linear-gradient(180deg,_rgba(24,32,54,0.06)_0%,_rgba(24,32,54,0.7)_100%)]" />
+                        <div className="absolute left-5 top-5 rounded-full bg-white/14 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-white backdrop-blur">
+                          {lessonCount} уроков
+                        </div>
+                      </div>
+
+                      <div className="space-y-4 p-6">
+                        <h3 className="text-[clamp(1.65rem,2.1vw,2.1rem)] font-semibold leading-[1.02] text-[#182036]">
+                          {course.title}
+                        </h3>
+                        <p className="text-sm leading-7 text-[#5f6982]">
+                          {course.description || "Описание курса будет добавлено в следующем проходе."}
+                        </p>
+                        <Link
+                          href="/catalog"
+                          className="inline-flex items-center gap-2 text-sm font-semibold text-[#182036] transition hover:text-[#2650d8]"
+                        >
+                          Открыть карточку курса
+                          <ArrowUpRight className="h-4 w-4" />
+                        </Link>
+                      </div>
+                    </article>
+                  );
+                })}
+              </div>
+            </section>
+
+            <section id="process" className="grid gap-8 border-t border-black/5 pt-10 xl:grid-cols-[0.86fr_1.14fr]">
+              <SectionLead
+                eyebrow="Переход"
+                title="Дальше продукт нужно не украшать, а дисциплинировать."
+                text="Логика уже движется в правильную сторону: block-first уроки, разделение ролей, каталог как витрина. Следующий шаг — довести это до сильного визуального стандарта во всех основных экранах."
+              />
+
+              <div className="grid gap-4">
+                {processSteps.map((item) => (
+                  <article
+                    key={item.step}
+                    className="rounded-[28px] border border-white/85 bg-[rgba(255,255,255,0.94)] p-5 shadow-[0_16px_44px_rgba(24,32,54,0.06)]"
+                  >
+                    <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
                       <div>
-                        <p className="text-xs uppercase tracking-[0.24em] text-white/65">
-                          живой эфир
+                        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#7a6548]">
+                          Шаг {item.step}
                         </p>
-                        <p className="mt-2 text-2xl font-semibold">
-                          Живой урок + чат + материалы
-                        </p>
+                        <h3 className="mt-2 text-2xl font-semibold text-[#182036]">
+                          {item.title}
+                        </h3>
                       </div>
-                      <div className="rounded-2xl bg-white/10 p-3">
-                        <MonitorPlay className="h-6 w-6" />
-                      </div>
+                      <BookOpenText className="h-5 w-5 text-[#2650d8]" />
                     </div>
-                    <div className="mt-5 overflow-hidden rounded-[22px]">
-                      <Image
-                        src="https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&w=1200&q=80"
-                        alt="Онлайн-вебинар"
-                        width={900}
-                        height={560}
-                        className="h-52 w-full object-cover"
-                      />
-                    </div>
-                  </div>
+                    <p className="mt-4 text-sm leading-7 text-[#5f6982]">{item.text}</p>
+                  </article>
+                ))}
+              </div>
+            </section>
+
+            <section className="mt-10 rounded-[36px] bg-[linear-gradient(145deg,_#182036_0%,_#2240a3_52%,_#f08f68_100%)] p-8 text-white shadow-[0_34px_90px_rgba(24,32,54,0.2)] md:p-10">
+              <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
+                <div className="space-y-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.32em] text-white/58">
+                    Следующий шаг
+                  </p>
+                  <h2 className="font-[family:var(--font-landing-display)] text-4xl font-semibold leading-[0.95] tracking-tight md:text-5xl">
+                    Показать автору и администратору продукт, который уже выглядит уверенно.
+                  </h2>
+                  <p className="max-w-2xl text-base leading-8 text-white/82">
+                    Внутри уже есть курсы, роли и учебный путь. Теперь визуальный слой начинает
+                    соответствовать логике продукта, а не спорить с ней.
+                  </p>
                 </div>
 
-                <div className="space-y-3">
-                  {webinarPoints.map((item) => (
-                    <div
-                      key={item}
-                      className="rounded-[24px] border border-black/5 bg-white p-4 shadow-sm"
-                    >
-                      <div className="flex items-start gap-3">
-                        <div className="rounded-2xl bg-[#fff1ea] p-3">
-                          <CalendarDays className="h-5 w-5 text-[#ff825f]" />
-                        </div>
-                        <p className="text-sm leading-7 text-[#596177]">{item}</p>
-                      </div>
-                    </div>
-                  ))}
+                <div className="flex flex-wrap gap-3 lg:justify-end">
+                  <PublicButton href="/catalog">Перейти в каталог</PublicButton>
+                  <PublicButton href="/sign-in" tone="secondary">
+                    Войти в платформу
+                  </PublicButton>
+                  <PublicButton href="/sign-in" tone="ghost">
+                    Открыть кабинет автора
+                  </PublicButton>
                 </div>
               </div>
-            </div>
-          </SectionShell>
-        </section>
-
-        <section className="mt-16 space-y-8">
-          <SectionLead
-            eyebrow="Кому подходит"
-            title="Платформа должна работать и для школы, и для автора, и для команды агентства."
-            text="Ниже не абстрактные обещания, а реальные сценарии, под которые уже можно упаковывать продукт, звать дизайнеров и начинать наполнение методистами."
-          />
-
-          <div className="grid gap-5 lg:grid-cols-3">
-            {storyCards.map((item, index) => (
-              <article
-                key={item.title}
-                className="rounded-[28px] border border-black/5 bg-white p-6 shadow-[0_18px_50px_rgba(28,36,66,0.08)]"
-              >
-                <div className="flex items-center gap-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[linear-gradient(135deg,_#2840db_0%,_#ff8a67_100%)] text-sm font-semibold text-white">
-                    {index + 1}
-                  </div>
-                  <p className="font-semibold text-[#1c2442]">{item.title}</p>
-                </div>
-                <p className="mt-5 text-sm leading-7 text-[#596177]">{item.text}</p>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <SectionShell className="mt-16">
-          <SectionLead
-            eyebrow="FAQ"
-            title="Нормальные вопросы до входа в продукт."
-            text="Визуал должен вести к доверию, но продавать помогают понятные ответы на реальные вопросы команды, авторов и студентов."
-          />
-
-          <div className="mt-8 grid gap-4 lg:grid-cols-2">
-            {faqItems.map((item) => (
-              <article
-                key={item.question}
-                className="rounded-[28px] border border-black/5 bg-white p-6 shadow-[0_16px_45px_rgba(28,36,66,0.06)]"
-              >
-                <h3 className="text-xl font-semibold text-[#1c2442]">{item.question}</h3>
-                <p className="mt-3 text-sm leading-7 text-[#596177]">{item.answer}</p>
-              </article>
-            ))}
-          </div>
-        </SectionShell>
-
-        <section className="mt-16 rounded-[38px] border border-white/70 bg-[linear-gradient(135deg,_#18213d_0%,_#3146b6_48%,_#ff8f6d_100%)] p-8 text-white shadow-[0_38px_110px_rgba(34,40,88,0.22)] md:p-10">
-          <div className="grid gap-8 lg:grid-cols-[1.08fr_0.92fr] lg:items-end">
-            <div className="space-y-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.34em] text-white/60">
-                Следующий шаг
-              </p>
-              <h2 className="font-[family:var(--font-landing-display)] text-4xl font-semibold tracking-tight md:text-5xl">
-                Платформа уже может стать и школой, и витриной курсов, и базой для
-                вебинаров.
-              </h2>
-              <p className="max-w-2xl text-base leading-8 text-white/82">
-                Дальше можно усиливать упаковку, маркетинг и продуктовые роли, не ломая
-                уже собранный фундамент.
-              </p>
-            </div>
-
-            <div className="flex flex-wrap gap-3 lg:justify-end">
-              <PublicButton href="/catalog">Открыть каталог</PublicButton>
-              <PublicButton href="/sign-in" tone="secondary">
-                Стать автором
-              </PublicButton>
-              <PublicButton href="/sign-in" tone="ghost">
-                Войти в платформу
-              </PublicButton>
-            </div>
+            </section>
           </div>
         </section>
       </div>
