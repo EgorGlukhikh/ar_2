@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import {
@@ -15,15 +15,59 @@ import { usePathname } from "next/navigation";
 import { USER_ROLES, type UserRole } from "@academy/shared";
 
 import { cn } from "@/lib/utils";
+import {
+  canViewAnalyticsWorkspace,
+  canViewCourseWorkspace,
+  canViewEmailWorkspace,
+  canViewHomeworkWorkspace,
+  canViewStudentWorkspace,
+  canViewTeamWorkspace,
+  canViewWorkspaceOverview,
+} from "@/lib/workspace-role";
 
 const navItems = [
-  { href: "/admin", label: "Обзор", icon: LayoutDashboard },
-  { href: "/admin/courses", label: "Курсы", icon: BookOpen },
-  { href: "/admin/students", label: "Студенты", icon: Users },
-  { href: "/admin/homework", label: "Домашки", icon: ClipboardCheck },
-  { href: "/admin/emails", label: "Письма", icon: Mail },
-  { href: "/admin/analytics", label: "Аналитика", icon: BarChart3 },
-  { href: "/admin/team", label: "Команда", icon: Settings2 },
+  {
+    href: "/admin",
+    label: "Обзор",
+    icon: LayoutDashboard,
+    isVisible: canViewWorkspaceOverview,
+  },
+  {
+    href: "/admin/courses",
+    label: "Курсы",
+    icon: BookOpen,
+    isVisible: canViewCourseWorkspace,
+  },
+  {
+    href: "/admin/students",
+    label: "Студенты",
+    icon: Users,
+    isVisible: canViewStudentWorkspace,
+  },
+  {
+    href: "/admin/homework",
+    label: "Домашки",
+    icon: ClipboardCheck,
+    isVisible: canViewHomeworkWorkspace,
+  },
+  {
+    href: "/admin/emails",
+    label: "Письма",
+    icon: Mail,
+    isVisible: canViewEmailWorkspace,
+  },
+  {
+    href: "/admin/analytics",
+    label: "Аналитика",
+    icon: BarChart3,
+    isVisible: canViewAnalyticsWorkspace,
+  },
+  {
+    href: "/admin/team",
+    label: "Команда",
+    icon: Settings2,
+    isVisible: canViewTeamWorkspace,
+  },
 ] as const;
 
 type AdminNavProps = {
@@ -32,25 +76,11 @@ type AdminNavProps = {
 
 export function AdminNav({ effectiveRole }: AdminNavProps) {
   const pathname = usePathname();
-  const visibleItems = navItems.filter((item) => {
-    if (effectiveRole === USER_ROLES.AUTHOR) {
-      return item.href === "/admin/courses";
-    }
+  const visibleItems = navItems.filter((item) => item.isVisible(effectiveRole));
 
-    if (effectiveRole === USER_ROLES.CURATOR) {
-      return ["/admin/students", "/admin/homework", "/admin/analytics"].includes(
-        item.href,
-      );
-    }
-
-    if (effectiveRole === USER_ROLES.SALES_MANAGER) {
-      return ["/admin/students", "/admin/emails", "/admin/analytics"].includes(
-        item.href,
-      );
-    }
-
-    return true;
-  });
+  if (effectiveRole === USER_ROLES.STUDENT || visibleItems.length === 0) {
+    return null;
+  }
 
   return (
     <nav className="flex flex-wrap items-center gap-2">

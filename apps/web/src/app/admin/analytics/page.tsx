@@ -13,7 +13,7 @@ import {
   WorkspaceStatCard,
 } from "@/components/workspace/workspace-primitives";
 import { getStudentAnalyticsSummary, getViewerRoleLabel } from "@/features/analytics/service";
-import { requireRoleAccess } from "@/lib/admin";
+import { requireAdminUser } from "@/lib/admin";
 
 const dateTimeFormatter = new Intl.DateTimeFormat("ru-RU", {
   dateStyle: "medium",
@@ -54,7 +54,7 @@ function getStateLabel(state?: string | null) {
 }
 
 export default async function AdminAnalyticsPage() {
-  await requireRoleAccess([USER_ROLES.ADMIN, USER_ROLES.CURATOR, USER_ROLES.SALES_MANAGER]);
+  await requireAdminUser();
 
   const [summary, playStateEvents, completionEvents] = await Promise.all([
     getStudentAnalyticsSummary(),

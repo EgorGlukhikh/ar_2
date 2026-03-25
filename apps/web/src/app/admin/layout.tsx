@@ -5,25 +5,11 @@ import { LogoutButton } from "@/components/auth/logout-button";
 import { AdminNav } from "@/components/admin/admin-nav";
 import { RolePreviewSwitcher } from "@/components/workspace/role-preview-switcher";
 import { Button } from "@/components/ui/button";
+import { canCreateCourses } from "@/lib/admin";
 import { requireAdminViewer } from "@/lib/viewer";
+import { getWorkspaceDescription, getWorkspaceTitle } from "@/lib/workspace-role";
 
 export const dynamic = "force-dynamic";
-
-function getWorkspaceTitle(effectiveRole: string) {
-  if (effectiveRole === "AUTHOR") {
-    return "Кабинет автора";
-  }
-
-  return "Рабочий контур команды";
-}
-
-function getWorkspaceDescription(effectiveRole: string, email: string | null | undefined) {
-  if (effectiveRole === "AUTHOR") {
-    return `Режим автора для проверки каталога, структуры программ и контента. ${email ?? ""}`.trim();
-  }
-
-  return email ?? "";
-}
 
 export default async function AdminLayout({
   children,
@@ -31,6 +17,7 @@ export default async function AdminLayout({
   children: ReactNode;
 }) {
   const viewer = await requireAdminViewer();
+  const canCreateCourse = canCreateCourses(viewer.user);
 
   return (
     <main className="min-h-screen bg-[linear-gradient(180deg,_#f7f9ff_0%,_#f1f5ff_100%)] px-4 py-4 md:px-6 md:py-6">
@@ -67,6 +54,11 @@ export default async function AdminLayout({
             </div>
 
             <div className="flex flex-wrap gap-3 xl:justify-end">
+              {canCreateCourse ? (
+                <Button asChild>
+                  <Link href="/admin/courses/new">Новый курс</Link>
+                </Button>
+              ) : null}
               <Button asChild variant="outline">
                 <Link href="/">Открыть портал</Link>
               </Button>
