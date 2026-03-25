@@ -13,6 +13,7 @@ import { z } from "zod";
 
 import {
   canEditCourseContent,
+  getWorkspaceHomePath,
   requireAdminUser,
   requireCourseCreator,
   requireWorkspaceUser,
@@ -432,8 +433,6 @@ export async function createCourse(formData: FormData) {
 }
 
 export async function updateCourse(formData: FormData) {
-  await requireAdminUser();
-
   const parsed = updateCourseSchema.parse({
     courseId: getTrimmedValue(formData, "courseId"),
     title: getTrimmedValue(formData, "title"),
@@ -442,6 +441,25 @@ export async function updateCourse(formData: FormData) {
     status: getTrimmedValue(formData, "status"),
     authorId: getOptionalValue(formData, "authorId"),
   });
+
+  const user = await requireWorkspaceUser();
+  const course = await prisma.course.findUnique({
+    where: {
+      id: parsed.courseId,
+    },
+    select: {
+      id: true,
+      authorId: true,
+    },
+  });
+
+  if (!course) {
+    throw new Error("Course not found");
+  }
+
+  if (!canEditCourseContent(user, course.authorId)) {
+    redirect(getWorkspaceHomePath(user.role));
+  }
 
   const slug = await ensureUniqueCourseSlug(
     parsed.slug ?? parsed.title,
@@ -456,8 +474,12 @@ export async function updateCourse(formData: FormData) {
       title: parsed.title,
       slug,
       description: parsed.description,
-      status: parsed.status,
-      authorId: parsed.authorId ?? null,
+      ...(user.role === "ADMIN"
+        ? {
+            status: parsed.status,
+            authorId: parsed.authorId ?? null,
+          }
+        : {}),
     },
   });
 

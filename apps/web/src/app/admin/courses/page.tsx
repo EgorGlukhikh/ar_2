@@ -183,11 +183,14 @@ export default async function CoursesPage() {
                         </Link>
                       </Button>
 
+                      <Button asChild variant="outline">
+                        <Link href={`/admin/courses/${course.id}`}>
+                          {isAuthorMode ? "Карточка курса" : "Настройки"}
+                        </Link>
+                      </Button>
+
                       {viewer.actualRole === USER_ROLES.ADMIN ? (
                         <>
-                          <Button asChild variant="outline">
-                            <Link href={`/admin/courses/${course.id}`}>Настройки</Link>
-                          </Button>
                           <Button asChild variant="outline">
                             <Link href={`/admin/courses/${course.id}/access`}>
                               Доступ и продажи
