@@ -34,7 +34,8 @@
 4. Выполнить `npm run db:generate`.
 5. Выполнить `npm run db:push`.
 6. Выполнить `npm run db:seed`.
-7. Выполнить `npm run dev`.
+7. Выполнить `npm run db:sync-lesson-blocks`.
+8. Выполнить `npm run dev`.
 
 ## Тестовый админ
 
@@ -76,6 +77,8 @@
 
 В Railway уже развертывается `web` + `Postgres`.
 
+При деплое `preDeployCommand` автоматически выполняет `db:generate`, `db:push`, `db:seed` и `db:sync-lesson-blocks`, поэтому существующие legacy-уроки синхронизируются в `LessonBlock` без ручного шага.
+
 Для production email-цепочек нужен scheduled trigger:
 
 1. Создать cron/job, который вызывает `POST /api/cron/email-queue`
@@ -101,4 +104,3 @@
 - roadmap: `docs/current-implementation-roadmap.md`
 - 10x-план улучшений: `docs/10x-product-improvement-roadmap.md`
 - хронология работ: GitHub issue `#1`
-

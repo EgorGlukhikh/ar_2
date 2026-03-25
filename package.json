@@ -12,7 +12,7 @@
     "lint": "dotenv -e .env -- npm run lint --workspace @academy/web",
     "railway:build": "npm run build --workspace @academy/web",
     "railway:start": "npm run start --workspace @academy/web",
-    "railway:db:prepare": "npm run db:generate --workspace @academy/db && npm run db:push --workspace @academy/db && npm run db:seed --workspace @academy/db",
+    "railway:db:prepare": "npm run db:generate --workspace @academy/db && npm run db:push --workspace @academy/db && npm run db:seed --workspace @academy/db && npm run db:sync-lesson-blocks --workspace @academy/db",
     "db:start": "docker compose up -d db",
     "db:stop": "docker compose down",
     "db:generate": "dotenv -e .env -- npm run db:generate --workspace @academy/db",
