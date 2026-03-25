@@ -7,7 +7,6 @@ import {
   GripVertical,
   Paperclip,
   Plus,
-  Trash2,
   Type,
   Video,
   X,
@@ -48,6 +47,7 @@ type BlockTypeOption = {
   label: string;
   icon: typeof Type;
   description: string;
+  accentClassName: string;
 };
 
 const blockTypeOptions: BlockTypeOption[] = [
@@ -55,25 +55,29 @@ const blockTypeOptions: BlockTypeOption[] = [
     type: "TEXT",
     label: "Текст",
     icon: Type,
-    description: "Конспект, инструкция или пояснение.",
+    description: "Конспект, инструкция, тезисы или пояснение к уроку.",
+    accentClassName: "bg-[#eef4ff] text-[#2840db]",
   },
   {
     type: "VIDEO",
     label: "Видео",
     icon: Video,
-    description: "Ссылка или файл.",
+    description: "Видео-блок с подводкой и управлением источником.",
+    accentClassName: "bg-[#eefbf4] text-[#0f7a47]",
   },
   {
     type: "FILE",
     label: "Файл",
     icon: Paperclip,
-    description: "PDF, шаблон или внешний материал.",
+    description: "PDF, шаблон, ссылка на документ или внешний материал.",
+    accentClassName: "bg-[#fff6e8] text-[#9a5a00]",
   },
   {
     type: "HOMEWORK",
     label: "Задание",
     icon: ClipboardCheck,
-    description: "Домашняя работа.",
+    description: "Домашняя работа и правила сдачи для студента.",
+    accentClassName: "bg-[#fff0f0] text-[#b42318]",
   },
 ];
 
@@ -105,7 +109,7 @@ function createBlock(type: LessonBlock["type"], order: number): LessonBlock {
     return {
       id,
       type,
-      title: "Домашняя работа",
+      title: "Домашнее задание",
       body: "",
       submissionHint: "",
     };
@@ -127,8 +131,24 @@ function moveItem<T>(items: T[], fromIndex: number, toIndex: number) {
   return next;
 }
 
-function getBlockTypeLabel(type: LessonBlock["type"]) {
-  return blockTypeOptions.find((item) => item.type === type)?.label ?? type;
+function getBlockTypeMeta(type: LessonBlock["type"]) {
+  return blockTypeOptions.find((item) => item.type === type) ?? blockTypeOptions[0];
+}
+
+function getBlockPreview(block: LessonBlock) {
+  if (block.type === "TEXT") {
+    return block.body.trim() || "Добавь основной текст урока.";
+  }
+
+  if (block.type === "VIDEO") {
+    return block.body?.trim() || "Опиши, что важно вынести из этого видео.";
+  }
+
+  if (block.type === "FILE") {
+    return block.url.trim() || "Добавь ссылку на материал.";
+  }
+
+  return block.body.trim() || "Опиши, что именно должен сдать студент.";
 }
 
 export function LessonBlockStudio({
@@ -149,6 +169,10 @@ export function LessonBlockStudio({
   const hasVideoBlock = useMemo(() => blocks.some((block) => block.type === "VIDEO"), [blocks]);
   const hasHomeworkBlock = useMemo(
     () => blocks.some((block) => block.type === "HOMEWORK"),
+    [blocks],
+  );
+  const textBlockCount = useMemo(
+    () => blocks.filter((block) => block.type === "TEXT").length,
     [blocks],
   );
 
@@ -208,24 +232,62 @@ export function LessonBlockStudio({
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       <input type="hidden" name="blocksJson" value={JSON.stringify(blocks)} />
 
+      <div className="rounded-[28px] border border-[var(--border)] bg-[linear-gradient(180deg,_#fbfcff_0%,_#f5f7ff_100%)] p-5">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+          <div className="space-y-2">
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--muted)]">
+              Холст урока
+            </p>
+            <h3 className="text-2xl font-semibold tracking-tight text-[var(--foreground)]">
+              Структура урока по блокам
+            </h3>
+            <p className="max-w-2xl text-sm leading-7 text-[var(--muted)]">
+              Урок собирается как последовательность независимых блоков. Здесь можно менять
+              порядок, комбинировать форматы и держать весь контент в одном сценарии.
+            </p>
+          </div>
+
+          <div className="flex flex-wrap gap-2 lg:max-w-[420px] lg:justify-end">
+            <Badge variant="neutral">Всего блоков {blocks.length}</Badge>
+            <Badge variant="neutral">Текста {textBlockCount}</Badge>
+            <Badge variant={hasVideoBlock ? "success" : "neutral"}>
+              {hasVideoBlock ? "Видео добавлено" : "Без видео"}
+            </Badge>
+            <Badge variant={hasHomeworkBlock ? "warning" : "neutral"}>
+              {hasHomeworkBlock ? "Есть задание" : "Без домашки"}
+            </Badge>
+          </div>
+        </div>
+      </div>
+
       {blocks.length === 0 ? (
-        <div className="rounded-[24px] border border-dashed border-[var(--border)] bg-[var(--surface)] p-6">
-          <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
+        <div className="rounded-[28px] border border-dashed border-[var(--border)] bg-[var(--surface)] p-8">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--muted)]">
             Пустой урок
           </p>
           <h3 className="mt-2 text-2xl font-semibold tracking-tight text-[var(--foreground)]">
             Добавь первый блок
           </h3>
-          <p className="mt-2 text-sm leading-7 text-[var(--muted)]">Здесь пока нет контента.</p>
+          <p className="mt-2 max-w-2xl text-sm leading-7 text-[var(--muted)]">
+            Начни с текста, видео, файла или задания. После этого урок уже можно будет собрать
+            как полноценный сценарий.
+          </p>
+          <div className="mt-5">
+            <Button type="button" onClick={() => setIsPickerOpen(true)}>
+              <Plus className="mr-2 h-4 w-4" />
+              Выбрать тип блока
+            </Button>
+          </div>
         </div>
       ) : null}
 
       {blocks.map((block, index) => {
         const isExpanded = expandedIds.includes(block.id);
-        const Icon = blockTypeOptions.find((item) => item.type === block.type)?.icon ?? Type;
+        const meta = getBlockTypeMeta(block.type);
+        const Icon = meta.icon;
 
         return (
           <section
@@ -234,29 +296,38 @@ export function LessonBlockStudio({
             onDragStart={() => setDraggedId(block.id)}
             onDragOver={(event) => event.preventDefault()}
             onDrop={() => handleDrop(block.id)}
-            className="overflow-hidden rounded-[24px] border border-[var(--border)] bg-white shadow-sm"
+            className="overflow-hidden rounded-[28px] border border-[var(--border)] bg-white shadow-sm"
           >
-            <header className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--border)] px-5 py-4">
+            <header className="flex flex-wrap items-start justify-between gap-4 border-b border-[var(--border)] px-5 py-4">
               <button
                 type="button"
                 onClick={() => toggleExpanded(block.id)}
-                className="flex min-w-0 items-center gap-3 text-left"
+                className="flex min-w-0 flex-1 items-start gap-3 text-left"
               >
-                <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[var(--primary-soft)] text-[var(--primary)]">
-                  <Icon className="h-4 w-4" />
+                <div
+                  className={`mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl ${meta.accentClassName}`}
+                >
+                  <Icon className="h-5 w-5" />
                 </div>
+
                 <div className="min-w-0">
-                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
-                    Блок {index + 1}
-                  </p>
-                  <h3 className="truncate text-lg font-semibold tracking-tight text-[var(--foreground)]">
-                    {block.title || getBlockTypeLabel(block.type)}
+                  <div className="flex flex-wrap items-center gap-2">
+                    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
+                      Блок {index + 1}
+                    </p>
+                    <Badge variant="neutral">{meta.label}</Badge>
+                  </div>
+
+                  <h3 className="mt-2 truncate text-lg font-semibold tracking-tight text-[var(--foreground)]">
+                    {block.title || meta.label}
                   </h3>
+                  <p className="mt-1 line-clamp-2 text-sm leading-6 text-[var(--muted)]">
+                    {getBlockPreview(block)}
+                  </p>
                 </div>
               </button>
 
               <div className="flex items-center gap-2">
-                <Badge variant="neutral">{getBlockTypeLabel(block.type)}</Badge>
                 <button
                   type="button"
                   className="rounded-2xl border border-[var(--border)] bg-white p-2 text-[var(--muted)] transition hover:border-[var(--primary)] hover:text-[var(--foreground)]"
@@ -264,21 +335,27 @@ export function LessonBlockStudio({
                 >
                   <GripVertical className="h-4 w-4" />
                 </button>
-                <button
-                  type="button"
-                  onClick={() => removeBlock(block.id)}
-                  className="rounded-2xl border border-red-200 bg-white p-2 text-red-500 transition hover:bg-red-50"
-                  aria-label="Удалить блок"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </button>
+
                 <button
                   type="button"
                   onClick={() => toggleExpanded(block.id)}
                   className="rounded-2xl border border-[var(--border)] bg-white p-2 text-[var(--muted)] transition hover:border-[var(--primary)] hover:text-[var(--foreground)]"
                   aria-label={isExpanded ? "Свернуть блок" : "Развернуть блок"}
                 >
-                  {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                  {isExpanded ? (
+                    <ChevronUp className="h-4 w-4" />
+                  ) : (
+                    <ChevronDown className="h-4 w-4" />
+                  )}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => removeBlock(block.id)}
+                  className="rounded-2xl border border-red-200 bg-white p-2 text-red-500 transition hover:bg-red-50"
+                  aria-label="Удалить блок"
+                >
+                  <X className="h-4 w-4" />
                 </button>
               </div>
             </header>
@@ -293,21 +370,21 @@ export function LessonBlockStudio({
                     onChange={(event) =>
                       updateBlock(block.id, { title: event.target.value } as Partial<LessonBlock>)
                     }
-                    placeholder="Название блока"
+                    placeholder="Например, Разбор кейса или Домашнее задание"
                   />
                 </div>
 
                 {block.type === "TEXT" ? (
                   <div className="space-y-2">
-                    <Label htmlFor={`block-body-${block.id}`}>Текст блока</Label>
+                    <Label htmlFor={`block-body-${block.id}`}>Содержимое блока</Label>
                     <Textarea
                       id={`block-body-${block.id}`}
                       value={block.body}
                       onChange={(event) =>
                         updateBlock(block.id, { body: event.target.value } as Partial<LessonBlock>)
                       }
-                      placeholder="Основной текст блока"
-                        className="min-h-[180px]"
+                      placeholder="Основной текст, тезисы, инструкции или описание шага."
+                      className="min-h-[220px]"
                     />
                   </div>
                 ) : null}
@@ -315,15 +392,17 @@ export function LessonBlockStudio({
                 {block.type === "VIDEO" ? (
                   <div className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor={`block-video-note-${block.id}`}>Короткая подводка</Label>
+                      <Label htmlFor={`block-video-note-${block.id}`}>
+                        Подводка к видео
+                      </Label>
                       <Textarea
                         id={`block-video-note-${block.id}`}
                         value={block.body ?? ""}
                         onChange={(event) =>
                           updateBlock(block.id, { body: event.target.value } as Partial<LessonBlock>)
                         }
-                        placeholder="Что студенту важно вынести из этого видео"
-                        className="min-h-[100px]"
+                        placeholder="Коротко объясни, зачем смотреть это видео и на что обратить внимание."
+                        className="min-h-[120px]"
                       />
                     </div>
 
@@ -340,7 +419,7 @@ export function LessonBlockStudio({
                 {block.type === "FILE" ? (
                   <div className="grid gap-4 md:grid-cols-2">
                     <div className="space-y-2">
-                      <Label htmlFor={`block-file-url-${block.id}`}>Ссылка на файл</Label>
+                      <Label htmlFor={`block-file-url-${block.id}`}>Ссылка на материал</Label>
                       <Input
                         id={`block-file-url-${block.id}`}
                         value={block.url}
@@ -350,6 +429,7 @@ export function LessonBlockStudio({
                         placeholder="https://disk.yandex.ru/... или https://example.com/file.pdf"
                       />
                     </div>
+
                     <div className="space-y-2">
                       <Label htmlFor={`block-file-note-${block.id}`}>Комментарий</Label>
                       <Input
@@ -358,7 +438,7 @@ export function LessonBlockStudio({
                         onChange={(event) =>
                           updateBlock(block.id, { note: event.target.value } as Partial<LessonBlock>)
                         }
-                        placeholder="Короткий комментарий к файлу"
+                        placeholder="Что это за файл и когда его открыть"
                       />
                     </div>
                   </div>
@@ -367,19 +447,24 @@ export function LessonBlockStudio({
                 {block.type === "HOMEWORK" ? (
                   <div className="grid gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor={`block-homework-body-${block.id}`}>Описание задания</Label>
+                      <Label htmlFor={`block-homework-body-${block.id}`}>
+                        Описание задания
+                      </Label>
                       <Textarea
                         id={`block-homework-body-${block.id}`}
                         value={block.body}
                         onChange={(event) =>
                           updateBlock(block.id, { body: event.target.value } as Partial<LessonBlock>)
                         }
-                        placeholder="Что нужно сделать"
-                        className="min-h-[140px]"
+                        placeholder="Что студент должен сделать по итогам урока."
+                        className="min-h-[160px]"
                       />
                     </div>
+
                     <div className="space-y-2">
-                      <Label htmlFor={`block-homework-hint-${block.id}`}>Как сдавать работу</Label>
+                      <Label htmlFor={`block-homework-hint-${block.id}`}>
+                        Как сдавать работу
+                      </Label>
                       <Textarea
                         id={`block-homework-hint-${block.id}`}
                         value={block.submissionHint ?? ""}
@@ -389,8 +474,8 @@ export function LessonBlockStudio({
                             { submissionHint: event.target.value } as Partial<LessonBlock>,
                           )
                         }
-                        placeholder="Например: прикрепить файл или вставить ссылку"
-                        className="min-h-[100px]"
+                        placeholder="Например: прикрепить файл, вставить ссылку или написать ответ текстом."
+                        className="min-h-[120px]"
                       />
                     </div>
                   </div>
@@ -401,12 +486,25 @@ export function LessonBlockStudio({
         );
       })}
 
-      <div className="rounded-[24px] border border-dashed border-[var(--border)] bg-[var(--surface)] p-4">
-        <Button type="button" onClick={() => setIsPickerOpen(true)}>
-          <Plus className="mr-2 h-4 w-4" />
-          Добавить блок {blocks.length + 1}
-        </Button>
-      </div>
+      {blocks.length > 0 ? (
+        <div className="rounded-[28px] border border-dashed border-[var(--border)] bg-[var(--surface)] p-4">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="text-sm font-semibold text-[var(--foreground)]">
+                Добавить следующий блок
+              </p>
+              <p className="text-sm leading-6 text-[var(--muted)]">
+                Собирай урок как цепочку шагов: вводный текст, видео, материалы и задание.
+              </p>
+            </div>
+
+            <Button type="button" onClick={() => setIsPickerOpen(true)}>
+              <Plus className="mr-2 h-4 w-4" />
+              Добавить блок {blocks.length + 1}
+            </Button>
+          </div>
+        </div>
+      ) : null}
 
       {isPickerOpen ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#18203b]/30 p-4 backdrop-blur-sm">
@@ -419,7 +517,12 @@ export function LessonBlockStudio({
                 <h3 className="mt-2 text-2xl font-semibold tracking-tight text-[var(--foreground)]">
                   Выбери тип блока
                 </h3>
+                <p className="mt-2 text-sm leading-7 text-[var(--muted)]">
+                  У каждого блока своя задача в уроке. Видео и домашнее задание в текущей
+                  версии держим по одному экземпляру на урок.
+                </p>
               </div>
+
               <button
                 type="button"
                 onClick={() => setIsPickerOpen(false)}
@@ -445,14 +548,18 @@ export function LessonBlockStudio({
                     onClick={() => addBlock(option.type)}
                     className="rounded-[24px] border border-[var(--border)] bg-[var(--surface)] p-4 text-left transition hover:border-[var(--primary)] hover:bg-white disabled:cursor-not-allowed disabled:opacity-50"
                   >
-                    <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white text-[var(--primary)] shadow-sm">
+                    <div
+                      className={`flex h-11 w-11 items-center justify-center rounded-2xl shadow-sm ${option.accentClassName}`}
+                    >
                       <Icon className="h-5 w-5" />
                     </div>
                     <h4 className="mt-4 text-lg font-semibold text-[var(--foreground)]">
                       {option.label}
                     </h4>
                     <p className="mt-1 text-sm leading-6 text-[var(--muted)]">
-                      {disabled ? "Этот блок уже добавлен в урок." : option.description}
+                      {disabled
+                        ? "Этот тип уже используется в уроке. Сначала удали текущий блок этого формата."
+                        : option.description}
                     </p>
                   </button>
                 );
