@@ -21,6 +21,11 @@ enum CourseStatus {
   ARCHIVED
 }
 
+enum CourseDeliveryFormat {
+  CLASSIC
+  LIVE_COHORT
+}
+
 enum LessonType {
   TEXT
   VIDEO
@@ -183,19 +188,21 @@ model VerificationToken {
 }
 
 model Course {
-  id          String       @id @default(cuid())
-  slug        String       @unique
-  title       String
-  description String?
-  status      CourseStatus @default(DRAFT)
-  authorId    String?
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  author      User?        @relation("CourseAuthor", fields: [authorId], references: [id], onDelete: SetNull)
-  modules     Module[]
-  enrollments Enrollment[]
-  products    Product[]
-  emails      EmailMessage[]
+  id             String               @id @default(cuid())
+  slug           String               @unique
+  title          String
+  description    String?
+  status         CourseStatus         @default(DRAFT)
+  deliveryFormat CourseDeliveryFormat @default(CLASSIC)
+  scheduleTimezone String             @default("Europe/Moscow")
+  authorId       String?
+  createdAt      DateTime             @default(now())
+  updatedAt      DateTime             @updatedAt
+  author         User?                @relation("CourseAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+  modules        Module[]
+  enrollments    Enrollment[]
+  products       Product[]
+  emails         EmailMessage[]
   lessonSessions LessonSession[]
 }
 

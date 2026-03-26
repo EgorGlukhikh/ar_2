@@ -2454,6 +2454,8 @@ export const CourseScalarFieldEnum = {
   title: 'title',
   description: 'description',
   status: 'status',
+  deliveryFormat: 'deliveryFormat',
+  scheduleTimezone: 'scheduleTimezone',
   authorId: 'authorId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -2925,6 +2927,20 @@ export type EnumCourseStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$Pri
  * Reference to a field of type 'CourseStatus[]'
  */
 export type ListEnumCourseStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CourseStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'CourseDeliveryFormat'
+ */
+export type EnumCourseDeliveryFormatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CourseDeliveryFormat'>
+    
+
+
+/**
+ * Reference to a field of type 'CourseDeliveryFormat[]'
+ */
+export type ListEnumCourseDeliveryFormatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CourseDeliveryFormat[]'>
     
 
 

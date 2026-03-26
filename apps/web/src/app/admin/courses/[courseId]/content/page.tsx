@@ -1,8 +1,8 @@
-import { LessonType, prisma } from "@academy/db";
+import { CourseDeliveryFormat, LessonType, prisma } from "@academy/db";
+import { Plus, Save, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
-import { Plus, Save, Trash2 } from "lucide-react";
 
 import { CourseStructureTree } from "@/components/admin/course-structure-tree";
 import { EditableHomeworkRulesCard } from "@/components/admin/editable-homework-rules-card";
@@ -107,9 +107,7 @@ function EmptyStudio({
 }) {
   return (
     <article className="rounded-[28px] border border-dashed border-[var(--border)] bg-white p-8 shadow-sm">
-      <h2 className="text-3xl font-semibold tracking-tight text-[var(--foreground)]">
-        {title}
-      </h2>
+      <h2 className="text-3xl font-semibold tracking-tight text-[var(--foreground)]">{title}</h2>
       <p className="mt-3 max-w-2xl text-sm leading-7 text-[var(--muted)]">{description}</p>
       {children ? <div className="mt-6">{children}</div> : null}
     </article>
@@ -132,6 +130,8 @@ export default async function CourseContentPage({
       id: true,
       title: true,
       authorId: true,
+      deliveryFormat: true,
+      scheduleTimezone: true,
       modules: {
         orderBy: {
           position: "asc",
@@ -254,7 +254,14 @@ export default async function CourseContentPage({
         lessonBlocks: lessonBlocksByLessonId.get(selectedLesson.id),
       })
     : [];
+
   const hasHomeworkBlock = selectedLessonBlocks.some((block) => block.type === "HOMEWORK");
+  const defaultLessonType =
+    course.deliveryFormat === CourseDeliveryFormat.LIVE_COHORT ? LessonType.LIVE : LessonType.TEXT;
+  const courseFormatLabel =
+    course.deliveryFormat === CourseDeliveryFormat.LIVE_COHORT
+      ? "онлайн-курс с вебинарами"
+      : "курс в записи и материалах";
 
   return (
     <section className="grid gap-6 xl:grid-cols-[320px_minmax(0,1fr)]">
@@ -284,9 +291,30 @@ export default async function CourseContentPage({
               moduleId={selectedModule.id}
               title={selectedModule.title}
               lessonsCount={selectedModule.lessons.length}
+              defaultLessonType={defaultLessonType}
+              courseFormatLabel={courseFormatLabel}
               updateModuleAction={updateModule}
               createLessonAction={createLesson}
             />
+
+            {course.deliveryFormat === CourseDeliveryFormat.LIVE_COHORT ? (
+              <article className="rounded-[24px] border border-[var(--border)] bg-[var(--surface)] p-5 shadow-sm">
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#7a6548]">
+                  Формат курса
+                </p>
+                <h3 className="mt-2 text-xl font-semibold text-[var(--foreground)]">
+                  Онлайн-курс с вебинарами
+                </h3>
+                <p className="mt-2 text-sm leading-7 text-[var(--muted)]">
+                  Новые шаги программы по умолчанию создаются как вебинарные занятия. Расписание
+                  ведем по часовому поясу{" "}
+                  <span className="font-medium text-[var(--foreground)]">
+                    {course.scheduleTimezone}
+                  </span>
+                  , а после эфира в уроке можно оставить запись и материалы.
+                </p>
+              </article>
+            ) : null}
 
             <div className="flex flex-wrap justify-between gap-3">
               {selectedLesson ? (
@@ -295,7 +323,9 @@ export default async function CourseContentPage({
                     Проверить как студент
                   </Link>
                 </Button>
-              ) : <span />}
+              ) : (
+                <span />
+              )}
 
               <form action={deleteModule}>
                 <input type="hidden" name="courseId" value={course.id} />
@@ -313,16 +343,32 @@ export default async function CourseContentPage({
 
             {!selectedLesson ? (
               <EmptyStudio
-                title="Добавь первый урок в модуль"
-                description="Урок откроется здесь же. Внутри можно собрать текст, видео, материалы и задание."
+                title={
+                  defaultLessonType === LessonType.LIVE
+                    ? "Добавь первый вебинар в модуль"
+                    : "Добавь первый урок в модуль"
+                }
+                description={
+                  defaultLessonType === LessonType.LIVE
+                    ? "Новый шаг сразу создастся как вебинарное занятие. После эфира в урок можно будет добавить запись и материалы."
+                    : "Урок откроется здесь же. Внутри можно собрать текст, видео, материалы и задание."
+                }
               >
                 <form action={createLesson} className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_auto]">
                   <input type="hidden" name="moduleId" value={selectedModule.id} />
-                  <input type="hidden" name="type" value={LessonType.TEXT} />
-                  <Input name="title" placeholder="Например, Вводное занятие" required />
+                  <input type="hidden" name="type" value={defaultLessonType} />
+                  <Input
+                    name="title"
+                    placeholder={
+                      defaultLessonType === LessonType.LIVE
+                        ? "Например, Эфир 1: старт потока"
+                        : "Например, Вводное занятие"
+                    }
+                    required
+                  />
                   <Button type="submit">
                     <Plus className="mr-2 h-4 w-4" />
-                    Добавить урок
+                    {defaultLessonType === LessonType.LIVE ? "Добавить вебинар" : "Добавить урок"}
                   </Button>
                 </form>
               </EmptyStudio>

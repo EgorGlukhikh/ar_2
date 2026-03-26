@@ -1,8 +1,14 @@
 import Link from "next/link";
-import { FileText, ShieldAlert, Sparkles, SlidersHorizontal } from "lucide-react";
+import {
+  CalendarClock,
+  FileText,
+  ShieldAlert,
+  Sparkles,
+  Tv,
+} from "lucide-react";
 import { notFound } from "next/navigation";
 
-import { CourseStatus, prisma } from "@academy/db";
+import { CourseDeliveryFormat, CourseStatus, prisma } from "@academy/db";
 import { USER_ROLES } from "@academy/shared";
 
 import { Button } from "@/components/ui/button";
@@ -21,6 +27,11 @@ type CourseSettingsPageProps = {
   }>;
 };
 
+const deliveryFormatLabelMap: Record<CourseDeliveryFormat, string> = {
+  CLASSIC: "Курс в записи и материалах",
+  LIVE_COHORT: "Онлайн-курс с вебинарами",
+};
+
 export default async function CourseSettingsPage({
   params,
 }: CourseSettingsPageProps) {
@@ -37,6 +48,8 @@ export default async function CourseSettingsPage({
       slug: true,
       description: true,
       status: true,
+      deliveryFormat: true,
+      scheduleTimezone: true,
       authorId: true,
     },
   });
@@ -83,42 +96,37 @@ export default async function CourseSettingsPage({
             Основная информация
           </h2>
           <p className="text-sm leading-7 text-[var(--muted)]">
-            {isAdmin
-              ? "Здесь админ управляет карточкой курса, публикацией и назначением автора. Программу и уроки редактируй во вкладке «Программа»."
-              : "Здесь автор заполняет карточку своего курса: название, адрес страницы и описание. Публикация и продажи остаются в контуре администратора."}
+            Здесь задаются понятные для ученика и автора вещи: название курса, формат обучения,
+            описание и автоматически собранный адрес страницы.
           </p>
         </div>
 
         <div className="mt-6 grid gap-3 md:grid-cols-3">
           <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4">
             <FileText className="h-5 w-5 text-[var(--primary)]" />
-            <p className="mt-3 text-sm font-semibold text-[var(--foreground)]">
-              Карточка курса
-            </p>
+            <p className="mt-3 text-sm font-semibold text-[var(--foreground)]">Карточка курса</p>
             <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
-              Название и описание видит вся команда платформы.
+              Название, описание и адрес страницы.
             </p>
           </div>
+
           <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4">
-            <SlidersHorizontal className="h-5 w-5 text-[var(--primary)]" />
+            <Tv className="h-5 w-5 text-[var(--primary)]" />
+            <p className="mt-3 text-sm font-semibold text-[var(--foreground)]">
+              Формат обучения
+            </p>
+            <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
+              Записи и материалы или живой поток с вебинарами.
+            </p>
+          </div>
+
+          <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4">
+            <Sparkles className="h-5 w-5 text-[var(--primary)]" />
             <p className="mt-3 text-sm font-semibold text-[var(--foreground)]">
               Публикация
             </p>
             <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
-              {isAdmin
-                ? "Админ решает, готов ли курс к публикации в каталоге."
-                : `Текущий статус: ${courseStatusLabelMap[course.status]}. Этим управляет администратор.`}
-            </p>
-          </div>
-          <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4">
-            <Sparkles className="h-5 w-5 text-[var(--primary)]" />
-            <p className="mt-3 text-sm font-semibold text-[var(--foreground)]">
-              Ответственный автор
-            </p>
-            <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
-              {isAdmin
-                ? "За автором можно закрепить курс и открыть ему реальный доступ в редактор."
-                : "Курс уже закреплен за тобой, поэтому можно спокойно вести карточку и программу дальше."}
+              Статус публикации и продажи остаются у администратора.
             </p>
           </div>
         </div>
@@ -129,9 +137,14 @@ export default async function CourseSettingsPage({
             <Input id="title" name="title" defaultValue={course.title} required />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="slug">Slug</Label>
-            <Input id="slug" name="slug" defaultValue={course.slug} />
+          <div className="rounded-[18px] border border-[var(--border)] bg-[var(--surface)] px-4 py-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
+              Автоматический адрес
+            </p>
+            <p className="mt-2 text-sm font-medium text-[var(--foreground)]">/{course.slug}</p>
+            <p className="mt-1 text-sm leading-6 text-[var(--muted)]">
+              Пересчитывается автоматически из названия курса в латинице.
+            </p>
           </div>
 
           <div className="space-y-2">
@@ -142,6 +155,33 @@ export default async function CourseSettingsPage({
               defaultValue={course.description ?? ""}
               className="min-h-36"
             />
+          </div>
+
+          <div className="grid gap-5 md:grid-cols-2">
+            <div className="space-y-2">
+              <Label htmlFor="deliveryFormat">Формат курса</Label>
+              <Select id="deliveryFormat" name="deliveryFormat" defaultValue={course.deliveryFormat}>
+                {Object.entries(deliveryFormatLabelMap).map(([value, label]) => (
+                  <option key={value} value={value}>
+                    {label}
+                  </option>
+                ))}
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="scheduleTimezone">Часовой пояс расписания</Label>
+              <Select
+                id="scheduleTimezone"
+                name="scheduleTimezone"
+                defaultValue={course.scheduleTimezone}
+              >
+                <option value="Europe/Moscow">Москва (МСК)</option>
+                <option value="Europe/Samara">Самара</option>
+                <option value="Asia/Yekaterinburg">Екатеринбург</option>
+                <option value="Asia/Novosibirsk">Новосибирск</option>
+              </Select>
+            </div>
           </div>
 
           {isAdmin ? (
@@ -188,34 +228,52 @@ export default async function CourseSettingsPage({
       <div className="space-y-6">
         <article className="rounded-[24px] border border-[var(--border)] bg-white p-6 shadow-sm">
           <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
-            Следующие шаги
+            Что дальше
           </p>
           <h2 className="mt-2 text-2xl font-semibold tracking-tight text-[var(--foreground)]">
-            Что делать дальше
+            Следующий рабочий шаг
           </h2>
 
           <div className="mt-5 space-y-3 text-sm leading-7 text-[var(--muted)]">
-            <p>1. Проверь карточку курса и адрес страницы.</p>
-            <p>2. Открой «Программу» и собери модули, уроки и материалы.</p>
+            <p>1. Проверь карточку и описание курса.</p>
+            <p>2. Открой программу и собери модули, уроки, эфиры, записи и материалы.</p>
             <p>
-              3. {isAdmin
-                ? "Когда курс готов, настрой доступ и продажи."
-                : "Когда программа готова, передай админу курс на публикацию и настройку продаж."}
+              3. Формат курса сейчас:{" "}
+              <span className="font-medium text-[var(--foreground)]">
+                {deliveryFormatLabelMap[course.deliveryFormat]}
+              </span>
+              .
             </p>
+            {course.deliveryFormat === CourseDeliveryFormat.LIVE_COHORT ? (
+              <p className="rounded-[18px] border border-[var(--border)] bg-[var(--surface)] px-4 py-3">
+                Вебинарные занятия фиксируются по выбранному часовому поясу. После эфира в уроке
+                можно оставить запись и материалы.
+              </p>
+            ) : null}
           </div>
 
           <div className="mt-6 flex flex-col gap-3">
             <Button asChild>
               <Link href={`/admin/courses/${course.id}/content`}>Перейти к наполнению</Link>
             </Button>
-            {isAdmin ? (
-              <Button asChild variant="outline">
-                <Link href={`/admin/courses/${course.id}/access`}>
-                  Настроить доступ и цену
-                </Link>
-              </Button>
-            ) : null}
+            <Button asChild variant="outline">
+              <Link href={`/learning/courses/${course.id}`}>Открыть как студент</Link>
+            </Button>
           </div>
+        </article>
+
+        <article className="rounded-[24px] border border-[var(--border)] bg-white p-6 shadow-sm">
+          <div className="inline-flex rounded-2xl bg-[var(--primary-soft)] p-3 text-[var(--primary)]">
+            <CalendarClock className="h-5 w-5" />
+          </div>
+          <h2 className="mt-4 text-xl font-semibold text-[var(--foreground)]">
+            Текущий формат курса
+          </h2>
+          <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
+            {course.deliveryFormat === CourseDeliveryFormat.LIVE_COHORT
+              ? "Курс идет как поток с онлайн-встречами. Для уроков можно использовать эфиры, а потом добавлять запись и материалы."
+              : "Курс идет как классическая программа: видео, тексты, файлы, тесты и домашние задания."}
+          </p>
         </article>
 
         {isAdmin ? (
@@ -235,8 +293,8 @@ export default async function CourseSettingsPage({
               <ShieldAlert className="h-5 w-5" />
             </div>
             <p className="mt-4 text-sm leading-7 text-[var(--muted)]">
-              Вместе с курсом удалятся модули, уроки, прогресс и доступы студентов.
-              Используй этот сценарий только если курс действительно больше не нужен.
+              Вместе с курсом удалятся модули, уроки, прогресс и доступы студентов. Используй
+              этот сценарий только если курс действительно больше не нужен.
             </p>
 
             <div className="mt-8">

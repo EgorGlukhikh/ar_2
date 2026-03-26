@@ -12,6 +12,8 @@ type EditableModulePanelProps = {
   moduleId: string;
   title: string;
   lessonsCount: number;
+  defaultLessonType: "TEXT" | "LIVE";
+  courseFormatLabel: string;
   updateModuleAction: (formData: FormData) => void | Promise<void>;
   createLessonAction: (formData: FormData) => void | Promise<void>;
 };
@@ -21,6 +23,8 @@ export function EditableModulePanel({
   moduleId,
   title,
   lessonsCount,
+  defaultLessonType,
+  courseFormatLabel,
   updateModuleAction,
   createLessonAction,
 }: EditableModulePanelProps) {
@@ -56,10 +60,7 @@ export function EditableModulePanel({
             <PencilLine className="mr-2 h-4 w-4" />
             {isEditingModule ? "Скрыть редактирование" : "Редактировать модуль"}
           </Button>
-          <Button
-            type="button"
-            onClick={() => setIsAddingLesson((current) => !current)}
-          >
+          <Button type="button" onClick={() => setIsAddingLesson((current) => !current)}>
             <Plus className="mr-2 h-4 w-4" />
             {isAddingLesson ? "Скрыть форму урока" : "Добавить урок"}
           </Button>
@@ -94,40 +95,45 @@ export function EditableModulePanel({
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#7a6548]">
               Название модуля
             </p>
-            <p className="mt-3 text-base font-semibold text-[var(--foreground)]">
-              {moduleTitle}
-            </p>
+            <p className="mt-3 text-base font-semibold text-[var(--foreground)]">{moduleTitle}</p>
           </div>
         )}
 
         {isAddingLesson ? (
           <form action={createLessonAction} className="space-y-3 rounded-[22px] bg-[var(--surface)] p-4">
             <input type="hidden" name="moduleId" value={moduleId} />
-            <input type="hidden" name="type" value="TEXT" />
-            <Label htmlFor="new-lesson-title-header">Новый урок</Label>
+            <input type="hidden" name="type" value={defaultLessonType} />
+            <Label htmlFor="new-lesson-title-header">
+              {defaultLessonType === "LIVE" ? "Новый вебинар" : "Новый урок"}
+            </Label>
             <div className="flex flex-col gap-3 sm:flex-row">
               <Input
                 id="new-lesson-title-header"
                 name="title"
                 value={lessonTitle}
                 onChange={(event) => setLessonTitle(event.target.value)}
-                placeholder="Например, Разбор первого кейса"
+                placeholder={
+                  defaultLessonType === "LIVE"
+                    ? "Например, Эфир 1: разбор первого кейса"
+                    : "Например, Разбор первого кейса"
+                }
                 required
               />
               <Button type="submit" className="sm:min-w-[180px]">
                 <Plus className="mr-2 h-4 w-4" />
-                Добавить урок
+                {defaultLessonType === "LIVE" ? "Добавить вебинар" : "Добавить урок"}
               </Button>
             </div>
           </form>
         ) : (
           <div className="rounded-[22px] border border-[var(--border)] bg-[var(--surface)] p-4">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#7a6548]">
-              Новый урок
+              Новый шаг программы
             </p>
             <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
-              Добавляй урок только когда действительно нужен новый шаг программы, а не
-              дополнительная карточка ради структуры.
+              {defaultLessonType === "LIVE"
+                ? `Этот курс идет в формате «${courseFormatLabel}». Новый шаг по умолчанию создается как вебинар, а после эфира в нем можно оставить запись и материалы.`
+                : "Добавляй урок только когда действительно нужен новый шаг программы, а не лишняя карточка ради структуры."}
             </p>
           </div>
         )}

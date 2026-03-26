@@ -186,6 +186,13 @@ export type EnumCourseStatusFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumCourseStatusFilter<$PrismaModel> | $Enums.CourseStatus
 }
 
+export type EnumCourseDeliveryFormatFilter<$PrismaModel = never> = {
+  equals?: $Enums.CourseDeliveryFormat | Prisma.EnumCourseDeliveryFormatFieldRefInput<$PrismaModel>
+  in?: $Enums.CourseDeliveryFormat[] | Prisma.ListEnumCourseDeliveryFormatFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CourseDeliveryFormat[] | Prisma.ListEnumCourseDeliveryFormatFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCourseDeliveryFormatFilter<$PrismaModel> | $Enums.CourseDeliveryFormat
+}
+
 export type EnumCourseStatusWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.CourseStatus | Prisma.EnumCourseStatusFieldRefInput<$PrismaModel>
   in?: $Enums.CourseStatus[] | Prisma.ListEnumCourseStatusFieldRefInput<$PrismaModel>
@@ -194,6 +201,16 @@ export type EnumCourseStatusWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumCourseStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumCourseStatusFilter<$PrismaModel>
+}
+
+export type EnumCourseDeliveryFormatWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CourseDeliveryFormat | Prisma.EnumCourseDeliveryFormatFieldRefInput<$PrismaModel>
+  in?: $Enums.CourseDeliveryFormat[] | Prisma.ListEnumCourseDeliveryFormatFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CourseDeliveryFormat[] | Prisma.ListEnumCourseDeliveryFormatFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCourseDeliveryFormatWithAggregatesFilter<$PrismaModel> | $Enums.CourseDeliveryFormat
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCourseDeliveryFormatFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCourseDeliveryFormatFilter<$PrismaModel>
 }
 
 export type IntFilter<$PrismaModel = never> = {
@@ -761,6 +778,13 @@ export type NestedEnumCourseStatusFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumCourseStatusFilter<$PrismaModel> | $Enums.CourseStatus
 }
 
+export type NestedEnumCourseDeliveryFormatFilter<$PrismaModel = never> = {
+  equals?: $Enums.CourseDeliveryFormat | Prisma.EnumCourseDeliveryFormatFieldRefInput<$PrismaModel>
+  in?: $Enums.CourseDeliveryFormat[] | Prisma.ListEnumCourseDeliveryFormatFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CourseDeliveryFormat[] | Prisma.ListEnumCourseDeliveryFormatFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCourseDeliveryFormatFilter<$PrismaModel> | $Enums.CourseDeliveryFormat
+}
+
 export type NestedEnumCourseStatusWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.CourseStatus | Prisma.EnumCourseStatusFieldRefInput<$PrismaModel>
   in?: $Enums.CourseStatus[] | Prisma.ListEnumCourseStatusFieldRefInput<$PrismaModel>
@@ -769,6 +793,16 @@ export type NestedEnumCourseStatusWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumCourseStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumCourseStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumCourseDeliveryFormatWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CourseDeliveryFormat | Prisma.EnumCourseDeliveryFormatFieldRefInput<$PrismaModel>
+  in?: $Enums.CourseDeliveryFormat[] | Prisma.ListEnumCourseDeliveryFormatFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CourseDeliveryFormat[] | Prisma.ListEnumCourseDeliveryFormatFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCourseDeliveryFormatWithAggregatesFilter<$PrismaModel> | $Enums.CourseDeliveryFormat
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCourseDeliveryFormatFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCourseDeliveryFormatFilter<$PrismaModel>
 }
 
 export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {

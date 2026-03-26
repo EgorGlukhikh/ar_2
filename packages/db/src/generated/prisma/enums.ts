@@ -29,6 +29,14 @@ export const CourseStatus = {
 export type CourseStatus = (typeof CourseStatus)[keyof typeof CourseStatus]
 
 
+export const CourseDeliveryFormat = {
+  CLASSIC: 'CLASSIC',
+  LIVE_COHORT: 'LIVE_COHORT'
+} as const
+
+export type CourseDeliveryFormat = (typeof CourseDeliveryFormat)[keyof typeof CourseDeliveryFormat]
+
+
 export const LessonType = {
   TEXT: 'TEXT',
   VIDEO: 'VIDEO',

@@ -1,6 +1,7 @@
 "use server";
 
 import {
+  CourseDeliveryFormat,
   CourseStatus,
   LessonType,
   MediaSourceType,
@@ -26,9 +27,10 @@ import {
 
 const createCourseSchema = z.object({
   title: z.string().trim().min(3),
-  slug: z.string().trim().optional(),
   description: z.string().trim().optional(),
   status: z.nativeEnum(CourseStatus),
+  deliveryFormat: z.nativeEnum(CourseDeliveryFormat).default(CourseDeliveryFormat.CLASSIC),
+  scheduleTimezone: z.string().trim().min(1).default("Europe/Moscow"),
   structureMode: z.enum(["modules", "single_module"]).default("modules"),
   firstModuleTitle: z.string().trim().optional(),
 });
@@ -200,6 +202,10 @@ function parseLessonBlocks(formData: FormData): LessonBlock[] {
 }
 
 function resolveLessonTypeFromBlocks(blocks: LessonBlock[], fallback: LessonType) {
+  if (fallback === LessonType.LIVE) {
+    return LessonType.LIVE;
+  }
+
   if (blocks.length === 0) {
     return fallback;
   }
@@ -249,11 +255,53 @@ function getBooleanValue(formData: FormData, key: string) {
 }
 
 function slugify(value: string) {
-  return value
+  const transliterationMap: Record<string, string> = {
+    а: "a",
+    б: "b",
+    в: "v",
+    г: "g",
+    д: "d",
+    е: "e",
+    ё: "e",
+    ж: "zh",
+    з: "z",
+    и: "i",
+    й: "y",
+    к: "k",
+    л: "l",
+    м: "m",
+    н: "n",
+    о: "o",
+    п: "p",
+    р: "r",
+    с: "s",
+    т: "t",
+    у: "u",
+    ф: "f",
+    х: "h",
+    ц: "ts",
+    ч: "ch",
+    ш: "sh",
+    щ: "sch",
+    ъ: "",
+    ы: "y",
+    ь: "",
+    э: "e",
+    ю: "yu",
+    я: "ya",
+  };
+
+  const transliterated = value
+    .trim()
     .toLowerCase()
     .normalize("NFKD")
     .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9а-яё]+/gi, "-")
+    .split("")
+    .map((symbol) => transliterationMap[symbol] ?? symbol)
+    .join("");
+
+  return transliterated
+    .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "")
     .replace(/-{2,}/g, "-")
     .slice(0, 80);
@@ -478,14 +526,16 @@ export async function createCourse(formData: FormData) {
 
   const parsed = createCourseSchema.parse({
     title: getTrimmedValue(formData, "title"),
-    slug: getOptionalValue(formData, "slug"),
     description: getOptionalValue(formData, "description"),
     status: getTrimmedValue(formData, "status"),
+    deliveryFormat:
+      getTrimmedValue(formData, "deliveryFormat") || CourseDeliveryFormat.CLASSIC,
+    scheduleTimezone: getTrimmedValue(formData, "scheduleTimezone") || "Europe/Moscow",
     structureMode: getTrimmedValue(formData, "structureMode") || "modules",
     firstModuleTitle: getOptionalValue(formData, "firstModuleTitle"),
   });
 
-  const slug = await ensureUniqueCourseSlug(parsed.slug ?? parsed.title);
+  const slug = await ensureUniqueCourseSlug(parsed.title);
   const shouldCreateFirstModule =
     parsed.structureMode === "single_module" || Boolean(parsed.firstModuleTitle);
 
@@ -496,6 +546,8 @@ export async function createCourse(formData: FormData) {
         slug,
         description: parsed.description,
         status: parsed.status,
+        deliveryFormat: parsed.deliveryFormat,
+        scheduleTimezone: parsed.scheduleTimezone,
         authorId: user.role === "AUTHOR" ? user.id : null,
       },
       select: {
@@ -544,9 +596,11 @@ export async function updateCourse(formData: FormData) {
   const parsed = updateCourseSchema.parse({
     courseId: getTrimmedValue(formData, "courseId"),
     title: getTrimmedValue(formData, "title"),
-    slug: getOptionalValue(formData, "slug"),
     description: getOptionalValue(formData, "description"),
     status: getTrimmedValue(formData, "status"),
+    deliveryFormat:
+      getTrimmedValue(formData, "deliveryFormat") || CourseDeliveryFormat.CLASSIC,
+    scheduleTimezone: getTrimmedValue(formData, "scheduleTimezone") || "Europe/Moscow",
     authorId: getOptionalValue(formData, "authorId"),
   });
 
@@ -569,10 +623,7 @@ export async function updateCourse(formData: FormData) {
     redirect(getWorkspaceHomePath(user.role));
   }
 
-  const slug = await ensureUniqueCourseSlug(
-    parsed.slug ?? parsed.title,
-    parsed.courseId,
-  );
+  const slug = await ensureUniqueCourseSlug(parsed.title, parsed.courseId);
 
   await prisma.course.update({
     where: {
@@ -582,6 +633,8 @@ export async function updateCourse(formData: FormData) {
       title: parsed.title,
       slug,
       description: parsed.description,
+      deliveryFormat: parsed.deliveryFormat,
+      scheduleTimezone: parsed.scheduleTimezone,
       ...(user.role === "ADMIN"
         ? {
             status: parsed.status,
