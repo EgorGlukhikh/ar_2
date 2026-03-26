@@ -27,6 +27,7 @@ type AdminLessonVideoManagerProps = {
   fallbackVideoSourceType?: string | null;
   fallbackVideoUrl?: string | null;
   fallbackVideoPlaybackId?: string | null;
+  onResolvedTitle?: (title: string) => void;
 };
 
 type LinkStrategy =
@@ -125,6 +126,7 @@ export function AdminLessonVideoManager({
   fallbackVideoSourceType,
   fallbackVideoUrl,
   fallbackVideoPlaybackId,
+  onResolvedTitle,
 }: AdminLessonVideoManagerProps) {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -225,12 +227,18 @@ export function AdminLessonVideoManager({
       "video-link",
       async () => {
         if (strategy.kind === "embed") {
-          await postVideoCommand({
+          const result = await postVideoCommand({
             action: "attachEmbed",
             lessonId,
             sourceType: strategy.sourceType,
             videoUrl: trimmedUrl,
           });
+
+          const resolvedTitle = result.title;
+
+          if (typeof resolvedTitle === "string" && resolvedTitle.trim()) {
+            onResolvedTitle?.(resolvedTitle.trim());
+          }
         } else {
           await postVideoCommand({
             action: "importFromUrl",

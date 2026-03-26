@@ -697,6 +697,11 @@ export function LessonBlockStudio({
                       fallbackVideoSourceType={fallbackVideoSourceType}
                       fallbackVideoUrl={fallbackVideoUrl}
                       fallbackVideoPlaybackId={fallbackVideoPlaybackId}
+                      onResolvedTitle={(resolvedTitle) =>
+                        updateBlock(block.id, {
+                          title: resolvedTitle,
+                        } as Partial<LessonBlock>)
+                      }
                     />
                   </div>
                 ) : null}

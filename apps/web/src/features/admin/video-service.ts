@@ -13,11 +13,7 @@ import { getVideoProvider } from "@/lib/video/provider";
 
 type EmbedSourceType = "RUTUBE_EMBED" | "EXTERNAL_EMBED";
 
-function normalizeRutubeEmbedUrl(url: string) {
-  return normalizeRutubePlaybackUrl(url);
-}
-
-function normalizeRutubePlaybackUrl(url: string) {
+function parseRutubeVideo(url: string) {
   const value = url.trim();
   let parsedUrl: URL;
 
@@ -53,7 +49,60 @@ function normalizeRutubePlaybackUrl(url: string) {
     embedUrl.searchParams.set(paramKey, paramValue);
   });
 
-  return embedUrl.toString();
+  return {
+    videoId,
+    sourceUrl: value,
+    embedUrl: embedUrl.toString(),
+  };
+}
+
+function normalizeRutubeEmbedUrl(url: string) {
+  return parseRutubeVideo(url).embedUrl;
+}
+
+async function resolveRutubeVideoTitle(rawUrl: string) {
+  const { videoId, sourceUrl } = parseRutubeVideo(rawUrl);
+
+  const playOptionsResponse = await fetch(`https://rutube.ru/api/play/options/${videoId}/`, {
+    headers: {
+      Accept: "application/json",
+    },
+    next: { revalidate: 3600 },
+  });
+
+  if (playOptionsResponse.ok) {
+    const playOptionsData = (await playOptionsResponse.json()) as {
+      title?: unknown;
+    };
+
+    if (typeof playOptionsData.title === "string" && playOptionsData.title.trim()) {
+      return playOptionsData.title.trim();
+    }
+  }
+
+  const oembedUrl = new URL("https://rutube.ru/api/oembed/");
+  oembedUrl.searchParams.set("url", sourceUrl);
+
+  const oembedResponse = await fetch(oembedUrl.toString(), {
+    headers: {
+      Accept: "application/json",
+    },
+    next: { revalidate: 3600 },
+  });
+
+  if (!oembedResponse.ok) {
+    return null;
+  }
+
+  const oembedData = (await oembedResponse.json()) as {
+    title?: unknown;
+  };
+
+  if (typeof oembedData.title === "string" && oembedData.title.trim()) {
+    return oembedData.title.trim();
+  }
+
+  return null;
 }
 
 function normalizeEmbedUrl(sourceType: EmbedSourceType, videoUrl: string) {
@@ -365,6 +414,10 @@ export async function attachLessonEmbedVideo(input: {
 }) {
   const lesson = await getLessonContext(input.lessonId);
   const normalizedUrl = normalizeEmbedUrl(input.sourceType, input.videoUrl);
+  const resolvedTitle =
+    input.sourceType === "RUTUBE_EMBED"
+      ? await resolveRutubeVideoTitle(input.videoUrl)
+      : null;
   const mappedSourceType =
     input.sourceType === "RUTUBE_EMBED"
       ? MediaSourceType.RUTUBE_EMBED
@@ -413,6 +466,7 @@ export async function attachLessonEmbedVideo(input: {
   return {
     sourceType: mappedSourceType,
     playerUrl: normalizedUrl,
+    title: resolvedTitle,
   };
 }
 
