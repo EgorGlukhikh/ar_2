@@ -38,7 +38,7 @@ export function WorkspaceCourseCard({
             {badges ? <div className="flex flex-wrap items-center gap-2">{badges}</div> : null}
 
             <div className="space-y-3">
-              <h2 className="text-[28px] font-semibold leading-[1.08] tracking-[-0.02em] text-[var(--foreground)]">
+              <h2 className="text-[24px] font-semibold leading-[1.08] tracking-[-0.02em] text-[var(--foreground)]">
                 {title}
               </h2>
               <p className="text-sm leading-7 text-[var(--muted)]">

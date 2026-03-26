@@ -3,6 +3,7 @@ import { CheckCircle2, ShieldCheck, Sparkles, UserRound } from "lucide-react";
 
 import { AuthCard } from "./auth-card";
 
+import { SiteIllustration } from "@/components/illustrations/site-illustration";
 import { publicGradientCardClassName, publicIconBoxClassName } from "@/components/marketing/public-primitives";
 import { formatPublicCopy } from "@/lib/public-copy";
 import { cn } from "@/lib/utils";
@@ -36,13 +37,19 @@ export function AuthShell({
           <p className="text-[12px] font-medium uppercase leading-4 tracking-[0.18em] text-[var(--muted)]">
             {formatPublicCopy("Доступ в платформу")}
           </p>
-          <h1 className="mt-4 max-w-[12ch] text-[clamp(2.4rem,5vw,4rem)] font-semibold leading-[1.04] tracking-[-0.03em] text-[var(--foreground)]">
+          <h1 className="mt-4 max-w-[12ch] text-[clamp(2rem,4vw,3rem)] font-semibold leading-[1.04] tracking-[-0.03em] text-[var(--foreground)]">
             {formatPublicCopy(title)}
           </h1>
-          <p className="mt-4 max-w-[560px] text-[18px] leading-8 text-[var(--muted)]">
+          <p className="mt-4 max-w-[560px] text-[16px] leading-7 text-[var(--muted)]">
             {formatPublicCopy(text)}
           </p>
         </AuthCard>
+
+        <SiteIllustration
+          kind="continuousLearning"
+          alt="Иллюстрация обучения и доступа к платформе"
+          className="p-5"
+        />
 
         <div className={publicGradientCardClassName}>
           <p className="text-[12px] font-medium uppercase leading-4 tracking-[0.18em] text-white/72">

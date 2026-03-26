@@ -83,7 +83,7 @@ export function SectionLead({
       </p>
       <h2
         className={cn(
-          "max-w-[18ch] text-[clamp(1.75rem,4.6vw,3rem)] font-semibold leading-[1.12] tracking-[-0.02em]",
+          "max-w-[18ch] text-[clamp(1.55rem,4vw,2.6rem)] font-semibold leading-[1.12] tracking-[-0.02em]",
           light ? "text-white" : "text-[var(--foreground)]",
         )}
       >
@@ -91,7 +91,7 @@ export function SectionLead({
       </h2>
       <p
         className={cn(
-          "max-w-[560px] text-base leading-7",
+          "max-w-[560px] text-[15px] leading-7",
           light ? "text-white/84" : "text-[var(--muted)]",
         )}
       >

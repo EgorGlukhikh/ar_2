@@ -216,6 +216,7 @@ export default async function LearningDashboardPage() {
                 ? "Добавь курс в админке или опубликуй программу, чтобы проверить реальный студенческий сценарий."
                 : "Когда администратор выдаст доступ или вы оплатите курс, он появится здесь."
             }
+            illustrationKind={isElevated ? "designProcess" : "bookReading"}
             action={
               <Button asChild>
                 <Link href="/catalog">Открыть каталог</Link>

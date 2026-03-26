@@ -90,6 +90,7 @@ export default async function CoursesPage() {
               ? "Создай первый курс и сразу переходи к программе: внутри можно собирать модули, уроки и материалы."
               : "Создай первую программу, затем открой вкладку «Программа» и собери внутри нее модули, уроки и материалы."
           }
+          illustrationKind={isAuthorMode ? "thoughtProcess" : "designProcess"}
           action={
             canCreateCourse ? (
               <Button asChild>

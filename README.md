@@ -151,3 +151,7 @@ OAuth:
 ## Button contrast
 
 - Primary and dark buttons must always use white text and white icons.
+## Illustrations
+
+- Local SVG illustrations are stored in `apps/web/public/illustrations`.
+- The current illustration system uses unDraw assets adapted for platform pages.

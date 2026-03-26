@@ -22,6 +22,7 @@ import {
   publicIconBoxClassName,
 } from "@/components/marketing/public-primitives";
 import { MotionReveal } from "@/components/marketing/motion-reveal";
+import { SiteIllustration } from "@/components/illustrations/site-illustration";
 import { formatPublicCopy } from "@/lib/public-copy";
 import { cn } from "@/lib/utils";
 import {
@@ -105,6 +106,18 @@ function ProductPreview({ role }: { role: LandingRole }) {
       </article>
 
       <div className="grid gap-4">
+        <SiteIllustration
+          kind={role === "author" ? "designProcess" : "onlineLearning"}
+          alt={
+            role === "author"
+              ? "Иллюстрация создания и сборки учебной программы"
+              : "Иллюстрация онлайн-обучения и учебного процесса"
+          }
+          priority
+          className="p-5"
+          imageClassName="scale-[1.04]"
+        />
+
         <article className={publicCardClassName}>
           <div className={publicIconBoxClassName}>
             <PlayCircle className="h-5 w-5" />
@@ -256,10 +269,10 @@ export function LandingExperience({
           </div>
 
           <div className="space-y-5">
-            <h1 className="max-w-[11ch] text-[clamp(2.5rem,6vw,4rem)] font-semibold leading-[1.04] tracking-[-0.03em] text-[var(--foreground)]">
+            <h1 className="max-w-[11ch] text-[clamp(2.15rem,5vw,3.35rem)] font-semibold leading-[1.04] tracking-[-0.03em] text-[var(--foreground)]">
               <Copy value={activeCopy.title} />
             </h1>
-            <p className="max-w-[560px] text-[18px] leading-8 text-[var(--muted)]">
+            <p className="max-w-[560px] text-[16px] leading-7 text-[var(--muted)]">
               <Copy value={activeCopy.text} />
             </p>
           </div>

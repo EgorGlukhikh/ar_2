@@ -1,5 +1,6 @@
 import { CheckCircle2, CreditCard, ShieldCheck, XCircle } from "lucide-react";
 
+import { SiteIllustration } from "@/components/illustrations/site-illustration";
 import {
   PublicButton,
   SectionLead,
@@ -63,6 +64,12 @@ export function CheckoutPageContent({
           text="Курс, стоимость и способ оплаты собраны в одном месте, чтобы можно было быстро проверить заказ перед подтверждением."
         />
 
+        <SiteIllustration
+          kind="idea"
+          alt="Иллюстрация оформления доступа к курсу"
+          className="p-5"
+        />
+
         <article className={publicCardClassName}>
           <div className="space-y-4 text-base leading-7 text-[var(--muted)]">
             <Row label="Курс" value={payload.courseTitle} />
@@ -111,7 +118,7 @@ export function CheckoutPageContent({
             <div className={publicIconBoxClassName}>
               <CheckCircle2 className="h-5 w-5" />
             </div>
-            <h2 className="mt-4 text-[32px] font-semibold leading-10 tracking-[-0.02em] text-[var(--foreground)]">
+            <h2 className="mt-4 text-[28px] font-semibold leading-9 tracking-[-0.02em] text-[var(--foreground)]">
               {formatPublicCopy("Доступ открыт")}
             </h2>
             <p className="mt-3 text-base leading-7 text-[var(--muted)]">
@@ -136,7 +143,7 @@ export function CheckoutPageContent({
             <div className={publicIconBoxClassName}>
               <XCircle className="h-5 w-5" />
             </div>
-            <h2 className="mt-4 text-[32px] font-semibold leading-10 tracking-[-0.02em] text-[var(--foreground)]">
+            <h2 className="mt-4 text-[28px] font-semibold leading-9 tracking-[-0.02em] text-[var(--foreground)]">
               {formatPublicCopy("Заказ закрыт")}
             </h2>
             <p className="mt-3 text-base leading-7 text-[var(--muted)]">

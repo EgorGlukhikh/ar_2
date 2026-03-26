@@ -165,7 +165,7 @@ export function CatalogPageContent({
             <p className="mt-5 text-[12px] font-medium uppercase leading-4 tracking-[0.18em] text-[var(--muted)]">
               {formatPublicCopy("Сейчас часто выбирают")}
             </p>
-            <h2 className="mt-3 text-[32px] font-semibold leading-10 tracking-[-0.02em] text-[var(--foreground)]">
+            <h2 className="mt-3 text-[28px] font-semibold leading-9 tracking-[-0.02em] text-[var(--foreground)]">
               {formatPublicCopy(featuredCourse.title)}
             </h2>
             <p className="mt-3 max-w-[560px] text-base leading-7 text-[var(--muted)]">
@@ -178,7 +178,7 @@ export function CatalogPageContent({
       <div className="grid gap-6 md:grid-cols-2">
         {courses.length === 0 ? (
           <article className={`${publicCardClassName} md:col-span-2`}>
-            <h2 className="text-[32px] font-semibold leading-10 tracking-[-0.02em] text-[var(--foreground)]">
+            <h2 className="text-[28px] font-semibold leading-9 tracking-[-0.02em] text-[var(--foreground)]">
               {formatPublicCopy("Пока нет опубликованных курсов")}
             </h2>
             <p className="mt-4 max-w-[560px] text-base leading-7 text-[var(--muted)]">

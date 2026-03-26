@@ -69,14 +69,14 @@ export function SignInPageContent({
             <p className="text-[12px] font-medium uppercase leading-4 tracking-[0.18em] text-[var(--muted)]">
               {formatPublicCopy(activeTab === "sign-in" ? "Вход" : "Регистрация")}
             </p>
-            <h2 className="text-[32px] font-semibold leading-10 tracking-[-0.02em] text-[var(--foreground)]">
+            <h2 className="text-[28px] font-semibold leading-9 tracking-[-0.02em] text-[var(--foreground)]">
               {formatPublicCopy(
                 activeTab === "sign-in"
                   ? "Открыть свой кабинет"
                   : "Создать аккаунт студента",
               )}
             </h2>
-            <p className="max-w-[560px] text-base leading-7 text-[var(--muted)]">
+            <p className="max-w-[560px] text-[15px] leading-6 text-[var(--muted)]">
               {formatPublicCopy(
                 activeTab === "sign-in"
                   ? "Войди по почте и паролю или используй Яндекс, если он привязан к твоему email."

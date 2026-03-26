@@ -2,11 +2,13 @@ import type { ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
 import { BookOpenText } from "lucide-react";
 
+import { SiteIllustration } from "@/components/illustrations/site-illustration";
 import {
   systemCardClassName,
   systemHeaderCardClassName,
   systemIconTileClassName,
 } from "@/components/system/system-ui";
+import type { IllustrationKey } from "@/lib/illustrations";
 import { cn } from "@/lib/utils";
 
 type WorkspacePageHeaderProps = {
@@ -40,6 +42,7 @@ type WorkspaceEmptyStateProps = {
   description: string;
   action?: ReactNode;
   className?: string;
+  illustrationKind?: IllustrationKey;
 };
 
 type CourseThumbProps = {
@@ -120,10 +123,10 @@ export function WorkspacePageHeader({
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
             {eyebrow}
           </p>
-          <h1 className="text-[clamp(2rem,4vw,2.75rem)] font-semibold tracking-[-0.02em] text-[var(--foreground)]">
+          <h1 className="text-[clamp(1.75rem,3.4vw,2.35rem)] font-semibold tracking-[-0.02em] text-[var(--foreground)]">
             {title}
           </h1>
-          <p className="max-w-3xl text-base leading-7 text-[var(--muted)]">{description}</p>
+          <p className="max-w-3xl text-sm leading-6 text-[var(--muted)]">{description}</p>
         </div>
 
         {(actions || meta) && (
@@ -161,7 +164,7 @@ export function WorkspacePanel({
               </p>
             ) : null}
             {title ? (
-              <h2 className="text-[28px] font-semibold tracking-[-0.02em] text-[var(--foreground)]">
+              <h2 className="text-[24px] font-semibold tracking-[-0.02em] text-[var(--foreground)]">
                 {title}
               </h2>
             ) : null}
@@ -202,7 +205,7 @@ export function WorkspaceStatCard({
         </p>
       </div>
 
-      <p className="mt-5 text-[38px] font-semibold tracking-[-0.03em] text-[var(--foreground)]">
+      <p className="mt-5 text-[32px] font-semibold tracking-[-0.03em] text-[var(--foreground)]">
         {value}
       </p>
       <p className="mt-3 text-sm leading-7 text-[var(--muted)]">{hint}</p>
@@ -215,6 +218,7 @@ export function WorkspaceEmptyState({
   description,
   action,
   className,
+  illustrationKind,
 }: WorkspaceEmptyStateProps) {
   return (
     <div
@@ -223,7 +227,15 @@ export function WorkspaceEmptyState({
         className,
       )}
     >
-      <p className="text-xl font-semibold tracking-tight text-[var(--foreground)]">{title}</p>
+      {illustrationKind ? (
+        <SiteIllustration
+          kind={illustrationKind}
+          alt={title}
+          className="mb-6 p-4 shadow-none"
+          imageClassName="scale-[0.94]"
+        />
+      ) : null}
+      <p className="text-lg font-semibold tracking-tight text-[var(--foreground)]">{title}</p>
       <p className="mt-3 max-w-2xl text-sm leading-7 text-[var(--muted)]">{description}</p>
       {action ? <div className="mt-6">{action}</div> : null}
     </div>
