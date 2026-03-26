@@ -69,9 +69,9 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
     <main className="min-h-screen bg-[linear-gradient(180deg,_#f7f9ff_0%,_#f1f5ff_100%)] px-4 py-4 md:px-6 md:py-6">
       <section className="mx-auto max-w-[1400px] space-y-6">
         <WorkspacePageHeader
-          eyebrow="Оформление доступа"
-          title="Подтверждение покупки курса"
-          description="Проверь состав заказа, сумму и статус оплаты. После подтверждения доступ к курсу откроется автоматически."
+          eyebrow="Подтверждение доступа"
+          title="Проверь курс и заверши оплату"
+          description="Здесь видно, какой курс ты открываешь, сколько он стоит и что произойдет после подтверждения оплаты."
           meta={
             <div className="flex flex-wrap gap-2">
               <Badge variant={orderStatusVariantMap[order.status]}>
@@ -87,10 +87,10 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
           actions={
             <>
               <Button asChild variant="outline">
-                <Link href="/catalog">Каталог</Link>
+                <Link href="/catalog">К курсам</Link>
               </Button>
               <Button asChild variant="outline">
-                <Link href="/learning">Учебный кабинет</Link>
+                <Link href="/learning">Мой кабинет</Link>
               </Button>
             </>
           }
@@ -98,9 +98,9 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
 
         <div className="grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
           <WorkspacePanel
-            eyebrow="Состав заказа"
+            eyebrow="Что оформляем"
             title={course?.title ?? orderItem?.product.name ?? "Курс"}
-            description="Ниже показаны данные покупки: продукт, сумма и платежный контур."
+            description="Курс, стоимость и способ оплаты собраны в одном месте, чтобы можно было быстро проверить заказ перед подтверждением."
           >
             <div className="grid gap-5 lg:grid-cols-[300px_minmax(0,1fr)]">
               <CourseThumb
@@ -112,7 +112,7 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
                 <div className="rounded-[24px] bg-[var(--surface)] p-5">
                   <div className="space-y-4 text-sm text-[var(--muted)]">
                     <div className="flex items-center justify-between gap-4">
-                      <span>Продукт</span>
+                      <span>Курс</span>
                       <span className="font-medium text-[var(--foreground)]">
                         {orderItem?.product.name ?? "Не найден"}
                       </span>
@@ -124,14 +124,14 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
                       </span>
                     </div>
                     <div className="flex items-center justify-between gap-4">
-                      <span>Платежный контур</span>
+                      <span>Способ оплаты</span>
                       <span className="font-medium text-[var(--foreground)]">
                         {paymentProviderLabelMap[order.paymentProvider]}
                       </span>
                     </div>
                     {payment?.providerPaymentId ? (
                       <div className="flex items-start justify-between gap-4">
-                        <span>Идентификатор</span>
+                        <span>Номер платежа</span>
                         <span className="break-all text-right font-medium text-[var(--foreground)]">
                           {payment.providerPaymentId}
                         </span>
@@ -147,16 +147,16 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
                       После оплаты
                     </p>
                     <p className="mt-1 text-xs leading-5 text-[var(--muted)]">
-                      Доступ к курсу выдается автоматически и курс появляется в учебном кабинете.
+                      Курс откроется автоматически и сразу появится в учебном кабинете.
                     </p>
                   </div>
                   <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-4 py-4">
                     <CreditCard className="h-4 w-4 text-[var(--primary)]" />
                     <p className="mt-3 text-sm font-medium text-[var(--foreground)]">
-                      Оплата онлайн
+                      Что дальше
                     </p>
                     <p className="mt-1 text-xs leading-5 text-[var(--muted)]">
-                      Страница оформляет заказ и показывает его актуальный статус до открытия доступа.
+                      Если передумаешь, заказ можно закрыть и позже вернуться к покупке из каталога.
                     </p>
                   </div>
                 </div>
@@ -166,8 +166,8 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
 
           <WorkspacePanel
             eyebrow="Статус оплаты"
-            title="Что происходит с заказом"
-            description="Здесь можно завершить оплату или закрыть заказ, если пользователь решил не продолжать покупку."
+            title="Следующий шаг по заказу"
+            description="Заверши оплату, если готов открыть курс сейчас, или закрой заказ и вернись к нему позже."
           >
             <div className="space-y-5">
               {isPaid ? (
@@ -178,10 +178,10 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
                     </div>
                     <div>
                       <p className="text-lg font-semibold text-emerald-950">
-                        Доступ выдан успешно
+                        Доступ открыт
                       </p>
                       <p className="mt-3 text-sm leading-7 text-emerald-900">
-                        Платеж подтвержден, заказ переведен в оплаченный, студент уже зачислен на курс.
+                        Оплата подтверждена, а курс уже доступен в учебном кабинете.
                       </p>
                     </div>
                   </div>
@@ -189,11 +189,11 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
                   <div className="mt-5 flex flex-wrap gap-3">
                     {course?.id ? (
                       <Button asChild>
-                        <Link href={`/learning/courses/${course.id}`}>Открыть курс</Link>
+                        <Link href={`/learning/courses/${course.id}`}>Перейти к курсу</Link>
                       </Button>
                     ) : null}
                     <Button asChild variant="outline">
-                      <Link href="/catalog">Вернуться в каталог</Link>
+                      <Link href="/catalog">Выбрать еще курс</Link>
                     </Button>
                   </div>
                 </div>
@@ -208,7 +208,7 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
                         Заказ закрыт
                       </p>
                       <p className="mt-3 text-sm leading-7 text-amber-900">
-                        Оплата не была завершена. Можно вернуться в каталог и оформить новый заказ, если пользователь решит продолжить покупку.
+                        Оплата не завершена. Можно вернуться в каталог и оформить доступ заново, когда будешь готов продолжить.
                       </p>
                     </div>
                   </div>
@@ -217,11 +217,11 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
                     {course?.id ? (
                       <form action={startDemoCheckout}>
                         <input type="hidden" name="courseId" value={course.id} />
-                        <Button type="submit">Оформить новый заказ</Button>
+                        <Button type="submit">Оформить заново</Button>
                       </form>
                     ) : null}
                     <Button asChild variant="outline">
-                      <Link href="/catalog">Вернуться в каталог</Link>
+                      <Link href="/catalog">Вернуться к курсам</Link>
                     </Button>
                   </div>
                 </div>
@@ -238,10 +238,10 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
                       </div>
                       <div className="mt-8">
                         <p className="text-lg font-semibold text-[var(--foreground)]">
-                          Оплатить курс
+                          Подтвердить оплату
                         </p>
                         <p className="mt-2 text-sm leading-7 text-[var(--muted)]">
-                          После подтверждения доступ откроется автоматически, а курс появится в учебном кабинете.
+                          После подтверждения курс сразу появится в учебном кабинете и будет доступен без дополнительных шагов.
                         </p>
                       </div>
                     </button>
@@ -261,7 +261,7 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
                           Отменить заказ
                         </p>
                         <p className="mt-2 text-sm leading-7 text-[var(--muted)]">
-                          Заказ будет закрыт без выдачи доступа, и пользователь сможет вернуться к покупке позже.
+                          Заказ закроется без доступа к курсу, а к покупке можно будет вернуться позже.
                         </p>
                       </div>
                     </button>

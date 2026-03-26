@@ -14,9 +14,9 @@ import {
 } from "@/lib/marketing-theme";
 
 const accessPoints = [
-  "Один вход для ученика, автора курса и команды платформы.",
-  "После авторизации система сама открывает нужный кабинет.",
-  "Вход выглядит как часть продукта, а не как служебный экран.",
+  "Один вход для ученика и автора: продолжить обучение или открыть свои курсы.",
+  "После авторизации платформа сама открывает нужный раздел без лишних шагов.",
+  "Если тебя пригласили в курс или в рабочий кабинет, вход уже привязан к твоей почте.",
 ];
 
 type SignInPageProps = {
@@ -53,8 +53,9 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
                   <p className="font-[family:var(--font-landing-display)] text-base font-semibold text-[#182036] sm:text-lg">
                     Вход в академию
                   </p>
-                  <p className="max-w-sm text-sm leading-6 text-[#5f6982]">
-                    Личный вход для обучения, работы с курсами и управления программами.
+                  <p className="max-w-md text-sm leading-6 text-[#5f6982]">
+                    Войди, чтобы продолжить обучение, открыть кабинет автора или
+                    вернуться к своим программам.
                   </p>
                 </div>
               </div>
@@ -70,16 +71,16 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
             <section className="grid gap-6 py-6 sm:gap-8 sm:py-8 xl:grid-cols-[0.92fr_1.08fr] xl:items-start">
               <div className="space-y-6 sm:space-y-8">
                 <SectionLead
-                  eyebrow="Авторизация"
-                  title="Войти в платформу и продолжить обучение или работу с курсами."
-                  text="На телефоне и на десктопе экран входа остается коротким, понятным и без служебных подсказок, которые мешают обычному пользователю."
+                  eyebrow="Доступ"
+                  title="Войди и продолжи с того места, где остановился"
+                  text="Если у тебя уже есть курс, приглашение или кабинет автора, здесь достаточно почты и пароля. После входа система сама переведет в нужный раздел."
                 />
 
                 <div className="grid gap-3 sm:grid-cols-3 sm:gap-4">
                   {[
                     { icon: Mail, label: "Вход", value: "Почта и пароль" },
-                    { icon: ShieldCheck, label: "Безопасность", value: "Личный доступ" },
-                    { icon: KeyRound, label: "Дальше", value: "Переход в свой кабинет" },
+                    { icon: ShieldCheck, label: "Доступ", value: "Личный кабинет" },
+                    { icon: KeyRound, label: "После входа", value: "Сразу в свой раздел" },
                   ].map((item) => {
                     const Icon = item.icon;
 
@@ -124,20 +125,22 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
                 <div className="rounded-[22px] bg-[linear-gradient(180deg,_#f6efe7_0%,_#eef2ff_100%)] p-5 sm:rounded-[28px] sm:p-6">
                   <div className="space-y-3">
                     <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#7a6548] sm:text-xs sm:tracking-[0.34em]">
-                      Доступ
+                      Вход
                     </p>
                     <h2 className="font-[family:var(--font-landing-display)] text-[1.9rem] font-semibold leading-[0.98] tracking-tight text-[#182036] sm:text-3xl">
-                      Войти по почте
+                      Открыть свой кабинет
                     </h2>
                     <p className="text-sm leading-7 text-[#5f6982]">
-                      Используй свою почту и пароль, чтобы продолжить обучение, открыть кабинет автора или перейти к управлению курсами.
+                      Используй свою почту и пароль, чтобы вернуться к урокам,
+                      открыть кабинет автора или продолжить работу с курсами.
                     </p>
                   </div>
 
                   <div className="mt-5 rounded-[22px] border border-white/80 bg-white p-4 shadow-[0_14px_32px_rgba(24,32,54,0.06)] sm:mt-6 sm:rounded-[24px] sm:p-5">
                     {showInviteSuccess ? (
                       <div className="mb-4 rounded-[18px] border border-emerald-100 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
-                        Приглашение активировано. Теперь можно войти в платформу.
+                        Приглашение активировано. Теперь можно войти и открыть
+                        свой раздел.
                       </div>
                     ) : null}
 
