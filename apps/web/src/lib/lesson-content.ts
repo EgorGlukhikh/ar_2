@@ -7,7 +7,7 @@ import {
   decodeHomeworkPayload,
   encodeHomeworkPayload,
   type HomeworkQuestion,
-} from "@/lib/homework-builder";
+} from "./homework-builder";
 
 export type LessonAttachment = {
   title: string;
