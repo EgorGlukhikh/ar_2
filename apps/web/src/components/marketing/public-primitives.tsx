@@ -11,7 +11,7 @@ export const publicSoftCardClassName =
   "rounded-[20px] border border-[var(--border)] bg-[var(--surface-strong)] p-6 shadow-[var(--shadow-sm)]";
 
 export const publicGradientCardClassName =
-  "rounded-[24px] bg-[var(--brand-gradient)] p-7 text-white shadow-[var(--shadow-brand)]";
+  "rounded-[24px] bg-[#1e285d] bg-[image:var(--brand-gradient)] bg-cover bg-center p-7 text-white shadow-[var(--shadow-brand)]";
 
 export const publicBadgeClassName =
   "inline-flex min-h-9 items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface)] px-3.5 text-[13px] font-medium leading-[18px] tracking-[0.06em] text-[var(--foreground)]";

@@ -476,14 +476,14 @@ export function LandingExperience({
 
       <div className="h-px bg-[var(--border)]" />
 
-      <section className="space-y-8">
+      <section className="grid gap-8 xl:grid-cols-4 xl:items-start">
         <SectionLead
           eyebrow="Кому подходит"
           title="Выбери свой сценарий: старт в профессии, точечная прокачка или запуск своей программы"
           text="Подача должна сразу показывать, куда идти дальше: учиться, усиливать навык или размещать свой курс."
         />
 
-        <div className="grid gap-6 lg:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-2 xl:col-span-3 xl:grid-cols-3">
           {audienceCards.map((card) => {
             const Icon = card.icon;
 
@@ -508,14 +508,15 @@ export function LandingExperience({
       </section>
 
       <section className="rounded-[24px] border border-[var(--border)] bg-[var(--surface-strong)] p-6 shadow-[var(--shadow-sm)] md:p-8">
-        <div className="grid gap-10 xl:grid-cols-[0.92fr_1.08fr] xl:items-start">
+        <div className="grid gap-8 xl:grid-cols-4 xl:items-start">
           <SectionLead
             eyebrow="Как это работает"
             title={activeCopy.processTitle}
             text={activeCopy.processText}
+            className="xl:sticky xl:top-8"
           />
 
-          <div className="grid gap-6 md:grid-cols-3">
+          <div className="grid gap-6 md:grid-cols-2 xl:col-span-3 xl:grid-cols-3">
             {activeCopy.steps.map((step) => {
               const Icon = step.icon;
 
@@ -612,7 +613,7 @@ export function LandingExperience({
         </div>
       </section>
 
-      <section className="rounded-[28px] bg-[var(--brand-gradient)] px-6 py-8 text-white shadow-[var(--shadow-brand)] md:px-8 md:py-12">
+      <section className="rounded-[28px] bg-[#1e285d] bg-[image:var(--brand-gradient)] bg-cover bg-center px-6 py-8 text-white shadow-[var(--shadow-brand)] md:px-8 md:py-12">
         <div className="grid gap-8 xl:grid-cols-[1fr_auto] xl:items-end">
           <SectionLead
             eyebrow="Готовы начать?"
