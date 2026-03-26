@@ -48,6 +48,8 @@
 
 ## Что уже переведено на общий UI kit
 
+- landing gradients use `background-image` tokens, and scenario / process sections use a shared wide 4-column grid
+
 - [landing](/C:/AR_codex/apps/web/src/app/page.tsx)
 - [catalog](/C:/AR_codex/apps/web/src/app/catalog/page.tsx)
 - [sign-in](/C:/AR_codex/apps/web/src/app/sign-in/page.tsx)
