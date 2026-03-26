@@ -28,7 +28,8 @@ export function SignInForm({ defaultEmail }: SignInFormProps) {
           name="email"
           type="email"
           autoComplete="email"
-          defaultValue={defaultEmail || "test@mail.ru"}
+          defaultValue={defaultEmail || ""}
+          placeholder="name@example.com"
           className="h-12 w-full rounded-2xl border border-[#d9e1f2] bg-white px-4 text-[#1c2442] outline-none transition focus:border-[#2840db] focus:ring-4 focus:ring-[#2840db]/10"
           required
         />
@@ -43,7 +44,7 @@ export function SignInForm({ defaultEmail }: SignInFormProps) {
           name="password"
           type="password"
           autoComplete="current-password"
-          defaultValue="12345"
+          placeholder="Введите пароль"
           className="h-12 w-full rounded-2xl border border-[#d9e1f2] bg-white px-4 text-[#1c2442] outline-none transition focus:border-[#2840db] focus:ring-4 focus:ring-[#2840db]/10"
           required
         />
