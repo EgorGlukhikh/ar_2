@@ -18,12 +18,29 @@
       }
     ],
     "paths": {
+      "@backend/*": [
+        "../../backend/src/*"
+      ],
+      "@database/*": [
+        "../../database/src/*"
+      ],
+      "@frontend/*": [
+        "../../frontend/src/*"
+      ],
+      "@shared/*": [
+        "../../shared/src/*"
+      ],
       "@/*": [
         "./src/*"
       ]
     }
   },
   "include": [
+    "../../backend/src/**/*.ts",
+    "../../database/src/**/*.ts",
+    "../../frontend/src/**/*.ts",
+    "../../frontend/src/**/*.tsx",
+    "../../shared/src/**/*.ts",
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
