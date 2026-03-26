@@ -148,3 +148,6 @@ OAuth:
 - `docs/10x-product-improvement-roadmap.md`
 - `docs/academy-platform-functional-spec.md`
 - GitHub issue `#1` — хронология работ
+## Button contrast
+
+- Primary and dark buttons must always use white text and white icons.

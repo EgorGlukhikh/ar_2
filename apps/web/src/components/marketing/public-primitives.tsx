@@ -52,10 +52,10 @@ export function publicButtonClassName(
   }
 
   if (tone === "dark") {
-    return "inline-flex min-h-[var(--control-height)] items-center justify-center gap-2 rounded-[var(--control-radius)] bg-[var(--foreground)] px-5 py-3 text-base font-semibold text-white shadow-[var(--shadow-md)] transition duration-200 hover:bg-[#020617] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(15,23,42,0.18)] focus-visible:ring-offset-2 [&_svg]:h-[18px] [&_svg]:w-[18px] [&_svg]:text-current";
+    return "inline-flex min-h-[var(--control-height)] items-center justify-center gap-2 rounded-[var(--control-radius)] bg-[var(--foreground)] px-5 py-3 text-base font-semibold !text-white shadow-[var(--shadow-md)] transition duration-200 hover:bg-[#020617] hover:!text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(15,23,42,0.18)] focus-visible:ring-offset-2 [&_svg]:h-[18px] [&_svg]:w-[18px] [&_svg]:!text-white";
   }
 
-  return "inline-flex min-h-[var(--control-height)] items-center justify-center gap-2 rounded-[var(--control-radius)] bg-[var(--primary)] px-5 py-3 text-base font-semibold text-[var(--primary-foreground)] shadow-[var(--shadow-brand)] transition duration-200 hover:bg-[var(--primary-hover)] hover:text-[var(--primary-foreground)] active:bg-[var(--primary-active)] active:text-[var(--primary-foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(79,70,229,0.16)] focus-visible:ring-offset-2 [&_svg]:h-[18px] [&_svg]:w-[18px] [&_svg]:text-current";
+  return "inline-flex min-h-[var(--control-height)] items-center justify-center gap-2 rounded-[var(--control-radius)] bg-[var(--primary)] px-5 py-3 text-base font-semibold !text-[var(--primary-foreground)] shadow-[var(--shadow-brand)] transition duration-200 hover:bg-[var(--primary-hover)] hover:!text-[var(--primary-foreground)] active:bg-[var(--primary-active)] active:!text-[var(--primary-foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(79,70,229,0.16)] focus-visible:ring-offset-2 [&_svg]:h-[18px] [&_svg]:w-[18px] [&_svg]:!text-[var(--primary-foreground)]";
 }
 
 export function SectionLead({

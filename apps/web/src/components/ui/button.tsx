@@ -10,7 +10,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "border border-transparent bg-[var(--primary)] text-[var(--primary-foreground)] shadow-[var(--shadow-brand)] hover:bg-[var(--primary-hover)] hover:text-[var(--primary-foreground)] active:bg-[var(--primary-active)] active:text-[var(--primary-foreground)] disabled:bg-[#c7d2fe] disabled:text-[var(--primary-foreground)]",
+          "border border-transparent bg-[var(--primary)] !text-[var(--primary-foreground)] shadow-[var(--shadow-brand)] hover:bg-[var(--primary-hover)] hover:!text-[var(--primary-foreground)] active:bg-[var(--primary-active)] active:!text-[var(--primary-foreground)] disabled:bg-[#c7d2fe] disabled:!text-[var(--primary-foreground)] [&_svg]:!text-[var(--primary-foreground)]",
         outline:
           "border border-[var(--border-strong)] bg-[var(--surface)] text-[var(--foreground)] shadow-[var(--shadow-sm)] hover:bg-[var(--surface-strong)] hover:text-[var(--foreground)] disabled:bg-[#f8fafc] disabled:text-[var(--muted-soft)]",
         ghost:
