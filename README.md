@@ -48,6 +48,8 @@
 - `frontend/src/admin/components/admin-dashboard-page-content.tsx`
 - `frontend/src/admin/components/admin-users-page-content.tsx`
 - `frontend/src/admin/components/course-access-page-content.tsx`
+- `frontend/src/admin/components/courses-page-content.tsx`
+- `frontend/src/learning/components/learning-dashboard-page-content.tsx`
 - `frontend/src/knowledge-base/components/knowledge-base-page-content.tsx`
 - `backend/src/public-home/get-public-home-payload.ts`
 - `backend/src/public-catalog/get-public-catalog-payload.ts`
@@ -57,6 +59,8 @@
 - `backend/src/admin-dashboard/get-admin-dashboard-payload.ts`
 - `backend/src/admin-users/get-admin-users-payload.ts`
 - `backend/src/admin-course-access/get-admin-course-access-payload.ts`
+- `backend/src/admin-courses/get-admin-courses-payload.ts`
+- `backend/src/learning-dashboard/get-learning-dashboard-payload.ts`
 - `database/src/public-home/public-home.repository.ts`
 - `database/src/public-catalog/public-catalog.repository.ts`
 - `database/src/public-checkout/public-checkout.repository.ts`
@@ -64,6 +68,8 @@
 - `database/src/admin-dashboard/admin-dashboard.repository.ts`
 - `database/src/admin-users/admin-users.repository.ts`
 - `database/src/admin-course-access/admin-course-access.repository.ts`
+- `database/src/admin-courses/admin-courses.repository.ts`
+- `database/src/learning-dashboard/learning-dashboard.repository.ts`
 - `shared/src/public-home/types.ts`
 - `shared/src/public-home/copy.ts`
 - `shared/src/public-catalog/types.ts`
@@ -73,6 +79,8 @@
 - `shared/src/admin-dashboard/types.ts`
 - `shared/src/admin-users/types.ts`
 - `shared/src/admin-course-access/types.ts`
+- `shared/src/admin-courses/types.ts`
+- `shared/src/learning-dashboard/types.ts`
 - `shared/src/knowledge-base/types.ts`
 - `shared/src/knowledge-base/content.ts`
 
@@ -160,6 +168,7 @@ OAuth:
 - админу доступен графический дашборд и страница пользователей с фильтрами по роли, доступу и способу входа
 - демо-оплаты пока остаются только в административном контуре
 - на странице доступа к курсу админ может добавить студента, выдать бесплатный доступ или провести демо-списание для платного курса
+- список курсов автора и учебный кабинет студента тоже переведены на layered-подход без прямого доступа страницы к Prisma
 
 ## Публичный контур
 
