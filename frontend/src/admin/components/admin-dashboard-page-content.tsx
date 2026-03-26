@@ -17,6 +17,7 @@ export function AdminDashboardPageContent({
 }: {
   payload: AdminDashboardPayload;
 }) {
+  const hasRevenueData = payload.demoRevenueSeries.some((item) => item.amount > 0);
   const maxAmount = Math.max(
     ...payload.demoRevenueSeries.map((item) => item.amount),
     1,
@@ -59,29 +60,35 @@ export function AdminDashboardPageContent({
       <div className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
         <WorkspacePanel eyebrow="Демо-оплаты" title="Динамика по дням">
           <div className="rounded-[20px] border border-[var(--border)] bg-[var(--surface-strong)] p-5">
-            <div className="flex h-52 items-end gap-3">
-              {payload.demoRevenueSeries.map((point) => (
-                <div
-                  key={point.label}
-                  className="flex min-w-0 flex-1 flex-col items-center gap-3"
-                >
-                  <div className="flex h-40 w-full items-end">
-                    <div
-                      className="w-full rounded-t-[14px] bg-[var(--primary)]"
-                      style={{
-                        height: `${Math.max(
-                          14,
-                          Math.round((point.amount / maxAmount) * 100),
-                        )}%`,
-                      }}
-                    />
+            {hasRevenueData ? (
+              <div className="flex h-52 items-end gap-3">
+                {payload.demoRevenueSeries.map((point) => (
+                  <div
+                    key={point.label}
+                    className="flex min-w-0 flex-1 flex-col items-center gap-3"
+                  >
+                    <div className="flex h-40 w-full items-end">
+                      <div
+                        className="w-full rounded-t-[14px] bg-[var(--primary)]"
+                        style={{
+                          height: `${Math.max(
+                            14,
+                            Math.round((point.amount / maxAmount) * 100),
+                          )}%`,
+                        }}
+                      />
+                    </div>
+                    <div className="text-center text-xs font-medium text-[var(--muted)]">
+                      {point.label}
+                    </div>
                   </div>
-                  <div className="text-center text-xs font-medium text-[var(--muted)]">
-                    {point.label}
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            ) : (
+              <div className="flex min-h-52 items-center justify-center rounded-[16px] border border-dashed border-[var(--border)] bg-[var(--surface)] px-6 py-8 text-center text-sm leading-7 text-[var(--muted)]">
+                За выбранный период еще нет демо-оплат. Как только появятся данные, график заполнится автоматически.
+              </div>
+            )}
           </div>
         </WorkspacePanel>
 

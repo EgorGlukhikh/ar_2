@@ -8,6 +8,16 @@ export async function listPublishedCatalogCourses(userId?: string) {
   return prisma.course.findMany({
     where: {
       status: CourseStatus.PUBLISHED,
+      products: {
+        some: {
+          isActive: true,
+          prices: {
+            some: {
+              isDefault: true,
+            },
+          },
+        },
+      },
     },
     orderBy: {
       updatedAt: "desc",

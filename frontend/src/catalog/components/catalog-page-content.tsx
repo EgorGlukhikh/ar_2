@@ -238,7 +238,7 @@ export function CatalogPageContent({
                 </p>
               </div>
 
-              <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              <div className="mt-5 grid gap-3 sm:grid-cols-2">
                 <CourseAction
                   courseId={course.id}
                   canCheckout={course.canCheckout}
@@ -248,16 +248,16 @@ export function CatalogPageContent({
 
                 <Link
                   href={isAuthenticated ? "/learning" : "/sign-in"}
-                  className={`${publicButtonClassName("secondary")} justify-center sm:w-auto`}
+                  className={`${publicButtonClassName("secondary")} w-full justify-center whitespace-nowrap`}
                 >
-                  {formatPublicCopy(isAuthenticated ? "Открыть кабинет" : "Войти")}
+                  {formatPublicCopy(isAuthenticated ? "В кабинет" : "Войти")}
                   <ArrowUpRight className="h-4 w-4" />
                 </Link>
               </div>
 
               <Link
                 href={course.hasAccess ? `/learning/courses/${course.id}` : "/catalog"}
-                className="mt-5 inline-flex items-center gap-2 text-base font-medium text-[var(--primary)] transition hover:text-[var(--primary-hover)]"
+                className="mt-5 inline-flex items-center gap-2 text-base font-medium !text-[var(--primary)] transition hover:!text-[var(--primary-hover)]"
               >
                 {formatPublicCopy("Смотреть программу")}
                 <ArrowRight className="h-4 w-4" />

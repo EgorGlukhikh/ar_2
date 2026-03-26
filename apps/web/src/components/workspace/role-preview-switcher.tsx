@@ -2,9 +2,9 @@ import { Eye, Shield, UserRound, PenSquare } from "lucide-react";
 
 import { USER_ROLES, type UserRole } from "@academy/shared";
 
-import { updateRolePreview } from "@/features/preview/actions";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 type RolePreviewSwitcherProps = {
   actualRole: UserRole;
@@ -62,7 +62,7 @@ export function RolePreviewSwitcher({
         </span>
       </div>
 
-      <div className="flex flex-wrap gap-2">
+      <div className="flex max-w-full gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {(Object.entries(roleMeta) as Array<
           [Extract<UserRole, "ADMIN" | "AUTHOR" | "STUDENT">, (typeof roleMeta)[keyof typeof roleMeta]]
         >).map(([role, meta]) => {
@@ -70,18 +70,17 @@ export function RolePreviewSwitcher({
           const isActive = effectiveRole === role;
 
           return (
-            <form key={role} action={updateRolePreview}>
-              <input type="hidden" name="role" value={role} />
-              <input type="hidden" name="returnTo" value={meta.returnTo} />
-              <Button type="submit" variant={isActive ? "default" : "outline"} size="sm">
+            <Button key={role} asChild variant={isActive ? "default" : "outline"}>
+              <Link
+                href={`/admin/role-preview?role=${role}&returnTo=${encodeURIComponent(meta.returnTo)}`}
+              >
                 <Icon className="mr-2 h-4 w-4" />
                 {meta.label}
-              </Button>
-            </form>
+              </Link>
+            </Button>
           );
         })}
       </div>
     </div>
   );
 }
-

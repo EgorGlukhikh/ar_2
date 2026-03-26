@@ -359,7 +359,7 @@ export function LandingExperience({
             />
 
             <div className="flex flex-col gap-3 sm:flex-row xl:items-end">
-              <PublicButton href="/catalog" tone="secondary" className="min-w-[220px]">
+              <PublicButton href="/catalog" className="min-w-[220px]">
                 <Copy value="Перейти в каталог" />
               </PublicButton>
               <PublicButton href="/sign-in?role=author" tone="ghost" className="min-w-[220px]">

@@ -5,6 +5,16 @@ export async function countPublishedCourses() {
   return prisma.course.count({
     where: {
       status: CourseStatus.PUBLISHED,
+      products: {
+        some: {
+          isActive: true,
+          prices: {
+            some: {
+              isDefault: true,
+            },
+          },
+        },
+      },
     },
   });
 }
@@ -14,6 +24,16 @@ export async function listPublishedLandingCourses(limit = 8) {
   return prisma.course.findMany({
     where: {
       status: CourseStatus.PUBLISHED,
+      products: {
+        some: {
+          isActive: true,
+          prices: {
+            some: {
+              isDefault: true,
+            },
+          },
+        },
+      },
     },
     orderBy: {
       updatedAt: "desc",

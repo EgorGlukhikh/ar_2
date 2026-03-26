@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 
 import { getPublicHomePayload } from "@backend/public-home/get-public-home-payload";
 
+import { PublicFooter } from "@/components/marketing/public-footer";
 import { LandingExperience } from "@/components/marketing/landing-experience";
 import {
   marketingBody,
@@ -30,6 +31,7 @@ export default async function Home() {
         <section className={marketingFrameClassName}>
           <div className={marketingInnerFrameClassName}>
             <LandingExperience {...homePayload} />
+            <PublicFooter />
           </div>
         </section>
       </div>

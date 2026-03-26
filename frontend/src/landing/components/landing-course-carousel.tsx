@@ -73,7 +73,7 @@ export function LandingCourseCarousel({ courses }: { courses: PublicCourseCard[]
       {showControls ? (
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-sm leading-6 text-[var(--muted)]">
-            <Copy value="Если программ больше трех, можно листать подборки и смотреть следующие карточки без узких колонок." />
+            <Copy value={`Подборка ${page + 1} из ${totalPages}`} />
           </p>
 
           <div className="flex flex-wrap items-center gap-3">
@@ -169,7 +169,7 @@ export function LandingCourseCarousel({ courses }: { courses: PublicCourseCard[]
 
                 <Link
                   href={`/catalog#${course.slug}`}
-                  className="mt-5 inline-flex items-center gap-2 text-base font-medium text-[var(--primary)] transition hover:text-[var(--primary-hover)]"
+                  className="mt-5 inline-flex items-center gap-2 text-base font-medium !text-[var(--primary)] transition hover:!text-[var(--primary-hover)]"
                 >
                   <Copy value="Смотреть программу" />
                   <ArrowRight className="h-4 w-4" />

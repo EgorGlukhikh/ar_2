@@ -92,7 +92,7 @@ export function AdminNav({ effectiveRole }: AdminNavProps) {
   }
 
   return (
-    <nav className="flex flex-wrap items-center gap-2 self-start">
+    <nav className="flex max-w-full items-center gap-2 self-start overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
       {visibleItems.map((item) => {
         const Icon = item.icon;
         const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);

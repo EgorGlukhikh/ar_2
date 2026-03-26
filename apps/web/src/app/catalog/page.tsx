@@ -3,6 +3,7 @@ import { auth } from "@academy/auth";
 import { getPublicCatalogPayload } from "@backend/public-catalog/get-public-catalog-payload";
 import { CatalogPageContent } from "@frontend/catalog/components/catalog-page-content";
 
+import { PublicFooter } from "@/components/marketing/public-footer";
 import {
   PublicButton,
 } from "@/components/marketing/public-primitives";
@@ -66,6 +67,7 @@ export default async function CatalogPage() {
               payload={payload}
               isAuthenticated={Boolean(session?.user)}
             />
+            <PublicFooter />
           </div>
         </section>
       </div>

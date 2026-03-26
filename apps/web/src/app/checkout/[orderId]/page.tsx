@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { getPublicCheckoutPayload } from "@backend/public-checkout/get-public-checkout-payload";
 import { CheckoutPageContent } from "@frontend/checkout/components/checkout-page-content";
 
+import { PublicFooter } from "@/components/marketing/public-footer";
 import {
   PublicButton,
   publicBadgeClassName,
@@ -78,6 +79,7 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
             </header>
 
             <CheckoutPageContent payload={payload} />
+            <PublicFooter />
           </div>
         </section>
       </div>

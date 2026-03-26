@@ -52,7 +52,7 @@ export function SignInPageContent({
                 type="button"
                 onClick={() => setActiveTab(tab.id)}
                 className={cn(
-                  "min-h-[calc(var(--control-height)-8px)] rounded-[calc(var(--control-radius)-4px)] px-5 text-sm font-semibold transition duration-200",
+                  "min-h-[40px] rounded-[10px] px-5 text-sm font-semibold transition duration-200",
                   activeTab === tab.id
                     ? "bg-[var(--primary)] text-[var(--primary-foreground)] shadow-[var(--shadow-brand)]"
                     : "text-[var(--foreground)] hover:bg-[var(--surface)]",
