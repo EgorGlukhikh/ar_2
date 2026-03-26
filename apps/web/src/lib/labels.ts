@@ -1,14 +1,14 @@
 import {
   CourseStatus,
+  EmailProviderType,
+  EmailStatus,
   EnrollmentStatus,
+  HomeworkSubmissionStatus,
   LessonType,
   MediaSourceType,
   OrderStatus,
   PaymentProviderType,
   PaymentStatus,
-  EmailProviderType,
-  EmailStatus,
-  HomeworkSubmissionStatus,
 } from "@academy/db";
 
 type BadgeVariant = "default" | "neutral" | "success" | "warning";
@@ -41,10 +41,7 @@ export const enrollmentStatusLabelMap: Record<EnrollmentStatus, string> = {
   CANCELED: "Отменен",
 };
 
-export const enrollmentStatusVariantMap: Record<
-  EnrollmentStatus,
-  BadgeVariant
-> = {
+export const enrollmentStatusVariantMap: Record<EnrollmentStatus, BadgeVariant> = {
   ACTIVE: "default",
   COMPLETED: "success",
   EXPIRED: "warning",
@@ -91,7 +88,7 @@ export const paymentStatusVariantMap: Record<PaymentStatus, BadgeVariant> = {
 };
 
 export const paymentProviderLabelMap: Record<PaymentProviderType, string> = {
-  DEMO: "Демо",
+  DEMO: "Онлайн-оплата",
   MANUAL: "Ручной счет",
   ROBOKASSA: "Robokassa",
   BANK131: "Bank 131",
@@ -99,7 +96,7 @@ export const paymentProviderLabelMap: Record<PaymentProviderType, string> = {
 };
 
 export const emailProviderLabelMap: Record<EmailProviderType, string> = {
-  MOCK: "Тестовый контур",
+  MOCK: "Внутренний контур",
   RESEND: "Resend",
 };
 

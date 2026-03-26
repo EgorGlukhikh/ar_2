@@ -134,9 +134,7 @@ export default async function CourseAccessPage({
             Цена и публикация в каталоге
           </h2>
           <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
-            Сейчас подключен демонстрационный сценарий оплаты. Здесь задается
-            цена, после чего курс появляется в каталоге и становится доступен
-            для тестовой покупки.
+            Здесь задается стоимость курса, его описание в витрине и доступность для покупки через каталог.
           </p>
 
           <div className="mt-6 grid gap-3">
@@ -149,7 +147,7 @@ export default async function CourseAccessPage({
                   Цена для каталога
                 </p>
                 <p className="text-sm text-[var(--muted)]">
-                  Определяет, как курс выглядит в витрине и в шаге оплаты.
+                  Определяет, как курс выглядит в витрине и на шаге оформления доступа.
                 </p>
               </div>
             </div>
@@ -160,10 +158,10 @@ export default async function CourseAccessPage({
               </div>
               <div>
                 <p className="text-sm font-semibold text-[var(--foreground)]">
-                  Доступ после оплаты
+                  Доступ после покупки
                 </p>
                 <p className="text-sm text-[var(--muted)]">
-                  После успешной покупки студент попадает в учебный кабинет.
+                  После успешной оплаты студент попадает в учебный кабинет и получает доступ к программе.
                 </p>
               </div>
             </div>
@@ -184,7 +182,7 @@ export default async function CourseAccessPage({
             <p className="mt-4 text-sm leading-7 text-[var(--muted)]">
               {offer
                 ? "Предложение уже создано. Можно обновить сумму, описание или временно скрыть курс из каталога."
-                : "Предложение еще не настроено. После сохранения у курса появится цена и кнопка оплаты в каталоге."}
+                : "Предложение еще не настроено. После сохранения у курса появится цена и кнопка оформления доступа в каталоге."}
             </p>
           </div>
         </article>
@@ -228,9 +226,7 @@ export default async function CourseAccessPage({
                 <Input
                   id="offer-amount"
                   name="amount"
-                  defaultValue={
-                    price ? String((price.amount / 100).toFixed(2)) : ""
-                  }
+                  defaultValue={price ? String((price.amount / 100).toFixed(2)) : ""}
                   placeholder="4900"
                   required
                 />
@@ -258,235 +254,207 @@ export default async function CourseAccessPage({
                 type="checkbox"
                 name="isActive"
                 defaultChecked={offer?.isActive ?? true}
-                className="h-4 w-4 rounded border-[var(--border)] accent-[var(--primary)]"
+                className="h-4 w-4 rounded border-[var(--border)] text-[var(--primary)]"
               />
-              Показывать курс в каталоге и разрешить оплату
+              Показывать курс в каталоге и открывать оформление доступа.
             </label>
-          </div>
 
-          <div className="mt-6 flex flex-wrap gap-3">
-            <Button type="submit">Сохранить цену</Button>
+            <div className="flex flex-wrap gap-3 pt-2">
+              <Button type="submit">Сохранить условия продажи</Button>
+            </div>
           </div>
         </form>
       </section>
 
-      <section className="grid gap-6 xl:grid-cols-[360px_1fr]">
-        <div className="space-y-6">
-          <form
-            action={enrollStudentInCourse}
-            className="rounded-[24px] border border-[var(--border)] bg-white p-6 shadow-sm"
-          >
-            <input type="hidden" name="courseId" value={course.id} />
+      <section className="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
+        <article className="rounded-[24px] border border-[var(--border)] bg-white p-6 shadow-sm">
+          <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
+            Зачисления
+          </p>
+          <h2 className="mt-2 text-2xl font-semibold tracking-tight text-[var(--foreground)]">
+            Доступы и прогресс студентов
+          </h2>
+          <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
+            Здесь видно, кто уже учится на курсе, сколько уроков завершено и кому можно сбросить прогресс или снять доступ.
+          </p>
 
-            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
-              Доступ к курсу
-            </p>
-            <h2 className="mt-2 text-2xl font-semibold tracking-tight text-[var(--foreground)]">
-              Выдать доступ существующему студенту
-            </h2>
-
-            <div className="mt-5 flex items-center gap-3 rounded-2xl bg-[var(--surface)] p-4">
-              <div className="rounded-2xl bg-white p-3 shadow-sm">
-                <Users className="h-5 w-5 text-[var(--primary)]" />
-              </div>
-              <p className="text-sm leading-6 text-[var(--muted)]">
-                Используй этот блок, если студент уже есть в базе, и ему нужно
-                просто открыть доступ к курсу.
+          <div className="mt-6 grid gap-3 sm:grid-cols-2">
+            <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4">
+              <Users className="h-5 w-5 text-[var(--primary)]" />
+              <p className="mt-3 text-sm font-semibold text-[var(--foreground)]">
+                Студентов на курсе
+              </p>
+              <p className="mt-1 text-2xl font-semibold text-[var(--foreground)]">
+                {course.enrollments.length}
               </p>
             </div>
 
-            <div className="mt-5 space-y-2">
-              <Label htmlFor="enroll-user">Студент</Label>
-              <Select
-                id="enroll-user"
-                name="userId"
-                defaultValue=""
-                required
-                disabled={availableStudents.length === 0}
-              >
-                <option value="" disabled>
-                  {availableStudents.length === 0
-                    ? "Все студенты уже зачислены"
-                    : "Выбери студента"}
-                </option>
-                {availableStudents.map((student) => (
-                  <option key={student.id} value={student.id}>
-                    {student.name
-                      ? `${student.name} · ${student.email}`
-                      : student.email}
-                  </option>
-                ))}
-              </Select>
+            <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4">
+              <UserPlus className="h-5 w-5 text-[var(--primary)]" />
+              <p className="mt-3 text-sm font-semibold text-[var(--foreground)]">
+                Уроков в программе
+              </p>
+              <p className="mt-1 text-2xl font-semibold text-[var(--foreground)]">
+                {lessonCount}
+              </p>
             </div>
+          </div>
+        </article>
 
-            <div className="mt-6">
-              <Button type="submit" disabled={availableStudents.length === 0}>
-                Выдать доступ
-              </Button>
-            </div>
-          </form>
-
+        <div className="space-y-6">
           <form
             action={createStudent}
             className="rounded-[24px] border border-[var(--border)] bg-white p-6 shadow-sm"
           >
             <input type="hidden" name="courseId" value={course.id} />
 
-            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
-              Быстрое создание
-            </p>
-            <h2 className="mt-2 text-2xl font-semibold tracking-tight text-[var(--foreground)]">
-              Создать нового студента и сразу выдать доступ
-            </h2>
-
-            <div className="mt-5 flex items-center gap-3 rounded-2xl bg-[var(--surface)] p-4">
-              <div className="rounded-2xl bg-white p-3 shadow-sm">
-                <UserPlus className="h-5 w-5 text-[var(--primary)]" />
-              </div>
-              <p className="text-sm leading-6 text-[var(--muted)]">
-                Этот сценарий удобен, когда нужно быстро зарегистрировать нового
-                ученика и сразу открыть ему курс.
-              </p>
-            </div>
-
-            <div className="mt-5 grid gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="inline-student-name">Имя</Label>
-                <Input
-                  id="inline-student-name"
-                  name="name"
-                  placeholder="Анна Иванова"
-                  required
-                />
-                <p className="text-sm leading-6 text-[var(--muted)]">
-                  Имя, которое будет видно в списках и прогрессе курса.
+            <div className="grid gap-4">
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
+                  Новый студент
                 </p>
+                <h2 className="mt-2 text-2xl font-semibold tracking-tight text-[var(--foreground)]">
+                  Создать студента и сразу зачислить
+                </h2>
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <Label htmlFor="student-name">Имя</Label>
+                  <Input id="student-name" name="name" placeholder="Анна Смирнова" />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="student-email">Почта</Label>
+                  <Input
+                    id="student-email"
+                    name="email"
+                    type="email"
+                    placeholder="anna@example.com"
+                    required
+                  />
+                </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="inline-student-email">Почта</Label>
+                <Label htmlFor="student-password">Пароль</Label>
                 <Input
-                  id="inline-student-email"
-                  name="email"
-                  type="email"
-                  placeholder="student@example.com"
-                  required
-                />
-                <p className="text-sm leading-6 text-[var(--muted)]">
-                  Эту почту студент будет использовать для входа в платформу.
-                </p>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="inline-student-password">Пароль</Label>
-                <Input
-                  id="inline-student-password"
+                  id="student-password"
                   name="password"
                   type="password"
                   placeholder="Минимум 5 символов"
                   required
                 />
-                <p className="text-sm leading-6 text-[var(--muted)]">
-                  Временный пароль, который потом можно будет заменить.
-                </p>
               </div>
-            </div>
 
-            <div className="mt-6">
-              <Button type="submit">Создать студента</Button>
+              <Button type="submit">Создать и зачислить</Button>
+            </div>
+          </form>
+
+          <form
+            action={enrollStudentInCourse}
+            className="rounded-[24px] border border-[var(--border)] bg-white p-6 shadow-sm"
+          >
+            <input type="hidden" name="courseId" value={course.id} />
+
+            <div className="grid gap-4">
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
+                  Зачисление
+                </p>
+                <h2 className="mt-2 text-2xl font-semibold tracking-tight text-[var(--foreground)]">
+                  Добавить существующего студента
+                </h2>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="student-id">Студент</Label>
+                <Select id="student-id" name="studentId" required defaultValue="">
+                  <option value="" disabled>
+                    Выбери студента
+                  </option>
+                  {availableStudents.map((student) => (
+                    <option key={student.id} value={student.id}>
+                      {student.name || student.email} ({student.email})
+                    </option>
+                  ))}
+                </Select>
+              </div>
+
+              <Button type="submit" variant="outline">
+                Зачислить на курс
+              </Button>
             </div>
           </form>
         </div>
+      </section>
 
-        <article className="rounded-[24px] border border-[var(--border)] bg-white p-6 shadow-sm">
-          <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
-                Студенты курса
-              </p>
-              <h2 className="mt-2 text-2xl font-semibold tracking-tight text-[var(--foreground)]">
-                Доступы и прогресс
-              </h2>
-            </div>
-
-            <div className="rounded-full bg-[var(--surface)] px-3 py-2 text-sm text-[var(--muted)]">
-              Всего уроков: {lessonCount}
-            </div>
+      <section className="rounded-[24px] border border-[var(--border)] bg-white p-6 shadow-sm">
+        <div className="flex flex-col gap-3 border-b border-[var(--border)] pb-5 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
+              Список студентов
+            </p>
+            <h2 className="mt-2 text-2xl font-semibold tracking-tight text-[var(--foreground)]">
+              Кто уже учится на этом курсе
+            </h2>
           </div>
+        </div>
 
-          <div className="mt-6 space-y-4">
-            {course.enrollments.length === 0 ? (
-              <div className="rounded-2xl border border-dashed border-[var(--border)] bg-[var(--surface)] p-5 text-sm leading-7 text-[var(--muted)]">
-                Пока никто не зачислен на этот курс.
-              </div>
-            ) : (
-              course.enrollments.map((enrollment) => {
-                const completedLessons = enrollment.user.progress.length;
-                const progressLabel =
-                  lessonCount > 0
-                    ? `${completedLessons} / ${lessonCount}`
-                    : "0 / 0";
+        <div className="mt-5 space-y-4">
+          {course.enrollments.length === 0 ? (
+            <div className="rounded-[20px] border border-dashed border-[var(--border)] bg-[var(--surface)] px-5 py-6 text-sm leading-7 text-[var(--muted)]">
+              Пока на этот курс никто не зачислен.
+            </div>
+          ) : (
+            course.enrollments.map((enrollment) => {
+              const completedLessons = enrollment.user.progress.length;
+              const studentName = enrollment.user.name || enrollment.user.email;
 
-                return (
-                  <div
-                    key={enrollment.id}
-                    className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5"
-                  >
-                    <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-                      <div>
-                        <p className="text-lg font-semibold text-[var(--foreground)]">
-                          {enrollment.user.name || enrollment.user.email}
-                        </p>
-                        <p className="mt-1 text-sm text-[var(--muted)]">
-                          {enrollment.user.email}
-                        </p>
-                      </div>
-
+              return (
+                <article
+                  key={enrollment.id}
+                  className="rounded-[22px] border border-[var(--border)] bg-[var(--surface)] p-5"
+                >
+                  <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                    <div className="space-y-3">
                       <div className="flex flex-wrap items-center gap-2">
-                        <Badge
-                          variant={enrollmentStatusVariantMap[enrollment.status]}
-                        >
+                        <p className="text-lg font-semibold text-[var(--foreground)]">
+                          {studentName}
+                        </p>
+                        <Badge variant={enrollmentStatusVariantMap[enrollment.status]}>
                           {enrollmentStatusLabelMap[enrollment.status]}
                         </Badge>
-                        <Badge
-                          variant={
-                            completedLessons === lessonCount && lessonCount > 0
-                              ? "success"
-                              : "default"
-                          }
-                        >
-                          Прогресс {progressLabel}
-                        </Badge>
                       </div>
+
+                      <p className="text-sm text-[var(--muted)]">{enrollment.user.email}</p>
+                      <p className="text-sm leading-7 text-[var(--muted)]">
+                        Завершено уроков: {completedLessons} из {lessonCount}
+                      </p>
                     </div>
 
-                    <div className="mt-4 flex flex-wrap gap-3">
+                    <div className="flex flex-wrap gap-3">
                       <form action={resetCourseProgress}>
-                        <input type="hidden" name="userId" value={enrollment.userId} />
                         <input type="hidden" name="courseId" value={course.id} />
+                        <input type="hidden" name="studentId" value={enrollment.user.id} />
                         <Button type="submit" variant="outline">
                           Сбросить прогресс
                         </Button>
                       </form>
 
                       <form action={removeEnrollment}>
-                        <input type="hidden" name="userId" value={enrollment.userId} />
-                        <input type="hidden" name="courseId" value={course.id} />
-                        <Button
-                          type="submit"
-                          variant="outline"
-                          className="border-red-300 text-red-600 hover:bg-red-50"
-                        >
-                          Отозвать доступ
+                        <input type="hidden" name="enrollmentId" value={enrollment.id} />
+                        <Button type="submit" variant="outline">
+                          Снять доступ
                         </Button>
                       </form>
                     </div>
                   </div>
-                );
-              })
-            )}
-          </div>
-        </article>
+                </article>
+              );
+            })
+          )}
+        </div>
       </section>
     </section>
   );

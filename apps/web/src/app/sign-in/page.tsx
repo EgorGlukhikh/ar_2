@@ -15,8 +15,8 @@ import {
 
 const accessPoints = [
   "Один вход для ученика, автора курса и команды платформы.",
-  "После авторизации система сама переводит в нужный кабинет.",
-  "Тестовые аккаунты уже готовы, чтобы быстро показать продукт.",
+  "После авторизации система сама открывает нужный кабинет.",
+  "Вход выглядит как часть продукта, а не как служебный экран.",
 ];
 
 type SignInPageProps = {
@@ -54,7 +54,7 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
                     Вход в академию
                   </p>
                   <p className="max-w-sm text-sm leading-6 text-[#5f6982]">
-                    Один экран входа для команды, авторов и студентов.
+                    Личный вход для обучения, работы с курсами и управления программами.
                   </p>
                 </div>
               </div>
@@ -71,15 +71,15 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
               <div className="space-y-6 sm:space-y-8">
                 <SectionLead
                   eyebrow="Авторизация"
-                  title="Войти в платформу и сразу попасть в свой рабочий контур."
-                  text="Страница входа выглядит так же аккуратно, как публичная витрина. На телефоне блоки собраны плотнее и не растягивают экран вниз."
+                  title="Войти в платформу и продолжить обучение или работу с курсами."
+                  text="На телефоне и на десктопе экран входа остается коротким, понятным и без служебных подсказок, которые мешают обычному пользователю."
                 />
 
                 <div className="grid gap-3 sm:grid-cols-3 sm:gap-4">
                   {[
-                    { icon: Mail, label: "Формат", value: "Почта и пароль" },
-                    { icon: ShieldCheck, label: "Роли", value: "Автор, админ, студент" },
-                    { icon: KeyRound, label: "Переход", value: "Редирект по роли" },
+                    { icon: Mail, label: "Вход", value: "Почта и пароль" },
+                    { icon: ShieldCheck, label: "Безопасность", value: "Личный доступ" },
+                    { icon: KeyRound, label: "Дальше", value: "Переход в свой кабинет" },
                   ].map((item) => {
                     const Icon = item.icon;
 
@@ -130,32 +130,8 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
                       Войти по почте
                     </h2>
                     <p className="text-sm leading-7 text-[#5f6982]">
-                      Для демонстрации можно использовать готовый админский аккаунт или автора Юру. После входа система сама откроет нужный кабинет.
+                      Используй свою почту и пароль, чтобы продолжить обучение, открыть кабинет автора или перейти к управлению курсами.
                     </p>
-                  </div>
-
-                  <div className="mt-5 grid gap-3 sm:mt-6 md:grid-cols-2 md:gap-4">
-                    <div className="rounded-[22px] border border-[#e5dacc] bg-white p-4 shadow-[0_12px_28px_rgba(24,32,54,0.05)] sm:rounded-[24px] sm:p-5">
-                      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#7a6548] sm:text-xs sm:tracking-[0.24em]">
-                        Администратор
-                      </p>
-                      <p className="mt-3 text-sm leading-7 text-[#182036]">
-                        Почта: <span className="font-semibold">test@mail.ru</span>
-                        <br />
-                        Пароль: <span className="font-semibold">12345</span>
-                      </p>
-                    </div>
-
-                    <div className="rounded-[22px] border border-[#dbe3fb] bg-white p-4 shadow-[0_12px_28px_rgba(24,32,54,0.05)] sm:rounded-[24px] sm:p-5">
-                      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#7a6548] sm:text-xs sm:tracking-[0.24em]">
-                        Автор
-                      </p>
-                      <p className="mt-3 text-sm leading-7 text-[#182036]">
-                        Почта: <span className="font-semibold">hp@mail.ru</span>
-                        <br />
-                        Пароль: <span className="font-semibold">123456789</span>
-                      </p>
-                    </div>
                   </div>
 
                   <div className="mt-5 rounded-[22px] border border-white/80 bg-white p-4 shadow-[0_14px_32px_rgba(24,32,54,0.06)] sm:mt-6 sm:rounded-[24px] sm:p-5">

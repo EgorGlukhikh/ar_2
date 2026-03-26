@@ -1,9 +1,5 @@
 import { CheckCircle2, CreditCard, ShieldCheck, XCircle } from "lucide-react";
-import {
-  OrderStatus,
-  PaymentProviderType,
-  prisma,
-} from "@academy/db";
+import { OrderStatus, PaymentProviderType, prisma } from "@academy/db";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -75,7 +71,7 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
         <WorkspacePageHeader
           eyebrow="Оформление доступа"
           title="Подтверждение покупки курса"
-          description="Это действующий демонстрационный шаг оплаты. Он показывает будущую логику реальной оплаты: создается заказ, меняется статус платежа и после подтверждения студент получает доступ к курсу."
+          description="Проверь состав заказа, сумму и статус оплаты. После подтверждения доступ к курсу откроется автоматически."
           meta={
             <div className="flex flex-wrap gap-2">
               <Badge variant={orderStatusVariantMap[order.status]}>
@@ -104,7 +100,7 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
           <WorkspacePanel
             eyebrow="Состав заказа"
             title={course?.title ?? orderItem?.product.name ?? "Курс"}
-            description="Карточка ниже показывает, как пользователь будет видеть продукт перед оплатой."
+            description="Ниже показаны данные покупки: продукт, сумма и платежный контур."
           >
             <div className="grid gap-5 lg:grid-cols-[300px_minmax(0,1fr)]">
               <CourseThumb
@@ -128,7 +124,7 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
                       </span>
                     </div>
                     <div className="flex items-center justify-between gap-4">
-                      <span>Провайдер</span>
+                      <span>Платежный контур</span>
                       <span className="font-medium text-[var(--foreground)]">
                         {paymentProviderLabelMap[order.paymentProvider]}
                       </span>
@@ -151,16 +147,16 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
                       После оплаты
                     </p>
                     <p className="mt-1 text-xs leading-5 text-[var(--muted)]">
-                      Доступ к курсу выдается автоматически.
+                      Доступ к курсу выдается автоматически и курс появляется в учебном кабинете.
                     </p>
                   </div>
                   <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-4 py-4">
                     <CreditCard className="h-4 w-4 text-[var(--primary)]" />
                     <p className="mt-3 text-sm font-medium text-[var(--foreground)]">
-                      Сейчас это демо
+                      Оплата онлайн
                     </p>
                     <p className="mt-1 text-xs leading-5 text-[var(--muted)]">
-                      Позже здесь будут реальные платежные ссылки.
+                      Страница оформляет заказ и показывает его актуальный статус до открытия доступа.
                     </p>
                   </div>
                 </div>
@@ -171,7 +167,7 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
           <WorkspacePanel
             eyebrow="Статус оплаты"
             title="Что происходит с заказом"
-            description="На этой панели можно пройти сценарий успешной оплаты или показать отказ, не ломая доменную модель заказов."
+            description="Здесь можно завершить оплату или закрыть заказ, если пользователь решил не продолжать покупку."
           >
             <div className="space-y-5">
               {isPaid ? (
@@ -185,8 +181,7 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
                         Доступ выдан успешно
                       </p>
                       <p className="mt-3 text-sm leading-7 text-emerald-900">
-                        Платеж подтвержден, заказ переведен в оплаченный, студент
-                        уже зачислен на курс.
+                        Платеж подтвержден, заказ переведен в оплаченный, студент уже зачислен на курс.
                       </p>
                     </div>
                   </div>
@@ -210,12 +205,10 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
                     </div>
                     <div>
                       <p className="text-lg font-semibold text-amber-950">
-                        Оплата завершилась отказом
+                        Заказ закрыт
                       </p>
                       <p className="mt-3 text-sm leading-7 text-amber-900">
-                        Заказ закрыт как неуспешный. Можно вернуться в каталог и
-                        создать новый демонстрационный заказ для повторной
-                        проверки сценария.
+                        Оплата не была завершена. Можно вернуться в каталог и оформить новый заказ, если пользователь решит продолжить покупку.
                       </p>
                     </div>
                   </div>
@@ -224,7 +217,7 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
                     {course?.id ? (
                       <form action={startDemoCheckout}>
                         <input type="hidden" name="courseId" value={course.id} />
-                        <Button type="submit">Создать новый заказ</Button>
+                        <Button type="submit">Оформить новый заказ</Button>
                       </form>
                     ) : null}
                     <Button asChild variant="outline">
@@ -245,11 +238,10 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
                       </div>
                       <div className="mt-8">
                         <p className="text-lg font-semibold text-[var(--foreground)]">
-                          Подтвердить оплату
+                          Оплатить курс
                         </p>
                         <p className="mt-2 text-sm leading-7 text-[var(--muted)]">
-                          Сценарий оплаты завершится успехом, и доступ к курсу
-                          откроется автоматически.
+                          После подтверждения доступ откроется автоматически, а курс появится в учебном кабинете.
                         </p>
                       </div>
                     </button>
@@ -266,23 +258,16 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
                       </div>
                       <div className="mt-8">
                         <p className="text-lg font-semibold text-[var(--foreground)]">
-                          Сымитировать отказ
+                          Отменить заказ
                         </p>
                         <p className="mt-2 text-sm leading-7 text-[var(--muted)]">
-                          Заказ будет закрыт без выдачи доступа, чтобы можно было
-                          показать альтернативный сценарий.
+                          Заказ будет закрыт без выдачи доступа, и пользователь сможет вернуться к покупке позже.
                         </p>
                       </div>
                     </button>
                   </form>
                 </div>
               )}
-
-              <div className="rounded-[24px] border border-[var(--border)] bg-[var(--surface)] p-5 text-sm leading-7 text-[var(--muted)]">
-                Следующий этап развития этого экрана — подключение реального
-                платежного провайдера с callback-статусами и боевой ссылкой на оплату
-                вместо тестовых кнопок.
-              </div>
             </div>
           </WorkspacePanel>
         </div>
