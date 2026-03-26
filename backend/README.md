@@ -5,6 +5,7 @@ Purpose: business orchestration, validation-ready service layer and API-facing l
 Current production slice:
 - `src/public-home/get-public-home-payload.ts`
 - `src/public-catalog/get-public-catalog-payload.ts`
+- `src/public-checkout/get-public-checkout-payload.ts`
 
 Rules:
 - backend depends on database and shared layers

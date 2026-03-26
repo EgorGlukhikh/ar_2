@@ -26,19 +26,28 @@
 - hero/product-preview
 - секция курсов с пагинацией по карточкам
 - каталог курсов `/catalog`
+- экран входа `/sign-in`
+- checkout `/checkout/[orderId]`
 - публичные endpoints `GET /api/public/home`, `GET /api/courses`, `GET /api/user`
+- checkout endpoint `GET /api/orders/[orderId]`
 
 Файлы нового среза:
 - `frontend/src/landing/components/landing-experience.tsx`
 - `frontend/src/landing/components/landing-course-carousel.tsx`
 - `frontend/src/catalog/components/catalog-page-content.tsx`
+- `frontend/src/auth/components/sign-in-page-content.tsx`
+- `frontend/src/checkout/components/checkout-page-content.tsx`
 - `backend/src/public-home/get-public-home-payload.ts`
 - `backend/src/public-catalog/get-public-catalog-payload.ts`
+- `backend/src/public-checkout/get-public-checkout-payload.ts`
 - `database/src/public-home/public-home.repository.ts`
 - `database/src/public-catalog/public-catalog.repository.ts`
+- `database/src/public-checkout/public-checkout.repository.ts`
 - `shared/src/public-home/types.ts`
 - `shared/src/public-home/copy.ts`
 - `shared/src/public-catalog/types.ts`
+- `shared/src/public-auth/copy.ts`
+- `shared/src/public-checkout/types.ts`
 
 ## UI-система
 

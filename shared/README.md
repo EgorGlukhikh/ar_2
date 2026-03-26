@@ -6,6 +6,8 @@ Current production slice:
 - `src/public-home/types.ts`
 - `src/public-home/copy.ts`
 - `src/public-catalog/types.ts`
+- `src/public-auth/copy.ts`
+- `src/public-checkout/types.ts`
 
 Rules:
 - no database calls
