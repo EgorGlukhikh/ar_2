@@ -10,11 +10,15 @@ import {
   BookOpenText,
   CalendarClock,
   PlayCircle,
+  ShieldCheck,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-import { PublicButton, SectionLead } from "@/components/marketing/public-primitives";
+import {
+  PublicButton,
+  SectionLead,
+} from "@/components/marketing/public-primitives";
 import { startDemoCheckout } from "@/features/billing/actions";
 import {
   getPublicCourseCover,
@@ -26,6 +30,50 @@ import {
   marketingShellClassName,
 } from "@/lib/marketing-theme";
 import { formatMinorUnits } from "@/lib/money";
+
+const showcaseCopyBySlug: Record<
+  string,
+  {
+    title: string;
+    description: string;
+    result: string;
+  }
+> = {
+  "ethics-safety-real-estate": {
+    title:
+      "Этика и безопасность в недвижимости: fair housing, privacy и доверие",
+    description:
+      "Как общаться без дискриминации, защищать данные клиента и безопасно проводить показы.",
+    result: "Снижаешь риски в работе с клиентом и увереннее ведешь показы.",
+  },
+  "buyer-deal-finance-closing": {
+    title:
+      "Сделка с покупателем: финансирование, inspection и closing",
+    description:
+      "Ведение покупателя от бюджета и buyer agreement до инспекции, оффера и финального закрытия.",
+    result: "Лучше контролируешь путь покупателя от первого разговора до closing.",
+  },
+  "seller-listing-system": {
+    title:
+      "Листинг продавца: подготовка объекта, показы и multiple offers",
+    description:
+      "Путь продавца от постановки объекта в работу до показов, безопасности собственника и разбора офферов.",
+    result: "Строишь понятный маршрут сделки продавца без хаоса и потерь по ходу.",
+  },
+  "rieltor-client-intake": {
+    title:
+      "Первые 10 дней риэлтора: бриф клиента и маршрут сделки",
+    description:
+      "Как провести первый контакт, собрать рабочий бриф и не потерять клиента между звонком, показами и оффером.",
+    result: "Быстрее входишь в профессию и собираешь рабочую систему на старте.",
+  },
+};
+
+const trustPoints = [
+  "Есть бесплатные и платные программы под разные этапы работы.",
+  "Внутри не только видео: материалы, задания и рабочие шаблоны по теме.",
+  "Курс можно открыть под конкретную задачу сделки, а не ради «общей теории».",
+];
 
 export default async function CatalogPage() {
   const session = await auth();
@@ -96,8 +144,10 @@ export default async function CatalogPage() {
                   <p className="font-[family:var(--font-landing-display)] text-base font-semibold text-[#182036] sm:text-lg">
                     Каталог курсов
                   </p>
-                  <p className="max-w-md text-sm leading-6 text-[#5f6982]">
-                    Выбирай программу под свою задачу: старт в профессии, показы, переговоры, сделки, безопасность и работа с клиентом.
+                  <p className="max-w-xl text-sm leading-6 text-[#5f6982]">
+                    Выбирай программу под задачу сделки: старт в профессии,
+                    работа с продавцом, путь покупателя, переговоры,
+                    безопасность и документы.
                   </p>
                 </div>
               </div>
@@ -114,33 +164,35 @@ export default async function CatalogPage() {
               </div>
             </header>
 
-            <section className="grid gap-5 py-6 sm:gap-6 sm:py-8 xl:grid-cols-[0.9fr_1.1fr]">
+            <section className="grid gap-5 py-6 sm:gap-6 sm:py-8 xl:grid-cols-[0.92fr_1.08fr]">
               <div className="space-y-5 sm:space-y-6">
                 <SectionLead
-                  eyebrow="Каталог"
-                  title="Покупатель должен сразу понять, чему научится и как пройдет обучение."
-                  text="Без внутренней терминологии и перегруза. Видно тему курса, формат, цену, количество уроков и понятный следующий шаг."
+                  eyebrow="Подбор курса"
+                  title="Открыл каталог, увидел свою задачу, понял следующий шаг"
+                  text="Здесь сразу видно, какой формат у программы, сколько внутри уроков, есть ли бесплатный вход и чему она поможет в реальной работе."
                 />
 
-                <div className="grid gap-3 sm:grid-cols-3">
+                <div className="grid gap-3 sm:grid-cols-3 xl:grid-cols-1">
                   <article className="rounded-[24px] border border-white/85 bg-white p-4 shadow-[0_16px_36px_rgba(24,32,54,0.07)] sm:rounded-[28px] sm:p-5">
                     <PlayCircle className="h-5 w-5 text-[#2650d8]" />
                     <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#7a6548] sm:mt-4 sm:text-xs sm:tracking-[0.24em]">
-                      Формат
+                      Форматы
                     </p>
                     <p className="mt-2 text-lg font-semibold text-[#182036] sm:mt-3 sm:text-xl">
-                      Записи и вебинары
+                      Записи и онлайн-потоки
                     </p>
                   </article>
+
                   <article className="rounded-[24px] border border-white/85 bg-white p-4 shadow-[0_16px_36px_rgba(24,32,54,0.07)] sm:rounded-[28px] sm:p-5">
                     <BookOpenText className="h-5 w-5 text-[#2650d8]" />
                     <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#7a6548] sm:mt-4 sm:text-xs sm:tracking-[0.24em]">
                       Внутри
                     </p>
                     <p className="mt-2 text-lg font-semibold text-[#182036] sm:mt-3 sm:text-xl">
-                      Уроки, записи, материалы
+                      Уроки, материалы, задания
                     </p>
                   </article>
+
                   <article className="rounded-[24px] border border-white/85 bg-white p-4 shadow-[0_16px_36px_rgba(24,32,54,0.07)] sm:rounded-[28px] sm:p-5">
                     <CalendarClock className="h-5 w-5 text-[#2650d8]" />
                     <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#7a6548] sm:mt-4 sm:text-xs sm:tracking-[0.24em]">
@@ -152,12 +204,31 @@ export default async function CatalogPage() {
                   </article>
                 </div>
 
+                <div className="grid gap-3">
+                  {trustPoints.map((item) => (
+                    <article
+                      key={item}
+                      className="rounded-[22px] border border-white/85 bg-[linear-gradient(180deg,_rgba(255,255,255,0.97)_0%,_rgba(249,250,253,0.94)_100%)] p-4 shadow-[0_16px_36px_rgba(24,32,54,0.06)]"
+                    >
+                      <div className="flex items-start gap-3">
+                        <div className="rounded-full bg-[var(--primary-soft)] p-2">
+                          <ShieldCheck className="h-4 w-4 text-[var(--primary)]" />
+                        </div>
+                        <p className="text-sm leading-6 text-[#182036]">{item}</p>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+
                 {featuredCourse ? (
                   <article className="overflow-hidden rounded-[26px] border border-white/85 bg-white shadow-[0_20px_50px_rgba(24,32,54,0.08)] sm:rounded-[32px]">
                     <div className="relative h-48 sm:h-60">
                       <Image
                         src={getPublicCourseCover(0)}
-                        alt={featuredCourse.title}
+                        alt={
+                          showcaseCopyBySlug[featuredCourse.slug]?.title ??
+                          featuredCourse.title
+                        }
                         fill
                         className="object-cover"
                       />
@@ -166,14 +237,16 @@ export default async function CatalogPage() {
 
                     <div className="space-y-3 p-5 sm:space-y-4 sm:p-6">
                       <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#7a6548] sm:text-xs sm:tracking-[0.24em]">
-                        Сейчас в фокусе
+                        Сейчас часто выбирают
                       </p>
                       <h2 className="font-[family:var(--font-landing-display)] text-[2rem] font-semibold leading-[0.96] tracking-tight text-[#182036] sm:text-4xl">
-                        {featuredCourse.title}
+                        {showcaseCopyBySlug[featuredCourse.slug]?.title ??
+                          featuredCourse.title}
                       </h2>
                       <p className="text-sm leading-7 text-[#5f6982]">
-                        {featuredCourse.description ||
-                          "Описание курса можно дополнить короткой и понятной подводкой о результате для ученика."}
+                        {showcaseCopyBySlug[featuredCourse.slug]?.description ??
+                          featuredCourse.description ??
+                          "Короткая программа с понятным результатом для работы риэлтора."}
                       </p>
                     </div>
                   </article>
@@ -187,17 +260,22 @@ export default async function CatalogPage() {
                       Пока нет опубликованных курсов
                     </h2>
                     <p className="mt-4 max-w-2xl text-sm leading-7 text-[#5f6982]">
-                      Как только программа будет опубликована, она появится здесь как часть публичного каталога.
+                      Как только программа будет опубликована, она появится
+                      здесь как часть публичного каталога.
                     </p>
                     <div className="mt-6">
-                      <PublicButton href="/sign-in">Открыть платформу</PublicButton>
+                      <PublicButton href="/sign-in">
+                        Открыть платформу
+                      </PublicButton>
                     </div>
                   </article>
                 ) : (
                   courses.map((course, index) => {
                     const defaultProduct = course.products[0];
                     const defaultPrice = defaultProduct?.prices[0];
-                    const isFreeCourse = Boolean(defaultPrice && defaultPrice.amount === 0);
+                    const isFreeCourse = Boolean(
+                      defaultPrice && defaultPrice.amount === 0,
+                    );
                     const lessonCount = course.modules.reduce(
                       (sum, module) => sum + module.lessons.length,
                       0,
@@ -209,6 +287,7 @@ export default async function CatalogPage() {
                       course.deliveryFormat === CourseDeliveryFormat.LIVE_COHORT
                         ? "Онлайн-поток"
                         : "Курс в записи";
+                    const showcaseCopy = showcaseCopyBySlug[course.slug];
 
                     return (
                       <article
@@ -218,7 +297,7 @@ export default async function CatalogPage() {
                         <div className="relative h-44 sm:h-48">
                           <Image
                             src={getPublicCourseCover(index + 1)}
-                            alt={course.title}
+                            alt={showcaseCopy?.title ?? course.title}
                             fill
                             className="object-cover"
                           />
@@ -236,11 +315,22 @@ export default async function CatalogPage() {
                         <div className="space-y-4 p-5 sm:space-y-5 sm:p-6">
                           <div>
                             <h2 className="text-xl font-semibold leading-[1.05] tracking-tight text-[#182036] sm:text-2xl">
-                              {course.title}
+                              {showcaseCopy?.title ?? course.title}
                             </h2>
                             <p className="mt-3 text-sm leading-7 text-[#5f6982]">
-                              {course.description ||
-                                "Описание курса можно дополнить короткой подводкой о результате для ученика."}
+                              {showcaseCopy?.description ??
+                                course.description ??
+                                "Короткая программа с понятным результатом для работы риэлтора."}
+                            </p>
+                          </div>
+
+                          <div className="rounded-[22px] bg-[linear-gradient(180deg,_#f6efe7_0%,_#eef2ff_100%)] p-4 sm:rounded-[26px] sm:p-5">
+                            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#7a6548] sm:text-xs sm:tracking-[0.24em]">
+                              Что получишь
+                            </p>
+                            <p className="mt-2 text-sm font-medium leading-6 text-[#182036] sm:mt-3 sm:text-base sm:leading-7">
+                              {showcaseCopy?.result ??
+                                "Понятный следующий шаг в работе по этой теме."}
                             </p>
                           </div>
 
@@ -252,7 +342,10 @@ export default async function CatalogPage() {
                               {defaultPrice
                                 ? isFreeCourse
                                   ? "Бесплатно"
-                                  : formatMinorUnits(defaultPrice.amount, defaultPrice.currency)
+                                  : formatMinorUnits(
+                                      defaultPrice.amount,
+                                      defaultPrice.currency,
+                                    )
                                 : "Цена скоро"}
                             </p>
                           </div>
@@ -264,12 +357,18 @@ export default async function CatalogPage() {
                               </PublicButton>
                             ) : defaultProduct && defaultPrice ? (
                               <form action={startDemoCheckout} className="contents">
-                                <input type="hidden" name="courseId" value={course.id} />
+                                <input
+                                  type="hidden"
+                                  name="courseId"
+                                  value={course.id}
+                                />
                                 <button
                                   type="submit"
                                   className="inline-flex min-h-11 items-center justify-center rounded-full bg-[linear-gradient(135deg,_#2650d8_0%,_#4f6ff0_55%,_#7893ff_100%)] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_18px_40px_rgba(38,80,216,0.24)] transition hover:-translate-y-[1px] hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2650d8] focus-visible:ring-offset-2 sm:min-h-12 sm:px-6 sm:py-3 [&_svg]:text-current"
                                 >
-                                  {isFreeCourse ? "Получить доступ" : "Оформить доступ"}
+                                  {isFreeCourse
+                                    ? "Получить доступ"
+                                    : "Оформить доступ"}
                                 </button>
                               </form>
                             ) : (
