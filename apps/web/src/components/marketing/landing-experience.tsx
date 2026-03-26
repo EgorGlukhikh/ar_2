@@ -27,6 +27,7 @@ import {
   publicIconBoxClassName,
   publicSoftCardClassName,
 } from "@/components/marketing/public-primitives";
+import { MotionReveal } from "@/components/marketing/motion-reveal";
 import { getPublicCourseCover } from "@/lib/marketing-theme";
 import { formatPublicCopy } from "@/lib/public-copy";
 import { cn } from "@/lib/utils";
@@ -289,7 +290,8 @@ export function LandingExperience({
 
   return (
     <div className="space-y-16 md:space-y-20 lg:space-y-24">
-      <header className="rounded-[24px] border border-[var(--border)] bg-[rgba(255,255,255,0.9)] px-5 py-5 shadow-[var(--shadow-sm)] backdrop-blur md:px-6 md:py-5">
+      <MotionReveal variant="soft" immediate>
+        <header className="rounded-[24px] border border-[var(--border)] bg-[rgba(255,255,255,0.9)] px-5 py-5 shadow-[var(--shadow-sm)] backdrop-blur md:px-6 md:py-5">
         <div className="flex min-h-20 flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex items-center gap-4">
             <div className="flex h-12 w-12 items-center justify-center rounded-[16px] bg-[var(--foreground)] text-sm font-semibold text-white">
@@ -331,10 +333,11 @@ export function LandingExperience({
             </div>
           </div>
         </div>
-      </header>
+        </header>
+      </MotionReveal>
 
       <section className="grid gap-8 xl:grid-cols-2 xl:items-center">
-        <div className="space-y-8">
+        <MotionReveal variant="left" immediate delay={80} className="space-y-8">
           <div className={publicBadgeClassName}>
             <ShieldCheck className="h-4 w-4 text-[var(--primary)]" />
             <Copy value={activeCopy.eyebrow} />
@@ -402,9 +405,14 @@ export function LandingExperience({
             <MetricChip label="Форматы" value="Записи и онлайн-потоки" />
             <MetricChip label="Внутри" value="Уроки, материалы и задания" />
           </div>
-        </div>
+        </MotionReveal>
 
-        <div className="grid gap-4 lg:grid-cols-[1.08fr_0.92fr]">
+        <MotionReveal
+          variant="right"
+          immediate
+          delay={140}
+          className="grid gap-4 lg:grid-cols-[1.08fr_0.92fr]"
+        >
           <article id="authors" className={publicGradientCardClassName}>
             <p className="text-[12px] font-medium uppercase leading-4 tracking-[0.18em] text-white/68">
               <Copy value={activeCopy.heroCardEyebrow} />
@@ -456,20 +464,22 @@ export function LandingExperience({
               </p>
             </article>
           </div>
-        </div>
+        </MotionReveal>
       </section>
 
       <section className="rounded-[24px] border border-[var(--border)] bg-[var(--surface)] p-6 shadow-[var(--shadow-sm)] md:p-8">
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          {trustPoints.map((item) => (
-            <article key={item} className="flex items-start gap-3 rounded-[16px] bg-[var(--surface-strong)] p-4">
-              <div className={cn(publicIconBoxClassName, "h-10 w-10 rounded-[12px]")}>
-                <ShieldCheck className="h-4 w-4" />
-              </div>
-              <p className="text-sm leading-6 text-[var(--foreground)]">
-                <Copy value={item} />
-              </p>
-            </article>
+          {trustPoints.map((item, index) => (
+            <MotionReveal key={item} variant="up" delay={index * 70} className="h-full">
+              <article className="flex h-full items-start gap-3 rounded-[16px] bg-[var(--surface-strong)] p-4">
+                <div className={cn(publicIconBoxClassName, "h-10 w-10 rounded-[12px]")}>
+                  <ShieldCheck className="h-4 w-4" />
+                </div>
+                <p className="text-sm leading-6 text-[var(--foreground)]">
+                  <Copy value={item} />
+                </p>
+              </article>
+            </MotionReveal>
           ))}
         </div>
       </section>
@@ -484,24 +494,26 @@ export function LandingExperience({
         />
 
         <div className="grid gap-6 md:grid-cols-2 xl:col-span-3 xl:grid-cols-3">
-          {audienceCards.map((card) => {
+          {audienceCards.map((card, index) => {
             const Icon = card.icon;
 
             return (
-              <article key={card.title} className={publicCardClassName}>
-                <div className={publicIconBoxClassName}>
-                  <Icon className="h-5 w-5" />
-                </div>
-                <p className="mt-4 text-[12px] font-medium uppercase leading-4 tracking-[0.18em] text-[var(--muted)]">
-                  <Copy value={card.eyebrow} />
-                </p>
-                <h3 className="mt-3 text-2xl font-semibold leading-8 tracking-[-0.02em] text-[var(--foreground)]">
-                  <Copy value={card.title} />
-                </h3>
-                <p className="mt-3 text-base leading-7 text-[var(--muted)]">
-                  <Copy value={card.text} />
-                </p>
-              </article>
+              <MotionReveal key={card.title} variant="up" delay={index * 90} className="h-full">
+                <article className={cn(publicCardClassName, "h-full")}>
+                  <div className={publicIconBoxClassName}>
+                    <Icon className="h-5 w-5" />
+                  </div>
+                  <p className="mt-4 text-[12px] font-medium uppercase leading-4 tracking-[0.18em] text-[var(--muted)]">
+                    <Copy value={card.eyebrow} />
+                  </p>
+                  <h3 className="mt-3 text-2xl font-semibold leading-8 tracking-[-0.02em] text-[var(--foreground)]">
+                    <Copy value={card.title} />
+                  </h3>
+                  <p className="mt-3 text-base leading-7 text-[var(--muted)]">
+                    <Copy value={card.text} />
+                  </p>
+                </article>
+              </MotionReveal>
             );
           })}
         </div>
@@ -517,21 +529,23 @@ export function LandingExperience({
           />
 
           <div className="grid gap-6 md:grid-cols-2 xl:col-span-3 xl:grid-cols-3">
-            {activeCopy.steps.map((step) => {
+            {activeCopy.steps.map((step, index) => {
               const Icon = step.icon;
 
               return (
-                <article key={step.title} className={publicCardClassName}>
-                  <div className={publicIconBoxClassName}>
-                    <Icon className="h-5 w-5" />
-                  </div>
-                  <h3 className="mt-4 text-xl font-semibold leading-7 text-[var(--foreground)]">
-                    <Copy value={step.title} />
-                  </h3>
-                  <p className="mt-3 text-base leading-7 text-[var(--muted)]">
-                    <Copy value={step.text} />
-                  </p>
-                </article>
+                <MotionReveal key={step.title} variant="up" delay={index * 100} className="h-full">
+                  <article className={cn(publicCardClassName, "h-full")}>
+                    <div className={publicIconBoxClassName}>
+                      <Icon className="h-5 w-5" />
+                    </div>
+                    <h3 className="mt-4 text-xl font-semibold leading-7 text-[var(--foreground)]">
+                      <Copy value={step.title} />
+                    </h3>
+                    <p className="mt-3 text-base leading-7 text-[var(--muted)]">
+                      <Copy value={step.text} />
+                    </p>
+                  </article>
+                </MotionReveal>
               );
             })}
           </div>
@@ -552,7 +566,8 @@ export function LandingExperience({
             const copy = showcaseCopyBySlug[course.slug];
 
             return (
-              <article key={course.id} className={publicCardClassName}>
+              <MotionReveal key={course.id} variant="scale" delay={index * 100} className="h-full">
+                <article className={cn(publicCardClassName, "h-full")}>
                 <div className="relative h-52 overflow-hidden rounded-[16px]">
                   <Image
                     src={getPublicCourseCover(index)}
@@ -582,7 +597,8 @@ export function LandingExperience({
                   <Copy value="Смотреть программу" />
                   <ArrowRight className="h-4 w-4" />
                 </Link>
-              </article>
+                </article>
+              </MotionReveal>
             );
           })}
         </div>
@@ -596,11 +612,9 @@ export function LandingExperience({
         />
 
         <div className="grid gap-4">
-          {activeCopy.faq.map((item) => (
-            <details
-              key={item.question}
-              className="group rounded-[20px] border border-[var(--border)] bg-[var(--surface)] p-6 shadow-[var(--shadow-sm)]"
-            >
+          {activeCopy.faq.map((item, index) => (
+            <MotionReveal key={item.question} variant="soft" delay={index * 70}>
+              <details className="group rounded-[20px] border border-[var(--border)] bg-[var(--surface)] p-6 shadow-[var(--shadow-sm)]">
               <summary className="flex cursor-pointer list-none items-start justify-between gap-4 text-left text-xl font-semibold leading-8 text-[var(--foreground)]">
                 <Copy value={item.question} />
                 <CircleHelp className="mt-1 h-5 w-5 flex-none text-[var(--primary)] transition group-open:rotate-12" />
@@ -608,12 +622,14 @@ export function LandingExperience({
               <p className="mt-4 max-w-[760px] text-base leading-7 text-[var(--muted)]">
                 <Copy value={item.answer} />
               </p>
-            </details>
+              </details>
+            </MotionReveal>
           ))}
         </div>
       </section>
 
-      <section className="rounded-[28px] bg-[#1e285d] bg-[image:var(--brand-gradient)] bg-cover bg-center px-6 py-8 text-white shadow-[var(--shadow-brand)] md:px-8 md:py-12">
+      <MotionReveal variant="scale" delay={80}>
+        <section className="rounded-[28px] bg-[#1e285d] bg-[image:var(--brand-gradient)] bg-cover bg-center px-6 py-8 text-white shadow-[var(--shadow-brand)] md:px-8 md:py-12">
         <div className="grid gap-8 xl:grid-cols-[1fr_auto] xl:items-end">
           <SectionLead
             eyebrow="Готовы начать?"
@@ -631,7 +647,8 @@ export function LandingExperience({
             </PublicButton>
           </div>
         </div>
-      </section>
+        </section>
+      </MotionReveal>
     </div>
   );
 }

@@ -49,6 +49,7 @@
 ## Что уже переведено на общий UI kit
 
 - landing gradients use `background-image` tokens, and scenario / process sections use a shared wide 4-column grid
+- landing uses a reusable motion-reveal layer: hero enters on load, and cards / faq / CTA reveal on scroll with staggered motion
 
 - [landing](/C:/AR_codex/apps/web/src/app/page.tsx)
 - [catalog](/C:/AR_codex/apps/web/src/app/catalog/page.tsx)
