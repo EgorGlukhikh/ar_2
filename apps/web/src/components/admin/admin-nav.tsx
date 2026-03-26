@@ -14,6 +14,7 @@ import { usePathname } from "next/navigation";
 
 import { USER_ROLES, type UserRole } from "@academy/shared";
 
+import { systemNavItemClassName } from "@/components/system/system-ui";
 import { cn } from "@/lib/utils";
 import {
   canViewAnalyticsWorkspace,
@@ -86,19 +87,13 @@ export function AdminNav({ effectiveRole }: AdminNavProps) {
     <nav className="flex flex-wrap items-center gap-2 self-start">
       {visibleItems.map((item) => {
         const Icon = item.icon;
-        const isActive =
-          pathname === item.href || pathname.startsWith(`${item.href}/`);
+        const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
 
         return (
           <Link
             key={item.href}
             href={item.href}
-            className={cn(
-              "inline-flex h-12 items-center gap-2 rounded-full border px-5 text-sm font-semibold leading-none transition",
-              isActive
-                ? "border-transparent bg-[linear-gradient(135deg,_#2650d8_0%,_#4f6ff0_58%,_#7893ff_100%)] text-white shadow-[0_16px_32px_rgba(38,80,216,0.24)] [&_svg]:text-white"
-                : "border-[var(--border)] bg-[rgba(255,255,255,0.92)] text-[var(--muted)] shadow-[0_10px_22px_rgba(24,32,54,0.05)] hover:border-[var(--primary)] hover:text-[var(--foreground)]",
-            )}
+            className={cn(systemNavItemClassName(isActive), "px-5 font-semibold leading-none")}
           >
             <Icon className="h-4 w-4 shrink-0" />
             {item.label}

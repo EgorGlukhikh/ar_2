@@ -6,8 +6,8 @@ import { USER_ROLES } from "@academy/shared";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { WorkspaceCourseCard } from "@/components/workspace/workspace-course-card";
 import {
-  CourseThumb,
   WorkspaceEmptyState,
   WorkspacePageHeader,
   WorkspacePanel,
@@ -67,7 +67,7 @@ export default async function CoursesPage() {
             : "Здесь создаются новые курсы и открываются их рабочие разделы: карточка, программа, доступы и продажи."
         }
         meta={
-          <div className="rounded-full bg-[var(--surface)] px-4 py-3 text-sm text-[var(--muted)]">
+          <div className="rounded-full border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-sm text-[var(--muted)]">
             Всего курсов: {courses.length}
           </div>
         }
@@ -99,7 +99,7 @@ export default async function CoursesPage() {
           }
         />
       ) : (
-        <div className="grid gap-5 xl:grid-cols-2">
+        <div className="grid gap-5">
           {courses.map((course) => {
             const lessonCount = course.modules.reduce(
               (sum, module) => sum + module._count.lessons,
@@ -107,113 +107,84 @@ export default async function CoursesPage() {
             );
 
             return (
-              <WorkspacePanel
+              <WorkspaceCourseCard
                 key={course.id}
-                className="overflow-hidden bg-[linear-gradient(180deg,_#ffffff_0%,_#fbfcff_100%)]"
-              >
-                <div className="grid gap-5 lg:grid-cols-[280px_minmax(0,1fr)]">
-                  <CourseThumb title={course.title} subtitle={`/${course.slug}`} compact />
-
-                  <div className="flex min-w-0 flex-col justify-between gap-5">
-                    <div className="space-y-4">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <Badge variant={courseStatusVariantMap[course.status]}>
-                          {courseStatusLabelMap[course.status]}
-                        </Badge>
-                        <Badge variant="neutral">Модулей {course._count.modules}</Badge>
-                        <Badge variant="neutral">Уроков {lessonCount}</Badge>
-                        {isAdminMode ? (
-                          <Badge variant="neutral">
-                            Зачислений {course._count.enrollments}
-                          </Badge>
-                        ) : null}
-                      </div>
-
-                      <div>
-                        <h2 className="text-2xl font-semibold tracking-tight text-[var(--foreground)]">
-                          {course.title}
-                        </h2>
-                        <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
-                          {course.description || "Описание курса пока не заполнено."}
-                        </p>
-                      </div>
-
-                      <div className="grid gap-3 sm:grid-cols-3">
-                        <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-4 py-4">
-                          <LayoutTemplate className="h-4 w-4 text-[var(--primary)]" />
-                          <p className="mt-3 text-sm font-medium text-[var(--foreground)]">
-                            Карточка
-                          </p>
-                          <p className="mt-1 text-xs leading-5 text-[var(--muted)]">
-                            Название, slug и статус.
-                          </p>
-                        </div>
-                        <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-4 py-4">
-                          <BookOpen className="h-4 w-4 text-[var(--primary)]" />
-                          <p className="mt-3 text-sm font-medium text-[var(--foreground)]">
-                            Программа
-                          </p>
-                          <p className="mt-1 text-xs leading-5 text-[var(--muted)]">
-                            Модули, уроки и контент.
-                          </p>
-                        </div>
-                        {isAdminMode ? (
-                          <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-4 py-4">
-                            <WalletCards className="h-4 w-4 text-[var(--primary)]" />
-                            <p className="mt-3 text-sm font-medium text-[var(--foreground)]">
-                              Продажи
-                            </p>
-                            <p className="mt-1 text-xs leading-5 text-[var(--muted)]">
-                              Цена, доступ и выдача курса.
-                            </p>
-                          </div>
-                        ) : (
-                          <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-4 py-4">
-                            <BookOpen className="h-4 w-4 text-[var(--primary)]" />
-                            <p className="mt-3 text-sm font-medium text-[var(--foreground)]">
-                              Наполнение
-                            </p>
-                            <p className="mt-1 text-xs leading-5 text-[var(--muted)]">
-                              Собирай программу без коммерческих показателей и продаж.
-                            </p>
-                          </div>
-                        )}
-                      </div>
-
-                      {course.author ? (
-                        <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-sm text-[var(--muted)]">
-                          Автор:{" "}
-                          <span className="font-medium text-[var(--foreground)]">
-                            {course.author.name || course.author.email}
-                          </span>
-                        </div>
-                      ) : null}
-                    </div>
-
-                    <div className="flex flex-wrap gap-3">
-                      <Button asChild>
-                        <Link href={`/admin/courses/${course.id}/content`}>
-                          Открыть программу
-                        </Link>
-                      </Button>
-
+                title={course.title}
+                slug={course.slug}
+                description={course.description}
+                badges={
+                  <>
+                    <Badge variant={courseStatusVariantMap[course.status]}>
+                      {courseStatusLabelMap[course.status]}
+                    </Badge>
+                    <Badge variant="neutral">Модулей {course._count.modules}</Badge>
+                    <Badge variant="neutral">Уроков {lessonCount}</Badge>
+                    {isAdminMode ? (
+                      <Badge variant="neutral">Зачислений {course._count.enrollments}</Badge>
+                    ) : null}
+                  </>
+                }
+                actions={
+                  <>
+                    <Button asChild>
+                      <Link href={`/admin/courses/${course.id}/content`}>Открыть программу</Link>
+                    </Button>
+                    <Button asChild variant="outline">
+                      <Link href={`/admin/courses/${course.id}`}>
+                        {isAuthorMode ? "Карточка курса" : "Настройки"}
+                      </Link>
+                    </Button>
+                    {isAdminMode ? (
                       <Button asChild variant="outline">
-                        <Link href={`/admin/courses/${course.id}`}>
-                          {isAuthorMode ? "Карточка курса" : "Настройки"}
-                        </Link>
+                        <Link href={`/admin/courses/${course.id}/access`}>Доступ и продажи</Link>
                       </Button>
-
-                      {isAdminMode ? (
-                        <Button asChild variant="outline">
-                          <Link href={`/admin/courses/${course.id}/access`}>
-                            Доступ и продажи
-                          </Link>
-                        </Button>
-                      ) : null}
-                    </div>
+                    ) : null}
+                  </>
+                }
+              >
+                <div className="grid gap-3 sm:grid-cols-3">
+                  <div className="rounded-[16px] border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-4">
+                    <LayoutTemplate className="h-4 w-4 text-[var(--primary)]" />
+                    <p className="mt-3 text-sm font-medium text-[var(--foreground)]">Карточка</p>
+                    <p className="mt-1 text-sm leading-6 text-[var(--muted)]">
+                      Название, описание и статус.
+                    </p>
                   </div>
+                  <div className="rounded-[16px] border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-4">
+                    <BookOpen className="h-4 w-4 text-[var(--primary)]" />
+                    <p className="mt-3 text-sm font-medium text-[var(--foreground)]">Программа</p>
+                    <p className="mt-1 text-sm leading-6 text-[var(--muted)]">
+                      Модули, уроки и контент.
+                    </p>
+                  </div>
+                  {isAdminMode ? (
+                    <div className="rounded-[16px] border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-4">
+                      <WalletCards className="h-4 w-4 text-[var(--primary)]" />
+                      <p className="mt-3 text-sm font-medium text-[var(--foreground)]">Продажи</p>
+                      <p className="mt-1 text-sm leading-6 text-[var(--muted)]">
+                        Цена, доступ и выдача курса.
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="rounded-[16px] border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-4">
+                      <BookOpen className="h-4 w-4 text-[var(--primary)]" />
+                      <p className="mt-3 text-sm font-medium text-[var(--foreground)]">Наполнение</p>
+                      <p className="mt-1 text-sm leading-6 text-[var(--muted)]">
+                        Собирай программу без коммерческих показателей.
+                      </p>
+                    </div>
+                  )}
                 </div>
-              </WorkspacePanel>
+
+                {course.author ? (
+                  <div className="rounded-[16px] border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-3 text-sm text-[var(--muted)]">
+                    Автор:{" "}
+                    <span className="font-medium text-[var(--foreground)]">
+                      {course.author.name || course.author.email}
+                    </span>
+                  </div>
+                ) : null}
+              </WorkspaceCourseCard>
             );
           })}
         </div>

@@ -106,7 +106,7 @@ function EmptyStudio({
   children?: ReactNode;
 }) {
   return (
-    <article className="rounded-[28px] border border-dashed border-[var(--border)] bg-white p-8 shadow-sm">
+    <article className="rounded-[20px] border border-dashed border-[var(--border)] bg-[var(--surface)] p-8 shadow-[var(--shadow-sm)]">
       <h2 className="text-3xl font-semibold tracking-tight text-[var(--foreground)]">{title}</h2>
       <p className="mt-3 max-w-2xl text-sm leading-7 text-[var(--muted)]">{description}</p>
       {children ? <div className="mt-6">{children}</div> : null}
@@ -298,8 +298,8 @@ export default async function CourseContentPage({
             />
 
             {course.deliveryFormat === CourseDeliveryFormat.LIVE_COHORT ? (
-              <article className="rounded-[24px] border border-[var(--border)] bg-[var(--surface)] p-5 shadow-sm">
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#7a6548]">
+              <article className="rounded-[20px] border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow-sm)]">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
                   Формат курса
                 </p>
                 <h3 className="mt-2 text-xl font-semibold text-[var(--foreground)]">
@@ -374,59 +374,67 @@ export default async function CourseContentPage({
               </EmptyStudio>
             ) : (
               <>
-                <form id="lesson-editor-form" action={updateLesson} className="space-y-6">
+                <form
+                  id="lesson-editor-form"
+                  action={updateLesson}
+                  className="grid gap-6 2xl:grid-cols-[340px_minmax(0,1fr)]"
+                >
                   <input type="hidden" name="lessonId" value={selectedLesson.id} />
                   <input type="hidden" name="moduleId" value={selectedModule.id} />
                   <input type="hidden" name="type" value={selectedLesson.type} />
 
-                  <EditableLessonSettingsCard
-                    formId="lesson-editor-form"
-                    title={selectedLesson.title}
-                    excerpt={selectedLesson.excerpt ?? ""}
-                    accessAfterDays={selectedLesson.accessAfterDays ?? null}
-                    isPreview={selectedLesson.isPreview}
-                  />
-
-                  <article className="rounded-[28px] border border-[var(--border)] bg-white p-6 shadow-sm">
-                    <LessonBlockStudio
-                      lessonId={selectedLesson.id}
-                      initialBlocks={selectedLessonBlocks}
-                      initialAsset={selectedLesson.videoAsset}
-                      fallbackVideoSourceType={selectedLesson.videoSourceType}
-                      fallbackVideoUrl={selectedLesson.videoUrl}
-                      fallbackVideoPlaybackId={selectedLesson.videoPlaybackId}
-                    />
-                  </article>
-
-                  {hasHomeworkBlock ? (
-                    <EditableHomeworkRulesCard
+                  <aside className="space-y-6 2xl:sticky 2xl:top-6 2xl:self-start">
+                    <EditableLessonSettingsCard
                       formId="lesson-editor-form"
-                      initialState={{
-                        requiresCuratorReview:
-                          selectedLesson.homeworkAssignment?.requiresCuratorReview ?? true,
-                        unlockNextModuleOnApproval:
-                          selectedLesson.homeworkAssignment?.unlockNextModuleOnApproval ?? true,
-                        allowTextSubmission:
-                          selectedLesson.homeworkAssignment?.allowTextSubmission ?? true,
-                        allowLinkSubmission:
-                          selectedLesson.homeworkAssignment?.allowLinkSubmission ?? true,
-                        allowFileUpload:
-                          selectedLesson.homeworkAssignment?.allowFileUpload ?? true,
-                      }}
+                      title={selectedLesson.title}
+                      excerpt={selectedLesson.excerpt ?? ""}
+                      accessAfterDays={selectedLesson.accessAfterDays ?? null}
+                      isPreview={selectedLesson.isPreview}
                     />
-                  ) : null}
 
-                  <div className="flex flex-wrap items-center gap-3 rounded-[28px] border border-[var(--border)] bg-white px-6 py-5 shadow-sm">
-                    <Button type="submit">
-                      <Save className="mr-2 h-4 w-4" />
-                      Сохранить урок
-                    </Button>
+                    {hasHomeworkBlock ? (
+                      <EditableHomeworkRulesCard
+                        formId="lesson-editor-form"
+                        initialState={{
+                          requiresCuratorReview:
+                            selectedLesson.homeworkAssignment?.requiresCuratorReview ?? true,
+                          unlockNextModuleOnApproval:
+                            selectedLesson.homeworkAssignment?.unlockNextModuleOnApproval ?? true,
+                          allowTextSubmission:
+                            selectedLesson.homeworkAssignment?.allowTextSubmission ?? true,
+                          allowLinkSubmission:
+                            selectedLesson.homeworkAssignment?.allowLinkSubmission ?? true,
+                          allowFileUpload:
+                            selectedLesson.homeworkAssignment?.allowFileUpload ?? true,
+                        }}
+                      />
+                    ) : null}
+                  </aside>
 
-                    <Button asChild variant="outline">
-                      <Link href={`/learning/courses/${course.id}?lessonId=${selectedLesson.id}`}>
-                        Проверить как студент
-                      </Link>
-                    </Button>
+                  <div className="min-w-0 space-y-6">
+                    <article className="rounded-[20px] border border-[var(--border)] bg-[var(--surface)] p-6 shadow-[var(--shadow-sm)]">
+                      <LessonBlockStudio
+                        lessonId={selectedLesson.id}
+                        initialBlocks={selectedLessonBlocks}
+                        initialAsset={selectedLesson.videoAsset}
+                        fallbackVideoSourceType={selectedLesson.videoSourceType}
+                        fallbackVideoUrl={selectedLesson.videoUrl}
+                        fallbackVideoPlaybackId={selectedLesson.videoPlaybackId}
+                      />
+                    </article>
+
+                    <div className="flex flex-wrap items-center gap-3 rounded-[20px] border border-[var(--border)] bg-[var(--surface)] px-5 py-5 shadow-[var(--shadow-sm)]">
+                      <Button type="submit">
+                        <Save className="mr-2 h-4 w-4" />
+                        Сохранить урок
+                      </Button>
+
+                      <Button asChild variant="outline">
+                        <Link href={`/learning/courses/${course.id}?lessonId=${selectedLesson.id}`}>
+                          Проверить как студент
+                        </Link>
+                      </Button>
+                    </div>
                   </div>
                 </form>
 

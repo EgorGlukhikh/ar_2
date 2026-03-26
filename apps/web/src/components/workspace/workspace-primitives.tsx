@@ -2,6 +2,11 @@ import type { ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
 import { BookOpenText } from "lucide-react";
 
+import {
+  systemCardClassName,
+  systemHeaderCardClassName,
+  systemIconTileClassName,
+} from "@/components/system/system-ui";
 import { cn } from "@/lib/utils";
 
 type WorkspacePageHeaderProps = {
@@ -106,19 +111,19 @@ export function WorkspacePageHeader({
   return (
     <header
       className={cn(
-        "rounded-[34px] border border-white/85 bg-[linear-gradient(180deg,_rgba(255,252,247,0.98)_0%,_rgba(255,255,255,0.94)_100%)] p-8 shadow-[0_28px_80px_rgba(24,32,54,0.08)]",
+        `${systemHeaderCardClassName} p-6 md:p-8`,
         className,
       )}
     >
       <div className="flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between">
         <div className="space-y-3">
-          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#7a6548]">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
             {eyebrow}
           </p>
-          <h1 className="text-4xl font-semibold tracking-tight text-[var(--foreground)]">
+          <h1 className="text-[clamp(2rem,4vw,2.75rem)] font-semibold tracking-[-0.02em] text-[var(--foreground)]">
             {title}
           </h1>
-          <p className="max-w-3xl text-base leading-8 text-[var(--muted)]">{description}</p>
+          <p className="max-w-3xl text-base leading-7 text-[var(--muted)]">{description}</p>
         </div>
 
         {(actions || meta) && (
@@ -143,7 +148,7 @@ export function WorkspacePanel({
   return (
     <article
       className={cn(
-        "rounded-[30px] border border-white/85 bg-[linear-gradient(180deg,_rgba(255,255,255,0.97)_0%,_rgba(249,250,253,0.94)_100%)] p-6 shadow-[0_22px_65px_rgba(24,32,54,0.07)]",
+        `${systemCardClassName} p-5 md:p-6`,
         className,
       )}
     >
@@ -151,12 +156,12 @@ export function WorkspacePanel({
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div className="space-y-2">
             {eyebrow ? (
-              <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#7a6548]">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
                 {eyebrow}
               </p>
             ) : null}
             {title ? (
-              <h2 className="text-2xl font-semibold tracking-tight text-[var(--foreground)]">
+              <h2 className="text-[28px] font-semibold tracking-[-0.02em] text-[var(--foreground)]">
                 {title}
               </h2>
             ) : null}
@@ -184,20 +189,20 @@ export function WorkspaceStatCard({
   return (
     <article
       className={cn(
-        "rounded-[28px] border border-white/85 bg-[linear-gradient(180deg,_rgba(255,255,255,0.98)_0%,_rgba(246,248,252,0.94)_100%)] p-5 shadow-[0_18px_50px_rgba(24,32,54,0.07)]",
+        `${systemCardClassName} p-5`,
         className,
       )}
     >
       <div className="flex items-start justify-between gap-4">
-        <div className="rounded-[18px] bg-[linear-gradient(135deg,_rgba(38,80,216,0.16)_0%,_rgba(79,111,240,0.08)_100%)] p-3">
+        <div className={systemIconTileClassName}>
           <Icon className="h-5 w-5 text-[var(--primary)]" />
         </div>
-        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#7a6548]">
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
           {label}
         </p>
       </div>
 
-      <p className="mt-5 text-4xl font-semibold tracking-tight text-[var(--foreground)]">
+      <p className="mt-5 text-[38px] font-semibold tracking-[-0.03em] text-[var(--foreground)]">
         {value}
       </p>
       <p className="mt-3 text-sm leading-7 text-[var(--muted)]">{hint}</p>
@@ -214,7 +219,7 @@ export function WorkspaceEmptyState({
   return (
     <div
       className={cn(
-        "rounded-[30px] border border-dashed border-[var(--border)] bg-[rgba(255,255,255,0.86)] p-8 shadow-[0_18px_50px_rgba(24,32,54,0.05)]",
+        "rounded-[20px] border border-dashed border-[var(--border)] bg-[var(--surface)] p-8 shadow-[var(--shadow-sm)]",
         className,
       )}
     >
@@ -236,7 +241,7 @@ export function CourseThumb({
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-[30px] border border-white/16 shadow-[0_26px_65px_rgba(24,32,54,0.16)]",
+        "relative overflow-hidden rounded-[20px] border border-white/16 shadow-[var(--shadow-lg)]",
         compact ? "min-h-[160px] p-4" : "min-h-[220px] p-5",
         theme.shell,
         className,

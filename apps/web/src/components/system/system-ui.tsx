@@ -1,0 +1,111 @@
+import type { HTMLAttributes, ReactNode } from "react";
+
+import { cn } from "@/lib/utils";
+
+export const systemCardClassName =
+  "rounded-[20px] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-sm)]";
+
+export const systemCardAltClassName =
+  "rounded-[20px] border border-[var(--border)] bg-[var(--surface-strong)] shadow-[var(--shadow-sm)]";
+
+export const systemCardInsetClassName =
+  "rounded-[16px] border border-[var(--border)] bg-[var(--surface-strong)]";
+
+export const systemHeaderCardClassName =
+  "rounded-[24px] border border-[var(--border)] bg-[rgba(255,255,255,0.92)] shadow-[var(--shadow-sm)] backdrop-blur";
+
+export const systemSectionSpacingClassName = "space-y-6";
+
+export const systemIconTileClassName =
+  "flex h-11 w-11 items-center justify-center rounded-[14px] bg-[var(--primary-soft)] text-[var(--primary)]";
+
+export function systemNavItemClassName(isActive: boolean) {
+  return cn(
+    "inline-flex min-h-12 items-center gap-2 rounded-full border px-4 py-3 text-sm font-medium transition duration-200 [&_svg]:h-4 [&_svg]:w-4 [&_svg]:text-current",
+    isActive
+      ? "border-transparent bg-[var(--primary)] text-white shadow-[var(--shadow-brand)]"
+      : "border-[var(--border-strong)] bg-[var(--surface)] text-[var(--foreground)] shadow-[var(--shadow-sm)] hover:bg-[var(--surface-strong)]",
+  );
+}
+
+export function SystemContainer({
+  className,
+  children,
+  ...props
+}: HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div
+      className={cn("mx-auto w-full max-w-[1400px] px-4 md:px-6", className)}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+}
+
+export function SystemSection({
+  className,
+  children,
+  ...props
+}: HTMLAttributes<HTMLElement>) {
+  return (
+    <section className={cn(systemSectionSpacingClassName, className)} {...props}>
+      {children}
+    </section>
+  );
+}
+
+export function SystemGrid({
+  className,
+  children,
+  ...props
+}: HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div className={cn("grid gap-6", className)} {...props}>
+      {children}
+    </div>
+  );
+}
+
+export function SystemFormGroup({
+  label,
+  hint,
+  className,
+  children,
+}: {
+  label: string;
+  hint?: string;
+  className?: string;
+  children: ReactNode;
+}) {
+  return (
+    <label className={cn("grid gap-2", className)}>
+      <span className="text-sm font-medium text-[var(--foreground)]">{label}</span>
+      {children}
+      {hint ? <span className="text-sm leading-6 text-[var(--muted)]">{hint}</span> : null}
+    </label>
+  );
+}
+
+export function SystemInfoItem({
+  label,
+  value,
+  hint,
+  className,
+}: {
+  label: string;
+  value: ReactNode;
+  hint?: ReactNode;
+  className?: string;
+}) {
+  return (
+    <div className={cn("rounded-[16px] border border-[var(--border)] bg-[var(--surface-strong)] p-4", className)}>
+      <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
+        {label}
+      </p>
+      <div className="mt-3 text-sm font-medium text-[var(--foreground)]">{value}</div>
+      {hint ? <div className="mt-1 text-sm leading-6 text-[var(--muted)]">{hint}</div> : null}
+    </div>
+  );
+}
+

@@ -16,30 +16,52 @@
 - базовая email-очередь и статусы доставки
 - behavioral analytics по урокам и просмотрам
 
-## Публичный UI
+## UI-система
 
-Публичный слой собран по spec из `codex_landing_spec` и использует общие design tokens:
+Публичный слой собран по spec из `codex_landing_spec`, а внутренний слой теперь переводится на общий `system-ui` слой из базовых примитивов:
 
-- единая светлая база `#F5F7FB`
+- `Container`
+- `Section`
+- `Grid`
+- `Header`
+- `NavItem`
+- `BaseCard`
+- `CourseCard`
+- `Primary / Secondary / Ghost button`
+- `Input / Select / Textarea / FormGroup`
+
+Главные токены:
+
+- фон страницы `#F5F7FB`
 - основной бренд `#4F46E5`
-- градиент `#20306F -> #2F49C8 -> #C58AA0 -> #E58C67`
-- единая типографика на `Inter`
-- одинаковые правила для кнопок:
-  - светлая кнопка -> тёмный текст
-  - тёмная или брендовая кнопка -> белый текст
-- единые отступы, карточки, badge и focus-состояния
+- светлая поверхность `#FFFFFF`
+- альтернативная поверхность `#F1F4F9`
+- основной текст `#0F172A`
+- вторичный текст `#5B6472`
+- радиусы `12 / 20 / 24`
 
-Под этот слой уже переведены:
+Единые правила для кнопок:
+
+- светлая кнопка -> темный текст и темная иконка
+- темная или брендовая кнопка -> белый текст и белая иконка
+
+## Что уже переведено на общий UI kit
 
 - [landing](/C:/AR_codex/apps/web/src/app/page.tsx)
 - [catalog](/C:/AR_codex/apps/web/src/app/catalog/page.tsx)
 - [sign-in](/C:/AR_codex/apps/web/src/app/sign-in/page.tsx)
 - [checkout](/C:/AR_codex/apps/web/src/app/checkout/[orderId]/page.tsx)
+- [admin layout](/C:/AR_codex/apps/web/src/app/admin/layout.tsx)
+- [admin overview](/C:/AR_codex/apps/web/src/app/admin/page.tsx)
+- [courses](/C:/AR_codex/apps/web/src/app/admin/courses/page.tsx)
+- [learning](/C:/AR_codex/apps/web/src/app/learning/page.tsx)
 
-Базовые публичные примитивы лежат в:
+Базовые примитивы лежат в:
 
+- [system-ui.tsx](/C:/AR_codex/apps/web/src/components/system/system-ui.tsx)
 - [public-primitives.tsx](/C:/AR_codex/apps/web/src/components/marketing/public-primitives.tsx)
-- [public-copy.ts](/C:/AR_codex/apps/web/src/lib/public-copy.ts)
+- [workspace-primitives.tsx](/C:/AR_codex/apps/web/src/components/workspace/workspace-primitives.tsx)
+- [workspace-course-card.tsx](/C:/AR_codex/apps/web/src/components/workspace/workspace-course-card.tsx)
 - [globals.css](/C:/AR_codex/apps/web/src/app/globals.css)
 
 ## Логика курсов
@@ -51,12 +73,21 @@
 
 Для новых и существующих уроков используется доменная модель `LessonBlock`. Legacy-уроки автоматически синхронизируются в новую таблицу при деплое.
 
+## Course Studio
+
+Редактор курса работает по block-first логике:
+
+- модуль и урок выбираются слева в структуре курса
+- основные настройки урока вынесены в отдельную левую колонку
+- блоки урока редактируются в основной правой области
+- домашка настраивается отдельно, только если в уроке есть homework block
+
 В lesson studio блоки работают в двух режимах:
 
 - просмотр
 - отдельное редактирование
 
-Это убирает одновременный показ превью блока и полей ввода в одном состоянии.
+Это убирает одновременный показ preview блока и полей ввода в одном состоянии.
 
 ## Слаг курса
 

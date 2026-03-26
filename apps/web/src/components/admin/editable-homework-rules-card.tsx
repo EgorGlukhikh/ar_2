@@ -4,6 +4,7 @@ import { PencilLine, X } from "lucide-react";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 type HomeworkRuleState = {
   requiresCuratorReview: boolean;
@@ -16,6 +17,7 @@ type HomeworkRuleState = {
 type EditableHomeworkRulesCardProps = {
   formId: string;
   initialState: HomeworkRuleState;
+  className?: string;
 };
 
 const homeworkRuleItems: Array<{
@@ -53,6 +55,7 @@ const homeworkRuleItems: Array<{
 export function EditableHomeworkRulesCard({
   formId,
   initialState,
+  className,
 }: EditableHomeworkRulesCardProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [state, setState] = useState(initialState);
@@ -63,7 +66,12 @@ export function EditableHomeworkRulesCard({
   }
 
   return (
-    <article className="rounded-[28px] border border-[var(--border)] bg-white shadow-sm">
+    <article
+      className={cn(
+        "rounded-[20px] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-sm)]",
+        className,
+      )}
+    >
       {homeworkRuleItems.map((item) => (
         <input
           key={item.key}
@@ -73,12 +81,12 @@ export function EditableHomeworkRulesCard({
         />
       ))}
 
-      <div className="flex flex-wrap items-start justify-between gap-4 px-6 py-5">
+      <div className="flex flex-wrap items-start justify-between gap-4 px-5 py-5">
         <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#7a6548]">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
             Домашняя работа
           </p>
-          <h3 className="mt-2 text-2xl font-semibold tracking-tight text-[var(--foreground)]">
+          <h3 className="mt-2 text-[28px] font-semibold tracking-[-0.02em] text-[var(--foreground)]">
             Правила сдачи
           </h3>
         </div>
@@ -103,16 +111,12 @@ export function EditableHomeworkRulesCard({
         </div>
       </div>
 
-      <div className="border-t border-[var(--border)] px-6 py-6">
-        <div className="grid gap-3 md:grid-cols-2">
+      <div className="border-t border-[var(--border)] px-5 py-5">
+        <div className="grid gap-3">
           {homeworkRuleItems.map((item) => (
             <label
               key={item.key}
-              className={`rounded-[20px] border px-4 py-4 transition ${
-                isEditing
-                  ? "border-[var(--border)] bg-[var(--surface)]"
-                  : "border-[var(--border)] bg-[var(--surface)]"
-              }`}
+              className="rounded-[16px] border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-4"
             >
               <div className="flex items-start gap-3">
                 {isEditing ? (
@@ -138,7 +142,7 @@ export function EditableHomeworkRulesCard({
                 )}
 
                 <span>
-                  <span className="block font-medium text-[var(--foreground)]">
+                  <span className="block text-sm font-medium text-[var(--foreground)]">
                     {item.title}
                   </span>
                   <span className="mt-1 block text-sm leading-6 text-[var(--muted)]">

@@ -12,8 +12,8 @@ import { USER_ROLES } from "@academy/shared";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { WorkspaceCourseCard } from "@/components/workspace/workspace-course-card";
 import {
-  CourseThumb,
   WorkspaceEmptyState,
   WorkspacePageHeader,
   WorkspacePanel,
@@ -100,9 +100,9 @@ export default async function AdminPage() {
       <WorkspacePageHeader
         eyebrow="Рабочий центр"
         title="Управление академией"
-        description="Здесь команда создает курсы, собирает программу, назначает доступы, проверяет путь студента и контролирует, как продукт выглядит внутри платформы."
+        description="Здесь команда создает курсы, собирает программу, назначает доступы, проверяет путь студента и держит под рукой ключевые цифры продукта."
         meta={
-          <div className="rounded-full bg-[var(--surface)] px-4 py-3 text-sm text-[var(--muted)]">
+          <div className="rounded-full border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-sm text-[var(--muted)]">
             Активных разделов: 5
           </div>
         }
@@ -153,7 +153,7 @@ export default async function AdminPage() {
               className="border-[var(--border)] bg-[var(--surface)] shadow-none"
             />
           ) : (
-            <div className="grid gap-4 lg:grid-cols-2">
+            <div className="grid gap-4">
               {recentCourses.map((course) => {
                 const lessonCount = course.modules.reduce(
                   (sum, module) => sum + module._count.lessons,
@@ -161,33 +161,32 @@ export default async function AdminPage() {
                 );
 
                 return (
-                  <article
+                  <WorkspaceCourseCard
                     key={course.id}
-                    className="overflow-hidden rounded-[28px] border border-[var(--border)] bg-[var(--surface)] shadow-sm"
-                  >
-                    <div className="p-4">
-                      <CourseThumb title={course.title} subtitle={`/${course.slug}`} compact />
-                    </div>
-
-                    <div className="space-y-4 px-5 pb-5">
-                      <div className="flex flex-wrap items-center gap-2">
+                    title={course.title}
+                    slug={course.slug}
+                    description="Открой карточку, программу или доступы. Это быстрый вход в реальную рабочую зону курса."
+                    badges={
+                      <>
                         <Badge variant={courseStatusVariantMap[course.status]}>
                           {courseStatusLabelMap[course.status]}
                         </Badge>
                         <Badge variant="neutral">Модулей {course._count.modules}</Badge>
                         <Badge variant="neutral">Уроков {lessonCount}</Badge>
-                      </div>
-
-                      <div className="flex flex-wrap gap-3">
+                        <Badge variant="neutral">Зачислений {course._count.enrollments}</Badge>
+                      </>
+                    }
+                    actions={
+                      <>
                         <Button asChild size="sm">
                           <Link href={`/admin/courses/${course.id}/content`}>Программа</Link>
                         </Button>
                         <Button asChild size="sm" variant="outline">
                           <Link href={`/admin/courses/${course.id}/access`}>Доступы и продажи</Link>
                         </Button>
-                      </div>
-                    </div>
-                  </article>
+                      </>
+                    }
+                  />
                 );
               })}
             </div>
@@ -198,18 +197,18 @@ export default async function AdminPage() {
           <WorkspacePanel
             eyebrow="Навигация по продукту"
             title="Что уже можно показывать команде"
-            description="Этот слой уже годится для наполнения курсами и передачи дизайнерам на следующий проход."
+            description="Здесь собраны опорные сценарии, которые уже годятся для демонстрации и повседневной работы."
           >
             <div className="grid gap-3">
               {[
                 "Лендинг, каталог и вход выглядят как единый публичный продукт.",
-                "Редактор курса разделен на настройки, программу и доступы.",
-                "Один урок поддерживает текст, видео и прикрепленный материал.",
+                "Редактор курса разделен на карточку, программу и доступы.",
+                "Один урок поддерживает текст, видео, материалы и задание.",
                 "Покупка открывает доступ к курсу и переводит пользователя в обучение.",
               ].map((item) => (
                 <div
                   key={item}
-                  className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-4 py-4 text-sm leading-7 text-[var(--muted)]"
+                  className="rounded-[16px] border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-4 text-sm leading-7 text-[var(--muted)]"
                 >
                   {item}
                 </div>
@@ -262,7 +261,7 @@ export default async function AdminPage() {
               ].map((item) => (
                 <div
                   key={item}
-                  className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-4 py-4 text-sm leading-7 text-[var(--muted)]"
+                  className="rounded-[16px] border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-4 text-sm leading-7 text-[var(--muted)]"
                 >
                   {item}
                 </div>
