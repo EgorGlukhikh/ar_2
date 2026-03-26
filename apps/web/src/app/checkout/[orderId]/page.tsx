@@ -1,8 +1,15 @@
 import { CheckCircle2, CreditCard, ShieldCheck, XCircle } from "lucide-react";
 import { OrderStatus, PaymentProviderType, prisma } from "@academy/db";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import {
+  PublicButton,
+  SectionLead,
+  publicBadgeClassName,
+  publicButtonClassName,
+  publicCardClassName,
+  publicIconBoxClassName,
+} from "@/components/marketing/public-primitives";
 import {
   completeDemoPayment,
   failDemoPayment,
@@ -10,20 +17,20 @@ import {
 } from "@/features/billing/actions";
 import {
   orderStatusLabelMap,
-  orderStatusVariantMap,
   paymentProviderLabelMap,
   paymentStatusLabelMap,
-  paymentStatusVariantMap,
 } from "@/lib/labels";
-import { formatMinorUnits } from "@/lib/money";
-import { requireAuthenticatedUser } from "@/lib/user";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
-  CourseThumb,
-  WorkspacePageHeader,
-  WorkspacePanel,
-} from "@/components/workspace/workspace-primitives";
+  marketingBody,
+  marketingContainerClassName,
+  marketingDisplay,
+  marketingFrameClassName,
+  marketingInnerFrameClassName,
+  marketingShellClassName,
+} from "@/lib/marketing-theme";
+import { formatMinorUnits } from "@/lib/money";
+import { formatPublicCopy } from "@/lib/public-copy";
+import { requireAuthenticatedUser } from "@/lib/user";
 
 type CheckoutPageProps = {
   params: Promise<{
@@ -66,212 +73,243 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
   const isCanceled = order.status === OrderStatus.CANCELED;
 
   return (
-    <main className="min-h-screen bg-[linear-gradient(180deg,_#f7f9ff_0%,_#f1f5ff_100%)] px-4 py-4 md:px-6 md:py-6">
-      <section className="mx-auto max-w-[1400px] space-y-6">
-        <WorkspacePageHeader
-          eyebrow="Подтверждение доступа"
-          title="Проверь курс и заверши оплату"
-          description="Здесь видно, какой курс ты открываешь, сколько он стоит и что произойдет после подтверждения оплаты."
-          meta={
-            <div className="flex flex-wrap gap-2">
-              <Badge variant={orderStatusVariantMap[order.status]}>
-                Заказ: {orderStatusLabelMap[order.status]}
-              </Badge>
-              {payment ? (
-                <Badge variant={paymentStatusVariantMap[payment.status]}>
-                  Платеж: {paymentStatusLabelMap[payment.status]}
-                </Badge>
-              ) : null}
-            </div>
-          }
-          actions={
-            <>
-              <Button asChild variant="outline">
-                <Link href="/catalog">К курсам</Link>
-              </Button>
-              <Button asChild variant="outline">
-                <Link href="/learning">Мой кабинет</Link>
-              </Button>
-            </>
-          }
-        />
-
-        <div className="grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
-          <WorkspacePanel
-            eyebrow="Что оформляем"
-            title={course?.title ?? orderItem?.product.name ?? "Курс"}
-            description="Курс, стоимость и способ оплаты собраны в одном месте, чтобы можно было быстро проверить заказ перед подтверждением."
-          >
-            <div className="grid gap-5 lg:grid-cols-[300px_minmax(0,1fr)]">
-              <CourseThumb
-                title={course?.title ?? orderItem?.product.name ?? "Курс"}
-                subtitle={`Заказ #${order.id}`}
-              />
-
-              <div className="space-y-4">
-                <div className="rounded-[24px] bg-[var(--surface)] p-5">
-                  <div className="space-y-4 text-sm text-[var(--muted)]">
-                    <div className="flex items-center justify-between gap-4">
-                      <span>Курс</span>
-                      <span className="font-medium text-[var(--foreground)]">
-                        {orderItem?.product.name ?? "Не найден"}
+    <main
+      className={`${marketingDisplay.variable} ${marketingBody.variable} ${marketingShellClassName}`}
+    >
+      <div className={marketingContainerClassName}>
+        <section className={marketingFrameClassName}>
+          <div className={marketingInnerFrameClassName}>
+            <header className="rounded-[24px] border border-[var(--border)] bg-[rgba(255,255,255,0.9)] px-5 py-5 shadow-[var(--shadow-sm)] backdrop-blur md:px-6">
+              <div className="flex min-h-20 flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+                <div className="space-y-3">
+                  <div className="flex flex-wrap gap-2">
+                    <span className={publicBadgeClassName}>
+                      {formatPublicCopy(`Заказ: ${orderStatusLabelMap[order.status]}`)}
+                    </span>
+                    {payment ? (
+                      <span className={publicBadgeClassName}>
+                        {formatPublicCopy(`Платёж: ${paymentStatusLabelMap[payment.status]}`)}
                       </span>
-                    </div>
-                    <div className="flex items-center justify-between gap-4">
-                      <span>Сумма</span>
-                      <span className="font-semibold text-[var(--foreground)]">
-                        {formatMinorUnits(order.totalAmount, order.currency)}
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between gap-4">
-                      <span>Способ оплаты</span>
-                      <span className="font-medium text-[var(--foreground)]">
-                        {paymentProviderLabelMap[order.paymentProvider]}
-                      </span>
-                    </div>
-                    {payment?.providerPaymentId ? (
-                      <div className="flex items-start justify-between gap-4">
-                        <span>Номер платежа</span>
-                        <span className="break-all text-right font-medium text-[var(--foreground)]">
-                          {payment.providerPaymentId}
-                        </span>
-                      </div>
                     ) : null}
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-sm font-semibold text-[var(--foreground)]">
+                      {formatPublicCopy("Подтверждение доступа")}
+                    </p>
+                    <p className="max-w-[560px] text-sm leading-6 text-[var(--muted)]">
+                      {formatPublicCopy(
+                        "Здесь видно, какой курс ты открываешь, сколько он стоит и что произойдёт после подтверждения оплаты.",
+                      )}
+                    </p>
                   </div>
                 </div>
 
-                <div className="grid gap-3 sm:grid-cols-2">
-                  <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-4 py-4">
-                    <ShieldCheck className="h-4 w-4 text-[var(--primary)]" />
-                    <p className="mt-3 text-sm font-medium text-[var(--foreground)]">
-                      После оплаты
-                    </p>
-                    <p className="mt-1 text-xs leading-5 text-[var(--muted)]">
-                      Курс откроется автоматически и сразу появится в учебном кабинете.
-                    </p>
-                  </div>
-                  <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-4 py-4">
-                    <CreditCard className="h-4 w-4 text-[var(--primary)]" />
-                    <p className="mt-3 text-sm font-medium text-[var(--foreground)]">
-                      Что дальше
-                    </p>
-                    <p className="mt-1 text-xs leading-5 text-[var(--muted)]">
-                      Если передумаешь, заказ можно закрыть и позже вернуться к покупке из каталога.
-                    </p>
-                  </div>
+                <div className="flex flex-wrap gap-3">
+                  <PublicButton href="/catalog" tone="secondary">
+                    {formatPublicCopy("К курсам")}
+                  </PublicButton>
+                  <PublicButton href="/learning" tone="secondary">
+                    {formatPublicCopy("Мой кабинет")}
+                  </PublicButton>
                 </div>
               </div>
-            </div>
-          </WorkspacePanel>
+            </header>
 
-          <WorkspacePanel
-            eyebrow="Статус оплаты"
-            title="Следующий шаг по заказу"
-            description="Заверши оплату, если готов открыть курс сейчас, или закрой заказ и вернись к нему позже."
-          >
-            <div className="space-y-5">
-              {isPaid ? (
-                <div className="rounded-[26px] border border-emerald-200 bg-emerald-50 p-6">
-                  <div className="flex items-start gap-4">
-                    <div className="rounded-2xl bg-white p-3 text-emerald-700 shadow-sm">
+            <section className="grid gap-8 xl:grid-cols-[1.02fr_0.98fr]">
+              <div className="space-y-8">
+                <SectionLead
+                  eyebrow="Что оформляем"
+                  title={course?.title ?? orderItem?.product.name ?? "Курс"}
+                  text="Курс, стоимость и способ оплаты собраны в одном месте, чтобы можно было быстро проверить заказ перед подтверждением."
+                />
+
+                <article className={publicCardClassName}>
+                  <div className="space-y-4 text-base leading-7 text-[var(--muted)]">
+                    <Row
+                      label="Курс"
+                      value={orderItem?.product.name ?? formatPublicCopy("Не найден")}
+                    />
+                    <Row
+                      label="Сумма"
+                      value={formatMinorUnits(order.totalAmount, order.currency)}
+                      strong
+                    />
+                    <Row
+                      label="Способ оплаты"
+                      value={paymentProviderLabelMap[order.paymentProvider]}
+                    />
+                    {payment?.providerPaymentId ? (
+                      <Row
+                        label="Номер платежа"
+                        value={payment.providerPaymentId}
+                        breakAll
+                      />
+                    ) : null}
+                  </div>
+                </article>
+
+                <div className="grid gap-4 md:grid-cols-2">
+                  <article className={publicCardClassName}>
+                    <div className={publicIconBoxClassName}>
+                      <ShieldCheck className="h-5 w-5" />
+                    </div>
+                    <h3 className="mt-4 text-xl font-semibold leading-7 text-[var(--foreground)]">
+                      {formatPublicCopy("После оплаты")}
+                    </h3>
+                    <p className="mt-3 text-base leading-7 text-[var(--muted)]">
+                      {formatPublicCopy(
+                        "Курс откроется автоматически и сразу появится в учебном кабинете.",
+                      )}
+                    </p>
+                  </article>
+
+                  <article className={publicCardClassName}>
+                    <div className={publicIconBoxClassName}>
+                      <CreditCard className="h-5 w-5" />
+                    </div>
+                    <h3 className="mt-4 text-xl font-semibold leading-7 text-[var(--foreground)]">
+                      {formatPublicCopy("Что дальше")}
+                    </h3>
+                    <p className="mt-3 text-base leading-7 text-[var(--muted)]">
+                      {formatPublicCopy(
+                        "Если передумаешь, заказ можно закрыть и позже вернуться к покупке из каталога.",
+                      )}
+                    </p>
+                  </article>
+                </div>
+              </div>
+
+              <div className="space-y-6">
+                {isPaid ? (
+                  <article className={publicCardClassName}>
+                    <div className={publicIconBoxClassName}>
                       <CheckCircle2 className="h-5 w-5" />
                     </div>
-                    <div>
-                      <p className="text-lg font-semibold text-emerald-950">
-                        Доступ открыт
-                      </p>
-                      <p className="mt-3 text-sm leading-7 text-emerald-900">
-                        Оплата подтверждена, а курс уже доступен в учебном кабинете.
-                      </p>
-                    </div>
-                  </div>
+                    <h2 className="mt-4 text-[32px] font-semibold leading-10 tracking-[-0.02em] text-[var(--foreground)]">
+                      {formatPublicCopy("Доступ открыт")}
+                    </h2>
+                    <p className="mt-3 text-base leading-7 text-[var(--muted)]">
+                      {formatPublicCopy(
+                        "Оплата подтверждена, а курс уже доступен в учебном кабинете.",
+                      )}
+                    </p>
 
-                  <div className="mt-5 flex flex-wrap gap-3">
-                    {course?.id ? (
-                      <Button asChild>
-                        <Link href={`/learning/courses/${course.id}`}>Перейти к курсу</Link>
-                      </Button>
-                    ) : null}
-                    <Button asChild variant="outline">
-                      <Link href="/catalog">Выбрать еще курс</Link>
-                    </Button>
-                  </div>
-                </div>
-              ) : isCanceled ? (
-                <div className="rounded-[26px] border border-amber-200 bg-amber-50 p-6">
-                  <div className="flex items-start gap-4">
-                    <div className="rounded-2xl bg-white p-3 text-amber-700 shadow-sm">
+                    <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                      {course?.id ? (
+                        <PublicButton href={`/learning/courses/${course.id}`}>
+                          {formatPublicCopy("Перейти к курсу")}
+                        </PublicButton>
+                      ) : null}
+                      <PublicButton href="/catalog" tone="secondary">
+                        {formatPublicCopy("Выбрать ещё курс")}
+                      </PublicButton>
+                    </div>
+                  </article>
+                ) : isCanceled ? (
+                  <article className={publicCardClassName}>
+                    <div className={publicIconBoxClassName}>
                       <XCircle className="h-5 w-5" />
                     </div>
-                    <div>
-                      <p className="text-lg font-semibold text-amber-950">
-                        Заказ закрыт
-                      </p>
-                      <p className="mt-3 text-sm leading-7 text-amber-900">
-                        Оплата не завершена. Можно вернуться в каталог и оформить доступ заново, когда будешь готов продолжить.
-                      </p>
-                    </div>
-                  </div>
+                    <h2 className="mt-4 text-[32px] font-semibold leading-10 tracking-[-0.02em] text-[var(--foreground)]">
+                      {formatPublicCopy("Заказ закрыт")}
+                    </h2>
+                    <p className="mt-3 text-base leading-7 text-[var(--muted)]">
+                      {formatPublicCopy(
+                        "Оплата не завершена. Можно вернуться в каталог и оформить доступ заново, когда будешь готов продолжить.",
+                      )}
+                    </p>
 
-                  <div className="mt-5 flex flex-wrap gap-3">
-                    {course?.id ? (
-                      <form action={startDemoCheckout}>
-                        <input type="hidden" name="courseId" value={course.id} />
-                        <Button type="submit">Оформить заново</Button>
-                      </form>
-                    ) : null}
-                    <Button asChild variant="outline">
-                      <Link href="/catalog">Вернуться к курсам</Link>
-                    </Button>
-                  </div>
-                </div>
-              ) : (
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <form action={completeDemoPayment} className="h-full">
-                    <input type="hidden" name="orderId" value={order.id} />
-                    <button
-                      type="submit"
-                      className="flex h-full w-full flex-col justify-between rounded-[28px] border border-[#dce4ff] bg-[linear-gradient(180deg,_#eff4ff_0%,_#ffffff_100%)] p-5 text-left shadow-sm transition hover:-translate-y-[1px] hover:border-[var(--primary)]"
-                    >
-                      <div className="rounded-2xl bg-[var(--primary-soft)] p-3 text-[var(--primary)]">
+                    <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                      {course?.id ? (
+                        <form action={startDemoCheckout}>
+                          <input type="hidden" name="courseId" value={course.id} />
+                          <button type="submit" className={publicButtonClassName("primary")}>
+                            {formatPublicCopy("Оформить заново")}
+                          </button>
+                        </form>
+                      ) : null}
+                      <PublicButton href="/catalog" tone="secondary">
+                        {formatPublicCopy("Вернуться к курсам")}
+                      </PublicButton>
+                    </div>
+                  </article>
+                ) : (
+                  <div className="grid gap-4">
+                    <article className={publicCardClassName}>
+                      <div className={publicIconBoxClassName}>
                         <CheckCircle2 className="h-5 w-5" />
                       </div>
-                      <div className="mt-8">
-                        <p className="text-lg font-semibold text-[var(--foreground)]">
-                          Подтвердить оплату
-                        </p>
-                        <p className="mt-2 text-sm leading-7 text-[var(--muted)]">
-                          После подтверждения курс сразу появится в учебном кабинете и будет доступен без дополнительных шагов.
-                        </p>
-                      </div>
-                    </button>
-                  </form>
+                      <h2 className="mt-4 text-2xl font-semibold leading-8 text-[var(--foreground)]">
+                        {formatPublicCopy("Подтвердить оплату")}
+                      </h2>
+                      <p className="mt-3 text-base leading-7 text-[var(--muted)]">
+                        {formatPublicCopy(
+                          "После подтверждения курс сразу появится в учебном кабинете и будет доступен без дополнительных шагов.",
+                        )}
+                      </p>
+                      <form action={completeDemoPayment} className="mt-6">
+                        <input type="hidden" name="orderId" value={order.id} />
+                        <button type="submit" className={`${publicButtonClassName("primary")} w-full justify-center`}>
+                          {formatPublicCopy("Подтвердить оплату")}
+                        </button>
+                      </form>
+                    </article>
 
-                  <form action={failDemoPayment} className="h-full">
-                    <button
-                      type="submit"
-                      className="flex h-full w-full flex-col justify-between rounded-[28px] border border-[#ffe1c1] bg-[linear-gradient(180deg,_#fff6ea_0%,_#ffffff_100%)] p-5 text-left shadow-sm transition hover:-translate-y-[1px] hover:border-[#f3a55c]"
-                    >
-                      <input type="hidden" name="orderId" value={order.id} />
-                      <div className="rounded-2xl bg-white p-3 text-[#c97726] shadow-sm">
+                    <article className={publicCardClassName}>
+                      <div className={publicIconBoxClassName}>
                         <XCircle className="h-5 w-5" />
                       </div>
-                      <div className="mt-8">
-                        <p className="text-lg font-semibold text-[var(--foreground)]">
-                          Отменить заказ
-                        </p>
-                        <p className="mt-2 text-sm leading-7 text-[var(--muted)]">
-                          Заказ закроется без доступа к курсу, а к покупке можно будет вернуться позже.
-                        </p>
-                      </div>
-                    </button>
-                  </form>
-                </div>
-              )}
-            </div>
-          </WorkspacePanel>
-        </div>
-      </section>
+                      <h2 className="mt-4 text-2xl font-semibold leading-8 text-[var(--foreground)]">
+                        {formatPublicCopy("Отменить заказ")}
+                      </h2>
+                      <p className="mt-3 text-base leading-7 text-[var(--muted)]">
+                        {formatPublicCopy(
+                          "Заказ закроется без доступа к курсу, а к покупке можно будет вернуться позже.",
+                        )}
+                      </p>
+                      <form action={failDemoPayment} className="mt-6">
+                        <input type="hidden" name="orderId" value={order.id} />
+                        <button type="submit" className={`${publicButtonClassName("secondary")} w-full justify-center`}>
+                          {formatPublicCopy("Отменить заказ")}
+                        </button>
+                      </form>
+                    </article>
+                  </div>
+                )}
+              </div>
+            </section>
+          </div>
+        </section>
+      </div>
     </main>
+  );
+}
+
+function Row({
+  label,
+  value,
+  strong = false,
+  breakAll = false,
+}: {
+  label: string;
+  value: string;
+  strong?: boolean;
+  breakAll?: boolean;
+}) {
+  return (
+    <div className="flex items-start justify-between gap-4">
+      <span>{formatPublicCopy(label)}</span>
+      <span
+        className={[
+          "text-right text-[var(--foreground)]",
+          strong ? "font-semibold" : "font-medium",
+          breakAll ? "break-all" : "",
+        ]
+          .filter(Boolean)
+          .join(" ")}
+      >
+        {value}
+      </span>
+    </div>
   );
 }

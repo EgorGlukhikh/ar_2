@@ -1,7 +1,26 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 
+import { formatPublicCopy } from "@/lib/public-copy";
 import { cn } from "@/lib/utils";
+
+export const publicCardClassName =
+  "rounded-[20px] border border-[var(--border)] bg-[var(--surface)] p-6 shadow-[var(--shadow-sm)] transition duration-200 hover:-translate-y-1 hover:shadow-[var(--shadow-lg)]";
+
+export const publicSoftCardClassName =
+  "rounded-[20px] border border-[var(--border)] bg-[var(--surface-strong)] p-6 shadow-[var(--shadow-sm)]";
+
+export const publicGradientCardClassName =
+  "rounded-[24px] bg-[var(--brand-gradient)] p-7 text-white shadow-[var(--shadow-brand)]";
+
+export const publicBadgeClassName =
+  "inline-flex min-h-9 items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface)] px-3.5 text-[13px] font-medium leading-[18px] tracking-[0.06em] text-[var(--foreground)]";
+
+export const publicIconBoxClassName =
+  "flex h-11 w-11 items-center justify-center rounded-[14px] bg-[var(--primary-soft)] text-[var(--primary)]";
+
+export const publicInputClassName =
+  "h-12 w-full rounded-[12px] border border-[var(--border-strong)] bg-[var(--surface)] px-4 text-base text-[var(--foreground)] outline-none transition focus:border-[var(--primary)] focus:ring-4 focus:ring-[rgba(79,70,229,0.14)] placeholder:text-[var(--muted-soft)]";
 
 export function PublicButton({
   href,
@@ -25,18 +44,18 @@ export function publicButtonClassName(
   tone: "primary" | "secondary" | "ghost" | "dark" = "primary",
 ) {
   if (tone === "secondary") {
-    return "inline-flex min-h-11 items-center justify-center rounded-full border border-[#cfd7e8] bg-[rgba(255,255,255,0.92)] px-5 py-2.5 text-sm font-semibold text-[#182036] shadow-[0_10px_24px_rgba(24,32,54,0.06)] transition hover:-translate-y-[1px] hover:border-[#2650d8] hover:text-[#2650d8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2650d8] focus-visible:ring-offset-2 sm:min-h-12 sm:px-6 sm:py-3 [&_svg]:shrink-0 [&_svg]:text-current";
+    return "inline-flex min-h-12 items-center justify-center gap-2 rounded-[12px] border border-[var(--border-strong)] bg-[var(--surface)] px-5 py-3 text-base font-medium text-[var(--foreground)] shadow-[var(--shadow-sm)] transition duration-200 hover:bg-[#f8fafc] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(79,70,229,0.16)] focus-visible:ring-offset-2 [&_svg]:h-[18px] [&_svg]:w-[18px] [&_svg]:text-current";
   }
 
   if (tone === "ghost") {
-    return "inline-flex min-h-11 items-center justify-center rounded-full border border-white/18 bg-white/10 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-white/16 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#182036] sm:min-h-12 sm:px-6 sm:py-3 [&_svg]:shrink-0 [&_svg]:text-current";
+    return "inline-flex min-h-12 items-center justify-center gap-2 rounded-[12px] border border-white/30 bg-transparent px-5 py-3 text-base font-medium text-white transition duration-200 hover:bg-white/8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent [&_svg]:h-[18px] [&_svg]:w-[18px] [&_svg]:text-current";
   }
 
   if (tone === "dark") {
-    return "inline-flex min-h-11 items-center justify-center rounded-full bg-[#182036] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_16px_36px_rgba(24,32,54,0.24)] transition hover:-translate-y-[1px] hover:bg-[#10182c] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#182036] focus-visible:ring-offset-2 sm:min-h-12 sm:px-6 sm:py-3 [&_svg]:shrink-0 [&_svg]:text-current";
+    return "inline-flex min-h-12 items-center justify-center gap-2 rounded-[12px] bg-[var(--foreground)] px-5 py-3 text-base font-medium text-white shadow-[var(--shadow-md)] transition duration-200 hover:bg-[#020617] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(15,23,42,0.18)] focus-visible:ring-offset-2 [&_svg]:h-[18px] [&_svg]:w-[18px] [&_svg]:text-current";
   }
 
-  return "inline-flex min-h-11 items-center justify-center rounded-full bg-[linear-gradient(135deg,_#2650d8_0%,_#4f6ff0_55%,_#7893ff_100%)] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_18px_40px_rgba(38,80,216,0.24)] transition hover:-translate-y-[1px] hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2650d8] focus-visible:ring-offset-2 sm:min-h-12 sm:px-6 sm:py-3 [&_svg]:shrink-0 [&_svg]:text-current";
+  return "inline-flex min-h-12 items-center justify-center gap-2 rounded-[12px] bg-[var(--primary)] px-5 py-3 text-base font-medium text-white shadow-[var(--shadow-brand)] transition duration-200 hover:bg-[var(--primary-hover)] active:bg-[var(--primary-active)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(79,70,229,0.16)] focus-visible:ring-offset-2 [&_svg]:h-[18px] [&_svg]:w-[18px] [&_svg]:text-current";
 }
 
 export function SectionLead({
@@ -53,30 +72,30 @@ export function SectionLead({
   className?: string;
 }) {
   return (
-    <div className={cn("space-y-2.5 sm:space-y-3", className)}>
+    <div className={cn("max-w-[560px] space-y-4", className)}>
       <p
         className={cn(
-          "text-[11px] font-semibold uppercase tracking-[0.28em] sm:text-xs sm:tracking-[0.34em]",
-          light ? "text-white/60" : "text-[#7a6548]",
+          "text-[12px] font-medium uppercase leading-4 tracking-[0.18em]",
+          light ? "text-white/70" : "text-[var(--muted)]",
         )}
       >
-        {eyebrow}
+        {formatPublicCopy(eyebrow)}
       </p>
       <h2
         className={cn(
-          "max-w-[22ch] text-balance font-[family:var(--font-landing-display)] text-[clamp(1.9rem,6vw,3.55rem)] font-semibold leading-[0.98] tracking-tight",
-          light ? "text-white" : "text-[#182036]",
+          "max-w-[18ch] text-[clamp(1.75rem,4.6vw,3rem)] font-semibold leading-[1.12] tracking-[-0.02em]",
+          light ? "text-white" : "text-[var(--foreground)]",
         )}
       >
-        {title}
+        {formatPublicCopy(title)}
       </h2>
       <p
         className={cn(
-          "max-w-2xl text-sm leading-7 sm:text-base sm:leading-8",
-          light ? "text-white/82" : "text-[#5f6982]",
+          "max-w-[560px] text-base leading-7",
+          light ? "text-white/84" : "text-[var(--muted)]",
         )}
       >
-        {text}
+        {formatPublicCopy(text)}
       </p>
     </div>
   );
@@ -90,12 +109,12 @@ export function MetricChip({
   value: string;
 }) {
   return (
-    <div className="rounded-[22px] border border-white/80 bg-[linear-gradient(180deg,_rgba(255,255,255,0.96)_0%,_rgba(248,250,255,0.94)_100%)] p-4 shadow-[0_16px_36px_rgba(24,32,54,0.08)] sm:rounded-[26px]">
-      <p className="text-[11px] uppercase tracking-[0.16em] text-[#7a6548] sm:text-sm sm:tracking-[0.18em]">
-        {label}
+    <div className={publicCardClassName}>
+      <p className="text-[12px] font-medium uppercase leading-4 tracking-[0.18em] text-[var(--muted)]">
+        {formatPublicCopy(label)}
       </p>
-      <p className="mt-2 max-w-[14ch] text-balance text-lg font-semibold leading-tight text-[#182036] sm:mt-3 sm:text-xl md:text-2xl">
-        {value}
+      <p className="mt-3 text-lg font-semibold leading-7 text-[var(--foreground)]">
+        {formatPublicCopy(value)}
       </p>
     </div>
   );

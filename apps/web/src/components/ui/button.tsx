@@ -5,21 +5,21 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-[16px] text-sm font-semibold transition-[background-color,border-color,color,box-shadow,transform] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ring-offset-white [&_svg]:shrink-0 [&_svg]:text-current",
+  "inline-flex items-center justify-center whitespace-nowrap rounded-[12px] text-base font-medium transition-[background-color,border-color,color,box-shadow,transform] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(79,70,229,0.16)] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:cursor-not-allowed ring-offset-white [&_svg]:shrink-0 [&_svg]:text-current",
   {
     variants: {
       variant: {
         default:
-          "bg-[var(--primary)] text-[var(--primary-foreground)] shadow-[0_14px_30px_rgba(40,64,219,0.22)] hover:-translate-y-[1px] hover:brightness-95",
+          "bg-[var(--primary)] text-white shadow-[var(--shadow-brand)] hover:bg-[var(--primary-hover)] active:bg-[var(--primary-active)] disabled:bg-[#c7d2fe] disabled:text-white",
         outline:
-          "border border-[var(--border)] bg-white text-[var(--foreground)] shadow-[0_10px_24px_rgba(28,36,66,0.05)] hover:border-[var(--primary)] hover:bg-[var(--primary-soft)]",
+          "border border-[var(--border-strong)] bg-[var(--surface)] text-[var(--foreground)] shadow-[var(--shadow-sm)] hover:bg-[#f8fafc] disabled:bg-[#f8fafc] disabled:text-[var(--muted-soft)]",
         ghost:
-          "border border-transparent bg-transparent text-[var(--muted)] hover:bg-[var(--primary-soft)] hover:text-[var(--foreground)]",
+          "border border-transparent bg-transparent text-[var(--muted)] hover:bg-[var(--primary-soft)] hover:text-[var(--foreground)] disabled:text-[var(--muted-soft)]",
       },
       size: {
-        default: "h-11 px-5 py-2",
-        sm: "h-9 px-4",
-        lg: "h-12 px-6 text-base",
+        default: "h-12 px-5 py-3",
+        sm: "h-10 px-4 text-sm",
+        lg: "h-14 px-6 py-3 text-base",
       },
     },
     defaultVariants: {

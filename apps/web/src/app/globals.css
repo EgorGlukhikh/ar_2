@@ -1,15 +1,35 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f3f0ea;
-  --foreground: #182036;
-  --surface: #fcfaf5;
-  --surface-strong: #ffffff;
-  --muted: #667089;
-  --border: #d7dbe6;
-  --primary: #2650d8;
+  --background: #f5f7fb;
+  --foreground: #0f172a;
+  --surface: #ffffff;
+  --surface-strong: #f1f4f9;
+  --surface-soft: #eef2ff;
+  --muted: #5b6472;
+  --muted-soft: #94a3b8;
+  --border: #e2e8f0;
+  --border-strong: #cbd5e1;
+  --primary: #4f46e5;
+  --primary-hover: #4338ca;
+  --primary-active: #3730a3;
   --primary-foreground: #ffffff;
-  --primary-soft: #e8efff;
+  --primary-soft: #eef2ff;
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --error: #ef4444;
+  --info: #2563eb;
+  --brand-gradient: linear-gradient(
+    135deg,
+    #20306f 0%,
+    #2f49c8 45%,
+    #c58aa0 75%,
+    #e58c67 100%
+  );
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 6px 18px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 16px 40px rgba(15, 23, 42, 0.1);
+  --shadow-brand: 0 18px 48px rgba(79, 70, 229, 0.24);
 }
 
 @theme inline {
@@ -17,8 +37,11 @@
   --color-foreground: var(--foreground);
   --color-surface: var(--surface);
   --color-surface-strong: var(--surface-strong);
+  --color-surface-soft: var(--surface-soft);
   --color-muted: var(--muted);
+  --color-muted-soft: var(--muted-soft);
   --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
   --color-primary-soft: var(--primary-soft);
@@ -31,14 +54,16 @@
 }
 
 html {
-  background: #f3f0ea;
+  background: var(--background);
+  color: var(--foreground);
+  scroll-behavior: smooth;
 }
 
 body {
   background:
-    radial-gradient(circle at top left, rgba(255, 196, 147, 0.2), transparent 22%),
-    radial-gradient(circle at top right, rgba(38, 80, 216, 0.13), transparent 28%),
-    linear-gradient(180deg, #f4efe7 0%, #eef2f8 55%, #edf1f7 100%);
+    radial-gradient(circle at top left, rgba(79, 70, 229, 0.08), transparent 24%),
+    radial-gradient(circle at top right, rgba(229, 140, 103, 0.08), transparent 18%),
+    var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), sans-serif;
   text-rendering: optimizeLegibility;
@@ -50,5 +75,32 @@ a {
 }
 
 ::selection {
-  background: rgba(38, 80, 216, 0.2);
+  background: rgba(79, 70, 229, 0.2);
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+p,
+li,
+label {
+  text-wrap: pretty;
+}
+
+.no-wrap {
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }

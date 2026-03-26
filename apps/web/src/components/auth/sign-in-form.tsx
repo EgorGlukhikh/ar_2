@@ -2,8 +2,12 @@
 
 import { useActionState } from "react";
 
-import { Button } from "@/components/ui/button";
+import {
+  publicButtonClassName,
+  publicInputClassName,
+} from "@/components/marketing/public-primitives";
 import { authenticate, type SignInState } from "@/features/auth/actions";
+import { formatPublicCopy } from "@/lib/public-copy";
 
 const initialState: SignInState = {};
 
@@ -20,8 +24,8 @@ export function SignInForm({ defaultEmail }: SignInFormProps) {
   return (
     <form action={formAction} className="space-y-5">
       <div className="space-y-2">
-        <label className="text-sm font-medium text-[#4f5870]" htmlFor="email">
-          Почта
+        <label className="text-sm font-medium text-[var(--foreground)]" htmlFor="email">
+          {formatPublicCopy("Почта")}
         </label>
         <input
           id="email"
@@ -30,35 +34,39 @@ export function SignInForm({ defaultEmail }: SignInFormProps) {
           autoComplete="email"
           defaultValue={defaultEmail || ""}
           placeholder="name@example.com"
-          className="h-12 w-full rounded-2xl border border-[#d9e1f2] bg-white px-4 text-[#1c2442] outline-none transition focus:border-[#2840db] focus:ring-4 focus:ring-[#2840db]/10"
+          className={publicInputClassName}
           required
         />
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium text-[#4f5870]" htmlFor="password">
-          Пароль
+        <label className="text-sm font-medium text-[var(--foreground)]" htmlFor="password">
+          {formatPublicCopy("Пароль")}
         </label>
         <input
           id="password"
           name="password"
           type="password"
           autoComplete="current-password"
-          placeholder="Введите пароль"
-          className="h-12 w-full rounded-2xl border border-[#d9e1f2] bg-white px-4 text-[#1c2442] outline-none transition focus:border-[#2840db] focus:ring-4 focus:ring-[#2840db]/10"
+          placeholder={formatPublicCopy("Введите пароль")}
+          className={publicInputClassName}
           required
         />
       </div>
 
       {state.error ? (
-        <p className="rounded-2xl border border-red-100 bg-red-50 px-4 py-3 text-sm text-red-700">
+        <p className="rounded-[12px] border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
           {state.error}
         </p>
       ) : null}
 
-      <Button type="submit" size="lg" className="w-full rounded-full" disabled={pending}>
-        {pending ? "Входим..." : "Войти в платформу"}
-      </Button>
+      <button
+        type="submit"
+        className={`${publicButtonClassName("primary")} w-full justify-center`}
+        disabled={pending}
+      >
+        {pending ? formatPublicCopy("Входим...") : formatPublicCopy("Войти в платформу")}
+      </button>
     </form>
   );
 }
