@@ -6,6 +6,7 @@ import {
   ClipboardCheck,
   GripVertical,
   Paperclip,
+  PencilLine,
   Plus,
   SquareCheckBig,
   Type,
@@ -188,6 +189,7 @@ export function LessonBlockStudio({
   const [expandedIds, setExpandedIds] = useState<string[]>(() =>
     initialBlocks.map((block) => block.id),
   );
+  const [editingIds, setEditingIds] = useState<string[]>([]);
   const [isPickerOpen, setIsPickerOpen] = useState(false);
 
   const hasVideoBlock = useMemo(() => blocks.some((block) => block.type === "VIDEO"), [blocks]);
@@ -210,6 +212,15 @@ export function LessonBlockStudio({
     );
   }
 
+  function startEditing(id: string) {
+    ensureExpanded(id);
+    setEditingIds((current) => (current.includes(id) ? current : [...current, id]));
+  }
+
+  function stopEditing(id: string) {
+    setEditingIds((current) => current.filter((item) => item !== id));
+  }
+
   function addBlock(type: LessonBlock["type"]) {
     if (type === "VIDEO" && hasVideoBlock) {
       return;
@@ -222,6 +233,7 @@ export function LessonBlockStudio({
     const nextBlock = createBlock(type, blocks.length + 1);
     setBlocks((current) => [...current, nextBlock]);
     ensureExpanded(nextBlock.id);
+    startEditing(nextBlock.id);
     setIsPickerOpen(false);
   }
 
@@ -234,6 +246,7 @@ export function LessonBlockStudio({
   function removeBlock(id: string) {
     setBlocks((current) => current.filter((block) => block.id !== id));
     setExpandedIds((current) => current.filter((item) => item !== id));
+    setEditingIds((current) => current.filter((item) => item !== id));
   }
 
   function handleDrop(targetId: string) {
@@ -527,6 +540,7 @@ export function LessonBlockStudio({
 
       {blocks.map((block, index) => {
         const isExpanded = expandedIds.includes(block.id);
+        const isEditing = editingIds.includes(block.id);
         const meta = getBlockTypeMeta(block.type);
         const Icon = meta.icon;
 
@@ -563,15 +577,31 @@ export function LessonBlockStudio({
                   </div>
 
                   <h3 className="mt-2 truncate text-lg font-semibold tracking-tight text-[var(--foreground)]">
-                    {block.title || meta.label}
+                    {isEditing
+                      ? `Редактирование: ${block.title || meta.label}`
+                      : block.title || meta.label}
                   </h3>
-                  <p className="mt-1 line-clamp-2 text-sm leading-6 text-[var(--muted)]">
-                    {getBlockPreview(block)}
-                  </p>
+                  {!isEditing ? (
+                    <p className="mt-1 line-clamp-2 text-sm leading-6 text-[var(--muted)]">
+                      {getBlockPreview(block)}
+                    </p>
+                  ) : null}
                 </div>
               </button>
 
               <div className="flex items-center gap-2">
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  onClick={() =>
+                    isEditing ? stopEditing(block.id) : startEditing(block.id)
+                  }
+                >
+                  <PencilLine className="mr-2 h-4 w-4" />
+                  {isEditing ? "Готово" : "Редактировать"}
+                </Button>
+
                 <button
                   type="button"
                   className="rounded-2xl border border-[var(--border)] bg-white p-2 text-[var(--muted)] transition hover:border-[var(--primary)] hover:text-[var(--foreground)]"
@@ -606,6 +636,19 @@ export function LessonBlockStudio({
 
             {isExpanded ? (
               <div className="space-y-5 px-5 py-5">
+                {!isEditing ? (
+                  <div className="rounded-[22px] border border-[var(--border)] bg-[var(--surface)] p-5">
+                    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
+                      Режим просмотра
+                    </p>
+                    <p className="mt-3 text-sm leading-7 text-[var(--foreground)]">
+                      Сейчас блок показан без полей редактирования. Нажми
+                      «Редактировать», если хочешь поменять содержимое этого
+                      блока.
+                    </p>
+                  </div>
+                ) : (
+                  <>
                 <div className="space-y-2">
                   <Label htmlFor={`block-title-${block.id}`}>Название блока</Label>
                   <Input
@@ -907,6 +950,8 @@ export function LessonBlockStudio({
                     </div>
                   </div>
                 ) : null}
+                  </>
+                )}
               </div>
             ) : null}
           </section>
