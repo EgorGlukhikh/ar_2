@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+﻿import type { ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -26,7 +26,7 @@ export function WorkspaceCourseCard({
   return (
     <article
       className={cn(
-        "overflow-hidden rounded-[20px] border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow-sm)]",
+        "overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow-sm)]",
         className,
       )}
     >
@@ -55,3 +55,4 @@ export function WorkspaceCourseCard({
     </article>
   );
 }
+

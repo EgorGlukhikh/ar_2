@@ -399,7 +399,7 @@ export default async function CourseLearningPage({
             </p>
           </div>
 
-          <div className="min-w-[220px] space-y-3 rounded-[24px] bg-[var(--surface)] p-4">
+          <div className="min-w-[220px] space-y-3 rounded-[var(--radius-xl)] bg-[var(--surface)] p-4">
             <div className="flex items-center justify-between text-sm text-[var(--muted)]">
               <span>Прогресс</span>
               <span>
@@ -417,7 +417,7 @@ export default async function CourseLearningPage({
       </header>
 
       <div className="grid gap-6 xl:grid-cols-[340px_1fr]">
-        <aside className="rounded-[24px] border border-[var(--border)] bg-white p-5 shadow-sm">
+        <aside className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-white p-5 shadow-sm">
           <div className="space-y-4">
             {course.modules.length === 0 ? (
               <div className="rounded-2xl border border-dashed border-[var(--border)] bg-[var(--surface)] p-5 text-sm leading-7 text-[var(--muted)]">
@@ -491,7 +491,7 @@ export default async function CourseLearningPage({
           </div>
         </aside>
 
-        <article className="rounded-[24px] border border-[var(--border)] bg-white p-6 shadow-sm">
+        <article className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-white p-6 shadow-sm">
           {!selectedEntry ? (
             <div className="rounded-2xl border border-dashed border-[var(--border)] bg-[var(--surface)] p-6 text-sm leading-7 text-[var(--muted)]">
               В этом курсе пока нет уроков.
@@ -529,7 +529,7 @@ export default async function CourseLearningPage({
               </div>
 
               {!selectedEntry.unlocked ? (
-                <div className="rounded-[24px] border border-amber-200 bg-amber-50 p-6 text-sm leading-7 text-amber-900">
+                <div className="rounded-[var(--radius-xl)] border border-amber-200 bg-amber-50 p-6 text-sm leading-7 text-amber-900">
                   Урок еще не открыт. Следующая дата доступа:{" "}
                   {selectedEntry.unlockAt
                     ? dateFormatter.format(selectedEntry.unlockAt)
@@ -563,7 +563,7 @@ export default async function CourseLearningPage({
                           return (
                             <section
                               key={block.id}
-                              className="rounded-[24px] border border-[var(--border)] bg-[var(--surface)] p-6"
+                              className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-6"
                             >
                               <div className="flex items-start gap-3">
                                 <div className="rounded-2xl bg-white p-3 text-[var(--primary)] shadow-sm">
@@ -590,7 +590,7 @@ export default async function CourseLearningPage({
                           return (
                             <section
                               key={block.id}
-                              className="space-y-4 rounded-[24px] border border-[var(--border)] bg-[var(--surface)] p-6"
+                              className="space-y-4 rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-6"
                             >
                               <div className="flex items-start gap-3">
                                 <div className="rounded-2xl bg-white p-3 text-[var(--primary)] shadow-sm">
@@ -638,7 +638,7 @@ export default async function CourseLearningPage({
                           return (
                             <section
                               key={block.id}
-                              className="rounded-[24px] border border-[var(--border)] bg-[var(--surface)] p-6"
+                              className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-6"
                             >
                               <div className="flex items-start justify-between gap-3">
                                 <div>
@@ -681,7 +681,7 @@ export default async function CourseLearningPage({
                         return (
                           <section
                             key={block.id}
-                            className="rounded-[24px] border border-[var(--border)] bg-[var(--surface)] p-6"
+                            className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-6"
                           >
                             <div className="flex items-start gap-3">
                               <div className="rounded-2xl bg-white p-3 text-[var(--primary)] shadow-sm">
@@ -714,13 +714,13 @@ export default async function CourseLearningPage({
                       })}
                     </div>
                   ) : (
-                    <div className="rounded-[24px] border border-dashed border-[var(--border)] bg-[var(--surface)] p-6 text-sm leading-7 text-[var(--muted)]">
+                    <div className="rounded-[var(--radius-xl)] border border-dashed border-[var(--border)] bg-[var(--surface)] p-6 text-sm leading-7 text-[var(--muted)]">
                       Для этого урока пока не добавлены блоки контента.
                     </div>
                   )}
 
                   {selectedHomeworkAssignment ? (
-                    <section className="rounded-[24px] border border-[var(--border)] bg-[var(--surface)] p-6">
+                    <section className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-6">
                       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                         <div>
                           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
@@ -953,7 +953,7 @@ export default async function CourseLearningPage({
                       </Button>
                     </form>
                   ) : (
-                    <div className="rounded-[20px] border border-[var(--border)] bg-[var(--surface)] p-5 text-sm leading-7 text-[var(--muted)]">
+                    <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-5 text-sm leading-7 text-[var(--muted)]">
                       В режиме просмотра прогресс не записывается. Для проверки реального
                       прохождения используй студенческую учетную запись.
                     </div>

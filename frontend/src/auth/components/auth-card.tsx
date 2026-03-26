@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+﻿import type { ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -15,7 +15,7 @@ export function AuthCard({
   return (
     <article
       className={cn(
-        "rounded-[24px] border border-[var(--border)] bg-[var(--surface)] p-6 shadow-[var(--shadow-sm)]",
+        "rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-6 shadow-[var(--shadow-sm)]",
         className,
       )}
     >
@@ -23,3 +23,4 @@ export function AuthCard({
     </article>
   );
 }
+

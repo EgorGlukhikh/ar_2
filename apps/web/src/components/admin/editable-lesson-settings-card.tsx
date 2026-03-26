@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { PencilLine, X } from "lucide-react";
 import { useState } from "react";
@@ -44,7 +44,7 @@ export function EditableLessonSettingsCard({
   }
 
   return (
-    <article className={cn("rounded-[20px] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-sm)]", className)}>
+    <article className={cn("rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-sm)]", className)}>
       <input type="hidden" name="title" value={draftTitle} />
       <input type="hidden" name="excerpt" value={draftExcerpt} />
       <input type="hidden" name="accessAfterDays" value={draftAccessAfterDays} />
@@ -117,7 +117,7 @@ export function EditableLessonSettingsCard({
                 />
               </div>
 
-              <label className="flex items-start gap-3 rounded-[16px] border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-4">
+              <label className="flex items-start gap-3 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-4">
                 <input
                   type="checkbox"
                   checked={draftIsPreview}
@@ -157,3 +157,4 @@ export function EditableLessonSettingsCard({
     </article>
   );
 }
+

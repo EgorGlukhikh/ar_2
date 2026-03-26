@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { Clock3, Eye, MailWarning, Send } from "lucide-react";
 
 import { EmailKind, EmailStatus, prisma } from "@academy/db";
@@ -140,7 +140,7 @@ export default async function AdminEmailsPage() {
             {emails.map((email) => (
               <article
                 key={email.id}
-                className="rounded-[24px] border border-[var(--border)] bg-[var(--surface)] p-5"
+                className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-5"
               >
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                   <div className="space-y-2">
@@ -237,3 +237,4 @@ export default async function AdminEmailsPage() {
     </section>
   );
 }
+

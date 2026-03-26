@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+﻿import type { ReactNode } from "react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -46,7 +46,7 @@ export default async function AdminLayout({
             <div className="flex flex-col gap-4 xl:min-w-0 xl:flex-1">
               <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                 <div className="flex items-center gap-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-[16px] bg-[var(--foreground)] text-sm font-semibold text-white shadow-[var(--shadow-md)]">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-[var(--radius-md)] bg-[var(--foreground)] text-sm font-semibold text-white shadow-[var(--shadow-md)]">
                     AR
                   </div>
                   <div className="min-w-0">
@@ -98,3 +98,4 @@ export default async function AdminLayout({
     </main>
   );
 }
+

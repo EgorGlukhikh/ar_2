@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { BarChart3, CreditCard, Users } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -59,7 +59,7 @@ export function AdminDashboardPageContent({
 
       <div className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
         <WorkspacePanel eyebrow="Демо-оплаты" title="Динамика по дням">
-          <div className="rounded-[20px] border border-[var(--border)] bg-[var(--surface-strong)] p-5">
+          <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-strong)] p-5">
             {hasRevenueData ? (
               <div className="flex h-52 items-end gap-3">
                 {payload.demoRevenueSeries.map((point) => (
@@ -85,7 +85,7 @@ export function AdminDashboardPageContent({
                 ))}
               </div>
             ) : (
-              <div className="flex min-h-52 items-center justify-center rounded-[16px] border border-dashed border-[var(--border)] bg-[var(--surface)] px-6 py-8 text-center text-sm leading-7 text-[var(--muted)]">
+              <div className="flex min-h-52 items-center justify-center rounded-[var(--radius-md)] border border-dashed border-[var(--border)] bg-[var(--surface)] px-6 py-8 text-center text-sm leading-7 text-[var(--muted)]">
                 За выбранный период еще нет демо-оплат. Как только появятся данные, график заполнится автоматически.
               </div>
             )}
@@ -168,3 +168,4 @@ export function AdminDashboardPageContent({
     </section>
   );
 }
+

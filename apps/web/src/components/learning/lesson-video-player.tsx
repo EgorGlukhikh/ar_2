@@ -1,4 +1,4 @@
-import { MediaSourceType, VideoAssetStatus, VideoProviderType } from "@academy/db";
+﻿import { MediaSourceType, VideoAssetStatus, VideoProviderType } from "@academy/db";
 
 type LessonVideoPlayerProps = {
   videoSourceType?: MediaSourceType | null;
@@ -42,7 +42,7 @@ export function LessonVideoPlayer({
 
   if (videoAsset?.status === VideoAssetStatus.ERROR) {
     return (
-      <div className="rounded-[24px] border border-red-200 bg-red-50 p-6 text-sm leading-7 text-red-700">
+      <div className="rounded-[var(--radius-xl)] border border-red-200 bg-red-50 p-6 text-sm leading-7 text-red-700">
         Видео не удалось подготовить к воспроизведению.
         {videoAsset.errorMessage ? ` ${videoAsset.errorMessage}` : ""}
       </div>
@@ -56,7 +56,7 @@ export function LessonVideoPlayer({
       videoAsset.status === VideoAssetStatus.PROCESSING)
   ) {
     return (
-      <div className="rounded-[24px] border border-[var(--border)] bg-[var(--surface)] p-6">
+      <div className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-6">
         <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
           Видео готовится
         </p>
@@ -75,7 +75,7 @@ export function LessonVideoPlayer({
 
   if (canRenderEmbed(sourceType, playerUrl)) {
     return (
-      <div className="overflow-hidden rounded-[24px] border border-[var(--border)] bg-black">
+      <div className="overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border)] bg-black">
         <div className="aspect-video">
           <iframe
             className="h-full w-full"
@@ -91,7 +91,7 @@ export function LessonVideoPlayer({
 
   if (videoAsset || sourceType || playbackId) {
     return (
-      <div className="rounded-[24px] border border-[var(--border)] bg-[var(--surface)] p-6">
+      <div className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-6">
         <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
           Видео урока
         </p>
@@ -106,3 +106,4 @@ export function LessonVideoPlayer({
 
   return null;
 }
+

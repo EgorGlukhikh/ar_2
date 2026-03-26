@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { Activity, ChartColumnIncreasing, CirclePause, GraduationCap } from "lucide-react";
 
 import { USER_ROLES, type UserRole } from "@academy/shared";
@@ -134,7 +134,7 @@ export default async function AdminAnalyticsPage() {
             {summary.latestSessions.map((session) => (
               <article
                 key={session.id}
-                className="rounded-[24px] border border-[var(--border)] bg-[var(--surface)] p-5"
+                className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-5"
               >
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                   <div className="space-y-2">
@@ -205,3 +205,4 @@ export default async function AdminAnalyticsPage() {
     </section>
   );
 }
+

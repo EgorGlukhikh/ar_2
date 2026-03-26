@@ -106,7 +106,7 @@ function EmptyStudio({
   children?: ReactNode;
 }) {
   return (
-    <article className="rounded-[20px] border border-dashed border-[var(--border)] bg-[var(--surface)] p-8 shadow-[var(--shadow-sm)]">
+    <article className="rounded-[var(--radius-lg)] border border-dashed border-[var(--border)] bg-[var(--surface)] p-8 shadow-[var(--shadow-sm)]">
       <h2 className="text-3xl font-semibold tracking-tight text-[var(--foreground)]">{title}</h2>
       <p className="mt-3 max-w-2xl text-sm leading-7 text-[var(--muted)]">{description}</p>
       {children ? <div className="mt-6">{children}</div> : null}
@@ -298,7 +298,7 @@ export default async function CourseContentPage({
             />
 
             {course.deliveryFormat === CourseDeliveryFormat.LIVE_COHORT ? (
-              <article className="rounded-[20px] border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow-sm)]">
+              <article className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow-sm)]">
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
                   Формат курса
                 </p>
@@ -412,7 +412,7 @@ export default async function CourseContentPage({
                   </aside>
 
                   <div className="min-w-0 space-y-6">
-                    <article className="rounded-[20px] border border-[var(--border)] bg-[var(--surface)] p-6 shadow-[var(--shadow-sm)]">
+                    <article className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-6 shadow-[var(--shadow-sm)]">
                       <LessonBlockStudio
                         lessonId={selectedLesson.id}
                         initialBlocks={selectedLessonBlocks}
@@ -423,7 +423,7 @@ export default async function CourseContentPage({
                       />
                     </article>
 
-                    <div className="flex flex-wrap items-center gap-3 rounded-[20px] border border-[var(--border)] bg-[var(--surface)] px-5 py-5 shadow-[var(--shadow-sm)]">
+                    <div className="flex flex-wrap items-center gap-3 rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] px-5 py-5 shadow-[var(--shadow-sm)]">
                       <Button type="submit">
                         <Save className="mr-2 h-4 w-4" />
                         Сохранить урок

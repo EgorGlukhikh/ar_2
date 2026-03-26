@@ -1,4 +1,4 @@
-import { BookOpenText, CalendarClock, Eye, PlayCircle, Sparkles, Tv } from "lucide-react";
+﻿import { BookOpenText, CalendarClock, Eye, PlayCircle, Sparkles, Tv } from "lucide-react";
 import { CourseDeliveryFormat, CourseStatus } from "@academy/db";
 
 import { Button } from "@/components/ui/button";
@@ -61,7 +61,7 @@ export default async function NewCoursePage() {
           </div>
         </div>
 
-        <div className="rounded-[24px] border border-[var(--border)] bg-[linear-gradient(160deg,_#eef3ff_0%,_#f8fbff_55%,_#ffffff_100%)] p-6">
+        <div className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[linear-gradient(160deg,_#eef3ff_0%,_#f8fbff_55%,_#ffffff_100%)] p-6">
           <div className="space-y-4">
             <div className="flex items-center gap-3 rounded-2xl bg-white/90 p-4 shadow-sm">
               <div className="rounded-2xl bg-[var(--primary-soft)] p-3">
@@ -204,3 +204,4 @@ export default async function NewCoursePage() {
     </section>
   );
 }
+

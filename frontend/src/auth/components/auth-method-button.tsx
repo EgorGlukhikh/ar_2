@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { LoaderCircle } from "lucide-react";
 
@@ -33,7 +33,7 @@ export function AuthMethodButton({
       onClick={onClick}
       disabled={isLocked}
       className={cn(
-        "group flex min-h-[72px] w-full items-center justify-between gap-4 rounded-[20px] border px-5 py-4 text-left transition",
+        "group flex min-h-[72px] w-full items-center justify-between gap-4 rounded-[var(--radius-lg)] border px-5 py-4 text-left transition",
         tone === "primary" &&
           "border-[var(--primary)] bg-[var(--primary)] text-[var(--primary-foreground)] shadow-[var(--shadow-brand)]",
         tone === "secondary" &&
@@ -78,3 +78,4 @@ export function AuthMethodButton({
     </button>
   );
 }
+

@@ -1,4 +1,4 @@
-import { BadgeDollarSign, ShoppingBag, UserPlus, Users } from "lucide-react";
+﻿import { BadgeDollarSign, ShoppingBag, UserPlus, Users } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -267,7 +267,7 @@ export function CourseAccessPageContent({
       >
         <div className="space-y-4">
           {payload.enrollments.length === 0 ? (
-            <div className="rounded-[20px] border border-dashed border-[var(--border)] bg-[var(--surface)] px-5 py-6 text-sm leading-7 text-[var(--muted)]">
+            <div className="rounded-[var(--radius-lg)] border border-dashed border-[var(--border)] bg-[var(--surface)] px-5 py-6 text-sm leading-7 text-[var(--muted)]">
               Пока на этот курс никто не зачислен.
             </div>
           ) : (
@@ -321,3 +321,4 @@ export function CourseAccessPageContent({
     </section>
   );
 }
+

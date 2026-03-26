@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+﻿import type { ReactNode } from "react";
 import Link from "next/link";
 
 import { LogoutButton } from "@/components/auth/logout-button";
@@ -29,7 +29,7 @@ export default async function LearningLayout({
             <div className="flex flex-col gap-4 xl:min-w-0 xl:flex-1">
               <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div className="flex items-center gap-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-[16px] bg-[#1c2442] text-sm font-semibold text-white">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-[var(--radius-md)] bg-[#1c2442] text-sm font-semibold text-white">
                     AR
                   </div>
                   <div className="min-w-0">
@@ -76,3 +76,4 @@ export default async function LearningLayout({
     </main>
   );
 }
+

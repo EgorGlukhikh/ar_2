@@ -1,4 +1,4 @@
-import { Eye, Shield, UserRound, PenSquare } from "lucide-react";
+﻿import { Eye, Shield, UserRound, PenSquare } from "lucide-react";
 
 import { USER_ROLES, type UserRole } from "@academy/shared";
 
@@ -47,7 +47,7 @@ export function RolePreviewSwitcher({
   }
 
   return (
-    <div className="flex flex-col gap-3 rounded-[24px] border border-[var(--border)] bg-[var(--surface)] px-4 py-4">
+    <div className="flex flex-col gap-3 rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] px-4 py-4">
       <div className="flex flex-wrap items-center gap-2">
         <Badge variant="neutral">
           <Eye className="mr-2 h-3.5 w-3.5" />
@@ -84,3 +84,4 @@ export function RolePreviewSwitcher({
     </div>
   );
 }
+

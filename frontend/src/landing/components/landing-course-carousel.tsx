@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
@@ -142,7 +142,7 @@ export function LandingCourseCarousel({ courses }: { courses: PublicCourseCard[]
           return (
             <MotionReveal key={course.id} variant="scale" delay={index * 100} className="h-full">
               <article className={cn(publicCardClassName, "h-full")}>
-                <div className="relative h-56 overflow-hidden rounded-[16px]">
+                <div className="relative h-56 overflow-hidden rounded-[var(--radius-md)]">
                   <Image
                     src={getPublicCourseCover(index + page * cardsPerView)}
                     alt={copy?.title ?? course.title}
@@ -182,3 +182,4 @@ export function LandingCourseCarousel({ courses }: { courses: PublicCourseCard[]
     </div>
   );
 }
+

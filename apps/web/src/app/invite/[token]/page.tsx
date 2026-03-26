@@ -163,7 +163,7 @@ export default async function InvitePage({ params }: InvitePageProps) {
                     </div>
 
                     <div className="mt-6 grid gap-4 md:grid-cols-2">
-                      <div className="rounded-[24px] border border-[#dfe5f7] bg-white p-5 shadow-sm">
+                      <div className="rounded-[var(--radius-xl)] border border-[#dfe5f7] bg-white p-5 shadow-sm">
                         <div className="inline-flex rounded-2xl bg-[#eef2ff] p-3">
                           <Mail className="h-5 w-5 text-[#2840db]" />
                         </div>
@@ -171,7 +171,7 @@ export default async function InvitePage({ params }: InvitePageProps) {
                         <p className="mt-2 text-lg font-semibold text-[#1c2442]">{invite.email}</p>
                       </div>
 
-                      <div className="rounded-[24px] border border-[#dfe5f7] bg-white p-5 shadow-sm">
+                      <div className="rounded-[var(--radius-xl)] border border-[#dfe5f7] bg-white p-5 shadow-sm">
                         <div className="inline-flex rounded-2xl bg-[#eef2ff] p-3">
                           <ShieldCheck className="h-5 w-5 text-[#2840db]" />
                         </div>

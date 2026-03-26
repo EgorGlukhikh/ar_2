@@ -1,4 +1,4 @@
-import { auth } from "@academy/auth";
+﻿import { auth } from "@academy/auth";
 import { redirect } from "next/navigation";
 
 import { getPublicAuthScreenPayload } from "@backend/public-auth/get-public-auth-screen-payload";
@@ -41,10 +41,10 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
       <div className={marketingContainerClassName}>
         <section className={marketingFrameClassName}>
           <div className={marketingInnerFrameClassName}>
-            <header className="rounded-[24px] border border-[var(--border)] bg-[rgba(255,255,255,0.9)] px-5 py-5 shadow-[var(--shadow-sm)] backdrop-blur md:px-6">
+            <header className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[rgba(255,255,255,0.9)] px-5 py-5 shadow-[var(--shadow-sm)] backdrop-blur md:px-6">
               <div className="flex min-h-20 flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
                 <div className="flex items-center gap-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-[16px] bg-[var(--foreground)] text-sm font-semibold text-white">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-[var(--radius-md)] bg-[var(--foreground)] text-sm font-semibold text-white">
                     AR
                   </div>
                   <div className="space-y-1">
@@ -78,3 +78,4 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
     </main>
   );
 }
+

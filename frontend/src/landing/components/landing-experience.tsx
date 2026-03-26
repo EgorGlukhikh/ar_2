@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { ArrowRight, PlayCircle, ShieldCheck, Tv } from "lucide-react";
 import Link from "next/link";
@@ -56,7 +56,7 @@ function ProductPreview() {
           ].map((item) => (
             <div
               key={item.title}
-              className="rounded-[16px] border border-white/15 bg-white/10 px-4 py-4"
+              className="rounded-[var(--radius-md)] border border-white/15 bg-white/10 px-4 py-4"
             >
               <p className="text-sm font-semibold text-white">
                 <Copy value={item.title} />
@@ -107,10 +107,10 @@ export function LandingExperience({
   return (
     <div className="space-y-16 md:space-y-20 lg:space-y-24">
       <MotionReveal variant="soft" immediate>
-        <header className="rounded-[24px] border border-[var(--border)] bg-[rgba(255,255,255,0.92)] px-5 py-5 shadow-[var(--shadow-sm)] backdrop-blur md:px-6 md:py-5">
+        <header className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[rgba(255,255,255,0.92)] px-5 py-5 shadow-[var(--shadow-sm)] backdrop-blur md:px-6 md:py-5">
           <div className="flex min-h-20 flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
             <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-[16px] bg-[var(--foreground)] text-sm font-semibold text-white">
+              <div className="flex h-12 w-12 items-center justify-center rounded-[var(--radius-md)] bg-[var(--foreground)] text-sm font-semibold text-white">
                 AR
               </div>
               <div className="space-y-1">
@@ -201,11 +201,11 @@ export function LandingExperience({
         </MotionReveal>
       </section>
 
-      <section className="rounded-[24px] border border-[var(--border)] bg-[var(--surface)] p-6 shadow-[var(--shadow-sm)] md:p-8">
+      <section className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-6 shadow-[var(--shadow-sm)] md:p-8">
         <div className="grid items-start gap-4 md:grid-cols-2 xl:grid-cols-4">
           {trustPoints.map((item, index) => (
             <MotionReveal key={item} variant="up" delay={index * 70}>
-              <article className="flex items-start gap-3 rounded-[16px] bg-[var(--surface-strong)] p-4">
+              <article className="flex items-start gap-3 rounded-[var(--radius-md)] bg-[var(--surface-strong)] p-4">
                 <div className={cn(publicIconBoxClassName, "h-10 w-10 rounded-[var(--icon-radius-sm)]")}>
                   <ShieldCheck className="h-4 w-4" />
                 </div>
@@ -253,7 +253,7 @@ export function LandingExperience({
 
       <section
         id="flow"
-        className="rounded-[24px] border border-[var(--border)] bg-[var(--surface-strong)] p-6 shadow-[var(--shadow-sm)] md:p-8"
+        className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface-strong)] p-6 shadow-[var(--shadow-sm)] md:p-8"
       >
         <div className="space-y-8">
           <SectionLead
@@ -318,7 +318,7 @@ export function LandingExperience({
               {authorCopy.steps.map((step) => (
                 <div
                   key={step.title}
-                  className="rounded-[16px] border border-white/15 bg-white/10 px-4 py-4"
+                  className="rounded-[var(--radius-md)] border border-white/15 bg-white/10 px-4 py-4"
                 >
                   <p className="text-sm font-semibold text-white">
                     <Copy value={step.title} />
@@ -372,3 +372,4 @@ export function LandingExperience({
     </div>
   );
 }
+

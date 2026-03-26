@@ -1,4 +1,4 @@
-import { Search } from "lucide-react";
+﻿import { Search } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -117,7 +117,7 @@ export function AdminUsersPageContent({
             {payload.users.map((user) => (
               <article
                 key={user.id}
-                className="rounded-[24px] border border-[var(--border)] bg-[var(--surface)] p-5"
+                className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-5"
               >
                 <div className="space-y-4">
                   <div className="flex flex-wrap items-start justify-between gap-3">
@@ -132,15 +132,15 @@ export function AdminUsersPageContent({
                   </div>
 
                   <div className="grid gap-3 sm:grid-cols-3">
-                    <div className="rounded-[16px] border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-3">
+                    <div className="rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-3">
                       <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">Курсы</p>
                       <p className="mt-2 font-semibold text-[var(--foreground)]">{user.enrollmentCount}</p>
                     </div>
-                    <div className="rounded-[16px] border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-3">
+                    <div className="rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-3">
                       <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">Активность</p>
                       <p className="mt-2 font-semibold text-[var(--foreground)]">{user.progressCount}</p>
                     </div>
-                    <div className="rounded-[16px] border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-3">
+                    <div className="rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-3">
                       <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">Создан</p>
                       <p className="mt-2 text-sm font-semibold text-[var(--foreground)]">{user.createdAtLabel}</p>
                     </div>
@@ -149,7 +149,7 @@ export function AdminUsersPageContent({
                   <div className="space-y-2">
                     <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">Последние курсы</p>
                     {user.latestCourses.length === 0 ? (
-                      <div className="rounded-[16px] border border-dashed border-[var(--border)] bg-[var(--surface-strong)] px-4 py-3 text-sm text-[var(--muted)]">
+                      <div className="rounded-[var(--radius-md)] border border-dashed border-[var(--border)] bg-[var(--surface-strong)] px-4 py-3 text-sm text-[var(--muted)]">
                         Пока нет доступов к курсам.
                       </div>
                     ) : (
@@ -174,3 +174,4 @@ export function AdminUsersPageContent({
     </section>
   );
 }
+

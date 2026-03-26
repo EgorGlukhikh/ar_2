@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { PencilLine, X } from "lucide-react";
 import { useState } from "react";
@@ -68,7 +68,7 @@ export function EditableHomeworkRulesCard({
   return (
     <article
       className={cn(
-        "rounded-[20px] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-sm)]",
+        "rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-sm)]",
         className,
       )}
     >
@@ -116,7 +116,7 @@ export function EditableHomeworkRulesCard({
           {homeworkRuleItems.map((item) => (
             <label
               key={item.key}
-              className="rounded-[16px] border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-4"
+              className="rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-4"
             >
               <div className="flex items-start gap-3">
                 {isEditing ? (
@@ -157,3 +157,4 @@ export function EditableHomeworkRulesCard({
     </article>
   );
 }
+

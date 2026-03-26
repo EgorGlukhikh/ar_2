@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { BookOpen, LayoutTemplate, PlusCircle, WalletCards } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -96,14 +96,14 @@ export function CoursesPageContent({
               }
             >
               <div className="grid gap-3 sm:grid-cols-3">
-                <div className="rounded-[16px] border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-4">
+                <div className="rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-4">
                   <LayoutTemplate className="h-4 w-4 text-[var(--primary)]" />
                   <p className="mt-3 text-sm font-medium text-[var(--foreground)]">Карточка</p>
                   <p className="mt-1 text-sm leading-6 text-[var(--muted)]">
                     Название, описание и статус.
                   </p>
                 </div>
-                <div className="rounded-[16px] border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-4">
+                <div className="rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-4">
                   <BookOpen className="h-4 w-4 text-[var(--primary)]" />
                   <p className="mt-3 text-sm font-medium text-[var(--foreground)]">Программа</p>
                   <p className="mt-1 text-sm leading-6 text-[var(--muted)]">
@@ -111,7 +111,7 @@ export function CoursesPageContent({
                   </p>
                 </div>
                 {payload.isAdminMode ? (
-                  <div className="rounded-[16px] border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-4">
+                  <div className="rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-4">
                     <WalletCards className="h-4 w-4 text-[var(--primary)]" />
                     <p className="mt-3 text-sm font-medium text-[var(--foreground)]">Доступы</p>
                     <p className="mt-1 text-sm leading-6 text-[var(--muted)]">
@@ -119,7 +119,7 @@ export function CoursesPageContent({
                     </p>
                   </div>
                 ) : (
-                  <div className="rounded-[16px] border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-4">
+                  <div className="rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-4">
                     <BookOpen className="h-4 w-4 text-[var(--primary)]" />
                     <p className="mt-3 text-sm font-medium text-[var(--foreground)]">Наполнение</p>
                     <p className="mt-1 text-sm leading-6 text-[var(--muted)]">
@@ -130,7 +130,7 @@ export function CoursesPageContent({
               </div>
 
               {course.authorLabel ? (
-                <div className="rounded-[16px] border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-3 text-sm text-[var(--muted)]">
+                <div className="rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-3 text-sm text-[var(--muted)]">
                   Автор:{" "}
                   <span className="font-medium text-[var(--foreground)]">
                     {course.authorLabel}
@@ -164,3 +164,4 @@ export function CoursesPageContent({
     </section>
   );
 }
+

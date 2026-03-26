@@ -1,4 +1,4 @@
-import { Briefcase, Link2, ShieldCheck, UserCog, Users2 } from "lucide-react";
+﻿import { Briefcase, Link2, ShieldCheck, UserCog, Users2 } from "lucide-react";
 
 import { prisma } from "@academy/db";
 import { USER_ROLES } from "@academy/shared";
@@ -327,7 +327,7 @@ export default async function TeamPage() {
                       ) : null}
                     </div>
 
-                    <div className="flex w-full max-w-[420px] flex-col gap-3 rounded-[24px] border border-[var(--border)] bg-white p-4">
+                    <div className="flex w-full max-w-[420px] flex-col gap-3 rounded-[var(--radius-xl)] border border-[var(--border)] bg-white p-4">
                       <div className="flex items-center gap-2 text-sm font-medium text-[var(--foreground)]">
                         <Link2 className="h-4 w-4 text-[var(--primary)]" />
                         Ссылка приглашения
@@ -360,3 +360,4 @@ export default async function TeamPage() {
     </section>
   );
 }
+

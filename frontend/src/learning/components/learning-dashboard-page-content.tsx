@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { BookOpen, Compass, GraduationCap } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -118,7 +118,7 @@ export function LearningDashboardPageContent({
                       style={{ width: `${course.progressPercent}%` }}
                     />
                   </div>
-                  <div className="rounded-[16px] border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-4 text-sm leading-7 text-[var(--muted)]">
+                  <div className="rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-4 text-sm leading-7 text-[var(--muted)]">
                     {course.nextLessonTitle
                       ? `Следующий ориентир: ${course.nextLessonTitle}`
                       : "Курс пока пустой. Когда в программе появятся уроки, здесь появится учебный маршрут."}
@@ -132,3 +132,4 @@ export function LearningDashboardPageContent({
     </section>
   );
 }
+

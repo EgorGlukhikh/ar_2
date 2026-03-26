@@ -1,4 +1,4 @@
-import Image from "next/image";
+﻿import Image from "next/image";
 
 import { getIllustrationSrc, type IllustrationKey } from "@/lib/illustrations";
 import { cn } from "@/lib/utils";
@@ -21,7 +21,7 @@ export function SiteIllustration({
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-[20px] border border-[var(--border)] bg-[linear-gradient(180deg,#ffffff_0%,#f7f9fc_100%)] p-6 shadow-[var(--shadow-sm)]",
+        "relative overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border)] bg-[linear-gradient(180deg,#ffffff_0%,#f7f9fc_100%)] p-6 shadow-[var(--shadow-sm)]",
         className,
       )}
     >
@@ -38,3 +38,4 @@ export function SiteIllustration({
     </div>
   );
 }
+

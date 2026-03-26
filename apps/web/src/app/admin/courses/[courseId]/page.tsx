@@ -83,7 +83,7 @@ export default async function CourseSettingsPage({
     <section className="grid gap-6 xl:grid-cols-[minmax(0,1.2fr)_360px]">
       <form
         action={updateCourse}
-        className="rounded-[24px] border border-[var(--border)] bg-white p-6 shadow-sm"
+        className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-white p-6 shadow-sm"
       >
         <input type="hidden" name="courseId" value={course.id} />
         {!isAdmin ? <input type="hidden" name="status" value={course.status} /> : null}
@@ -226,7 +226,7 @@ export default async function CourseSettingsPage({
       </form>
 
       <div className="space-y-6">
-        <article className="rounded-[24px] border border-[var(--border)] bg-white p-6 shadow-sm">
+        <article className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-white p-6 shadow-sm">
           <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
             Что дальше
           </p>
@@ -262,7 +262,7 @@ export default async function CourseSettingsPage({
           </div>
         </article>
 
-        <article className="rounded-[24px] border border-[var(--border)] bg-white p-6 shadow-sm">
+        <article className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-white p-6 shadow-sm">
           <div className="inline-flex rounded-2xl bg-[var(--primary-soft)] p-3 text-[var(--primary)]">
             <CalendarClock className="h-5 w-5" />
           </div>
@@ -279,7 +279,7 @@ export default async function CourseSettingsPage({
         {isAdmin ? (
           <form
             action={deleteCourse}
-            className="rounded-[24px] border border-[var(--border)] bg-white p-6 shadow-sm"
+            className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-white p-6 shadow-sm"
           >
             <input type="hidden" name="courseId" value={course.id} />
 

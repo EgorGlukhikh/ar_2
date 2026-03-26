@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { ChevronRight, GripVertical, Loader2, Plus, X } from "lucide-react";
 import Link from "next/link";
@@ -193,7 +193,7 @@ export function CourseStructureTree({
 
   return (
     <div className="space-y-4">
-      <article className="rounded-[24px] border border-[var(--border)] bg-white p-4 shadow-sm">
+      <article className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-white p-4 shadow-sm">
         <div className="flex items-start justify-between gap-3">
           <div className="space-y-1">
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#7a6548]">
@@ -256,7 +256,7 @@ export function CourseStructureTree({
 
                   runLessonReposition(moduleItem.id);
                 }}
-                className={`rounded-[24px] border bg-white transition ${
+                className={`rounded-[var(--radius-xl)] border bg-white transition ${
                   isActiveModule
                     ? "border-[var(--primary)] shadow-[0_16px_40px_rgba(65,97,255,0.12)]"
                     : "border-[var(--border)] shadow-sm"
@@ -443,3 +443,4 @@ export function CourseStructureTree({
     </div>
   );
 }
+

@@ -42,7 +42,7 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
       <div className={marketingContainerClassName}>
         <section className={marketingFrameClassName}>
           <div className={marketingInnerFrameClassName}>
-            <header className="rounded-[24px] border border-[var(--border)] bg-[rgba(255,255,255,0.9)] px-5 py-5 shadow-[var(--shadow-sm)] backdrop-blur md:px-6">
+            <header className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[rgba(255,255,255,0.9)] px-5 py-5 shadow-[var(--shadow-sm)] backdrop-blur md:px-6">
               <div className="flex min-h-20 flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
                 <div className="space-y-3">
                   <div className="flex flex-wrap gap-2">

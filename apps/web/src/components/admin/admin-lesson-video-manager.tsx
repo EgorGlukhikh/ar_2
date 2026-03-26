@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { Link2, Plus, Upload } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -284,7 +284,7 @@ export function AdminLessonVideoManager({
   }
 
   return (
-    <section className="space-y-4 rounded-[24px] border border-[var(--border)] bg-[var(--surface)] p-4">
+    <section className="space-y-4 rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-4">
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
@@ -379,7 +379,7 @@ export function AdminLessonVideoManager({
         </div>
       </div>
 
-      <div className="rounded-[20px] border border-dashed border-[var(--border)] bg-white px-4 py-4">
+      <div className="rounded-[var(--radius-lg)] border border-dashed border-[var(--border)] bg-white px-4 py-4">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="min-w-0">
             <p className="text-sm font-medium text-[var(--foreground)]">Или загрузи файл</p>
@@ -422,3 +422,4 @@ export function AdminLessonVideoManager({
     </section>
   );
 }
+

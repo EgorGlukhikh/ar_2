@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { signIn } from "next-auth/react";
@@ -86,13 +86,13 @@ export function SignInPageContent({
           </div>
 
           {payload.errorMessage ? (
-            <div className="rounded-[16px] border border-red-200 bg-red-50 px-4 py-3 text-sm leading-6 text-red-700">
+            <div className="rounded-[var(--radius-md)] border border-red-200 bg-red-50 px-4 py-3 text-sm leading-6 text-red-700">
               {formatPublicCopy(payload.errorMessage)}
             </div>
           ) : null}
 
           {payload.showInviteSuccess ? (
-            <div className="rounded-[16px] border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm leading-6 text-emerald-700">
+            <div className="rounded-[var(--radius-md)] border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm leading-6 text-emerald-700">
               {formatPublicCopy(
                 "Приглашение активировано. Можно войти в существующий аккаунт или быстро завершить регистрацию на эту почту.",
               )}
@@ -130,3 +130,4 @@ export function SignInPageContent({
     </AuthShell>
   );
 }
+

@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+﻿import type { ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
 import { BookOpenText } from "lucide-react";
 
@@ -223,7 +223,7 @@ export function WorkspaceEmptyState({
   return (
     <div
       className={cn(
-        "rounded-[20px] border border-dashed border-[var(--border)] bg-[var(--surface)] p-8 shadow-[var(--shadow-sm)]",
+        "rounded-[var(--radius-lg)] border border-dashed border-[var(--border)] bg-[var(--surface)] p-8 shadow-[var(--shadow-sm)]",
         className,
       )}
     >
@@ -253,7 +253,7 @@ export function CourseThumb({
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-[20px] border border-white/16 shadow-[var(--shadow-lg)]",
+        "relative overflow-hidden rounded-[var(--radius-lg)] border border-white/16 shadow-[var(--shadow-lg)]",
         compact ? "min-h-[160px] p-4" : "min-h-[220px] p-5",
         theme.shell,
         className,
@@ -298,3 +298,4 @@ export function CourseThumb({
     </div>
   );
 }
+

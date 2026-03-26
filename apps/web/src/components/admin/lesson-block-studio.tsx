@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import {
   ChevronDown,
@@ -813,7 +813,7 @@ export function LessonBlockStudio({
                           {block.questions.map((question, questionIndex) => (
                             <div
                               key={question.id}
-                              className="rounded-[20px] border border-[var(--border)] bg-white p-4"
+                              className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-white p-4"
                             >
                               <div className="flex flex-wrap items-start justify-between gap-3">
                                 <div className="flex flex-wrap items-center gap-2">
@@ -1021,7 +1021,7 @@ export function LessonBlockStudio({
                     type="button"
                     disabled={disabled}
                     onClick={() => addBlock(option.type)}
-                    className="rounded-[24px] border border-[var(--border)] bg-[var(--surface)] p-4 text-left transition hover:border-[var(--primary)] hover:bg-white disabled:cursor-not-allowed disabled:opacity-50"
+                    className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-4 text-left transition hover:border-[var(--primary)] hover:bg-white disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     <div
                       className={`flex h-11 w-11 items-center justify-center rounded-2xl shadow-sm ${option.accentClassName}`}
@@ -1046,3 +1046,4 @@ export function LessonBlockStudio({
     </div>
   );
 }
+

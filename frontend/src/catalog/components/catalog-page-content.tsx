@@ -1,4 +1,4 @@
-import {
+﻿import {
   ArrowRight,
   ArrowUpRight,
   BookOpen,
@@ -153,7 +153,7 @@ export function CatalogPageContent({
 
         {featuredCourse ? (
           <article className={publicCardClassName}>
-            <div className="relative h-60 overflow-hidden rounded-[16px]">
+            <div className="relative h-60 overflow-hidden rounded-[var(--radius-md)]">
               <Image
                 src={getPublicCourseCover(0)}
                 alt={featuredCourse.title}
@@ -195,7 +195,7 @@ export function CatalogPageContent({
         ) : (
           courses.map((course, index) => (
             <article id={course.slug} key={course.id} className={publicCardClassName}>
-              <div className="relative h-48 overflow-hidden rounded-[16px]">
+              <div className="relative h-48 overflow-hidden rounded-[var(--radius-md)]">
                 <Image
                   src={getPublicCourseCover(index + 1)}
                   alt={course.title}
@@ -220,7 +220,7 @@ export function CatalogPageContent({
                 {formatPublicCopy(course.description)}
               </p>
 
-              <div className="mt-5 rounded-[16px] bg-[var(--surface-strong)] p-4">
+              <div className="mt-5 rounded-[var(--radius-md)] bg-[var(--surface-strong)] p-4">
                 <p className="text-[12px] font-medium uppercase leading-4 tracking-[0.18em] text-[var(--muted)]">
                   {formatPublicCopy("Что получишь")}
                 </p>
@@ -229,7 +229,7 @@ export function CatalogPageContent({
                 </p>
               </div>
 
-              <div className="mt-4 rounded-[16px] bg-[var(--surface-strong)] p-4">
+              <div className="mt-4 rounded-[var(--radius-md)] bg-[var(--surface-strong)] p-4">
                 <p className="text-[12px] font-medium uppercase leading-4 tracking-[0.18em] text-[var(--muted)]">
                   {formatPublicCopy("Стоимость")}
                 </p>
@@ -269,3 +269,4 @@ export function CatalogPageContent({
     </section>
   );
 }
+

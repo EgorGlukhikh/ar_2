@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+﻿import type { ReactNode } from "react";
 import { CheckCircle2, ShieldCheck, Sparkles, UserRound } from "lucide-react";
 
 import { AuthCard } from "./auth-card";
@@ -59,7 +59,7 @@ export function AuthShell({
             {benefits.map((item) => (
               <div
                 key={item}
-                className="flex items-start gap-3 rounded-[16px] border border-white/15 bg-white/10 p-4"
+                className="flex items-start gap-3 rounded-[var(--radius-md)] border border-white/15 bg-white/10 p-4"
               >
                 <CheckCircle2 className="mt-1 h-5 w-5 flex-none text-white" />
                 <p className="text-sm leading-6 text-white/88">
@@ -99,3 +99,4 @@ export function AuthShell({
     </section>
   );
 }
+
