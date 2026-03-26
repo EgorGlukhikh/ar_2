@@ -31,6 +31,13 @@ export default async function AdminLayout({
     role: viewer.effectiveRole,
   });
 
+  const knowledgeBaseHref =
+    viewer.effectiveRole === USER_ROLES.ADMIN
+      ? null
+      : viewer.effectiveRole === USER_ROLES.AUTHOR || viewer.effectiveRole === USER_ROLES.CURATOR
+        ? "/knowledge-base?role=teacher"
+        : "/knowledge-base?role=student";
+
   return (
     <main className="min-h-screen bg-[var(--background)] px-4 py-4 md:px-6 md:py-6">
       <SystemContainer className="space-y-6 px-0">
@@ -71,12 +78,16 @@ export default async function AdminLayout({
                   <Link href="/admin/courses/new">Новый курс</Link>
                 </Button>
               ) : null}
-              <Button asChild variant="outline">
-                <Link href="/">Открыть портал</Link>
-              </Button>
-              <Button asChild variant="outline">
-                <Link href="/learning">Учебный кабинет</Link>
-              </Button>
+              {knowledgeBaseHref ? (
+                <Button asChild variant="outline">
+                  <Link href={knowledgeBaseHref}>База знаний</Link>
+                </Button>
+              ) : null}
+              {viewer.effectiveRole !== USER_ROLES.ADMIN ? (
+                <Button asChild variant="outline">
+                  <Link href="/learning">Учебный кабинет</Link>
+                </Button>
+              ) : null}
               <LogoutButton />
             </div>
           </div>

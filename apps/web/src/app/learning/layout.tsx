@@ -3,8 +3,8 @@ import Link from "next/link";
 
 import { LogoutButton } from "@/components/auth/logout-button";
 import { LearningNav } from "@/components/learning/learning-nav";
-import { RolePreviewSwitcher } from "@/components/workspace/role-preview-switcher";
 import { Button } from "@/components/ui/button";
+import { RolePreviewSwitcher } from "@/components/workspace/role-preview-switcher";
 import { isElevatedUserRole } from "@/lib/user";
 import { requireLearningViewer } from "@/lib/viewer";
 
@@ -16,7 +16,10 @@ export default async function LearningLayout({
   children: ReactNode;
 }) {
   const viewer = await requireLearningViewer();
-  const isElevated = isElevatedUserRole(viewer.effectiveRole);
+  const hasTeamAccess = isElevatedUserRole(viewer.actualRole);
+  const knowledgeBaseHref = hasTeamAccess
+    ? "/knowledge-base?role=teacher"
+    : "/knowledge-base?role=student";
 
   return (
     <main className="min-h-screen bg-[linear-gradient(180deg,_#f7f9ff_0%,_#f1f5ff_100%)] px-4 py-4 md:px-6 md:py-6">
@@ -26,7 +29,7 @@ export default async function LearningLayout({
             <div className="flex flex-col gap-4 xl:min-w-0 xl:flex-1">
               <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div className="flex items-center gap-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#1c2442] text-sm font-semibold text-white">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-[16px] bg-[#1c2442] text-sm font-semibold text-white">
                     AR
                   </div>
                   <div className="min-w-0">
@@ -34,7 +37,9 @@ export default async function LearningLayout({
                       Академия риэлторов
                     </p>
                     <h1 className="mt-1 truncate text-2xl font-semibold tracking-tight text-[var(--foreground)]">
-                      {viewer.effectiveRole === "STUDENT" ? "Учебный кабинет" : "Витрина обучения"}
+                      {viewer.effectiveRole === "STUDENT"
+                        ? "Учебный кабинет"
+                        : "Учебный просмотр"}
                     </h1>
                     <p className="mt-1 text-sm leading-6 text-[var(--muted)]">
                       {viewer.user.email}
@@ -53,16 +58,13 @@ export default async function LearningLayout({
             </div>
 
             <div className="flex flex-wrap gap-3 xl:justify-end">
-              {isElevated ? (
+              {hasTeamAccess ? (
                 <Button asChild variant="outline">
-                  <Link href="/admin">Открыть админку</Link>
+                  <Link href="/admin">Рабочий кабинет</Link>
                 </Button>
               ) : null}
               <Button asChild variant="outline">
-                <Link href="/catalog">Каталог курсов</Link>
-              </Button>
-              <Button asChild variant="outline">
-                <Link href="/">На главную</Link>
+                <Link href={knowledgeBaseHref}>База знаний</Link>
               </Button>
               <LogoutButton />
             </div>
@@ -74,4 +76,3 @@ export default async function LearningLayout({
     </main>
   );
 }
-

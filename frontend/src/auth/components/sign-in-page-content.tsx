@@ -14,9 +14,9 @@ import { cn } from "@/lib/utils";
 import type { AuthTab, PublicAuthScreenPayload } from "@shared/public-auth/types";
 
 /**
- * Purpose: standalone auth experience with explicit login/register modes and Yandex entrypoint.
+ * Purpose: standalone auth experience with explicit login and registration states.
  * Props:
- * - payload: query/env-derived auth screen settings
+ * - payload: auth screen state prepared in the backend layer
  */
 export function SignInPageContent({
   payload,
@@ -35,12 +35,12 @@ export function SignInPageContent({
 
   return (
     <AuthShell
-      title="Войди или создай аккаунт без лишних шагов."
-      text="Один экран для входа, регистрации и быстрого старта через Яндекс. После авторизации платформа сама переведет тебя в нужный раздел."
-      sideTitle="Доступ к курсам и кабинету автора начинается здесь."
-      sideText="Если email уже есть в системе, новый способ входа привяжется к тому же аккаунту. Новые Яндекс-пользователи получают обычный STUDENT-профиль и могут сразу начать учиться."
+      title="Вход и регистрация без лишних шагов."
+      text="Открой учебный кабинет или рабочий контур с одного экрана. Можно войти по почте и паролю или через Яндекс."
+      sideTitle="После входа платформа сама откроет нужный раздел."
+      sideText="Если почта уже есть в системе, вход через Яндекс подключится к тому же аккаунту. Новый вход через Яндекс создает обычный учебный профиль."
     >
-      <AuthCard className="p-0 overflow-hidden">
+      <AuthCard className="overflow-hidden p-0">
         <div className="border-b border-[var(--border)] p-3">
           <div className="inline-flex rounded-[var(--control-radius)] border border-[var(--border)] bg-[var(--surface-strong)] p-1 shadow-[var(--shadow-sm)]">
             {([
@@ -73,14 +73,14 @@ export function SignInPageContent({
               {formatPublicCopy(
                 activeTab === "sign-in"
                   ? "Открыть свой кабинет"
-                  : "Создать аккаунт студента",
+                  : "Создать новый аккаунт",
               )}
             </h2>
             <p className="max-w-[560px] text-[15px] leading-6 text-[var(--muted)]">
               {formatPublicCopy(
                 activeTab === "sign-in"
-                  ? "Войди по почте и паролю или используй Яндекс, если он привязан к твоему email."
-                  : "Регистрация сразу создает обычный STUDENT-аккаунт. Если потом понадобится другая роль, ее назначит команда платформы.",
+                  ? "Войди по почте и паролю или используй Яндекс, если он привязан к твоей почте."
+                  : "Регистрация открывает учебный профиль. Роль автора, куратора или администратора назначается отдельно внутри платформы.",
               )}
             </p>
           </div>
@@ -94,7 +94,7 @@ export function SignInPageContent({
           {payload.showInviteSuccess ? (
             <div className="rounded-[16px] border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm leading-6 text-emerald-700">
               {formatPublicCopy(
-                "Приглашение активировано. Теперь можно войти или быстро завершить регистрацию по этой почте.",
+                "Приглашение активировано. Можно войти в существующий аккаунт или быстро завершить регистрацию на эту почту.",
               )}
             </div>
           ) : null}
@@ -102,11 +102,12 @@ export function SignInPageContent({
           {payload.isYandexEnabled ? (
             <>
               <AuthMethodButton
-                label="Продолжить через Яндекс ID"
-                hint="Войдешь в существующий аккаунт по совпавшему email или создашь новый STUDENT-профиль."
+                label="Войти через Яндекс"
+                hint="Быстрый вход без отдельного пароля, если почта уже известна системе."
                 icon="Я"
                 onClick={handleYandexSignIn}
                 pending={yandexPending}
+                tone="yandex"
               />
 
               <div className="flex items-center gap-4">

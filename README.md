@@ -28,6 +28,9 @@
 - каталог курсов `/catalog`
 - экран входа `/sign-in`
 - checkout `/checkout/[orderId]`
+- админский дашборд `/admin`
+- страница пользователей `/admin/users`
+- база знаний `/knowledge-base`
 - публичные endpoints `GET /api/public/home`, `GET /api/courses`, `GET /api/user`
 - checkout endpoint `GET /api/orders/[orderId]`
 - регистрация `POST /api/auth/register`
@@ -42,21 +45,32 @@
 - `frontend/src/auth/components/sign-in-form.tsx`
 - `frontend/src/auth/components/sign-up-form.tsx`
 - `frontend/src/checkout/components/checkout-page-content.tsx`
+- `frontend/src/admin/components/admin-dashboard-page-content.tsx`
+- `frontend/src/admin/components/admin-users-page-content.tsx`
+- `frontend/src/knowledge-base/components/knowledge-base-page-content.tsx`
 - `backend/src/public-home/get-public-home-payload.ts`
 - `backend/src/public-catalog/get-public-catalog-payload.ts`
 - `backend/src/public-checkout/get-public-checkout-payload.ts`
 - `backend/src/auth/register-credentials-user.ts`
 - `backend/src/public-auth/get-public-auth-screen-payload.ts`
+- `backend/src/admin-dashboard/get-admin-dashboard-payload.ts`
+- `backend/src/admin-users/get-admin-users-payload.ts`
 - `database/src/public-home/public-home.repository.ts`
 - `database/src/public-catalog/public-catalog.repository.ts`
 - `database/src/public-checkout/public-checkout.repository.ts`
 - `database/src/auth/auth.repository.ts`
+- `database/src/admin-dashboard/admin-dashboard.repository.ts`
+- `database/src/admin-users/admin-users.repository.ts`
 - `shared/src/public-home/types.ts`
 - `shared/src/public-home/copy.ts`
 - `shared/src/public-catalog/types.ts`
 - `shared/src/public-auth/copy.ts`
 - `shared/src/public-auth/types.ts`
 - `shared/src/public-checkout/types.ts`
+- `shared/src/admin-dashboard/types.ts`
+- `shared/src/admin-users/types.ts`
+- `shared/src/knowledge-base/types.ts`
+- `shared/src/knowledge-base/content.ts`
 
 ## UI-система
 
@@ -135,6 +149,13 @@ OAuth:
 - `db:seed`
 - `db:sync-lesson-blocks`
 
+## Рабочие контуры
+
+- студенту в учебном кабинете оставляем минимальную навигацию: курсы, база знаний, выход
+- автору и куратору даем отдельную кнопку `База знаний` с ролевыми инструкциями
+- админу доступен графический дашборд и страница пользователей с фильтрами по роли, доступу и способу входа
+- демо-оплаты пока остаются только в административном контуре
+
 ## Внутренние аккаунты
 
 Сервисные аккаунты нужны только для разработки и внутренней проверки. В публичном UI они не показываются.
@@ -155,3 +176,9 @@ OAuth:
 
 - Local SVG illustrations are stored in `apps/web/public/illustrations`.
 - The current illustration system uses unDraw assets adapted for platform pages.
+
+## Вход через Яндекс
+
+- на экране `/sign-in` используется отдельная черная кнопка `Войти через Яндекс`
+- если email уже существует, Яндекс привязывается к существующему аккаунту
+- если email новый, создается обычный учебный профиль

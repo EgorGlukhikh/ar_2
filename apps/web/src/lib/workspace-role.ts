@@ -12,6 +12,10 @@ export function canViewStudentWorkspace(role: UserRole) {
   return role === USER_ROLES.ADMIN || role === USER_ROLES.CURATOR;
 }
 
+export function canViewUserWorkspace(role: UserRole) {
+  return role === USER_ROLES.ADMIN;
+}
+
 export function canViewHomeworkWorkspace(role: UserRole) {
   return role === USER_ROLES.ADMIN || role === USER_ROLES.CURATOR;
 }

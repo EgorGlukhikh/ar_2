@@ -23,13 +23,14 @@ import {
   canViewHomeworkWorkspace,
   canViewStudentWorkspace,
   canViewTeamWorkspace,
+  canViewUserWorkspace,
   canViewWorkspaceOverview,
 } from "@/lib/workspace-role";
 
 const navItems = [
   {
     href: "/admin",
-    label: "Обзор",
+    label: "Панель",
     icon: LayoutDashboard,
     isVisible: canViewWorkspaceOverview,
   },
@@ -40,14 +41,21 @@ const navItems = [
     isVisible: canViewCourseWorkspace,
   },
   {
+    href: "/admin/users",
+    label: "Пользователи",
+    icon: Users,
+    isVisible: canViewUserWorkspace,
+  },
+  {
     href: "/admin/students",
     label: "Студенты",
     icon: Users,
-    isVisible: canViewStudentWorkspace,
+    isVisible: (role: UserRole) =>
+      canViewStudentWorkspace(role) && !canViewUserWorkspace(role),
   },
   {
     href: "/admin/homework",
-    label: "Домашки",
+    label: "Домашние",
     icon: ClipboardCheck,
     isVisible: canViewHomeworkWorkspace,
   },
