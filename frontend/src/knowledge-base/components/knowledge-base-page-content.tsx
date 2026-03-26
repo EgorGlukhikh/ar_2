@@ -31,7 +31,7 @@ export function KnowledgeBasePageContent({
                 className="rounded-[18px] border border-[var(--border)] bg-[var(--surface)] p-4"
               >
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-[12px] bg-[var(--primary-soft)] text-[var(--primary)]">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-[var(--icon-radius-sm)] bg-[var(--primary-soft)] text-[var(--primary)]">
                     <BookOpen className="h-4 w-4" />
                   </div>
                   <h2 className="text-lg font-semibold text-[var(--foreground)]">{section.title}</h2>
@@ -61,7 +61,7 @@ export function KnowledgeBasePageContent({
                 className="rounded-[18px] border border-[var(--border)] bg-[var(--surface)] p-4"
               >
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-[12px] bg-[var(--primary-soft)] text-[var(--primary)]">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-[var(--icon-radius-sm)] bg-[var(--primary-soft)] text-[var(--primary)]">
                     <BookOpen className="h-4 w-4" />
                   </div>
                   <h2 className="text-lg font-semibold text-[var(--foreground)]">{section.title}</h2>

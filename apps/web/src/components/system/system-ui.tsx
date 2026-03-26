@@ -3,21 +3,21 @@ import type { HTMLAttributes, ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 export const systemCardClassName =
-  "rounded-[20px] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-sm)]";
+  "rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-sm)]";
 
 export const systemCardAltClassName =
-  "rounded-[20px] border border-[var(--border)] bg-[var(--surface-strong)] shadow-[var(--shadow-sm)]";
+  "rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-strong)] shadow-[var(--shadow-sm)]";
 
 export const systemCardInsetClassName =
-  "rounded-[16px] border border-[var(--border)] bg-[var(--surface-strong)]";
+  "rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface-strong)]";
 
 export const systemHeaderCardClassName =
-  "rounded-[24px] border border-[var(--border)] bg-[rgba(255,255,255,0.92)] shadow-[var(--shadow-sm)] backdrop-blur";
+  "rounded-[var(--radius-xl)] border border-[var(--border)] bg-[rgba(255,255,255,0.92)] shadow-[var(--shadow-sm)] backdrop-blur";
 
 export const systemSectionSpacingClassName = "space-y-6";
 
 export const systemIconTileClassName =
-  "flex h-11 w-11 items-center justify-center rounded-[14px] bg-[var(--primary-soft)] text-[var(--primary)]";
+  "flex h-11 w-11 items-center justify-center rounded-[var(--icon-radius)] bg-[var(--primary-soft)] text-[var(--primary)]";
 
 export function systemNavItemClassName(isActive: boolean) {
   return cn(
@@ -99,7 +99,7 @@ export function SystemInfoItem({
   className?: string;
 }) {
   return (
-    <div className={cn("rounded-[16px] border border-[var(--border)] bg-[var(--surface-strong)] p-4", className)}>
+    <div className={cn("rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface-strong)] p-4", className)}>
       <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
         {label}
       </p>

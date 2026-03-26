@@ -46,7 +46,7 @@ export function AuthMethodButton({
       <div className="flex items-center gap-4">
         <div
           className={cn(
-            "flex h-11 w-11 items-center justify-center rounded-[14px] text-sm font-semibold",
+            "flex h-11 w-11 items-center justify-center rounded-[var(--icon-radius)] text-sm font-semibold",
             tone === "primary" && "bg-white/16 text-white",
             tone === "secondary" && "bg-[#FC3F1D] text-white",
             isYandex && "bg-white text-[#FC3F1D]",

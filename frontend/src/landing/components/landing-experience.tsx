@@ -206,7 +206,7 @@ export function LandingExperience({
           {trustPoints.map((item, index) => (
             <MotionReveal key={item} variant="up" delay={index * 70}>
               <article className="flex items-start gap-3 rounded-[16px] bg-[var(--surface-strong)] p-4">
-                <div className={cn(publicIconBoxClassName, "h-10 w-10 rounded-[12px]")}>
+                <div className={cn(publicIconBoxClassName, "h-10 w-10 rounded-[var(--icon-radius-sm)]")}>
                   <ShieldCheck className="h-4 w-4" />
                 </div>
                 <p className="text-sm leading-6 text-[var(--foreground)]">

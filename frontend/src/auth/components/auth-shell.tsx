@@ -80,7 +80,7 @@ export function AuthShell({
 
             return (
               <AuthCard key={item.label}>
-                <div className={cn(publicIconBoxClassName, "h-10 w-10 rounded-[12px]")}>
+                <div className={cn(publicIconBoxClassName, "h-10 w-10 rounded-[var(--icon-radius-sm)]")}>
                   <Icon className="h-4 w-4" />
                 </div>
                 <p className="mt-4 text-[12px] font-medium uppercase leading-4 tracking-[0.18em] text-[var(--muted)]">

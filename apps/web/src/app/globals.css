@@ -30,9 +30,16 @@
   --shadow-md: 0 6px 18px rgba(15, 23, 42, 0.08);
   --shadow-lg: 0 16px 40px rgba(15, 23, 42, 0.1);
   --shadow-brand: 0 18px 48px rgba(79, 70, 229, 0.24);
+  --radius-xs: 10px;
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
   --control-radius: 14px;
   --control-height: 48px;
   --control-height-sm: 40px;
+  --icon-radius: 14px;
+  --icon-radius-sm: 12px;
 }
 
 @theme inline {

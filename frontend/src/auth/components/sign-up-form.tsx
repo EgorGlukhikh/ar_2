@@ -155,7 +155,7 @@ export function SignUpForm({
       </div>
 
       {formError ? (
-        <p className="rounded-[12px] border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+        <p className="rounded-[var(--radius-sm)] border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
           {formatPublicCopy(formError)}
         </p>
       ) : null}

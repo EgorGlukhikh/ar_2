@@ -5,19 +5,19 @@ import { formatPublicCopy } from "@/lib/public-copy";
 import { cn } from "@/lib/utils";
 
 export const publicCardClassName =
-  "rounded-[20px] border border-[var(--border)] bg-[var(--surface)] p-6 shadow-[var(--shadow-sm)] transition duration-200 hover:-translate-y-1 hover:shadow-[var(--shadow-lg)]";
+  "rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-6 shadow-[var(--shadow-sm)] transition duration-200 hover:-translate-y-1 hover:shadow-[var(--shadow-lg)]";
 
 export const publicSoftCardClassName =
-  "rounded-[20px] border border-[var(--border)] bg-[var(--surface-strong)] p-6 shadow-[var(--shadow-sm)]";
+  "rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-strong)] p-6 shadow-[var(--shadow-sm)]";
 
 export const publicGradientCardClassName =
-  "rounded-[24px] bg-[#1e285d] bg-[image:var(--brand-gradient)] bg-cover bg-center p-7 text-white shadow-[var(--shadow-brand)]";
+  "rounded-[var(--radius-xl)] bg-[#1e285d] bg-[image:var(--brand-gradient)] bg-cover bg-center p-7 text-white shadow-[var(--shadow-brand)]";
 
 export const publicBadgeClassName =
   "inline-flex min-h-9 items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface)] px-3.5 text-[13px] font-medium leading-[18px] tracking-[0.06em] text-[var(--foreground)]";
 
 export const publicIconBoxClassName =
-  "flex h-11 w-11 items-center justify-center rounded-[14px] bg-[var(--primary-soft)] text-[var(--primary)]";
+  "flex h-11 w-11 items-center justify-center rounded-[var(--icon-radius)] bg-[var(--primary-soft)] text-[var(--primary)]";
 
 export const publicInputClassName =
   "h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-[var(--border-strong)] bg-[var(--surface)] px-4 text-base text-[var(--foreground)] outline-none transition focus:border-[var(--primary)] focus:ring-4 focus:ring-[rgba(79,70,229,0.14)] placeholder:text-[var(--muted-soft)]";

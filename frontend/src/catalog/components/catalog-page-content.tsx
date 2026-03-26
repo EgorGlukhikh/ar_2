@@ -140,7 +140,7 @@ export function CatalogPageContent({
           {trustPoints.map((item) => (
             <article key={item} className={publicCardClassName}>
               <div className="flex items-start gap-3">
-                <div className={cn(publicIconBoxClassName, "h-10 w-10 rounded-[12px]")}>
+                <div className={cn(publicIconBoxClassName, "h-10 w-10 rounded-[var(--icon-radius-sm)]")}>
                   <ShieldCheck className="h-4 w-4" />
                 </div>
                 <p className="text-sm leading-6 text-[var(--foreground)]">
