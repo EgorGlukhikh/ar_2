@@ -517,6 +517,15 @@ export function LessonBlockStudio({
         </div>
       </div>
 
+      {blocks.length > 0 ? (
+        <div className="rounded-[22px] border border-[var(--border)] bg-[var(--surface)] px-5 py-4">
+          <p className="text-sm leading-7 text-[var(--foreground)]">
+            Блоки ниже по умолчанию открываются в режиме просмотра. Если нужно изменить
+            содержимое конкретного блока, нажми «Редактировать» в его шапке.
+          </p>
+        </div>
+      ) : null}
+
       {blocks.length === 0 ? (
         <div className="rounded-[28px] border border-dashed border-[var(--border)] bg-[var(--surface)] p-8">
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--muted)]">
@@ -636,18 +645,7 @@ export function LessonBlockStudio({
 
             {isExpanded ? (
               <div className="space-y-5 px-5 py-5">
-                {!isEditing ? (
-                  <div className="rounded-[22px] border border-[var(--border)] bg-[var(--surface)] p-5">
-                    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
-                      Режим просмотра
-                    </p>
-                    <p className="mt-3 text-sm leading-7 text-[var(--foreground)]">
-                      Сейчас блок показан без полей редактирования. Нажми
-                      «Редактировать», если хочешь поменять содержимое этого
-                      блока.
-                    </p>
-                  </div>
-                ) : (
+                {isEditing ? (
                   <>
                 <div className="space-y-2">
                   <Label htmlFor={`block-title-${block.id}`}>Название блока</Label>
@@ -951,7 +949,7 @@ export function LessonBlockStudio({
                   </div>
                 ) : null}
                   </>
-                )}
+                ) : null}
               </div>
             ) : null}
           </section>
