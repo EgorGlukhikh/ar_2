@@ -25,14 +25,20 @@
 - витрина курсов на лендинге
 - hero/product-preview
 - секция курсов с пагинацией по карточкам
+- каталог курсов `/catalog`
+- публичные endpoints `GET /api/public/home`, `GET /api/courses`, `GET /api/user`
 
 Файлы нового среза:
 - `frontend/src/landing/components/landing-experience.tsx`
 - `frontend/src/landing/components/landing-course-carousel.tsx`
+- `frontend/src/catalog/components/catalog-page-content.tsx`
 - `backend/src/public-home/get-public-home-payload.ts`
+- `backend/src/public-catalog/get-public-catalog-payload.ts`
 - `database/src/public-home/public-home.repository.ts`
+- `database/src/public-catalog/public-catalog.repository.ts`
 - `shared/src/public-home/types.ts`
 - `shared/src/public-home/copy.ts`
+- `shared/src/public-catalog/types.ts`
 
 ## UI-система
 
