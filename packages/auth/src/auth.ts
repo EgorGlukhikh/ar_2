@@ -3,8 +3,13 @@ import { prisma } from "@academy/db";
 import { USER_ROLES } from "@academy/shared";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import Yandex from "next-auth/providers/yandex";
 import { z } from "zod";
 
+import {
+  findAccountByProviderAccountId,
+  findUserByEmail,
+} from "../../../database/src/auth/auth.repository";
 import { verifyPassword } from "./password";
 
 const credentialsSchema = z.object({
@@ -40,9 +45,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           return null;
         }
 
-        const user = await prisma.user.findUnique({
-          where: { email: parsed.data.email },
-        });
+        const user = await findUserByEmail(parsed.data.email);
 
         if (!user?.passwordHash) {
           return null;
@@ -65,8 +68,48 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         };
       },
     }),
+    ...(process.env.YANDEX_CLIENT_ID && process.env.YANDEX_CLIENT_SECRET
+      ? [
+          Yandex({
+            clientId: process.env.YANDEX_CLIENT_ID,
+            clientSecret: process.env.YANDEX_CLIENT_SECRET,
+            allowDangerousEmailAccountLinking: true,
+          }),
+        ]
+      : []),
   ],
   callbacks: {
+    signIn: async ({ account, profile, user }) => {
+      if (account?.provider !== "yandex") {
+        return true;
+      }
+
+      const existingAccount = await findAccountByProviderAccountId(
+        account.provider,
+        account.providerAccountId,
+      );
+
+      if (existingAccount) {
+        return true;
+      }
+
+      const email =
+        user.email ??
+        (typeof profile === "object" &&
+        profile !== null &&
+        "default_email" in profile &&
+        typeof profile.default_email === "string"
+          ? profile.default_email
+          : Array.isArray((profile as { emails?: string[] }).emails)
+            ? (profile as { emails?: string[] }).emails?.[0]
+            : undefined);
+
+      if (!email) {
+        return "/sign-in?error=yandex-email";
+      }
+
+      return true;
+    },
     jwt: async ({ token, user }) => {
       if (user) {
         token.role = user.role;

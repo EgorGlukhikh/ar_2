@@ -8,6 +8,9 @@ Current production slice:
 - `src/catalog/components/catalog-page-content.tsx`
 - `src/auth/components/sign-in-page-content.tsx`
 - `src/checkout/components/checkout-page-content.tsx`
+- `src/auth/components/auth-shell.tsx`
+- `src/auth/components/sign-in-form.tsx`
+- `src/auth/components/sign-up-form.tsx`
 
 Rules:
 - no direct database access

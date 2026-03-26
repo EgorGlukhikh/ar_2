@@ -30,23 +30,32 @@
 - checkout `/checkout/[orderId]`
 - публичные endpoints `GET /api/public/home`, `GET /api/courses`, `GET /api/user`
 - checkout endpoint `GET /api/orders/[orderId]`
+- регистрация `POST /api/auth/register`
+- вход через Яндекс на `/sign-in`
 
 Файлы нового среза:
 - `frontend/src/landing/components/landing-experience.tsx`
 - `frontend/src/landing/components/landing-course-carousel.tsx`
 - `frontend/src/catalog/components/catalog-page-content.tsx`
 - `frontend/src/auth/components/sign-in-page-content.tsx`
+- `frontend/src/auth/components/auth-shell.tsx`
+- `frontend/src/auth/components/sign-in-form.tsx`
+- `frontend/src/auth/components/sign-up-form.tsx`
 - `frontend/src/checkout/components/checkout-page-content.tsx`
 - `backend/src/public-home/get-public-home-payload.ts`
 - `backend/src/public-catalog/get-public-catalog-payload.ts`
 - `backend/src/public-checkout/get-public-checkout-payload.ts`
+- `backend/src/auth/register-credentials-user.ts`
+- `backend/src/public-auth/get-public-auth-screen-payload.ts`
 - `database/src/public-home/public-home.repository.ts`
 - `database/src/public-catalog/public-catalog.repository.ts`
 - `database/src/public-checkout/public-checkout.repository.ts`
+- `database/src/auth/auth.repository.ts`
 - `shared/src/public-home/types.ts`
 - `shared/src/public-home/copy.ts`
 - `shared/src/public-catalog/types.ts`
 - `shared/src/public-auth/copy.ts`
+- `shared/src/public-auth/types.ts`
 - `shared/src/public-checkout/types.ts`
 
 ## UI-система
@@ -113,6 +122,10 @@ Bootstrap-пользователь:
 - `BOOTSTRAP_USER_PASSWORD`
 - `BOOTSTRAP_USER_NAME`
 - `BOOTSTRAP_USER_ROLE`
+
+OAuth:
+- `YANDEX_CLIENT_ID`
+- `YANDEX_CLIENT_SECRET`
 
 ## Railway
 

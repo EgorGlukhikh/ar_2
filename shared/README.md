@@ -7,6 +7,7 @@ Current production slice:
 - `src/public-home/copy.ts`
 - `src/public-catalog/types.ts`
 - `src/public-auth/copy.ts`
+- `src/public-auth/types.ts`
 - `src/public-checkout/types.ts`
 
 Rules:

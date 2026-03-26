@@ -1,6 +1,7 @@
 import { auth } from "@academy/auth";
 import { redirect } from "next/navigation";
 
+import { getPublicAuthScreenPayload } from "@backend/public-auth/get-public-auth-screen-payload";
 import { SignInPageContent } from "@frontend/auth/components/sign-in-page-content";
 
 import { PublicButton } from "@/components/marketing/public-primitives";
@@ -18,6 +19,7 @@ type SignInPageProps = {
   searchParams?: Promise<{
     email?: string;
     invited?: string;
+    error?: string;
   }>;
 };
 
@@ -29,8 +31,7 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
   }
 
   const resolvedSearchParams = searchParams ? await searchParams : {};
-  const defaultEmail = resolvedSearchParams.email ?? "";
-  const showInviteSuccess = resolvedSearchParams.invited === "1";
+  const payload = getPublicAuthScreenPayload(resolvedSearchParams);
 
   return (
     <main
@@ -47,11 +48,11 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
                   </div>
                   <div className="space-y-1">
                     <p className="text-sm font-semibold text-[var(--foreground)]">
-                      {formatPublicCopy("Вход в академию")}
+                      {formatPublicCopy("Авторизация и регистрация")}
                     </p>
                     <p className="max-w-[560px] text-sm leading-6 text-[var(--muted)]">
                       {formatPublicCopy(
-                        "Войди, чтобы продолжить обучение, открыть кабинет автора или вернуться к своим программам.",
+                        "Отдельный экран входа для учеников и авторов: почта, пароль и быстрый вход через Яндекс.",
                       )}
                     </p>
                   </div>
@@ -68,10 +69,7 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
               </div>
             </header>
 
-            <SignInPageContent
-              defaultEmail={defaultEmail}
-              showInviteSuccess={showInviteSuccess}
-            />
+            <SignInPageContent payload={payload} />
           </div>
         </section>
       </div>
