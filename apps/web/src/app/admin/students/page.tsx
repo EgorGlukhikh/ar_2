@@ -59,7 +59,7 @@ export default async function StudentsPage() {
         title="Управление учениками"
         description="Здесь команда видит всех студентов, их доступы и активность. Создание новых аккаунтов оставлено администратору, а куратор работает с уже существующей базой."
         meta={
-          <div className="rounded-full bg-[var(--surface)] px-4 py-3 text-sm text-[var(--muted)]">
+          <div className="rounded-[var(--control-radius)] bg-[var(--surface)] px-4 py-3 text-sm text-[var(--muted)]">
             Всего студентов: {students.length}
           </div>
         }
@@ -203,7 +203,7 @@ export default async function StudentsPage() {
                           {student.enrollments.map((enrollment) => (
                             <span
                               key={enrollment.id}
-                              className="rounded-full border border-[var(--border)] bg-white px-3 py-2 text-sm text-[var(--foreground)]"
+                              className="rounded-[var(--control-radius)] border border-[var(--border)] bg-white px-3 py-2 text-sm text-[var(--foreground)]"
                             >
                               {enrollment.course.title}
                             </span>

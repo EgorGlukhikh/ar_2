@@ -53,10 +53,10 @@ export function AdminCourseTabs({
             key={item.href}
             href={item.href}
             className={cn(
-              "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition",
+              "inline-flex min-h-[var(--control-height-sm)] items-center gap-2 rounded-[var(--control-radius)] px-4 py-2 text-sm font-semibold transition [&_svg]:h-4 [&_svg]:w-4 [&_svg]:text-current",
               isActive
-                ? "bg-[var(--primary)] text-white"
-                : "border border-[var(--border)] bg-white text-[var(--muted)] hover:border-[var(--primary)] hover:text-[var(--foreground)]",
+                ? "border border-transparent bg-[var(--primary)] text-[var(--primary-foreground)] shadow-[var(--shadow-brand)] hover:text-[var(--primary-foreground)]"
+                : "border border-[var(--border-strong)] bg-[var(--surface)] text-[var(--foreground)] shadow-[var(--shadow-sm)] hover:border-[var(--primary)] hover:bg-[var(--surface-strong)] hover:text-[var(--foreground)]",
             )}
           >
             <Icon className="h-4 w-4" />

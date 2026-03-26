@@ -167,7 +167,7 @@ export default async function LearningDashboardPage() {
             : "Здесь собраны ваши активные курсы, текущий прогресс и понятный переход к следующему уроку."
         }
         meta={
-          <div className="rounded-full border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-sm text-[var(--muted)]">
+          <div className="rounded-[var(--control-radius)] border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-sm text-[var(--muted)]">
             Курсов в кабинете: {courseCards.length}
           </div>
         }

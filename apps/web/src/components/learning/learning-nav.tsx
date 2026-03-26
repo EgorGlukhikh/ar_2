@@ -21,10 +21,10 @@ export function LearningNav() {
             key={item.href}
             href={item.href}
             className={cn(
-              "inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium transition",
+              "inline-flex min-h-[var(--control-height)] items-center gap-2 rounded-[var(--control-radius)] px-4 py-3 text-sm font-semibold transition [&_svg]:h-4 [&_svg]:w-4 [&_svg]:text-current",
               isActive
-                ? "bg-[#2840db] text-white shadow-[0_14px_28px_rgba(40,64,219,0.2)]"
-                : "border border-[var(--border)] bg-white text-[var(--muted)] hover:border-[var(--primary)] hover:text-[var(--foreground)]",
+                ? "border border-transparent bg-[var(--primary)] text-[var(--primary-foreground)] shadow-[var(--shadow-brand)] hover:text-[var(--primary-foreground)]"
+                : "border border-[var(--border-strong)] bg-[var(--surface)] text-[var(--foreground)] shadow-[var(--shadow-sm)] hover:border-[var(--primary)] hover:bg-[var(--surface-strong)] hover:text-[var(--foreground)]",
             )}
           >
             {item.label}

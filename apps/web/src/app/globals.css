@@ -30,6 +30,9 @@
   --shadow-md: 0 6px 18px rgba(15, 23, 42, 0.08);
   --shadow-lg: 0 16px 40px rgba(15, 23, 42, 0.1);
   --shadow-brand: 0 18px 48px rgba(79, 70, 229, 0.24);
+  --control-radius: 14px;
+  --control-height: 48px;
+  --control-height-sm: 40px;
 }
 
 @theme inline {

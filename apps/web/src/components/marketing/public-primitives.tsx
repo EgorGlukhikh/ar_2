@@ -20,7 +20,7 @@ export const publicIconBoxClassName =
   "flex h-11 w-11 items-center justify-center rounded-[14px] bg-[var(--primary-soft)] text-[var(--primary)]";
 
 export const publicInputClassName =
-  "h-12 w-full rounded-[12px] border border-[var(--border-strong)] bg-[var(--surface)] px-4 text-base text-[var(--foreground)] outline-none transition focus:border-[var(--primary)] focus:ring-4 focus:ring-[rgba(79,70,229,0.14)] placeholder:text-[var(--muted-soft)]";
+  "h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-[var(--border-strong)] bg-[var(--surface)] px-4 text-base text-[var(--foreground)] outline-none transition focus:border-[var(--primary)] focus:ring-4 focus:ring-[rgba(79,70,229,0.14)] placeholder:text-[var(--muted-soft)]";
 
 export function PublicButton({
   href,
@@ -44,18 +44,18 @@ export function publicButtonClassName(
   tone: "primary" | "secondary" | "ghost" | "dark" = "primary",
 ) {
   if (tone === "secondary") {
-    return "inline-flex min-h-12 items-center justify-center gap-2 rounded-[12px] border border-[var(--border-strong)] bg-[var(--surface)] px-5 py-3 text-base font-medium text-[var(--foreground)] shadow-[var(--shadow-sm)] transition duration-200 hover:bg-[#f8fafc] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(79,70,229,0.16)] focus-visible:ring-offset-2 [&_svg]:h-[18px] [&_svg]:w-[18px] [&_svg]:text-current";
+    return "inline-flex min-h-[var(--control-height)] items-center justify-center gap-2 rounded-[var(--control-radius)] border border-[var(--border-strong)] bg-[var(--surface)] px-5 py-3 text-base font-semibold text-[var(--foreground)] shadow-[var(--shadow-sm)] transition duration-200 hover:bg-[#f8fafc] hover:text-[var(--foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(79,70,229,0.16)] focus-visible:ring-offset-2 [&_svg]:h-[18px] [&_svg]:w-[18px] [&_svg]:text-current";
   }
 
   if (tone === "ghost") {
-    return "inline-flex min-h-12 items-center justify-center gap-2 rounded-[12px] border border-white/30 bg-transparent px-5 py-3 text-base font-medium text-white transition duration-200 hover:bg-white/8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent [&_svg]:h-[18px] [&_svg]:w-[18px] [&_svg]:text-current";
+    return "inline-flex min-h-[var(--control-height)] items-center justify-center gap-2 rounded-[var(--control-radius)] border border-white/30 bg-transparent px-5 py-3 text-base font-semibold text-white transition duration-200 hover:bg-white/8 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent [&_svg]:h-[18px] [&_svg]:w-[18px] [&_svg]:text-current";
   }
 
   if (tone === "dark") {
-    return "inline-flex min-h-12 items-center justify-center gap-2 rounded-[12px] bg-[var(--foreground)] px-5 py-3 text-base font-medium text-white shadow-[var(--shadow-md)] transition duration-200 hover:bg-[#020617] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(15,23,42,0.18)] focus-visible:ring-offset-2 [&_svg]:h-[18px] [&_svg]:w-[18px] [&_svg]:text-current";
+    return "inline-flex min-h-[var(--control-height)] items-center justify-center gap-2 rounded-[var(--control-radius)] bg-[var(--foreground)] px-5 py-3 text-base font-semibold text-white shadow-[var(--shadow-md)] transition duration-200 hover:bg-[#020617] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(15,23,42,0.18)] focus-visible:ring-offset-2 [&_svg]:h-[18px] [&_svg]:w-[18px] [&_svg]:text-current";
   }
 
-  return "inline-flex min-h-12 items-center justify-center gap-2 rounded-[12px] bg-[var(--primary)] px-5 py-3 text-base font-medium text-white shadow-[var(--shadow-brand)] transition duration-200 hover:bg-[var(--primary-hover)] active:bg-[var(--primary-active)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(79,70,229,0.16)] focus-visible:ring-offset-2 [&_svg]:h-[18px] [&_svg]:w-[18px] [&_svg]:text-current";
+  return "inline-flex min-h-[var(--control-height)] items-center justify-center gap-2 rounded-[var(--control-radius)] bg-[var(--primary)] px-5 py-3 text-base font-semibold text-[var(--primary-foreground)] shadow-[var(--shadow-brand)] transition duration-200 hover:bg-[var(--primary-hover)] hover:text-[var(--primary-foreground)] active:bg-[var(--primary-active)] active:text-[var(--primary-foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(79,70,229,0.16)] focus-visible:ring-offset-2 [&_svg]:h-[18px] [&_svg]:w-[18px] [&_svg]:text-current";
 }
 
 export function SectionLead({

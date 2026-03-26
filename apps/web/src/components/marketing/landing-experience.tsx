@@ -340,7 +340,7 @@ export function LandingExperience({
             <Copy value={activeCopy.eyebrow} />
           </div>
 
-          <div className="inline-flex h-11 rounded-full bg-[var(--surface-strong)] p-1 shadow-[var(--shadow-sm)]">
+          <div className="inline-flex rounded-[var(--control-radius)] border border-[var(--border)] bg-[var(--surface-strong)] p-1 shadow-[var(--shadow-sm)]">
             {([
               { value: "learn", label: "Я учусь" },
               { value: "author", label: "Я автор" },
@@ -350,10 +350,10 @@ export function LandingExperience({
                 type="button"
                 onClick={() => handleRoleChange(item.value)}
                 className={cn(
-                  "rounded-full px-5 text-sm font-medium transition duration-200",
+                  "min-h-[calc(var(--control-height)-8px)] rounded-[calc(var(--control-radius)-4px)] px-5 text-sm font-semibold transition duration-200",
                   role === item.value
-                    ? "bg-[var(--primary)] text-white shadow-[var(--shadow-brand)]"
-                    : "text-[var(--muted)] hover:text-[var(--foreground)]",
+                    ? "bg-[var(--primary)] text-[var(--primary-foreground)] shadow-[var(--shadow-brand)] hover:text-[var(--primary-foreground)]"
+                    : "text-[var(--foreground)] hover:bg-[var(--surface)] hover:text-[var(--foreground)]",
                 )}
               >
                 <Copy value={item.label} />

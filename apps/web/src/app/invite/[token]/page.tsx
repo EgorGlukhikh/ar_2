@@ -213,7 +213,7 @@ export default async function InvitePage({ params }: InvitePageProps) {
                         </div>
                       ) : null}
 
-                      <Button type="submit" size="lg" className="w-full rounded-full">
+                      <Button type="submit" size="lg" className="w-full">
                         Активировать доступ
                         <ArrowRight className="ml-2 h-4 w-4" />
                       </Button>

@@ -102,7 +102,7 @@ export default async function AdminPage() {
         title="Управление академией"
         description="Здесь команда создает курсы, собирает программу, назначает доступы, проверяет путь студента и держит под рукой ключевые цифры продукта."
         meta={
-          <div className="rounded-full border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-sm text-[var(--muted)]">
+          <div className="rounded-[var(--control-radius)] border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-sm text-[var(--muted)]">
             Активных разделов: 5
           </div>
         }

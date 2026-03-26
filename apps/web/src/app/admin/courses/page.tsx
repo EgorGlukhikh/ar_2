@@ -67,7 +67,7 @@ export default async function CoursesPage() {
             : "Здесь создаются новые курсы и открываются их рабочие разделы: карточка, программа, доступы и продажи."
         }
         meta={
-          <div className="rounded-full border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-sm text-[var(--muted)]">
+          <div className="rounded-[var(--control-radius)] border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-sm text-[var(--muted)]">
             Всего курсов: {courses.length}
           </div>
         }

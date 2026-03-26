@@ -81,14 +81,14 @@ export default async function CourseLayout({
               </div>
 
               <div className="flex flex-wrap gap-3 text-sm text-[var(--muted)]">
-                <span className="rounded-full bg-[var(--surface)] px-3 py-2">
+                <span className="rounded-[var(--control-radius)] bg-[var(--surface)] px-3 py-2">
                   Модулей: {course._count.modules}
                 </span>
-                <span className="rounded-full bg-[var(--surface)] px-3 py-2">
+                <span className="rounded-[var(--control-radius)] bg-[var(--surface)] px-3 py-2">
                   Уроков: {course.lessonCount}
                 </span>
                 {isAdminMode ? (
-                  <span className="rounded-full bg-[var(--surface)] px-3 py-2">
+                  <span className="rounded-[var(--control-radius)] bg-[var(--surface)] px-3 py-2">
                     Зачислений: {course._count.enrollments}
                   </span>
                 ) : null}

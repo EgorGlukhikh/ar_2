@@ -21,10 +21,10 @@ export const systemIconTileClassName =
 
 export function systemNavItemClassName(isActive: boolean) {
   return cn(
-    "inline-flex min-h-12 items-center gap-2 rounded-full border px-4 py-3 text-sm font-medium transition duration-200 [&_svg]:h-4 [&_svg]:w-4 [&_svg]:text-current",
+    "inline-flex min-h-[var(--control-height)] items-center gap-2 rounded-[var(--control-radius)] border px-4 py-3 text-sm font-semibold transition duration-200 [&_svg]:h-4 [&_svg]:w-4 [&_svg]:text-current",
     isActive
-      ? "border-transparent bg-[var(--primary)] text-white shadow-[var(--shadow-brand)]"
-      : "border-[var(--border-strong)] bg-[var(--surface)] text-[var(--foreground)] shadow-[var(--shadow-sm)] hover:bg-[var(--surface-strong)]",
+      ? "border-transparent bg-[var(--primary)] text-[var(--primary-foreground)] shadow-[var(--shadow-brand)] hover:text-[var(--primary-foreground)]"
+      : "border-[var(--border-strong)] bg-[var(--surface)] text-[var(--foreground)] shadow-[var(--shadow-sm)] hover:bg-[var(--surface-strong)] hover:text-[var(--foreground)]",
   );
 }
 
@@ -108,4 +108,3 @@ export function SystemInfoItem({
     </div>
   );
 }
-
