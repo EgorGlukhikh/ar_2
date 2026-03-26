@@ -47,6 +47,7 @@
 - `frontend/src/checkout/components/checkout-page-content.tsx`
 - `frontend/src/admin/components/admin-dashboard-page-content.tsx`
 - `frontend/src/admin/components/admin-users-page-content.tsx`
+- `frontend/src/admin/components/course-access-page-content.tsx`
 - `frontend/src/knowledge-base/components/knowledge-base-page-content.tsx`
 - `backend/src/public-home/get-public-home-payload.ts`
 - `backend/src/public-catalog/get-public-catalog-payload.ts`
@@ -55,12 +56,14 @@
 - `backend/src/public-auth/get-public-auth-screen-payload.ts`
 - `backend/src/admin-dashboard/get-admin-dashboard-payload.ts`
 - `backend/src/admin-users/get-admin-users-payload.ts`
+- `backend/src/admin-course-access/get-admin-course-access-payload.ts`
 - `database/src/public-home/public-home.repository.ts`
 - `database/src/public-catalog/public-catalog.repository.ts`
 - `database/src/public-checkout/public-checkout.repository.ts`
 - `database/src/auth/auth.repository.ts`
 - `database/src/admin-dashboard/admin-dashboard.repository.ts`
 - `database/src/admin-users/admin-users.repository.ts`
+- `database/src/admin-course-access/admin-course-access.repository.ts`
 - `shared/src/public-home/types.ts`
 - `shared/src/public-home/copy.ts`
 - `shared/src/public-catalog/types.ts`
@@ -69,6 +72,7 @@
 - `shared/src/public-checkout/types.ts`
 - `shared/src/admin-dashboard/types.ts`
 - `shared/src/admin-users/types.ts`
+- `shared/src/admin-course-access/types.ts`
 - `shared/src/knowledge-base/types.ts`
 - `shared/src/knowledge-base/content.ts`
 
@@ -155,6 +159,13 @@ OAuth:
 - автору и куратору даем отдельную кнопку `База знаний` с ролевыми инструкциями
 - админу доступен графический дашборд и страница пользователей с фильтрами по роли, доступу и способу входа
 - демо-оплаты пока остаются только в административном контуре
+- на странице доступа к курсу админ может добавить студента, выдать бесплатный доступ или провести демо-списание для платного курса
+
+## Публичный контур
+
+- лендинг собран по student-first логике: главный герой и основной маршрут ориентированы на ученика
+- для преподавателя оставлен отдельный блок, а не переключение всей страницы
+- секция курсов на лендинге листается кнопками, если программ больше трех
 
 ## Внутренние аккаунты
 

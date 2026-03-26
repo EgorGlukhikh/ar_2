@@ -1,6 +1,12 @@
 "use server";
 
-import { EnrollmentStatus, prisma } from "@academy/db";
+import {
+  EnrollmentStatus,
+  OrderStatus,
+  PaymentProviderType,
+  PaymentStatus,
+  prisma,
+} from "@academy/db";
 import { hashPassword } from "@academy/auth";
 import { USER_ROLES } from "@academy/shared";
 import { revalidatePath } from "next/cache";
@@ -10,20 +16,29 @@ import { requireAdminUser } from "@/lib/admin";
 import {
   processDueEmailQueue,
   queueCourseAccessGrantedEmail,
+  queuePaymentSuccessEmail,
   queueStudentAccountCreatedEmail,
   queueStudentMarketingSequence,
 } from "@/features/email/service";
+import { formatMinorUnits } from "@/lib/money";
 
 const createStudentSchema = z.object({
   email: z.email().trim().toLowerCase(),
   name: z.string().trim().min(2),
   password: z.string().min(5),
   courseId: z.string().trim().min(1).optional(),
+  grantMode: z.enum(["free", "demo_charge"]).default("free"),
+  confirmPaidAccess: z.boolean().default(false),
 });
 
-const enrollmentSchema = z.object({
+const enrollmentIdentitySchema = z.object({
   userId: z.string().trim().min(1),
   courseId: z.string().trim().min(1),
+});
+
+const enrollmentSchema = enrollmentIdentitySchema.extend({
+  grantMode: z.enum(["free", "demo_charge"]).default("free"),
+  confirmPaidAccess: z.boolean().default(false),
 });
 
 const createWorkspaceMemberSchema = z.object({
@@ -50,6 +65,162 @@ function refreshStudentAdminRoutes(courseId?: string) {
     revalidatePath(`/admin/courses/${courseId}/access`);
     revalidatePath(`/learning/courses/${courseId}`);
   }
+}
+
+async function getCourseAccessContext(courseId: string) {
+  const course = await prisma.course.findUnique({
+    where: {
+      id: courseId,
+    },
+    include: {
+      products: {
+        where: {
+          isActive: true,
+        },
+        include: {
+          prices: {
+            where: {
+              isDefault: true,
+            },
+            orderBy: {
+              createdAt: "desc",
+            },
+            take: 1,
+          },
+        },
+        take: 1,
+      },
+    },
+  });
+
+  if (!course) {
+    throw new Error("Курс не найден.");
+  }
+
+  const product = course.products[0] ?? null;
+  const price = product?.prices[0] ?? null;
+
+  return {
+    course,
+    product,
+    price,
+    isPaidCourse: Boolean(price && price.amount > 0),
+  };
+}
+
+async function grantCourseAccess(args: {
+  userId: string;
+  courseId: string;
+  grantMode: "free" | "demo_charge";
+  confirmPaidAccess: boolean;
+}) {
+  const { course, product, price, isPaidCourse } = await getCourseAccessContext(
+    args.courseId,
+  );
+
+  if (isPaidCourse && !args.confirmPaidAccess) {
+    throw new Error(
+      "Подтверди сценарий выдачи доступа для платного курса перед сохранением.",
+    );
+  }
+
+  if (args.grantMode === "demo_charge") {
+    if (!isPaidCourse || !product || !price) {
+      throw new Error("Для демо-списания у курса должна быть настроена цена.");
+    }
+
+    const order = await prisma.order.create({
+      data: {
+        userId: args.userId,
+        status: OrderStatus.PAID,
+        currency: price.currency,
+        totalAmount: price.amount,
+        paymentProvider: PaymentProviderType.DEMO,
+        items: {
+          create: {
+            productId: product.id,
+            quantity: 1,
+            unitAmount: price.amount,
+          },
+        },
+        payments: {
+          create: {
+            provider: PaymentProviderType.DEMO,
+            status: PaymentStatus.SUCCEEDED,
+            rawPayload: {
+              mode: "admin-demo-charge",
+              paidAt: new Date().toISOString(),
+            },
+          },
+        },
+      },
+      select: {
+        id: true,
+        totalAmount: true,
+        currency: true,
+      },
+    });
+
+    await prisma.enrollment.upsert({
+      where: {
+        userId_courseId: {
+          userId: args.userId,
+          courseId: args.courseId,
+        },
+      },
+      create: {
+        userId: args.userId,
+        courseId: args.courseId,
+        status: EnrollmentStatus.ACTIVE,
+        startedAt: new Date(),
+      },
+      update: {
+        status: EnrollmentStatus.ACTIVE,
+        startedAt: new Date(),
+        completedAt: null,
+      },
+    });
+
+    return {
+      course: {
+        id: course.id,
+        title: course.title,
+      },
+      order,
+      accessSource: "demo_charge" as const,
+      amountLabel: formatMinorUnits(order.totalAmount, order.currency),
+    };
+  }
+
+  await prisma.enrollment.upsert({
+    where: {
+      userId_courseId: {
+        userId: args.userId,
+        courseId: args.courseId,
+      },
+    },
+    create: {
+      userId: args.userId,
+      courseId: args.courseId,
+      status: EnrollmentStatus.ACTIVE,
+      startedAt: new Date(),
+    },
+    update: {
+      status: EnrollmentStatus.ACTIVE,
+      startedAt: new Date(),
+      completedAt: null,
+    },
+  });
+
+  return {
+    course: {
+      id: course.id,
+      title: course.title,
+    },
+    order: null,
+    accessSource: "free" as const,
+    amountLabel: null,
+  };
 }
 
 export async function createWorkspaceMember(formData: FormData) {
@@ -113,6 +284,9 @@ export async function createStudent(formData: FormData) {
     name: getTrimmedValue(formData, "name"),
     password: getTrimmedValue(formData, "password"),
     courseId: getTrimmedValue(formData, "courseId") || undefined,
+    grantMode:
+      (getTrimmedValue(formData, "grantMode") as "free" | "demo_charge") || "free",
+    confirmPaidAccess: formData.get("confirmPaidAccess") === "on",
   });
 
   const existingUser = await prisma.user.findUnique({
@@ -159,28 +333,6 @@ export async function createStudent(formData: FormData) {
     isNewStudent = true;
   }
 
-  if (parsed.courseId && userId) {
-    await prisma.enrollment.upsert({
-      where: {
-        userId_courseId: {
-          userId,
-          courseId: parsed.courseId,
-        },
-      },
-      create: {
-        userId,
-        courseId: parsed.courseId,
-        status: EnrollmentStatus.ACTIVE,
-        startedAt: new Date(),
-      },
-      update: {
-        status: EnrollmentStatus.ACTIVE,
-        startedAt: new Date(),
-        completedAt: null,
-      },
-    });
-  }
-
   const [student, course] = await Promise.all([
     userId
       ? prisma.user.findUnique({
@@ -220,7 +372,28 @@ export async function createStudent(formData: FormData) {
       });
     }
 
-    if (course) {
+    if (parsed.courseId && userId) {
+      const grantResult = await grantCourseAccess({
+        userId,
+        courseId: parsed.courseId,
+        grantMode: parsed.grantMode,
+        confirmPaidAccess: parsed.confirmPaidAccess,
+      });
+
+      if (grantResult.accessSource === "demo_charge") {
+        await queuePaymentSuccessEmail({
+          user: student,
+          course: grantResult.course,
+          order: grantResult.order!,
+          amountLabel: grantResult.amountLabel!,
+        });
+      } else {
+        await queueCourseAccessGrantedEmail({
+          user: student,
+          course: grantResult.course,
+        });
+      }
+    } else if (course) {
       await queueCourseAccessGrantedEmail({
         user: student,
         course,
@@ -239,26 +412,16 @@ export async function enrollStudentInCourse(formData: FormData) {
   const parsed = enrollmentSchema.parse({
     userId: getTrimmedValue(formData, "userId"),
     courseId: getTrimmedValue(formData, "courseId"),
+    grantMode:
+      (getTrimmedValue(formData, "grantMode") as "free" | "demo_charge") || "free",
+    confirmPaidAccess: formData.get("confirmPaidAccess") === "on",
   });
 
-  await prisma.enrollment.upsert({
-    where: {
-      userId_courseId: {
-        userId: parsed.userId,
-        courseId: parsed.courseId,
-      },
-    },
-    create: {
-      userId: parsed.userId,
-      courseId: parsed.courseId,
-      status: EnrollmentStatus.ACTIVE,
-      startedAt: new Date(),
-    },
-    update: {
-      status: EnrollmentStatus.ACTIVE,
-      startedAt: new Date(),
-      completedAt: null,
-    },
+  const grantResult = await grantCourseAccess({
+    userId: parsed.userId,
+    courseId: parsed.courseId,
+    grantMode: parsed.grantMode,
+    confirmPaidAccess: parsed.confirmPaidAccess,
   });
 
   const [student, course] = await Promise.all([
@@ -284,10 +447,19 @@ export async function enrollStudentInCourse(formData: FormData) {
   ]);
 
   if (student && course) {
-    await queueCourseAccessGrantedEmail({
-      user: student,
-      course,
-    });
+    if (grantResult.accessSource === "demo_charge") {
+      await queuePaymentSuccessEmail({
+        user: student,
+        course,
+        order: grantResult.order!,
+        amountLabel: grantResult.amountLabel!,
+      });
+    } else {
+      await queueCourseAccessGrantedEmail({
+        user: student,
+        course,
+      });
+    }
 
     await processDueEmailQueue({ force: true, limit: 10 });
   }
@@ -298,7 +470,7 @@ export async function enrollStudentInCourse(formData: FormData) {
 export async function removeEnrollment(formData: FormData) {
   await requireAdminUser();
 
-  const parsed = enrollmentSchema.parse({
+  const parsed = enrollmentIdentitySchema.parse({
     userId: getTrimmedValue(formData, "userId"),
     courseId: getTrimmedValue(formData, "courseId"),
   });
@@ -328,7 +500,7 @@ export async function removeEnrollment(formData: FormData) {
 export async function resetCourseProgress(formData: FormData) {
   await requireAdminUser();
 
-  const parsed = enrollmentSchema.parse({
+  const parsed = enrollmentIdentitySchema.parse({
     userId: getTrimmedValue(formData, "userId"),
     courseId: getTrimmedValue(formData, "courseId"),
   });

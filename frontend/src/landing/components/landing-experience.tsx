@@ -1,14 +1,7 @@
 "use client";
 
-import { startTransition, useEffect, useState } from "react";
-import {
-  ArrowRight,
-  PlayCircle,
-  ShieldCheck,
-  Tv,
-} from "lucide-react";
+import { ArrowRight, PlayCircle, ShieldCheck, Tv } from "lucide-react";
 import Link from "next/link";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { LandingCourseCarousel } from "./landing-course-carousel";
 
@@ -30,64 +23,36 @@ import {
   roleCopy,
   trustPoints,
 } from "@shared/public-home/copy";
-import type { LandingRole, PublicHomePayload } from "@shared/public-home/types";
-
-type LandingExperienceProps = PublicHomePayload;
+import type { PublicHomePayload } from "@shared/public-home/types";
 
 function Copy({ value, className }: { value: string; className?: string }) {
   return <span className={className}>{formatPublicCopy(value)}</span>;
 }
 
-function buildUrlWithRole(
-  pathname: string,
-  searchParams: URLSearchParams,
-  role: LandingRole,
-) {
-  const params = new URLSearchParams(searchParams.toString());
-  params.set("role", role);
-  const nextQuery = params.toString();
-  return nextQuery ? `${pathname}?${nextQuery}` : pathname;
-}
-
-function ProductPreview({ role }: { role: LandingRole }) {
+function ProductPreview() {
   return (
     <div className="grid gap-4 lg:grid-cols-[1.06fr_0.94fr]">
       <article className={publicGradientCardClassName}>
         <p className="text-[12px] font-medium uppercase leading-4 tracking-[0.18em] text-white/68">
-          <Copy value={role === "author" ? "Витрина продукта" : "Внутри платформы"} />
+          <Copy value="Что получает студент" />
         </p>
         <h2 className="mt-4 max-w-[13ch] text-[32px] font-semibold leading-10 tracking-[-0.02em] text-white">
-          <Copy
-            value={
-              role === "author"
-                ? "Курс собирается как продукт: карточка, уроки, материалы и продажи."
-                : "Ученик видит курс, маршрут уроков и все материалы в одном интерфейсе."
-            }
-          />
+          <Copy value="Курс, материалы, задания и прогресс живут в одном интерфейсе." />
         </h2>
 
         <div className="mt-6 grid gap-3">
           {[
             {
-              title: role === "author" ? "Структура курса" : "Маршрут обучения",
-              text:
-                role === "author"
-                  ? "Модули, уроки, задания и видео собираются в одной программе."
-                  : "Каталог, карточка курса, уроки и прогресс читаются без лишнего шума.",
+              title: "Маршрут обучения",
+              text: "Каталог, карточка курса, уроки и прогресс читаются без лишнего служебного шума.",
             },
             {
-              title: role === "author" ? "Форматы" : "Наполнение урока",
-              text:
-                role === "author"
-                  ? "Запись и онлайн-поток живут в единой логике уроков."
-                  : "Видео, текст, файлы и задания остаются в уроке и не теряются по ходу курса.",
+              title: "Наполнение урока",
+              text: "Видео, текст, файлы и задания остаются внутри урока и не теряются по дороге.",
             },
             {
-              title: role === "author" ? "Публикация" : "Следующий шаг",
-              text:
-                role === "author"
-                  ? "Курс получает понятную карточку и публикуется в каталоге."
-                  : "После выбора программы сразу понятно, что делать дальше.",
+              title: "Следующий шаг",
+              text: "После выбора программы сразу понятно, что делать дальше и как перейти к учебе.",
             },
           ].map((item) => (
             <div
@@ -107,12 +72,8 @@ function ProductPreview({ role }: { role: LandingRole }) {
 
       <div className="grid gap-4">
         <SiteIllustration
-          kind={role === "author" ? "designProcess" : "onlineLearning"}
-          alt={
-            role === "author"
-              ? "Иллюстрация создания и сборки учебной программы"
-              : "Иллюстрация онлайн-обучения и учебного процесса"
-          }
+          kind="onlineLearning"
+          alt="Иллюстрация онлайн-обучения и учебного процесса"
           priority
           className="p-5"
           imageClassName="scale-[1.04]"
@@ -146,54 +107,11 @@ function ProductPreview({ role }: { role: LandingRole }) {
   );
 }
 
-/**
- * Purpose: public SaaS-style landing assembled only from frontend concerns.
- * Props:
- * - publishedCourses: count of published courses for hero metrics.
- * - courses: normalized public course cards from backend/shared layer.
- * Usage:
- * - used by app/page.tsx after backend service builds the landing payload.
- */
 export function LandingExperience({
   publishedCourses,
   courses,
-}: LandingExperienceProps) {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const [role, setRole] = useState<LandingRole>("learn");
-  const activeCopy = roleCopy[role];
-
-  useEffect(() => {
-    const roleParam = searchParams.get("role");
-
-    if (roleParam === "learn" || roleParam === "author") {
-      setRole(roleParam);
-      window.localStorage.setItem("academy-landing-role", roleParam);
-      return;
-    }
-
-    const storedRole = window.localStorage.getItem("academy-landing-role");
-
-    if (storedRole === "learn" || storedRole === "author") {
-      setRole(storedRole);
-      startTransition(() => {
-        router.replace(buildUrlWithRole(pathname, new URLSearchParams(searchParams), storedRole), {
-          scroll: false,
-        });
-      });
-    }
-  }, [pathname, router, searchParams]);
-
-  function handleRoleChange(nextRole: LandingRole) {
-    setRole(nextRole);
-    window.localStorage.setItem("academy-landing-role", nextRole);
-    startTransition(() => {
-      router.replace(buildUrlWithRole(pathname, new URLSearchParams(searchParams), nextRole), {
-        scroll: false,
-      });
-    });
-  }
+}: PublicHomePayload) {
+  const authorCopy = roleCopy.author;
 
   return (
     <div className="space-y-16 md:space-y-20 lg:space-y-24">
@@ -209,7 +127,7 @@ export function LandingExperience({
                   <Copy value="Академия риэлторов" />
                 </p>
                 <p className="max-w-[540px] text-sm leading-6 text-[var(--muted)]">
-                  <Copy value="Платформа с курсами по недвижимости для учеников, агентов и авторов программ." />
+                  <Copy value="Курсы по недвижимости для новичков, агентов и команд, которым нужен понятный учебный маршрут." />
                 </p>
               </div>
             </div>
@@ -220,7 +138,7 @@ export function LandingExperience({
                   <Copy value="Для кого" />
                 </Link>
                 <Link href="#flow" className="transition hover:text-[var(--foreground)]">
-                  <Copy value="Как работает" />
+                  <Copy value="Как это работает" />
                 </Link>
                 <Link href="#courses" className="transition hover:text-[var(--foreground)]">
                   <Copy value="Курсы" />
@@ -231,8 +149,8 @@ export function LandingExperience({
                 <PublicButton href="/sign-in" tone="secondary">
                   <Copy value="Войти" />
                 </PublicButton>
-                <PublicButton href={activeCopy.primaryHref}>
-                  <Copy value={activeCopy.primaryLabel} />
+                <PublicButton href="/catalog">
+                  <Copy value="Подобрать курс" />
                 </PublicButton>
               </div>
             </div>
@@ -244,59 +162,38 @@ export function LandingExperience({
         <MotionReveal variant="left" immediate delay={80} className="space-y-8">
           <div className={publicBadgeClassName}>
             <ShieldCheck className="h-4 w-4 text-[var(--primary)]" />
-            <Copy value={activeCopy.eyebrow} />
-          </div>
-
-          <div className="inline-flex rounded-[var(--control-radius)] border border-[var(--border)] bg-[var(--surface-strong)] p-1 shadow-[var(--shadow-sm)]">
-            {([
-              { value: "learn", label: "Я учусь" },
-              { value: "author", label: "Я автор" },
-            ] as const).map((item) => (
-              <button
-                key={item.value}
-                type="button"
-                onClick={() => handleRoleChange(item.value)}
-                className={cn(
-                  "min-h-[calc(var(--control-height)-8px)] rounded-[calc(var(--control-radius)-4px)] px-5 text-sm font-semibold transition duration-200",
-                  role === item.value
-                    ? "bg-[var(--primary)] text-[var(--primary-foreground)] shadow-[var(--shadow-brand)]"
-                    : "text-[var(--foreground)] hover:bg-[var(--surface)]",
-                )}
-              >
-                <Copy value={item.label} />
-              </button>
-            ))}
+            <Copy value="Обучение по недвижимости в одном понятном месте" />
           </div>
 
           <div className="space-y-5">
             <h1 className="max-w-[11ch] text-[clamp(2.15rem,5vw,3.35rem)] font-semibold leading-[1.04] tracking-[-0.03em] text-[var(--foreground)]">
-              <Copy value={activeCopy.title} />
+              <Copy value="Закрывай сделки увереннее и учись без хаоса." />
             </h1>
             <p className="max-w-[560px] text-[16px] leading-7 text-[var(--muted)]">
-              <Copy value={activeCopy.text} />
+              <Copy value="Короткие практичные программы для риэлторов: записи, онлайн-потоки, задания, шаблоны и материалы в каждом уроке. Открыл курс, понял маршрут, пошел применять в работе." />
             </p>
           </div>
 
           <div className="flex flex-col gap-4 sm:flex-row">
             <div className="space-y-3">
-              <PublicButton href={activeCopy.primaryHref} className="w-full justify-center sm:w-auto">
-                <Copy value={activeCopy.primaryLabel} />
+              <PublicButton href="/catalog" className="w-full justify-center sm:w-auto">
+                <Copy value="Выбрать курс" />
               </PublicButton>
               <p className="max-w-[260px] text-sm leading-6 text-[var(--muted)]">
-                <Copy value={activeCopy.primaryHint} />
+                <Copy value="Есть бесплатные программы. Каталог можно посмотреть без регистрации." />
               </p>
             </div>
 
             <div className="space-y-3">
               <PublicButton
-                href={activeCopy.secondaryHref}
+                href="/sign-in?role=author"
                 tone="secondary"
                 className="w-full justify-center sm:w-auto"
               >
-                <Copy value={activeCopy.secondaryLabel} />
+                <Copy value="Для преподавателя" />
               </PublicButton>
               <p className="max-w-[260px] text-sm leading-6 text-[var(--muted)]">
-                <Copy value={activeCopy.secondaryHint} />
+                <Copy value="Отдельный вход для автора и команды курса." />
               </p>
             </div>
           </div>
@@ -309,7 +206,7 @@ export function LandingExperience({
         </MotionReveal>
 
         <MotionReveal variant="right" immediate delay={140}>
-          <ProductPreview role={role} />
+          <ProductPreview />
         </MotionReveal>
       </section>
 
@@ -334,7 +231,7 @@ export function LandingExperience({
         <SectionLead
           eyebrow="Для кого"
           title="Один продукт для старта в профессии, прокачки навыка и запуска своей программы"
-          text="Здесь не нужно разбираться в сложной схеме платформы. Человек сразу узнает свой сценарий и понимает, куда кликать дальше."
+          text="Человек должен сразу узнать свой сценарий: начать с базы, быстро закрыть пробел перед сделкой или собрать собственный курс."
         />
 
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
@@ -370,12 +267,12 @@ export function LandingExperience({
         <div className="space-y-8">
           <SectionLead
             eyebrow="Как это работает"
-            title={activeCopy.processTitle}
-            text={activeCopy.processText}
+            title="Выбираешь программу, проходишь уроки и применяешь в сделке"
+            text="Маршрут читается за несколько секунд: курс, уроки, задание, результат."
           />
 
           <div className="grid gap-5 xl:grid-cols-[1fr_auto_1fr_auto_1fr] xl:items-stretch">
-            {activeCopy.steps.map((step, index) => {
+            {roleCopy.learn.steps.map((step, index) => {
               const Icon = step.icon;
 
               return (
@@ -395,7 +292,7 @@ export function LandingExperience({
                     </p>
                   </article>
 
-                  {index < activeCopy.steps.length - 1 ? (
+                  {index < roleCopy.learn.steps.length - 1 ? (
                     <div className="hidden items-center justify-center xl:flex">
                       <div className="flex w-20 items-center gap-2 text-[var(--primary)]">
                         <div className="h-px flex-1 bg-[var(--primary)]/35" />
@@ -411,11 +308,50 @@ export function LandingExperience({
         </div>
       </section>
 
+      <section className="grid gap-8 xl:grid-cols-[0.92fr_1.08fr] xl:items-start">
+        <SectionLead
+          eyebrow="Для преподавателя"
+          title="Собери программу как продукт, а не как папку со ссылками"
+          text="Для автора и команды курса есть отдельный контур: структура программы, уроки, задания, студенты и база знаний по работе с курсом."
+        />
+
+        <MotionReveal variant="up">
+          <article className={publicGradientCardClassName}>
+            <p className="text-[12px] font-medium uppercase leading-4 tracking-[0.18em] text-white/68">
+              <Copy value="Контур автора" />
+            </p>
+            <h3 className="mt-4 max-w-[14ch] text-[30px] font-semibold leading-9 tracking-[-0.02em] text-white">
+              <Copy value={authorCopy.title} />
+            </h3>
+            <div className="mt-6 grid gap-3">
+              {authorCopy.steps.map((step) => (
+                <div
+                  key={step.title}
+                  className="rounded-[16px] border border-white/15 bg-white/10 px-4 py-4"
+                >
+                  <p className="text-sm font-semibold text-white">
+                    <Copy value={step.title} />
+                  </p>
+                  <p className="mt-2 text-sm leading-6 text-white/84">
+                    <Copy value={step.text} />
+                  </p>
+                </div>
+              ))}
+            </div>
+            <div className="mt-6">
+              <PublicButton href="/sign-in?role=author" tone="secondary">
+                <Copy value="Открыть кабинет автора" />
+              </PublicButton>
+            </div>
+          </article>
+        </MotionReveal>
+      </section>
+
       <section id="courses" className="space-y-8">
         <SectionLead
           eyebrow="Каталог"
           title="Выбирай программу под задачу сделки"
-          text="В карточке курса сразу видно формат, объем, цену и чему научишься. Если программ больше трех, подборки можно листать кнопками без узких колонок и ломки сетки."
+          text="В карточке курса сразу видно формат, объем, цену и чему научишься. Если программ больше трех, подборку можно листать кнопками."
         />
 
         <LandingCourseCarousel courses={courses} />
@@ -426,8 +362,8 @@ export function LandingExperience({
           <div className="grid gap-8 xl:grid-cols-[1fr_auto] xl:items-end">
             <SectionLead
               eyebrow="Готовы начать?"
-              title="Выбери курс или открой свой кабинет автора"
-              text="Открой каталог, посмотри форматы и начни с того шага, который даст результат уже в ближайшей сделке или в запуске собственной программы."
+              title="Выбери курс и начни с шага, который нужен тебе сейчас"
+              text="Открой каталог, посмотри форматы и начни с программы, которая даст понятный результат уже в ближайшей сделке."
               light
             />
 
@@ -436,7 +372,7 @@ export function LandingExperience({
                 <Copy value="Перейти в каталог" />
               </PublicButton>
               <PublicButton href="/sign-in?role=author" tone="ghost" className="min-w-[220px]">
-                <Copy value="Стать автором" />
+                <Copy value="Для преподавателя" />
               </PublicButton>
             </div>
           </div>
