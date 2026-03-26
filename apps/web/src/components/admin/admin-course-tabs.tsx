@@ -8,9 +8,10 @@ import { cn } from "@/lib/utils";
 
 type AdminCourseTabsProps = {
   courseId: string;
+  showAccessTab?: boolean;
 };
 
-const getCourseTabItems = (courseId: string) => [
+const getCourseTabItems = (courseId: string, showAccessTab: boolean) => [
   {
     href: `/admin/courses/${courseId}`,
     label: "О курсе",
@@ -22,19 +23,26 @@ const getCourseTabItems = (courseId: string) => [
     label: "Программа",
     icon: BookOpen,
   },
-  {
-    href: `/admin/courses/${courseId}/access`,
-    label: "Доступ и продажи",
-    icon: CreditCard,
-  },
+  ...(showAccessTab
+    ? [
+        {
+          href: `/admin/courses/${courseId}/access`,
+          label: "Доступ и продажи",
+          icon: CreditCard,
+        },
+      ]
+    : []),
 ];
 
-export function AdminCourseTabs({ courseId }: AdminCourseTabsProps) {
+export function AdminCourseTabs({
+  courseId,
+  showAccessTab = true,
+}: AdminCourseTabsProps) {
   const pathname = usePathname();
 
   return (
     <nav className="flex flex-wrap gap-2 border-t border-[var(--border)] pt-5">
-      {getCourseTabItems(courseId).map((item) => {
+      {getCourseTabItems(courseId, showAccessTab).map((item) => {
         const Icon = item.icon;
         const isActive = item.exact
           ? pathname === item.href

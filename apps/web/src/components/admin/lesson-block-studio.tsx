@@ -7,6 +7,7 @@ import {
   GripVertical,
   Paperclip,
   Plus,
+  SquareCheckBig,
   Type,
   Video,
   X,
@@ -19,6 +20,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  createQuestionTemplate,
+  encodeHomeworkPayload,
+  type HomeworkChoiceOption,
+  type HomeworkQuestion,
+} from "@/lib/homework-builder";
 import type { LessonBlock } from "@/lib/lesson-content";
 
 type VideoAssetState = {
@@ -112,6 +119,7 @@ function createBlock(type: LessonBlock["type"], order: number): LessonBlock {
       title: "Домашнее задание",
       body: "",
       submissionHint: "",
+      questions: [],
     };
   }
 
@@ -148,7 +156,23 @@ function getBlockPreview(block: LessonBlock) {
     return block.url.trim() || "Добавь ссылку на материал.";
   }
 
+  if (block.questions && block.questions.length > 0) {
+    return `Вопросов: ${block.questions.length}. ${block.body.trim() || "Опиши, что именно должен сдать студент."}`;
+  }
+
   return block.body.trim() || "Опиши, что именно должен сдать студент.";
+}
+
+function getQuestionTypeLabel(type: HomeworkQuestion["type"]) {
+  if (type === "single_choice") {
+    return "Один ответ";
+  }
+
+  if (type === "multiple_choice") {
+    return "Несколько ответов";
+  }
+
+  return "Свободный ответ";
 }
 
 export function LessonBlockStudio({
@@ -231,6 +255,189 @@ export function LessonBlockStudio({
     setDraggedId(null);
   }
 
+  function addHomeworkQuestion(blockId: string, type: HomeworkQuestion["type"]) {
+    setBlocks((current) =>
+      current.map((block) => {
+        if (block.id !== blockId || block.type !== "HOMEWORK") {
+          return block;
+        }
+
+        const questions = block.questions ?? [];
+        const nextQuestion = createQuestionTemplate(type, questions.length + 1);
+
+        return {
+          ...block,
+          questions: [...questions, nextQuestion],
+        };
+      }),
+    );
+  }
+
+  function updateHomeworkQuestion(
+    blockId: string,
+    questionId: string,
+    patch: Partial<HomeworkQuestion>,
+  ) {
+    setBlocks((current) =>
+      current.map((block) => {
+        if (block.id !== blockId || block.type !== "HOMEWORK") {
+          return block;
+        }
+
+        return {
+          ...block,
+          questions: (block.questions ?? []).map((question) =>
+            question.id === questionId ? ({ ...question, ...patch } as HomeworkQuestion) : question,
+          ),
+        };
+      }),
+    );
+  }
+
+  function removeHomeworkQuestion(blockId: string, questionId: string) {
+    setBlocks((current) =>
+      current.map((block) => {
+        if (block.id !== blockId || block.type !== "HOMEWORK") {
+          return block;
+        }
+
+        return {
+          ...block,
+          questions: (block.questions ?? []).filter((question) => question.id !== questionId),
+        };
+      }),
+    );
+  }
+
+  function updateHomeworkOption(
+    blockId: string,
+    questionId: string,
+    optionId: string,
+    patch: Partial<HomeworkChoiceOption>,
+  ) {
+    setBlocks((current) =>
+      current.map((block) => {
+        if (block.id !== blockId || block.type !== "HOMEWORK") {
+          return block;
+        }
+
+        return {
+          ...block,
+          questions: (block.questions ?? []).map((question) => {
+            if (question.id !== questionId || question.type === "free_text") {
+              return question;
+            }
+
+            return {
+              ...question,
+              options: question.options.map((option) =>
+                option.id === optionId ? { ...option, ...patch } : option,
+              ),
+            };
+          }),
+        };
+      }),
+    );
+  }
+
+  function toggleHomeworkOptionCorrect(
+    blockId: string,
+    question: Extract<HomeworkQuestion, { type: "single_choice" | "multiple_choice" }>,
+    optionId: string,
+  ) {
+    setBlocks((current) =>
+      current.map((block) => {
+        if (block.id !== blockId || block.type !== "HOMEWORK") {
+          return block;
+        }
+
+        return {
+          ...block,
+          questions: (block.questions ?? []).map((item) => {
+            if (item.id !== question.id || item.type === "free_text") {
+              return item;
+            }
+
+            return {
+              ...item,
+              options: item.options.map((option) => {
+                if (item.type === "single_choice") {
+                  return {
+                    ...option,
+                    isCorrect: option.id === optionId,
+                  };
+                }
+
+                if (option.id !== optionId) {
+                  return option;
+                }
+
+                return {
+                  ...option,
+                  isCorrect: !option.isCorrect,
+                };
+              }),
+            };
+          }),
+        };
+      }),
+    );
+  }
+
+  function addHomeworkOption(blockId: string, questionId: string) {
+    setBlocks((current) =>
+      current.map((block) => {
+        if (block.id !== blockId || block.type !== "HOMEWORK") {
+          return block;
+        }
+
+        return {
+          ...block,
+          questions: (block.questions ?? []).map((question) => {
+            if (question.id !== questionId || question.type === "free_text") {
+              return question;
+            }
+
+            return {
+              ...question,
+              options: [
+                ...question.options,
+                {
+                  id: `${question.id}-option-${question.options.length + 1}`,
+                  text: `Вариант ${question.options.length + 1}`,
+                },
+              ],
+            };
+          }),
+        };
+      }),
+    );
+  }
+
+  function removeHomeworkOption(blockId: string, questionId: string, optionId: string) {
+    setBlocks((current) =>
+      current.map((block) => {
+        if (block.id !== blockId || block.type !== "HOMEWORK") {
+          return block;
+        }
+
+        return {
+          ...block,
+          questions: (block.questions ?? []).map((question) => {
+            if (question.id !== questionId || question.type === "free_text") {
+              return question;
+            }
+
+            return {
+              ...question,
+              options: question.options.filter((option) => option.id !== optionId),
+            };
+          }),
+        };
+      }),
+    );
+  }
+
   return (
     <div className="space-y-5">
       {blocks.map((block, index) => (
@@ -257,7 +464,14 @@ export function LessonBlockStudio({
           <input
             type="hidden"
             name="lessonBlockSubmissionHint"
-            value={"submissionHint" in block ? (block.submissionHint ?? "") : ""}
+            value={
+              block.type === "HOMEWORK"
+                ? encodeHomeworkPayload({
+                    hint: block.submissionHint ?? "",
+                    questions: block.questions ?? [],
+                  })
+                : ""
+            }
           />
         </Fragment>
       ))}
@@ -343,6 +557,9 @@ export function LessonBlockStudio({
                       Блок {index + 1}
                     </p>
                     <Badge variant="neutral">{meta.label}</Badge>
+                    {block.type === "HOMEWORK" && block.questions && block.questions.length > 0 ? (
+                      <Badge variant="warning">Вопросов {block.questions.length}</Badge>
+                    ) : null}
                   </div>
 
                   <h3 className="mt-2 truncate text-lg font-semibold tracking-tight text-[var(--foreground)]">
@@ -504,6 +721,189 @@ export function LessonBlockStudio({
                         placeholder="Например: прикрепить файл, вставить ссылку или написать ответ текстом."
                         className="min-h-[120px]"
                       />
+                    </div>
+
+                    <div className="rounded-[22px] border border-[var(--border)] bg-[var(--surface)] p-4">
+                      <div className="flex flex-wrap items-start justify-between gap-3">
+                        <div>
+                          <p className="text-sm font-semibold text-[var(--foreground)]">
+                            Вопросы задания
+                          </p>
+                          <p className="mt-1 text-sm leading-6 text-[var(--muted)]">
+                            Готовые шаблоны: один ответ, несколько ответов или свободный ответ.
+                          </p>
+                        </div>
+
+                        <div className="flex flex-wrap gap-2">
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="outline"
+                            onClick={() => addHomeworkQuestion(block.id, "single_choice")}
+                          >
+                            Один ответ
+                          </Button>
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="outline"
+                            onClick={() => addHomeworkQuestion(block.id, "multiple_choice")}
+                          >
+                            Несколько ответов
+                          </Button>
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="outline"
+                            onClick={() => addHomeworkQuestion(block.id, "free_text")}
+                          >
+                            Свободный ответ
+                          </Button>
+                        </div>
+                      </div>
+
+                      {block.questions && block.questions.length > 0 ? (
+                        <div className="mt-4 space-y-4">
+                          {block.questions.map((question, questionIndex) => (
+                            <div
+                              key={question.id}
+                              className="rounded-[20px] border border-[var(--border)] bg-white p-4"
+                            >
+                              <div className="flex flex-wrap items-start justify-between gap-3">
+                                <div className="flex flex-wrap items-center gap-2">
+                                  <Badge variant="neutral">Вопрос {questionIndex + 1}</Badge>
+                                  <Badge variant="warning">
+                                    {getQuestionTypeLabel(question.type)}
+                                  </Badge>
+                                </div>
+
+                                <Button
+                                  type="button"
+                                  size="sm"
+                                  variant="outline"
+                                  className="border-red-200 text-red-600 hover:bg-red-50"
+                                  onClick={() => removeHomeworkQuestion(block.id, question.id)}
+                                >
+                                  <X className="mr-2 h-4 w-4" />
+                                  Удалить
+                                </Button>
+                              </div>
+
+                              <div className="mt-4 space-y-4">
+                                <div className="space-y-2">
+                                  <Label htmlFor={`question-prompt-${question.id}`}>
+                                    Текст вопроса
+                                  </Label>
+                                  <Input
+                                    id={`question-prompt-${question.id}`}
+                                    value={question.prompt}
+                                    onChange={(event) =>
+                                      updateHomeworkQuestion(block.id, question.id, {
+                                        prompt: event.target.value,
+                                      })
+                                    }
+                                  />
+                                </div>
+
+                                {question.type === "free_text" ? (
+                                  <div className="space-y-2">
+                                    <Label htmlFor={`question-placeholder-${question.id}`}>
+                                      Подсказка в поле ответа
+                                    </Label>
+                                    <Input
+                                      id={`question-placeholder-${question.id}`}
+                                      value={question.placeholder ?? ""}
+                                      onChange={(event) =>
+                                        updateHomeworkQuestion(block.id, question.id, {
+                                          placeholder: event.target.value,
+                                        })
+                                      }
+                                    />
+                                  </div>
+                                ) : (
+                                  <div className="space-y-3">
+                                    {question.options.map((option, optionIndex) => (
+                                      <div
+                                        key={option.id}
+                                        className="grid gap-3 rounded-[18px] border border-[var(--border)] bg-[var(--surface)] p-3 lg:grid-cols-[auto_minmax(0,1fr)_auto_auto]"
+                                      >
+                                        <button
+                                          type="button"
+                                          onClick={() =>
+                                            toggleHomeworkOptionCorrect(block.id, question, option.id)
+                                          }
+                                          className={`flex h-10 w-10 items-center justify-center rounded-2xl border transition ${
+                                            option.isCorrect
+                                              ? "border-[var(--primary)] bg-[var(--primary)] text-white"
+                                              : "border-[var(--border)] bg-white text-[var(--muted)]"
+                                          }`}
+                                          aria-label="Отметить верный вариант"
+                                        >
+                                          <SquareCheckBig className="h-4 w-4" />
+                                        </button>
+
+                                        <Input
+                                          value={option.text}
+                                          onChange={(event) =>
+                                            updateHomeworkOption(
+                                              block.id,
+                                              question.id,
+                                              option.id,
+                                              { text: event.target.value },
+                                            )
+                                          }
+                                          placeholder={`Вариант ${optionIndex + 1}`}
+                                        />
+
+                                        <Button
+                                          type="button"
+                                          size="sm"
+                                          variant={option.isCorrect ? "default" : "outline"}
+                                          onClick={() =>
+                                            toggleHomeworkOptionCorrect(block.id, question, option.id)
+                                          }
+                                        >
+                                          {question.type === "single_choice"
+                                            ? "Верный"
+                                            : option.isCorrect
+                                              ? "Выбран"
+                                              : "Отметить"}
+                                        </Button>
+
+                                        <Button
+                                          type="button"
+                                          size="sm"
+                                          variant="outline"
+                                          className="border-red-200 text-red-600 hover:bg-red-50"
+                                          onClick={() =>
+                                            removeHomeworkOption(block.id, question.id, option.id)
+                                          }
+                                        >
+                                          Удалить
+                                        </Button>
+                                      </div>
+                                    ))}
+
+                                    <Button
+                                      type="button"
+                                      size="sm"
+                                      variant="outline"
+                                      onClick={() => addHomeworkOption(block.id, question.id)}
+                                    >
+                                      <Plus className="mr-2 h-4 w-4" />
+                                      Добавить вариант
+                                    </Button>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="mt-4 rounded-[18px] border border-dashed border-[var(--border)] bg-white p-4 text-sm text-[var(--muted)]">
+                          Пока без вопросов. Можно оставить только текст задания или добавить шаблон выше.
+                        </div>
+                      )}
                     </div>
                   </div>
                 ) : null}

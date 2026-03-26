@@ -29,6 +29,8 @@ const createCourseSchema = z.object({
   slug: z.string().trim().optional(),
   description: z.string().trim().optional(),
   status: z.nativeEnum(CourseStatus),
+  structureMode: z.enum(["modules", "single_module"]).default("modules"),
+  firstModuleTitle: z.string().trim().optional(),
 });
 
 const updateCourseSchema = createCourseSchema.extend({
@@ -236,6 +238,14 @@ function getOptionalNumber(formData: FormData, key: string) {
   const value = Number(raw);
 
   return Number.isFinite(value) ? value : null;
+}
+
+function getBooleanValue(formData: FormData, key: string) {
+  const rawValue = String(formData.get(key) ?? "")
+    .trim()
+    .toLowerCase();
+
+  return rawValue === "on" || rawValue === "true" || rawValue === "1" || rawValue === "yes";
 }
 
 function slugify(value: string) {
@@ -471,25 +481,63 @@ export async function createCourse(formData: FormData) {
     slug: getOptionalValue(formData, "slug"),
     description: getOptionalValue(formData, "description"),
     status: getTrimmedValue(formData, "status"),
+    structureMode: getTrimmedValue(formData, "structureMode") || "modules",
+    firstModuleTitle: getOptionalValue(formData, "firstModuleTitle"),
   });
 
   const slug = await ensureUniqueCourseSlug(parsed.slug ?? parsed.title);
+  const shouldCreateFirstModule =
+    parsed.structureMode === "single_module" || Boolean(parsed.firstModuleTitle);
 
-  const course = await prisma.course.create({
-    data: {
-      title: parsed.title,
-      slug,
-      description: parsed.description,
-      status: parsed.status,
-      authorId: user.role === "AUTHOR" ? user.id : null,
-    },
-    select: {
-      id: true,
-    },
+  const course = await prisma.$transaction(async (tx) => {
+    const createdCourse = await tx.course.create({
+      data: {
+        title: parsed.title,
+        slug,
+        description: parsed.description,
+        status: parsed.status,
+        authorId: user.role === "AUTHOR" ? user.id : null,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (!shouldCreateFirstModule) {
+      return {
+        id: createdCourse.id,
+        firstModuleId: null as string | null,
+      };
+    }
+
+    const moduleTitle =
+      parsed.structureMode === "single_module"
+        ? parsed.firstModuleTitle ?? parsed.title
+        : parsed.firstModuleTitle ?? "Модуль 1";
+
+    const createdModule = await tx.module.create({
+      data: {
+        courseId: createdCourse.id,
+        title: moduleTitle,
+        position: 1,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    return {
+      id: createdCourse.id,
+      firstModuleId: createdModule.id,
+    };
   });
 
   refreshAdminRoutes(course.id);
-  redirect(`/admin/courses/${course.id}/content`);
+  redirect(
+    course.firstModuleId
+      ? `/admin/courses/${course.id}/content?moduleId=${course.firstModuleId}`
+      : `/admin/courses/${course.id}/content`,
+  );
 }
 
 export async function updateCourse(formData: FormData) {
@@ -686,13 +734,13 @@ export async function updateLesson(formData: FormData) {
     title: getTrimmedValue(formData, "title"),
     excerpt: getOptionalValue(formData, "excerpt"),
     type: (getTrimmedValue(formData, "type") || LessonType.TEXT) as LessonType,
-    isPreview: formData.get("isPreview") === "on",
+    isPreview: getBooleanValue(formData, "isPreview"),
     accessAfterDays: getOptionalNumber(formData, "accessAfterDays"),
-    requiresCuratorReview: formData.get("requiresCuratorReview") === "on",
-    unlockNextModuleOnApproval: formData.get("unlockNextModuleOnApproval") === "on",
-    allowTextSubmission: formData.get("allowTextSubmission") === "on",
-    allowLinkSubmission: formData.get("allowLinkSubmission") === "on",
-    allowFileUpload: formData.get("allowFileUpload") === "on",
+    requiresCuratorReview: getBooleanValue(formData, "requiresCuratorReview"),
+    unlockNextModuleOnApproval: getBooleanValue(formData, "unlockNextModuleOnApproval"),
+    allowTextSubmission: getBooleanValue(formData, "allowTextSubmission"),
+    allowLinkSubmission: getBooleanValue(formData, "allowLinkSubmission"),
+    allowFileUpload: getBooleanValue(formData, "allowFileUpload"),
     videoSourceType: getOptionalValue(formData, "videoSourceType") ?? null,
     videoUrl: getOptionalValue(formData, "videoUrl"),
     videoPlaybackId: getOptionalValue(formData, "videoPlaybackId"),

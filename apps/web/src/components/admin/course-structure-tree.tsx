@@ -1,9 +1,9 @@
 "use client";
 
-import { ChevronRight, GripVertical, Loader2, Plus } from "lucide-react";
+import { ChevronRight, GripVertical, Loader2, Plus, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -36,6 +36,7 @@ type RepositionModuleResult = {
 
 type CourseStructureTreeProps = {
   courseId: string;
+  courseTitle: string;
   modules: TreeModule[];
   selectedModuleId: string | null;
   selectedLessonId: string | null;
@@ -78,8 +79,13 @@ function buildDropKey(type: "module" | "lesson", id: string, targetId?: string) 
   return targetId ? `${type}:${id}:${targetId}` : `${type}:${id}:end`;
 }
 
+function getSuggestedModuleTitle(courseTitle: string, modulesCount: number) {
+  return modulesCount === 0 ? courseTitle : `Модуль ${modulesCount + 1}`;
+}
+
 export function CourseStructureTree({
   courseId,
+  courseTitle,
   modules,
   selectedModuleId,
   selectedLessonId,
@@ -92,10 +98,24 @@ export function CourseStructureTree({
   const [dragState, setDragState] = useState<DragState>(null);
   const [dropKey, setDropKey] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [isAddingModule, setIsAddingModule] = useState(modules.length === 0);
+  const [moduleTitle, setModuleTitle] = useState(getSuggestedModuleTitle(courseTitle, modules.length));
+
+  useEffect(() => {
+    setModuleTitle(getSuggestedModuleTitle(courseTitle, modules.length));
+    if (modules.length === 0) {
+      setIsAddingModule(true);
+    }
+  }, [courseTitle, modules.length]);
 
   function clearDragState() {
     setDragState(null);
     setDropKey(null);
+  }
+
+  function closeAddModule() {
+    setIsAddingModule(false);
+    setModuleTitle(getSuggestedModuleTitle(courseTitle, modules.length));
   }
 
   function runLessonReposition(targetModuleId: string, targetLessonId?: string) {
@@ -128,9 +148,7 @@ export function CourseStructureTree({
         router.refresh();
       } catch (actionError) {
         setError(
-          actionError instanceof Error
-            ? actionError.message
-            : "Не удалось переместить урок.",
+          actionError instanceof Error ? actionError.message : "Не удалось переместить урок.",
         );
       } finally {
         clearDragState();
@@ -165,9 +183,7 @@ export function CourseStructureTree({
         router.refresh();
       } catch (actionError) {
         setError(
-          actionError instanceof Error
-            ? actionError.message
-            : "Не удалось переместить модуль.",
+          actionError instanceof Error ? actionError.message : "Не удалось переместить модуль.",
         );
       } finally {
         clearDragState();
@@ -178,37 +194,37 @@ export function CourseStructureTree({
   return (
     <div className="space-y-4">
       <article className="rounded-[24px] border border-[var(--border)] bg-white p-4 shadow-sm">
-        <div className="space-y-1">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--muted)]">
-            Структура курса
-          </p>
-          <h2 className="text-xl font-semibold tracking-tight text-[var(--foreground)]">
-            Модули и уроки
-          </h2>
+        <div className="flex items-start justify-between gap-3">
+          <div className="space-y-1">
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#7a6548]">
+              Структура курса
+            </p>
+            <h2 className="text-xl font-semibold tracking-tight text-[var(--foreground)]">
+              Модули и уроки
+            </h2>
+          </div>
+
+          {!isAddingModule ? (
+            <Button type="button" size="sm" onClick={() => setIsAddingModule(true)}>
+              <Plus className="mr-2 h-4 w-4" />
+              Добавить модуль
+            </Button>
+          ) : null}
         </div>
 
-        <form action={createModuleAction} className="mt-4 space-y-3">
-          <input type="hidden" name="courseId" value={courseId} />
-          <Input name="title" placeholder="Новый модуль" required />
-          <Button type="submit" className="w-full">
-            <Plus className="mr-2 h-4 w-4" />
-            Добавить модуль
-          </Button>
-        </form>
-      </article>
+        {error ? (
+          <p className="mt-4 rounded-[18px] border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            {error}
+          </p>
+        ) : null}
 
-      {error ? (
-        <p className="rounded-[18px] border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-          {error}
-        </p>
-      ) : null}
+        {modules.length === 0 ? (
+          <div className="mt-4 rounded-[22px] border border-dashed border-[var(--border)] bg-[var(--surface)] p-4 text-sm text-[var(--muted)]">
+            Пока модулей нет. Создай первый, и структура курса появится здесь.
+          </div>
+        ) : null}
 
-      {modules.length === 0 ? (
-        <article className="rounded-[24px] border border-dashed border-[var(--border)] bg-white p-4 text-sm text-[var(--muted)] shadow-sm">
-          Модулей пока нет. Создай первый, и структура курса появится здесь.
-        </article>
-      ) : (
-        <div className="space-y-3">
+        <div className="mt-4 space-y-3">
           {modules.map((moduleItem) => {
             const isActiveModule = selectedModuleId === moduleItem.id;
             const moduleDropKey = buildDropKey("module", moduleItem.id);
@@ -223,9 +239,7 @@ export function CourseStructureTree({
                   }
 
                   event.preventDefault();
-                  setDropKey(
-                    dragState.kind === "module" ? moduleDropKey : lessonDropKey,
-                  );
+                  setDropKey(dragState.kind === "module" ? moduleDropKey : lessonDropKey);
                 }}
                 onDragLeave={() => {
                   if (dropKey === moduleDropKey || dropKey === lessonDropKey) {
@@ -270,6 +284,7 @@ export function CourseStructureTree({
 
                   <Link
                     href={buildContentHref(courseId, moduleItem.id)}
+                    scroll={false}
                     className="flex min-w-0 flex-1 items-center justify-between gap-3"
                   >
                     <div className="min-w-0">
@@ -331,6 +346,7 @@ export function CourseStructureTree({
                           >
                             <Link
                               href={buildContentHref(courseId, moduleItem.id, lesson.id)}
+                              scroll={false}
                               className={`flex items-center gap-3 rounded-[18px] px-3 py-2.5 transition ${
                                 isActiveLesson
                                   ? "bg-[var(--primary-soft)] text-[var(--foreground)]"
@@ -393,8 +409,37 @@ export function CourseStructureTree({
               Перетащи модуль сюда, чтобы отправить его в конец списка.
             </div>
           ) : null}
+
+          {isAddingModule ? (
+            <form
+              action={createModuleAction}
+              className="rounded-[22px] border border-dashed border-[var(--primary)] bg-[var(--primary-soft)]/35 p-4"
+            >
+              <input type="hidden" name="courseId" value={courseId} />
+              <div className="space-y-3">
+                <p className="text-sm font-semibold text-[var(--foreground)]">Новый модуль</p>
+                <Input
+                  name="title"
+                  value={moduleTitle}
+                  onChange={(event) => setModuleTitle(event.target.value)}
+                  placeholder="Название модуля"
+                  required
+                />
+                <div className="flex gap-2">
+                  <Button type="submit" className="flex-1">
+                    Создать модуль
+                  </Button>
+                  {modules.length > 0 ? (
+                    <Button type="button" variant="outline" onClick={closeAddModule}>
+                      <X className="h-4 w-4" />
+                    </Button>
+                  ) : null}
+                </div>
+              </div>
+            </form>
+          ) : null}
         </div>
-      )}
+      </article>
     </div>
   );
 }

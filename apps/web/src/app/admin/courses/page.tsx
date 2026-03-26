@@ -18,18 +18,15 @@ import { requireAdminViewer } from "@/lib/viewer";
 
 export default async function CoursesPage() {
   const viewer = await requireAdminViewer();
-  const isAuthorRole = viewer.actualRole === USER_ROLES.AUTHOR;
-  const isAuthorPreview =
-    viewer.actualRole === USER_ROLES.ADMIN &&
-    viewer.effectiveRole === USER_ROLES.AUTHOR;
-  const isAuthorMode = isAuthorRole || isAuthorPreview;
+  const isAuthorMode = viewer.effectiveRole === USER_ROLES.AUTHOR;
+  const isAdminMode = viewer.effectiveRole === USER_ROLES.ADMIN;
   const canCreateCourse = canCreateCourses({
     ...viewer.user,
     role: viewer.effectiveRole,
   });
 
   const courses = await prisma.course.findMany({
-    where: isAuthorRole ? { authorId: viewer.user.id } : undefined,
+    where: isAuthorMode ? { authorId: viewer.user.id } : undefined,
     orderBy: {
       updatedAt: "desc",
     },
@@ -125,9 +122,11 @@ export default async function CoursesPage() {
                         </Badge>
                         <Badge variant="neutral">Модулей {course._count.modules}</Badge>
                         <Badge variant="neutral">Уроков {lessonCount}</Badge>
-                        <Badge variant="neutral">
-                          Зачислений {course._count.enrollments}
-                        </Badge>
+                        {isAdminMode ? (
+                          <Badge variant="neutral">
+                            Зачислений {course._count.enrollments}
+                          </Badge>
+                        ) : null}
                       </div>
 
                       <div>
@@ -158,15 +157,27 @@ export default async function CoursesPage() {
                             Модули, уроки и контент.
                           </p>
                         </div>
-                        <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-4 py-4">
-                          <WalletCards className="h-4 w-4 text-[var(--primary)]" />
-                          <p className="mt-3 text-sm font-medium text-[var(--foreground)]">
-                            Продажи
-                          </p>
-                          <p className="mt-1 text-xs leading-5 text-[var(--muted)]">
-                            Цена, доступ и выдача курса.
-                          </p>
-                        </div>
+                        {isAdminMode ? (
+                          <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-4 py-4">
+                            <WalletCards className="h-4 w-4 text-[var(--primary)]" />
+                            <p className="mt-3 text-sm font-medium text-[var(--foreground)]">
+                              Продажи
+                            </p>
+                            <p className="mt-1 text-xs leading-5 text-[var(--muted)]">
+                              Цена, доступ и выдача курса.
+                            </p>
+                          </div>
+                        ) : (
+                          <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-4 py-4">
+                            <BookOpen className="h-4 w-4 text-[var(--primary)]" />
+                            <p className="mt-3 text-sm font-medium text-[var(--foreground)]">
+                              Наполнение
+                            </p>
+                            <p className="mt-1 text-xs leading-5 text-[var(--muted)]">
+                              Собирай программу без коммерческих показателей и продаж.
+                            </p>
+                          </div>
+                        )}
                       </div>
 
                       {course.author ? (
@@ -192,14 +203,12 @@ export default async function CoursesPage() {
                         </Link>
                       </Button>
 
-                      {viewer.actualRole === USER_ROLES.ADMIN ? (
-                        <>
-                          <Button asChild variant="outline">
-                            <Link href={`/admin/courses/${course.id}/access`}>
-                              Доступ и продажи
-                            </Link>
-                          </Button>
-                        </>
+                      {isAdminMode ? (
+                        <Button asChild variant="outline">
+                          <Link href={`/admin/courses/${course.id}/access`}>
+                            Доступ и продажи
+                          </Link>
+                        </Button>
                       ) : null}
                     </div>
                   </div>

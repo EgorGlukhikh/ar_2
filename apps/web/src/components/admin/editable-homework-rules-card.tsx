@@ -1,0 +1,155 @@
+"use client";
+
+import { PencilLine, X } from "lucide-react";
+import { useState } from "react";
+
+import { Button } from "@/components/ui/button";
+
+type HomeworkRuleState = {
+  requiresCuratorReview: boolean;
+  unlockNextModuleOnApproval: boolean;
+  allowTextSubmission: boolean;
+  allowLinkSubmission: boolean;
+  allowFileUpload: boolean;
+};
+
+type EditableHomeworkRulesCardProps = {
+  formId: string;
+  initialState: HomeworkRuleState;
+};
+
+const homeworkRuleItems: Array<{
+  key: keyof HomeworkRuleState;
+  title: string;
+  description: string;
+}> = [
+  {
+    key: "requiresCuratorReview",
+    title: "Проверка куратором",
+    description: "Работа не считается принятой без ручной проверки.",
+  },
+  {
+    key: "unlockNextModuleOnApproval",
+    title: "Открывать следующий модуль после принятия",
+    description: "Следующий модуль откроется только после одобрения задания.",
+  },
+  {
+    key: "allowTextSubmission",
+    title: "Разрешить текстовый ответ",
+    description: "Студент может отправить развернутый текст в форме.",
+  },
+  {
+    key: "allowLinkSubmission",
+    title: "Разрешить ссылку",
+    description: "Студент может отправить ссылку на документ или облако.",
+  },
+  {
+    key: "allowFileUpload",
+    title: "Разрешить файл",
+    description: "Студент может прикрепить файл с выполненной работой.",
+  },
+];
+
+export function EditableHomeworkRulesCard({
+  formId,
+  initialState,
+}: EditableHomeworkRulesCardProps) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [state, setState] = useState(initialState);
+
+  function resetState() {
+    setState(initialState);
+    setIsEditing(false);
+  }
+
+  return (
+    <article className="rounded-[28px] border border-[var(--border)] bg-white shadow-sm">
+      {homeworkRuleItems.map((item) => (
+        <input
+          key={item.key}
+          type="hidden"
+          name={item.key}
+          value={state[item.key] ? "true" : "false"}
+        />
+      ))}
+
+      <div className="flex flex-wrap items-start justify-between gap-4 px-6 py-5">
+        <div>
+          <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#7a6548]">
+            Домашняя работа
+          </p>
+          <h3 className="mt-2 text-2xl font-semibold tracking-tight text-[var(--foreground)]">
+            Правила сдачи
+          </h3>
+        </div>
+
+        <div className="flex flex-wrap gap-2">
+          {isEditing ? (
+            <>
+              <Button type="submit" form={formId}>
+                Сохранить урок
+              </Button>
+              <Button type="button" variant="outline" onClick={resetState}>
+                <X className="mr-2 h-4 w-4" />
+                Отмена
+              </Button>
+            </>
+          ) : (
+            <Button type="button" variant="outline" onClick={() => setIsEditing(true)}>
+              <PencilLine className="mr-2 h-4 w-4" />
+              Редактировать
+            </Button>
+          )}
+        </div>
+      </div>
+
+      <div className="border-t border-[var(--border)] px-6 py-6">
+        <div className="grid gap-3 md:grid-cols-2">
+          {homeworkRuleItems.map((item) => (
+            <label
+              key={item.key}
+              className={`rounded-[20px] border px-4 py-4 transition ${
+                isEditing
+                  ? "border-[var(--border)] bg-[var(--surface)]"
+                  : "border-[var(--border)] bg-[var(--surface)]"
+              }`}
+            >
+              <div className="flex items-start gap-3">
+                {isEditing ? (
+                  <input
+                    type="checkbox"
+                    checked={state[item.key]}
+                    onChange={(event) =>
+                      setState((current) => ({
+                        ...current,
+                        [item.key]: event.target.checked,
+                      }))
+                    }
+                    className="mt-1 h-4 w-4 rounded border-[#cfd7f3] text-[var(--primary)] focus:ring-[var(--primary-soft)]"
+                  />
+                ) : (
+                  <div
+                    className={`mt-0.5 h-4 w-4 rounded-full border ${
+                      state[item.key]
+                        ? "border-[var(--primary)] bg-[var(--primary)]"
+                        : "border-[var(--border)] bg-white"
+                    }`}
+                  />
+                )}
+
+                <span>
+                  <span className="block font-medium text-[var(--foreground)]">
+                    {item.title}
+                  </span>
+                  <span className="mt-1 block text-sm leading-6 text-[var(--muted)]">
+                    {item.description}
+                  </span>
+                </span>
+              </div>
+            </label>
+          ))}
+        </div>
+      </div>
+    </article>
+  );
+}

@@ -3,6 +3,12 @@ import type {
   Prisma,
 } from "@academy/db";
 
+import {
+  decodeHomeworkPayload,
+  encodeHomeworkPayload,
+  type HomeworkQuestion,
+} from "@/lib/homework-builder";
+
 export type LessonAttachment = {
   title: string;
   url: string;
@@ -37,6 +43,7 @@ export type LessonBlock =
       title: string;
       body: string;
       submissionHint?: string;
+      questions?: HomeworkQuestion[];
     };
 
 export type PersistedLessonBlockRecord = {
@@ -113,8 +120,9 @@ function normalizeLessonBlock(block: LessonBlock, index: number): LessonBlock | 
   if (block.type === "HOMEWORK") {
     const body = block.body.trim();
     const submissionHint = block.submissionHint?.trim() || "";
+    const questions = block.questions ?? [];
 
-    if (!title && !body && !submissionHint) {
+    if (!title && !body && !submissionHint && questions.length === 0) {
       return null;
     }
 
@@ -124,6 +132,7 @@ function normalizeLessonBlock(block: LessonBlock, index: number): LessonBlock | 
       title,
       body,
       submissionHint,
+      questions,
     };
   }
 
@@ -192,14 +201,18 @@ function parseStructuredContentBlock(
   }
 
   if (item.type === "HOMEWORK") {
+    const decodedHomeworkPayload = decodeHomeworkPayload(
+      typeof item.submissionHint === "string" ? item.submissionHint : "",
+    );
+
     return normalizeLessonBlock(
       {
         id: normalizeBlockId(item.id, index),
         type: "HOMEWORK",
         title: typeof item.title === "string" ? item.title : "",
         body: typeof item.body === "string" ? item.body : "",
-        submissionHint:
-          typeof item.submissionHint === "string" ? item.submissionHint : "",
+        submissionHint: decodedHomeworkPayload.hint,
+        questions: decodedHomeworkPayload.questions,
       },
       index,
     );
@@ -306,12 +319,15 @@ export function extractLessonBlocksFromRecords(
       }
 
       if (block.type === "HOMEWORK") {
+        const decodedHomeworkPayload = decodeHomeworkPayload(block.submissionHint);
+
         normalizedBlocks.push({
           id: block.blockKey,
           type: "HOMEWORK",
           title: block.title,
           body: block.body ?? "",
-          submissionHint: block.submissionHint ?? "",
+          submissionHint: decodedHomeworkPayload.hint,
+          questions: decodedHomeworkPayload.questions,
         });
         return;
       }
@@ -402,7 +418,10 @@ export function buildLessonContentFromBlocks(
         type: "HOMEWORK" as const,
         title: block.title,
         body: block.body,
-        submissionHint: block.submissionHint ?? "",
+        submissionHint: encodeHomeworkPayload({
+          hint: block.submissionHint ?? "",
+          questions: block.questions ?? [],
+        }),
       };
     }
 
@@ -434,6 +453,12 @@ export function buildPersistedLessonBlocks(blocks: LessonBlock[]) {
         : null,
     url: block.type === "FILE" ? block.url : null,
     note: block.type === "FILE" ? block.note ?? "" : null,
-    submissionHint: block.type === "HOMEWORK" ? block.submissionHint ?? "" : null,
+    submissionHint:
+      block.type === "HOMEWORK"
+        ? encodeHomeworkPayload({
+            hint: block.submissionHint ?? "",
+            questions: block.questions ?? [],
+          })
+        : null,
   }));
 }

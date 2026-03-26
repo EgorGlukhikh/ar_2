@@ -1,20 +1,14 @@
-import {
-  BookOpenText,
-  Eye,
-  Link2,
-  Sparkles,
-  Target,
-} from "lucide-react";
+import { BookOpenText, Eye, Link2, Sparkles, Target } from "lucide-react";
 import { CourseStatus } from "@academy/db";
 
-import { createCourse } from "@/features/admin/course-actions";
-import { requireCourseCreator } from "@/lib/admin";
-import { courseStatusLabelMap } from "@/lib/labels";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { createCourse } from "@/features/admin/course-actions";
+import { requireCourseCreator } from "@/lib/admin";
+import { courseStatusLabelMap } from "@/lib/labels";
 
 export default async function NewCoursePage() {
   await requireCourseCreator();
@@ -30,8 +24,8 @@ export default async function NewCoursePage() {
             Создать курс
           </h1>
           <p className="mt-3 max-w-3xl text-base leading-8 text-[var(--muted)]">
-            На этом шаге создается карточка курса. После сохранения ты сразу
-            попадешь во вкладку программы, где можно собирать модули и уроки.
+            На этом шаге создается карточка курса. После сохранения ты сразу попадешь во вкладку
+            программы, где можно собирать модули и уроки.
           </p>
 
           <div className="mt-6 grid gap-3 md:grid-cols-3">
@@ -48,10 +42,10 @@ export default async function NewCoursePage() {
             <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4">
               <Target className="h-5 w-5 text-[var(--primary)]" />
               <p className="mt-3 text-sm font-semibold text-[var(--foreground)]">
-                Понимание для команды
+                Структура
               </p>
               <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
-                Подсказки ниже объясняют, зачем нужно каждое поле.
+                Сразу решаем, делится ли курс на модули или идет как единый поток уроков.
               </p>
             </div>
 
@@ -61,7 +55,7 @@ export default async function NewCoursePage() {
                 Следующий шаг
               </p>
               <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
-                После сохранения открывается программа курса и редактор уроков.
+                После сохранения откроется программа курса и редактор уроков.
               </p>
             </div>
           </div>
@@ -89,9 +83,7 @@ export default async function NewCoursePage() {
                 <Link2 className="h-5 w-5 text-[var(--primary)]" />
               </div>
               <div>
-                <p className="text-sm font-semibold text-[var(--foreground)]">
-                  Ссылка курса
-                </p>
+                <p className="text-sm font-semibold text-[var(--foreground)]">Ссылка курса</p>
                 <p className="text-sm text-[var(--muted)]">
                   Slug нужен для аккуратного адреса страницы.
                 </p>
@@ -129,8 +121,7 @@ export default async function NewCoursePage() {
               required
             />
             <p className="text-sm leading-6 text-[var(--muted)]">
-              Это основное имя курса. Его увидят администраторы, авторы и
-              студенты.
+              Это основное имя курса. Его увидят администраторы, авторы и студенты.
             </p>
           </div>
 
@@ -138,8 +129,7 @@ export default async function NewCoursePage() {
             <Label htmlFor="slug">Slug</Label>
             <Input id="slug" name="slug" placeholder="osnovy-rieltorskogo-biznesa" />
             <p className="text-sm leading-6 text-[var(--muted)]">
-              Техническая часть ссылки. Если оставить пустым, система соберет ее
-              автоматически.
+              Техническая часть ссылки. Если оставить пустым, система соберет ее автоматически.
             </p>
           </div>
 
@@ -152,8 +142,7 @@ export default async function NewCoursePage() {
               className="min-h-32"
             />
             <p className="text-sm leading-6 text-[var(--muted)]">
-              Помогает быстро понять, для кого курс и какой результат должен
-              получить ученик.
+              Помогает быстро понять, для кого курс и какой результат должен получить ученик.
             </p>
           </div>
 
@@ -167,8 +156,32 @@ export default async function NewCoursePage() {
               ))}
             </Select>
             <p className="text-sm leading-6 text-[var(--muted)]">
-              Начни с черновика, чтобы спокойно собрать программу, и переведи в
-              опубликованный статус, когда курс будет готов.
+              Начни с черновика, чтобы спокойно собрать программу, и переведи в опубликованный
+              статус, когда курс будет готов.
+            </p>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="structureMode">Структура курса</Label>
+            <Select id="structureMode" name="structureMode" defaultValue="modules">
+              <option value="modules">Курс делится на модули</option>
+              <option value="single_module">Курс идет без модулей</option>
+            </Select>
+            <p className="text-sm leading-6 text-[var(--muted)]">
+              Если курс без модулей, мы сразу создадим общий модуль с уроками внутри.
+            </p>
+          </div>
+
+          <div className="space-y-2 lg:col-span-2">
+            <Label htmlFor="firstModuleTitle">Название первого модуля</Label>
+            <Input
+              id="firstModuleTitle"
+              name="firstModuleTitle"
+              placeholder="Например, Модуль 1 или Основной раздел курса"
+            />
+            <p className="text-sm leading-6 text-[var(--muted)]">
+              Если оставить пустым, для обычного курса первый модуль можно будет добавить позже, а
+              для курса без модулей мы назовем общий модуль так же, как сам курс.
             </p>
           </div>
         </div>

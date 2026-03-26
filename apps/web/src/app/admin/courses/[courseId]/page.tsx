@@ -11,8 +11,9 @@ import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { deleteCourse, updateCourse } from "@/features/admin/course-actions";
-import { canEditCourseContent, requireWorkspaceUser } from "@/lib/admin";
+import { canEditCourseContent } from "@/lib/admin";
 import { courseStatusLabelMap } from "@/lib/labels";
+import { requireAdminViewer } from "@/lib/viewer";
 
 type CourseSettingsPageProps = {
   params: Promise<{
@@ -23,7 +24,7 @@ type CourseSettingsPageProps = {
 export default async function CourseSettingsPage({
   params,
 }: CourseSettingsPageProps) {
-  const viewer = await requireWorkspaceUser();
+  const viewer = await requireAdminViewer();
   const { courseId } = await params;
 
   const course = await prisma.course.findUnique({
@@ -44,11 +45,11 @@ export default async function CourseSettingsPage({
     notFound();
   }
 
-  if (!canEditCourseContent(viewer, course.authorId)) {
+  if (!canEditCourseContent({ ...viewer.user, role: viewer.actualRole }, course.authorId)) {
     notFound();
   }
 
-  const isAdmin = viewer.role === USER_ROLES.ADMIN;
+  const isAdmin = viewer.effectiveRole === USER_ROLES.ADMIN;
   const authors = isAdmin
     ? await prisma.user.findMany({
         where: {

@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { BookOpen, GraduationCap, Settings2 } from "lucide-react";
+import { GraduationCap, Settings2 } from "lucide-react";
+import { USER_ROLES } from "@academy/shared";
 
 import { AdminCourseTabs } from "@/components/admin/admin-course-tabs";
 import { Badge } from "@/components/ui/badge";
@@ -8,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { CourseThumb } from "@/components/workspace/workspace-primitives";
 import { getAdminCourseShell } from "@/features/admin/course-page-data";
 import { courseStatusLabelMap, courseStatusVariantMap } from "@/lib/labels";
+import { requireAdminViewer } from "@/lib/viewer";
 
 type CourseLayoutProps = {
   children: ReactNode;
@@ -20,8 +22,10 @@ export default async function CourseLayout({
   children,
   params,
 }: CourseLayoutProps) {
+  const viewer = await requireAdminViewer();
   const { courseId } = await params;
   const course = await getAdminCourseShell(courseId);
+  const isAdminMode = viewer.effectiveRole === USER_ROLES.ADMIN;
 
   return (
     <div className="space-y-6">
@@ -73,12 +77,6 @@ export default async function CourseLayout({
                       Настройки курса
                     </Link>
                   </Button>
-                  <Button asChild>
-                    <Link href={`/admin/courses/${course.id}/content`}>
-                      <BookOpen className="mr-2 h-4 w-4" />
-                      Открыть программу
-                    </Link>
-                  </Button>
                 </div>
               </div>
 
@@ -89,13 +87,15 @@ export default async function CourseLayout({
                 <span className="rounded-full bg-[var(--surface)] px-3 py-2">
                   Уроков: {course.lessonCount}
                 </span>
-                <span className="rounded-full bg-[var(--surface)] px-3 py-2">
-                  Зачислений: {course._count.enrollments}
-                </span>
+                {isAdminMode ? (
+                  <span className="rounded-full bg-[var(--surface)] px-3 py-2">
+                    Зачислений: {course._count.enrollments}
+                  </span>
+                ) : null}
               </div>
             </div>
 
-            <AdminCourseTabs courseId={course.id} />
+            <AdminCourseTabs courseId={course.id} showAccessTab={isAdminMode} />
           </div>
         </div>
       </header>
