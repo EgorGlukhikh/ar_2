@@ -15,7 +15,6 @@ import {
   publicIconBoxClassName,
 } from "@/components/marketing/public-primitives";
 import { MotionReveal } from "@/components/marketing/motion-reveal";
-import { SiteIllustration } from "@/components/illustrations/site-illustration";
 import { formatPublicCopy } from "@/lib/public-copy";
 import { cn } from "@/lib/utils";
 import {
@@ -71,14 +70,6 @@ function ProductPreview() {
       </article>
 
       <div className="grid gap-4">
-        <SiteIllustration
-          kind="onlineLearning"
-          alt="Иллюстрация онлайн-обучения и учебного процесса"
-          priority
-          className="p-5"
-          imageClassName="scale-[1.04]"
-        />
-
         <article className={publicCardClassName}>
           <div className={publicIconBoxClassName}>
             <PlayCircle className="h-5 w-5" />

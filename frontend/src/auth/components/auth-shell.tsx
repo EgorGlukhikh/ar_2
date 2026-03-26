@@ -3,7 +3,6 @@ import { CheckCircle2, ShieldCheck, Sparkles, UserRound } from "lucide-react";
 
 import { AuthCard } from "./auth-card";
 
-import { SiteIllustration } from "@/components/illustrations/site-illustration";
 import { publicGradientCardClassName, publicIconBoxClassName } from "@/components/marketing/public-primitives";
 import { formatPublicCopy } from "@/lib/public-copy";
 import { cn } from "@/lib/utils";
@@ -44,12 +43,6 @@ export function AuthShell({
             {formatPublicCopy(text)}
           </p>
         </AuthCard>
-
-        <SiteIllustration
-          kind="continuousLearning"
-          alt="Иллюстрация обучения и доступа к платформе"
-          className="p-5"
-        />
 
         <div className={publicGradientCardClassName}>
           <p className="text-[12px] font-medium uppercase leading-4 tracking-[0.18em] text-white/72">

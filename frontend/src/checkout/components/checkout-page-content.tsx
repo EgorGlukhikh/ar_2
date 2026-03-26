@@ -1,6 +1,5 @@
 import { CheckCircle2, CreditCard, ShieldCheck, XCircle } from "lucide-react";
 
-import { SiteIllustration } from "@/components/illustrations/site-illustration";
 import {
   PublicButton,
   SectionLead,
@@ -62,12 +61,6 @@ export function CheckoutPageContent({
           eyebrow="Что оформляем"
           title={payload.courseTitle}
           text="Курс, стоимость и способ оплаты собраны в одном месте, чтобы можно было быстро проверить заказ перед подтверждением."
-        />
-
-        <SiteIllustration
-          kind="idea"
-          alt="Иллюстрация оформления доступа к курсу"
-          className="p-5"
         />
 
         <article className={publicCardClassName}>
