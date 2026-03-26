@@ -35,7 +35,7 @@ export function SystemContainer({
 }: HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn("mx-auto w-full max-w-[1400px] px-4 md:px-6", className)}
+      className={cn("mx-auto w-full max-w-[var(--container-max)] px-6 md:px-8", className)}
       {...props}
     >
       {children}
@@ -61,7 +61,7 @@ export function SystemGrid({
   ...props
 }: HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className={cn("grid gap-6", className)} {...props}>
+    <div className={cn("grid grid-cols-1 gap-6 md:grid-cols-8 xl:grid-cols-12", className)} {...props}>
       {children}
     </div>
   );

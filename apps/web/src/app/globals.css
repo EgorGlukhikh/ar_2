@@ -3,7 +3,10 @@
 :root {
   --background: #f5f7fb;
   --foreground: #0f172a;
+  --text: #0f172a;
+  --text-muted: #5b6472;
   --surface: #ffffff;
+  --surface-alt: #fbfcfe;
   --surface-strong: #f1f4f9;
   --surface-soft: #eef2ff;
   --muted: #5b6472;
@@ -15,6 +18,7 @@
   --primary-active: #3730a3;
   --primary-foreground: #ffffff;
   --primary-soft: #eef2ff;
+  --focus: rgba(79, 70, 229, 0.16);
   --success: #22c55e;
   --warning: #f59e0b;
   --error: #ef4444;
@@ -40,12 +44,17 @@
   --control-height-sm: 40px;
   --icon-radius: 14px;
   --icon-radius-sm: 12px;
+  --container-max: 1200px;
+  --grid-gutter: 24px;
+  --section-gap: 96px;
+  --content-max: 560px;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-surface: var(--surface);
+  --color-surface-alt: var(--surface-alt);
   --color-surface-strong: var(--surface-strong);
   --color-surface-soft: var(--surface-soft);
   --color-muted: var(--muted);
@@ -67,6 +76,7 @@ html {
   background: var(--background);
   color: var(--foreground);
   scroll-behavior: smooth;
+  color-scheme: light;
 }
 
 body {
@@ -77,6 +87,7 @@ body {
   color: var(--foreground);
   font-family: var(--font-geist-sans), sans-serif;
   text-rendering: optimizeLegibility;
+  min-width: 320px;
 }
 
 a {

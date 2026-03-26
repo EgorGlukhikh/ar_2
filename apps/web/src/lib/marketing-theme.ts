@@ -13,13 +13,13 @@ export const marketingShellClassName =
   "min-h-screen bg-[var(--background)] font-[family:var(--font-landing-body)] text-[var(--foreground)]";
 
 export const marketingContainerClassName =
-  "mx-auto w-full max-w-[1200px] px-4 py-4 md:px-5 lg:px-6 lg:py-6";
+  "mx-auto w-full max-w-[var(--container-max)] px-6 py-6 md:px-8 md:py-8";
 
 export const marketingFrameClassName =
-  "space-y-16 md:space-y-20 lg:space-y-24";
+  "space-y-16 md:space-y-20 lg:space-y-[var(--section-gap)]";
 
 export const marketingInnerFrameClassName =
-  "space-y-16 md:space-y-20 lg:space-y-24";
+  "space-y-16 md:space-y-20 lg:space-y-[var(--section-gap)]";
 
 export const publicCourseCoverPool = [
   "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?auto=format&fit=crop&w=1400&q=80",

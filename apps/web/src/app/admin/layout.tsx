@@ -39,7 +39,7 @@ export default async function AdminLayout({
         : "/knowledge-base?role=student";
 
   return (
-    <main className="min-h-screen bg-[var(--background)] px-4 py-4 md:px-6 md:py-6">
+    <main className="min-h-screen bg-[var(--background)] px-4 py-5 md:px-6 md:py-6">
       <SystemContainer className="space-y-6 px-0">
         <header className={`${systemHeaderCardClassName} p-4 md:p-5`}>
           <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
@@ -98,4 +98,3 @@ export default async function AdminLayout({
     </main>
   );
 }
-

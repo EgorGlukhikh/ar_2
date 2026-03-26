@@ -8,6 +8,7 @@ import {
   systemHeaderCardClassName,
   systemIconTileClassName,
 } from "@/components/system/system-ui";
+import { PageGrid } from "@/components/layout/page-grid";
 import type { IllustrationKey } from "@/lib/illustrations";
 import { cn } from "@/lib/utils";
 
@@ -118,24 +119,26 @@ export function WorkspacePageHeader({
         className,
       )}
     >
-      <div className="flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between">
-        <div className="space-y-3">
+      <PageGrid className="items-end">
+        <div className="space-y-3 xl:col-span-8">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
             {eyebrow}
           </p>
           <h1 className="text-[clamp(1.75rem,3.4vw,2.35rem)] font-semibold tracking-[-0.02em] text-[var(--foreground)]">
             {title}
           </h1>
-          <p className="max-w-3xl text-sm leading-6 text-[var(--muted)]">{description}</p>
+          <p className="max-w-[var(--content-max)] text-sm leading-7 text-[var(--muted)]">
+            {description}
+          </p>
         </div>
 
         {(actions || meta) && (
-          <div className="flex flex-col gap-3 xl:items-end">
+          <div className="flex flex-col gap-3 xl:col-span-4 xl:items-end">
             {meta}
             {actions ? <div className="flex flex-wrap gap-3">{actions}</div> : null}
           </div>
         )}
-      </div>
+      </PageGrid>
     </header>
   );
 }
@@ -156,8 +159,8 @@ export function WorkspacePanel({
       )}
     >
       {(eyebrow || title || description || actions) && (
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-          <div className="space-y-2">
+        <PageGrid className="items-end">
+          <div className="space-y-2 xl:col-span-8">
             {eyebrow ? (
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
                 {eyebrow}
@@ -169,12 +172,14 @@ export function WorkspacePanel({
               </h2>
             ) : null}
             {description ? (
-              <p className="max-w-3xl text-sm leading-7 text-[var(--muted)]">{description}</p>
+              <p className="max-w-[var(--content-max)] text-sm leading-7 text-[var(--muted)]">
+                {description}
+              </p>
             ) : null}
           </div>
 
-          {actions ? <div className="flex flex-wrap gap-3">{actions}</div> : null}
-        </div>
+          {actions ? <div className="flex flex-wrap gap-3 xl:col-span-4 xl:justify-end">{actions}</div> : null}
+        </PageGrid>
       )}
 
       {children ? <div className={title || eyebrow || description ? "mt-6" : ""}>{children}</div> : null}
@@ -298,4 +303,3 @@ export function CourseThumb({
     </div>
   );
 }
-
