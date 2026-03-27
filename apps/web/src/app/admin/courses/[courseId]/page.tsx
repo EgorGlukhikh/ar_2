@@ -6,6 +6,8 @@ import {
   Sparkles,
   Tv,
 } from "lucide-react";
+
+import { TIMEZONE_OPTIONS } from "@/lib/timezones";
 import { notFound } from "next/navigation";
 
 import { CourseDeliveryFormat, CourseStatus, prisma } from "@academy/db";
@@ -50,6 +52,7 @@ export default async function CourseSettingsPage({
       status: true,
       deliveryFormat: true,
       scheduleTimezone: true,
+      coverUrl: true,
       authorId: true,
     },
   });
@@ -159,6 +162,19 @@ export default async function CourseSettingsPage({
             />
           </div>
 
+          <div className="space-y-2">
+            <Label htmlFor="coverUrl">Обложка курса (URL изображения)</Label>
+            <Input
+              id="coverUrl"
+              name="coverUrl"
+              defaultValue={course.coverUrl ?? ""}
+              placeholder="https://images.unsplash.com/photo-..."
+            />
+            <p className="text-sm leading-6 text-[var(--muted)]">
+              Вставь ссылку на изображение. Рекомендуемое соотношение 16:9. Отображается в шапке курса и каталоге.
+            </p>
+          </div>
+
           <div className="grid gap-5 md:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor="deliveryFormat">Формат курса</Label>
@@ -178,10 +194,9 @@ export default async function CourseSettingsPage({
                 name="scheduleTimezone"
                 defaultValue={course.scheduleTimezone}
               >
-                <option value="Europe/Moscow">Москва (МСК)</option>
-                <option value="Europe/Samara">Самара</option>
-                <option value="Asia/Yekaterinburg">Екатеринбург</option>
-                <option value="Asia/Novosibirsk">Новосибирск</option>
+                {TIMEZONE_OPTIONS.map((tz) => (
+                  <option key={tz.value} value={tz.value}>{tz.label}</option>
+                ))}
               </Select>
             </div>
           </div>

@@ -63,6 +63,7 @@ export async function getAdminCourseShell(courseId: string) {
       title: true,
       description: true,
       status: true,
+      coverUrl: true,
       modules: {
         orderBy: {
           position: "asc",

@@ -45,10 +45,10 @@ export function EditableLessonSettingsCard({
 
   return (
     <article className={cn("rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-sm)]", className)}>
-      <input type="hidden" name="title" value={draftTitle} />
-      <input type="hidden" name="excerpt" value={draftExcerpt} />
-      <input type="hidden" name="accessAfterDays" value={draftAccessAfterDays} />
-      <input type="hidden" name="isPreview" value={draftIsPreview ? "true" : "false"} />
+      <input type="hidden" name="title" value={draftTitle} form={formId} />
+      <input type="hidden" name="excerpt" value={draftExcerpt} form={formId} />
+      <input type="hidden" name="accessAfterDays" value={draftAccessAfterDays} form={formId} />
+      <input type="hidden" name="isPreview" value={draftIsPreview ? "true" : "false"} form={formId} />
 
       <div className="flex flex-wrap items-start justify-between gap-4 px-5 py-5">
         <div>

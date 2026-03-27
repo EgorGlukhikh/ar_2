@@ -78,6 +78,7 @@ export function EditableHomeworkRulesCard({
           type="hidden"
           name={item.key}
           value={state[item.key] ? "true" : "false"}
+          form={formId}
         />
       ))}
 

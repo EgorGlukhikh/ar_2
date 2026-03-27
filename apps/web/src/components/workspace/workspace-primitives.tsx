@@ -1,4 +1,5 @@
 ﻿import type { ReactNode } from "react";
+import Image from "next/image";
 import type { LucideIcon } from "lucide-react";
 import { BookOpenText } from "lucide-react";
 
@@ -50,6 +51,7 @@ type CourseThumbProps = {
   title: string;
   subtitle?: string;
   compact?: boolean;
+  imageUrl?: string;
   className?: string;
 };
 
@@ -251,6 +253,7 @@ export function CourseThumb({
   title,
   subtitle,
   compact = false,
+  imageUrl,
   className,
 }: CourseThumbProps) {
   const theme = getPosterTheme(title);
@@ -260,12 +263,21 @@ export function CourseThumb({
       className={cn(
         "relative overflow-hidden rounded-[var(--radius-lg)] border border-white/16 shadow-[var(--shadow-lg)]",
         compact ? "min-h-[160px] p-4" : "min-h-[220px] p-5",
-        theme.shell,
+        imageUrl ? "bg-[var(--foreground)]" : theme.shell,
         className,
       )}
     >
-      <div className={cn("absolute inset-0 opacity-90", theme.glow)} />
-      <div className="absolute -bottom-10 -right-6 h-28 w-28 rounded-full bg-white/12 blur-2xl" />
+      {imageUrl ? (
+        <>
+          <Image src={imageUrl} alt={title} fill className="object-cover opacity-70" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+        </>
+      ) : (
+        <>
+          <div className={cn("absolute inset-0 opacity-90", theme.glow)} />
+          <div className="absolute -bottom-10 -right-6 h-28 w-28 rounded-full bg-white/12 blur-2xl" />
+        </>
+      )}
 
       <div className="relative flex h-full flex-col justify-between">
         <div className="flex items-start justify-between gap-4">

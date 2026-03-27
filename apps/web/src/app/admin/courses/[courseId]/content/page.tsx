@@ -1,4 +1,5 @@
 import { CourseDeliveryFormat, LessonType, prisma } from "@academy/db";
+import { getTimezoneLabel } from "@/lib/timezones";
 import { Plus, Save, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -265,7 +266,7 @@ export default async function CourseContentPage({
 
   return (
     <section className="grid gap-6 xl:grid-cols-[320px_minmax(0,1fr)]">
-      <aside className="space-y-4 xl:sticky xl:top-6 xl:self-start">
+      <aside className="space-y-4 xl:sticky xl:top-6 xl:self-start xl:max-h-[calc(100vh-4rem)] xl:overflow-y-auto">
         <CourseStructureTree
           courseId={course.id}
           courseTitle={course.title}
@@ -276,6 +277,34 @@ export default async function CourseContentPage({
           repositionLessonAction={repositionLesson}
           repositionModuleAction={repositionModule}
         />
+        {selectedLesson ? (
+          <>
+            <EditableLessonSettingsCard
+              formId="lesson-editor-form"
+              title={selectedLesson.title}
+              excerpt={selectedLesson.excerpt ?? ""}
+              accessAfterDays={selectedLesson.accessAfterDays ?? null}
+              isPreview={selectedLesson.isPreview}
+            />
+            {hasHomeworkBlock ? (
+              <EditableHomeworkRulesCard
+                formId="lesson-editor-form"
+                initialState={{
+                  requiresCuratorReview:
+                    selectedLesson.homeworkAssignment?.requiresCuratorReview ?? true,
+                  unlockNextModuleOnApproval:
+                    selectedLesson.homeworkAssignment?.unlockNextModuleOnApproval ?? true,
+                  allowTextSubmission:
+                    selectedLesson.homeworkAssignment?.allowTextSubmission ?? true,
+                  allowLinkSubmission:
+                    selectedLesson.homeworkAssignment?.allowLinkSubmission ?? true,
+                  allowFileUpload:
+                    selectedLesson.homeworkAssignment?.allowFileUpload ?? true,
+                }}
+              />
+            ) : null}
+          </>
+        ) : null}
       </aside>
 
       <div className="min-w-0 space-y-6">
@@ -309,7 +338,7 @@ export default async function CourseContentPage({
                   Новые шаги программы по умолчанию создаются как вебинарные занятия. Расписание
                   ведем по часовому поясу{" "}
                   <span className="font-medium text-[var(--foreground)]">
-                    {course.scheduleTimezone}
+                    {getTimezoneLabel(course.scheduleTimezone)}
                   </span>
                   , а после эфира в уроке можно оставить запись и материалы.
                 </p>
@@ -377,41 +406,12 @@ export default async function CourseContentPage({
                 <form
                   id="lesson-editor-form"
                   action={updateLesson}
-                  className="grid gap-6 2xl:grid-cols-[340px_minmax(0,1fr)]"
                 >
                   <input type="hidden" name="lessonId" value={selectedLesson.id} />
                   <input type="hidden" name="moduleId" value={selectedModule.id} />
                   <input type="hidden" name="type" value={selectedLesson.type} />
 
-                  <aside className="space-y-6 2xl:sticky 2xl:top-6 2xl:self-start">
-                    <EditableLessonSettingsCard
-                      formId="lesson-editor-form"
-                      title={selectedLesson.title}
-                      excerpt={selectedLesson.excerpt ?? ""}
-                      accessAfterDays={selectedLesson.accessAfterDays ?? null}
-                      isPreview={selectedLesson.isPreview}
-                    />
-
-                    {hasHomeworkBlock ? (
-                      <EditableHomeworkRulesCard
-                        formId="lesson-editor-form"
-                        initialState={{
-                          requiresCuratorReview:
-                            selectedLesson.homeworkAssignment?.requiresCuratorReview ?? true,
-                          unlockNextModuleOnApproval:
-                            selectedLesson.homeworkAssignment?.unlockNextModuleOnApproval ?? true,
-                          allowTextSubmission:
-                            selectedLesson.homeworkAssignment?.allowTextSubmission ?? true,
-                          allowLinkSubmission:
-                            selectedLesson.homeworkAssignment?.allowLinkSubmission ?? true,
-                          allowFileUpload:
-                            selectedLesson.homeworkAssignment?.allowFileUpload ?? true,
-                        }}
-                      />
-                    ) : null}
-                  </aside>
-
-                  <div className="min-w-0 space-y-6">
+                  <div className="space-y-6">
                     <article className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-6 shadow-[var(--shadow-sm)]">
                       <LessonBlockStudio
                         lessonId={selectedLesson.id}

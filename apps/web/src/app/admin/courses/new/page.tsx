@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { createCourse } from "@/features/admin/course-actions";
 import { requireCourseCreator } from "@/lib/admin";
 import { courseStatusLabelMap } from "@/lib/labels";
+import { TIMEZONE_OPTIONS } from "@/lib/timezones";
 
 export default async function NewCoursePage() {
   await requireCourseCreator();
@@ -166,10 +167,9 @@ export default async function NewCoursePage() {
           <div className="space-y-2">
             <Label htmlFor="scheduleTimezone">Часовой пояс расписания</Label>
             <Select id="scheduleTimezone" name="scheduleTimezone" defaultValue="Europe/Moscow">
-              <option value="Europe/Moscow">Москва (МСК)</option>
-              <option value="Europe/Samara">Самара</option>
-              <option value="Asia/Yekaterinburg">Екатеринбург</option>
-              <option value="Asia/Novosibirsk">Новосибирск</option>
+              {TIMEZONE_OPTIONS.map((tz) => (
+                <option key={tz.value} value={tz.value}>{tz.label}</option>
+              ))}
             </Select>
             <p className="text-sm leading-6 text-[var(--muted)]">
               Для вебинарных курсов фиксируем расписание по МСК или другому выбранному поясу.

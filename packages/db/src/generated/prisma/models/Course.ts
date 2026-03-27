@@ -32,6 +32,7 @@ export type CourseMinAggregateOutputType = {
   status: $Enums.CourseStatus | null
   deliveryFormat: $Enums.CourseDeliveryFormat | null
   scheduleTimezone: string | null
+  coverUrl: string | null
   authorId: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -45,6 +46,7 @@ export type CourseMaxAggregateOutputType = {
   status: $Enums.CourseStatus | null
   deliveryFormat: $Enums.CourseDeliveryFormat | null
   scheduleTimezone: string | null
+  coverUrl: string | null
   authorId: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -58,6 +60,7 @@ export type CourseCountAggregateOutputType = {
   status: number
   deliveryFormat: number
   scheduleTimezone: number
+  coverUrl: number
   authorId: number
   createdAt: number
   updatedAt: number
@@ -73,6 +76,7 @@ export type CourseMinAggregateInputType = {
   status?: true
   deliveryFormat?: true
   scheduleTimezone?: true
+  coverUrl?: true
   authorId?: true
   createdAt?: true
   updatedAt?: true
@@ -86,6 +90,7 @@ export type CourseMaxAggregateInputType = {
   status?: true
   deliveryFormat?: true
   scheduleTimezone?: true
+  coverUrl?: true
   authorId?: true
   createdAt?: true
   updatedAt?: true
@@ -99,6 +104,7 @@ export type CourseCountAggregateInputType = {
   status?: true
   deliveryFormat?: true
   scheduleTimezone?: true
+  coverUrl?: true
   authorId?: true
   createdAt?: true
   updatedAt?: true
@@ -185,6 +191,7 @@ export type CourseGroupByOutputType = {
   status: $Enums.CourseStatus
   deliveryFormat: $Enums.CourseDeliveryFormat
   scheduleTimezone: string
+  coverUrl: string | null
   authorId: string | null
   createdAt: Date
   updatedAt: Date
@@ -219,6 +226,7 @@ export type CourseWhereInput = {
   status?: Prisma.EnumCourseStatusFilter<"Course"> | $Enums.CourseStatus
   deliveryFormat?: Prisma.EnumCourseDeliveryFormatFilter<"Course"> | $Enums.CourseDeliveryFormat
   scheduleTimezone?: Prisma.StringFilter<"Course"> | string
+  coverUrl?: Prisma.StringNullableFilter<"Course"> | string | null
   authorId?: Prisma.StringNullableFilter<"Course"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Course"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Course"> | Date | string
@@ -238,6 +246,7 @@ export type CourseOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   deliveryFormat?: Prisma.SortOrder
   scheduleTimezone?: Prisma.SortOrder
+  coverUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   authorId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -260,6 +269,7 @@ export type CourseWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.EnumCourseStatusFilter<"Course"> | $Enums.CourseStatus
   deliveryFormat?: Prisma.EnumCourseDeliveryFormatFilter<"Course"> | $Enums.CourseDeliveryFormat
   scheduleTimezone?: Prisma.StringFilter<"Course"> | string
+  coverUrl?: Prisma.StringNullableFilter<"Course"> | string | null
   authorId?: Prisma.StringNullableFilter<"Course"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Course"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Course"> | Date | string
@@ -279,6 +289,7 @@ export type CourseOrderByWithAggregationInput = {
   status?: Prisma.SortOrder
   deliveryFormat?: Prisma.SortOrder
   scheduleTimezone?: Prisma.SortOrder
+  coverUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   authorId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -298,6 +309,7 @@ export type CourseScalarWhereWithAggregatesInput = {
   status?: Prisma.EnumCourseStatusWithAggregatesFilter<"Course"> | $Enums.CourseStatus
   deliveryFormat?: Prisma.EnumCourseDeliveryFormatWithAggregatesFilter<"Course"> | $Enums.CourseDeliveryFormat
   scheduleTimezone?: Prisma.StringWithAggregatesFilter<"Course"> | string
+  coverUrl?: Prisma.StringNullableWithAggregatesFilter<"Course"> | string | null
   authorId?: Prisma.StringNullableWithAggregatesFilter<"Course"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Course"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Course"> | Date | string
@@ -311,6 +323,7 @@ export type CourseCreateInput = {
   status?: $Enums.CourseStatus
   deliveryFormat?: $Enums.CourseDeliveryFormat
   scheduleTimezone?: string
+  coverUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   author?: Prisma.UserCreateNestedOneWithoutAuthoredInput
@@ -329,6 +342,7 @@ export type CourseUncheckedCreateInput = {
   status?: $Enums.CourseStatus
   deliveryFormat?: $Enums.CourseDeliveryFormat
   scheduleTimezone?: string
+  coverUrl?: string | null
   authorId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -347,6 +361,7 @@ export type CourseUpdateInput = {
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   deliveryFormat?: Prisma.EnumCourseDeliveryFormatFieldUpdateOperationsInput | $Enums.CourseDeliveryFormat
   scheduleTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   author?: Prisma.UserUpdateOneWithoutAuthoredNestedInput
@@ -365,6 +380,7 @@ export type CourseUncheckedUpdateInput = {
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   deliveryFormat?: Prisma.EnumCourseDeliveryFormatFieldUpdateOperationsInput | $Enums.CourseDeliveryFormat
   scheduleTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -383,6 +399,7 @@ export type CourseCreateManyInput = {
   status?: $Enums.CourseStatus
   deliveryFormat?: $Enums.CourseDeliveryFormat
   scheduleTimezone?: string
+  coverUrl?: string | null
   authorId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -396,6 +413,7 @@ export type CourseUpdateManyMutationInput = {
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   deliveryFormat?: Prisma.EnumCourseDeliveryFormatFieldUpdateOperationsInput | $Enums.CourseDeliveryFormat
   scheduleTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -408,6 +426,7 @@ export type CourseUncheckedUpdateManyInput = {
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   deliveryFormat?: Prisma.EnumCourseDeliveryFormatFieldUpdateOperationsInput | $Enums.CourseDeliveryFormat
   scheduleTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -431,6 +450,7 @@ export type CourseCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   deliveryFormat?: Prisma.SortOrder
   scheduleTimezone?: Prisma.SortOrder
+  coverUrl?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -444,6 +464,7 @@ export type CourseMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   deliveryFormat?: Prisma.SortOrder
   scheduleTimezone?: Prisma.SortOrder
+  coverUrl?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -457,6 +478,7 @@ export type CourseMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   deliveryFormat?: Prisma.SortOrder
   scheduleTimezone?: Prisma.SortOrder
+  coverUrl?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -604,6 +626,7 @@ export type CourseCreateWithoutAuthorInput = {
   status?: $Enums.CourseStatus
   deliveryFormat?: $Enums.CourseDeliveryFormat
   scheduleTimezone?: string
+  coverUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   modules?: Prisma.ModuleCreateNestedManyWithoutCourseInput
@@ -621,6 +644,7 @@ export type CourseUncheckedCreateWithoutAuthorInput = {
   status?: $Enums.CourseStatus
   deliveryFormat?: $Enums.CourseDeliveryFormat
   scheduleTimezone?: string
+  coverUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutCourseInput
@@ -667,6 +691,7 @@ export type CourseScalarWhereInput = {
   status?: Prisma.EnumCourseStatusFilter<"Course"> | $Enums.CourseStatus
   deliveryFormat?: Prisma.EnumCourseDeliveryFormatFilter<"Course"> | $Enums.CourseDeliveryFormat
   scheduleTimezone?: Prisma.StringFilter<"Course"> | string
+  coverUrl?: Prisma.StringNullableFilter<"Course"> | string | null
   authorId?: Prisma.StringNullableFilter<"Course"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Course"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Course"> | Date | string
@@ -680,6 +705,7 @@ export type CourseCreateWithoutModulesInput = {
   status?: $Enums.CourseStatus
   deliveryFormat?: $Enums.CourseDeliveryFormat
   scheduleTimezone?: string
+  coverUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   author?: Prisma.UserCreateNestedOneWithoutAuthoredInput
@@ -697,6 +723,7 @@ export type CourseUncheckedCreateWithoutModulesInput = {
   status?: $Enums.CourseStatus
   deliveryFormat?: $Enums.CourseDeliveryFormat
   scheduleTimezone?: string
+  coverUrl?: string | null
   authorId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -730,6 +757,7 @@ export type CourseUpdateWithoutModulesInput = {
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   deliveryFormat?: Prisma.EnumCourseDeliveryFormatFieldUpdateOperationsInput | $Enums.CourseDeliveryFormat
   scheduleTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   author?: Prisma.UserUpdateOneWithoutAuthoredNestedInput
@@ -747,6 +775,7 @@ export type CourseUncheckedUpdateWithoutModulesInput = {
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   deliveryFormat?: Prisma.EnumCourseDeliveryFormatFieldUpdateOperationsInput | $Enums.CourseDeliveryFormat
   scheduleTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -764,6 +793,7 @@ export type CourseCreateWithoutEnrollmentsInput = {
   status?: $Enums.CourseStatus
   deliveryFormat?: $Enums.CourseDeliveryFormat
   scheduleTimezone?: string
+  coverUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   author?: Prisma.UserCreateNestedOneWithoutAuthoredInput
@@ -781,6 +811,7 @@ export type CourseUncheckedCreateWithoutEnrollmentsInput = {
   status?: $Enums.CourseStatus
   deliveryFormat?: $Enums.CourseDeliveryFormat
   scheduleTimezone?: string
+  coverUrl?: string | null
   authorId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -814,6 +845,7 @@ export type CourseUpdateWithoutEnrollmentsInput = {
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   deliveryFormat?: Prisma.EnumCourseDeliveryFormatFieldUpdateOperationsInput | $Enums.CourseDeliveryFormat
   scheduleTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   author?: Prisma.UserUpdateOneWithoutAuthoredNestedInput
@@ -831,6 +863,7 @@ export type CourseUncheckedUpdateWithoutEnrollmentsInput = {
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   deliveryFormat?: Prisma.EnumCourseDeliveryFormatFieldUpdateOperationsInput | $Enums.CourseDeliveryFormat
   scheduleTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -848,6 +881,7 @@ export type CourseCreateWithoutProductsInput = {
   status?: $Enums.CourseStatus
   deliveryFormat?: $Enums.CourseDeliveryFormat
   scheduleTimezone?: string
+  coverUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   author?: Prisma.UserCreateNestedOneWithoutAuthoredInput
@@ -865,6 +899,7 @@ export type CourseUncheckedCreateWithoutProductsInput = {
   status?: $Enums.CourseStatus
   deliveryFormat?: $Enums.CourseDeliveryFormat
   scheduleTimezone?: string
+  coverUrl?: string | null
   authorId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -898,6 +933,7 @@ export type CourseUpdateWithoutProductsInput = {
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   deliveryFormat?: Prisma.EnumCourseDeliveryFormatFieldUpdateOperationsInput | $Enums.CourseDeliveryFormat
   scheduleTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   author?: Prisma.UserUpdateOneWithoutAuthoredNestedInput
@@ -915,6 +951,7 @@ export type CourseUncheckedUpdateWithoutProductsInput = {
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   deliveryFormat?: Prisma.EnumCourseDeliveryFormatFieldUpdateOperationsInput | $Enums.CourseDeliveryFormat
   scheduleTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -932,6 +969,7 @@ export type CourseCreateWithoutEmailsInput = {
   status?: $Enums.CourseStatus
   deliveryFormat?: $Enums.CourseDeliveryFormat
   scheduleTimezone?: string
+  coverUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   author?: Prisma.UserCreateNestedOneWithoutAuthoredInput
@@ -949,6 +987,7 @@ export type CourseUncheckedCreateWithoutEmailsInput = {
   status?: $Enums.CourseStatus
   deliveryFormat?: $Enums.CourseDeliveryFormat
   scheduleTimezone?: string
+  coverUrl?: string | null
   authorId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -982,6 +1021,7 @@ export type CourseUpdateWithoutEmailsInput = {
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   deliveryFormat?: Prisma.EnumCourseDeliveryFormatFieldUpdateOperationsInput | $Enums.CourseDeliveryFormat
   scheduleTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   author?: Prisma.UserUpdateOneWithoutAuthoredNestedInput
@@ -999,6 +1039,7 @@ export type CourseUncheckedUpdateWithoutEmailsInput = {
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   deliveryFormat?: Prisma.EnumCourseDeliveryFormatFieldUpdateOperationsInput | $Enums.CourseDeliveryFormat
   scheduleTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1016,6 +1057,7 @@ export type CourseCreateWithoutLessonSessionsInput = {
   status?: $Enums.CourseStatus
   deliveryFormat?: $Enums.CourseDeliveryFormat
   scheduleTimezone?: string
+  coverUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   author?: Prisma.UserCreateNestedOneWithoutAuthoredInput
@@ -1033,6 +1075,7 @@ export type CourseUncheckedCreateWithoutLessonSessionsInput = {
   status?: $Enums.CourseStatus
   deliveryFormat?: $Enums.CourseDeliveryFormat
   scheduleTimezone?: string
+  coverUrl?: string | null
   authorId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1066,6 +1109,7 @@ export type CourseUpdateWithoutLessonSessionsInput = {
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   deliveryFormat?: Prisma.EnumCourseDeliveryFormatFieldUpdateOperationsInput | $Enums.CourseDeliveryFormat
   scheduleTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   author?: Prisma.UserUpdateOneWithoutAuthoredNestedInput
@@ -1083,6 +1127,7 @@ export type CourseUncheckedUpdateWithoutLessonSessionsInput = {
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   deliveryFormat?: Prisma.EnumCourseDeliveryFormatFieldUpdateOperationsInput | $Enums.CourseDeliveryFormat
   scheduleTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1100,6 +1145,7 @@ export type CourseCreateManyAuthorInput = {
   status?: $Enums.CourseStatus
   deliveryFormat?: $Enums.CourseDeliveryFormat
   scheduleTimezone?: string
+  coverUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1112,6 +1158,7 @@ export type CourseUpdateWithoutAuthorInput = {
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   deliveryFormat?: Prisma.EnumCourseDeliveryFormatFieldUpdateOperationsInput | $Enums.CourseDeliveryFormat
   scheduleTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   modules?: Prisma.ModuleUpdateManyWithoutCourseNestedInput
@@ -1129,6 +1176,7 @@ export type CourseUncheckedUpdateWithoutAuthorInput = {
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   deliveryFormat?: Prisma.EnumCourseDeliveryFormatFieldUpdateOperationsInput | $Enums.CourseDeliveryFormat
   scheduleTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   modules?: Prisma.ModuleUncheckedUpdateManyWithoutCourseNestedInput
@@ -1146,6 +1194,7 @@ export type CourseUncheckedUpdateManyWithoutAuthorInput = {
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   deliveryFormat?: Prisma.EnumCourseDeliveryFormatFieldUpdateOperationsInput | $Enums.CourseDeliveryFormat
   scheduleTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1225,6 +1274,7 @@ export type CourseSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   status?: boolean
   deliveryFormat?: boolean
   scheduleTimezone?: boolean
+  coverUrl?: boolean
   authorId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1245,6 +1295,7 @@ export type CourseSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   status?: boolean
   deliveryFormat?: boolean
   scheduleTimezone?: boolean
+  coverUrl?: boolean
   authorId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1259,6 +1310,7 @@ export type CourseSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   status?: boolean
   deliveryFormat?: boolean
   scheduleTimezone?: boolean
+  coverUrl?: boolean
   authorId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1273,12 +1325,13 @@ export type CourseSelectScalar = {
   status?: boolean
   deliveryFormat?: boolean
   scheduleTimezone?: boolean
+  coverUrl?: boolean
   authorId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type CourseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "title" | "description" | "status" | "deliveryFormat" | "scheduleTimezone" | "authorId" | "createdAt" | "updatedAt", ExtArgs["result"]["course"]>
+export type CourseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "title" | "description" | "status" | "deliveryFormat" | "scheduleTimezone" | "coverUrl" | "authorId" | "createdAt" | "updatedAt", ExtArgs["result"]["course"]>
 export type CourseInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   author?: boolean | Prisma.Course$authorArgs<ExtArgs>
   modules?: boolean | Prisma.Course$modulesArgs<ExtArgs>
@@ -1313,6 +1366,7 @@ export type $CoursePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     status: $Enums.CourseStatus
     deliveryFormat: $Enums.CourseDeliveryFormat
     scheduleTimezone: string
+    coverUrl: string | null
     authorId: string | null
     createdAt: Date
     updatedAt: Date
@@ -1752,6 +1806,7 @@ export interface CourseFieldRefs {
   readonly status: Prisma.FieldRef<"Course", 'CourseStatus'>
   readonly deliveryFormat: Prisma.FieldRef<"Course", 'CourseDeliveryFormat'>
   readonly scheduleTimezone: Prisma.FieldRef<"Course", 'String'>
+  readonly coverUrl: Prisma.FieldRef<"Course", 'String'>
   readonly authorId: Prisma.FieldRef<"Course", 'String'>
   readonly createdAt: Prisma.FieldRef<"Course", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Course", 'DateTime'>

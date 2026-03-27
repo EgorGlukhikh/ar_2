@@ -162,6 +162,7 @@ export const CourseScalarFieldEnum = {
   status: 'status',
   deliveryFormat: 'deliveryFormat',
   scheduleTimezone: 'scheduleTimezone',
+  coverUrl: 'coverUrl',
   authorId: 'authorId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

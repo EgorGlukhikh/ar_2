@@ -31,7 +31,7 @@ export default async function CourseLayout({
     <div className="space-y-6">
       <header className="rounded-[28px] border border-[var(--border)] bg-white p-8 shadow-sm">
         <div className="grid gap-6 xl:grid-cols-[300px_minmax(0,1fr)]">
-          <CourseThumb title={course.title} subtitle={`/${course.slug}`} />
+          <CourseThumb title={course.title} subtitle={`/${course.slug}`} imageUrl={course.coverUrl ?? undefined} />
 
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-6">
@@ -64,14 +64,14 @@ export default async function CourseLayout({
                   </div>
                 </div>
 
-                <div className="flex flex-wrap gap-3">
-                  <Button asChild variant="outline">
+                <div className="flex shrink-0 flex-wrap gap-3">
+                  <Button asChild variant="outline" className="shrink-0">
                     <Link href={`/learning/courses/${course.id}`}>
                       <GraduationCap className="mr-2 h-4 w-4" />
                       Проверить как студент
                     </Link>
                   </Button>
-                  <Button asChild variant="outline">
+                  <Button asChild variant="outline" className="shrink-0">
                     <Link href={`/admin/courses/${course.id}`}>
                       <Settings2 className="mr-2 h-4 w-4" />
                       Настройки курса

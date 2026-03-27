@@ -38,6 +38,7 @@ const createCourseSchema = z.object({
 const updateCourseSchema = createCourseSchema.extend({
   courseId: z.string().trim().min(1),
   authorId: z.string().trim().optional(),
+  coverUrl: z.string().trim().optional(),
 });
 
 const moduleSchema = z.object({
@@ -602,6 +603,7 @@ export async function updateCourse(formData: FormData) {
       getTrimmedValue(formData, "deliveryFormat") || CourseDeliveryFormat.CLASSIC,
     scheduleTimezone: getTrimmedValue(formData, "scheduleTimezone") || "Europe/Moscow",
     authorId: getOptionalValue(formData, "authorId"),
+    coverUrl: getOptionalValue(formData, "coverUrl"),
   });
 
   const user = await requireWorkspaceUser();
@@ -635,6 +637,7 @@ export async function updateCourse(formData: FormData) {
       description: parsed.description,
       deliveryFormat: parsed.deliveryFormat,
       scheduleTimezone: parsed.scheduleTimezone,
+      coverUrl: parsed.coverUrl ?? null,
       ...(user.role === "ADMIN"
         ? {
             status: parsed.status,
