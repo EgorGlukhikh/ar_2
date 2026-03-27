@@ -345,23 +345,58 @@ export function LandingExperience({ publishedCourses, courses }: PublicHomePaylo
       </section>
 
       {/* ─── CTA ───────────────────────────────────────────────────── */}
-      <section className="bg-[#1e285d] bg-[image:var(--brand-gradient)] py-20">
+      <section className="bg-[var(--surface-alt)] py-20">
         <PageContainer>
           <MotionReveal variant="scale" delay={80}>
-            <div className="flex flex-col gap-8 xl:flex-row xl:items-center xl:justify-between">
-              <div className="max-w-[560px] space-y-4">
+            <div className="relative overflow-hidden rounded-[var(--radius-xl)] bg-[var(--primary)] px-6 py-16 text-center shadow-[var(--shadow-brand)] md:px-12">
+
+              {/* Декоративные фигуры фона */}
+              <div className="pointer-events-none absolute inset-0" aria-hidden>
+                <div className="absolute -left-6 -top-8 h-28 w-28 rounded-2xl bg-white/8" />
+                <div className="absolute -bottom-6 left-20 h-20 w-20 rounded-2xl bg-white/6" />
+                <div className="absolute -right-6 -top-6 h-24 w-24 rounded-2xl bg-white/8" />
+                <div className="absolute bottom-6 right-24 h-14 w-14 rounded-xl bg-white/6" />
+              </div>
+
+              {/* Флоатящие карточки — левая сторона */}
+              <div className="pointer-events-none absolute left-8 top-1/2 hidden -translate-y-1/2 space-y-3 xl:block" aria-hidden>
+                <div className="-rotate-6 rounded-[var(--radius-md)] bg-white px-4 py-3 text-left shadow-[var(--shadow-md)]">
+                  <p className="text-[11px] font-medium text-[var(--muted)]">Следующий урок</p>
+                  <p className="mt-1 text-sm font-semibold text-[var(--foreground)]">Работа с продавцом</p>
+                </div>
+                <div className="rotate-3 rounded-[var(--radius-md)] bg-white px-4 py-3 text-left shadow-[var(--shadow-md)]">
+                  <p className="text-2xl font-bold text-[var(--primary)]">75%</p>
+                  <p className="text-[11px] font-medium text-[var(--muted)]">Пройдено</p>
+                </div>
+              </div>
+
+              {/* Центр */}
+              <div className="relative mx-auto max-w-[480px] space-y-6">
                 <h2 className="text-[clamp(1.8rem,4vw,2.6rem)] font-semibold leading-[1.08] tracking-[-0.03em] text-white">
                   <Copy value="Выбери курс и начни с шага, который нужен тебе сейчас" />
                 </h2>
-                <p className="text-[16px] leading-8 text-white/72">
+                <p className="text-[16px] leading-7 text-white/72">
                   <Copy value="Открой каталог, посмотри форматы и начни с программы, которая даст понятный результат уже в ближайшей сделке." />
                 </p>
+                <div className="flex justify-center">
+                  <PublicButton href="/catalog" tone="secondary">
+                    <Copy value="Перейти в каталог" />
+                  </PublicButton>
+                </div>
               </div>
-              <div className="flex shrink-0 gap-3">
-                <PublicButton href="/catalog">
-                  <Copy value="Перейти в каталог" />
-                </PublicButton>
+
+              {/* Флоатящие карточки — правая сторона */}
+              <div className="pointer-events-none absolute right-8 top-1/2 hidden -translate-y-1/2 space-y-3 xl:block" aria-hidden>
+                <div className="rotate-6 rounded-[var(--radius-md)] bg-white px-4 py-3 text-left shadow-[var(--shadow-md)]">
+                  <p className="text-2xl font-bold text-[var(--foreground)]">{programsLabel(publishedCourses)}</p>
+                  <p className="text-[11px] font-medium text-[var(--muted)]">в каталоге</p>
+                </div>
+                <div className="-rotate-3 rounded-[var(--radius-md)] bg-white px-4 py-3 text-left shadow-[var(--shadow-md)]">
+                  <p className="text-[11px] font-medium text-[var(--muted)]">Средний прогресс</p>
+                  <p className="mt-1 text-sm font-semibold text-[var(--foreground)]">+15% за неделю</p>
+                </div>
               </div>
+
             </div>
           </MotionReveal>
         </PageContainer>
