@@ -121,7 +121,7 @@ export function CoursePreviewModal({ course, onClose }: CoursePreviewModalProps)
         {/* ── CTA footer ── */}
         <div className="border-t border-[var(--border)] px-6 py-5 space-y-3">
           <Link
-            href={`/catalog#${course.slug}`}
+            href="/sign-up"
             onClick={onClose}
             className="flex w-full items-center justify-center rounded-[var(--control-radius)] bg-[var(--primary)] py-3.5 text-sm font-semibold text-[var(--primary-foreground)] shadow-[var(--shadow-brand)] transition hover:opacity-90 active:scale-[0.98]"
           >
