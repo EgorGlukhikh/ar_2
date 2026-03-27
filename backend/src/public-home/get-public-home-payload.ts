@@ -14,6 +14,8 @@ const fallbackCourses: PublicHomePayload["courses"] = [
       "Как общаться без дискриминации, защищать данные клиента и спокойно проводить показы.",
     lessonCount: 5,
     priceLabel: "Бесплатно",
+    authorName: "Академия риэлторов",
+    modules: [],
   },
   {
     id: "sample-buyer",
@@ -23,6 +25,8 @@ const fallbackCourses: PublicHomePayload["courses"] = [
       "Маршрут покупателя от брифа и объекта до оффера, проверки и закрытия сделки.",
     lessonCount: 5,
     priceLabel: "3 490 ₽",
+    authorName: "Академия риэлторов",
+    modules: [],
   },
   {
     id: "sample-seller",
@@ -32,6 +36,8 @@ const fallbackCourses: PublicHomePayload["courses"] = [
       "Подготовка объекта, показы, защита собственника и разбор нескольких офферов.",
     lessonCount: 5,
     priceLabel: "2 490 ₽",
+    authorName: "Академия риэлторов",
+    modules: [],
   },
 ];
 
@@ -77,6 +83,15 @@ export async function getPublicHomePayload(): Promise<PublicHomePayload> {
       description: course.description ?? "",
       lessonCount,
       priceLabel,
+      authorName: course.author?.name ?? "Академия риэлторов",
+      modules: course.modules.map((mod) => ({
+        id: mod.id,
+        title: mod.title,
+        lessons: mod.lessons.map((lesson) => ({
+          id: lesson.id,
+          title: lesson.title,
+        })),
+      })),
     };
   });
 

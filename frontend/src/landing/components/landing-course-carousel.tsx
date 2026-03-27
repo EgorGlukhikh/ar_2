@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 
 import {
   publicBadgeClassName,
@@ -16,6 +15,8 @@ import { formatPublicCopy } from "@/lib/public-copy";
 import { cn } from "@/lib/utils";
 import { showcaseCopyBySlug } from "@shared/public-home/copy";
 import type { PublicCourseCard } from "@shared/public-home/types";
+
+import { CoursePreviewModal } from "./course-preview-modal";
 
 function Copy({ value, className }: { value: string; className?: string }) {
   return <span className={className}>{formatPublicCopy(value)}</span>;
@@ -31,6 +32,7 @@ function Copy({ value, className }: { value: string; className?: string }) {
 export function LandingCourseCarousel({ courses }: { courses: PublicCourseCard[] }) {
   const [cardsPerView, setCardsPerView] = useState(3);
   const [page, setPage] = useState(0);
+  const [previewCourse, setPreviewCourse] = useState<PublicCourseCard | null>(null);
 
   useEffect(() => {
     function syncCardsPerView() {
@@ -167,18 +169,26 @@ export function LandingCourseCarousel({ courses }: { courses: PublicCourseCard[]
                   <Copy value={copy?.description ?? course.description} />
                 </p>
 
-                <Link
-                  href={`/catalog#${course.slug}`}
-                  className="mt-5 inline-flex items-center gap-2 text-base font-medium !text-[var(--primary)] transition hover:!text-[var(--primary-hover)]"
+                <button
+                  type="button"
+                  onClick={() => setPreviewCourse(course)}
+                  className="mt-5 inline-flex items-center gap-2 text-base font-medium text-[var(--primary)] transition hover:text-[var(--primary-hover)]"
                 >
                   <Copy value="Смотреть программу" />
                   <ArrowRight className="h-4 w-4" />
-                </Link>
+                </button>
               </article>
             </MotionReveal>
           );
         })}
       </div>
+
+      {previewCourse ? (
+        <CoursePreviewModal
+          course={previewCourse}
+          onClose={() => setPreviewCourse(null)}
+        />
+      ) : null}
     </div>
   );
 }

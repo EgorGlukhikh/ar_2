@@ -41,12 +41,20 @@ export async function listPublishedLandingCourses(limit = 8) {
     take: limit,
     include: {
       modules: {
+        orderBy: { position: "asc" },
         include: {
           lessons: {
             select: {
               id: true,
+              title: true,
             },
+            orderBy: { position: "asc" },
           },
+        },
+      },
+      author: {
+        select: {
+          name: true,
         },
       },
       products: {
