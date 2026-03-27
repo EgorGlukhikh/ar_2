@@ -26,39 +26,28 @@ export default async function LearningLayout({
     <main className="min-h-screen bg-[linear-gradient(180deg,_#f7f9ff_0%,_#f1f5ff_100%)] px-4 py-5 md:px-6 md:py-6">
       <SystemContainer className="space-y-6 px-0">
         <header className={`${systemHeaderCardClassName} p-4 md:p-5`}>
-          <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
-            <div className="flex flex-col gap-4 xl:min-w-0 xl:flex-1">
-              <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-[var(--radius-md)] bg-[#1c2442] text-sm font-semibold text-white">
-                    AR
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--muted)]">
-                      Академия риэлторов
-                    </p>
-                    <h1 className="mt-1 truncate text-2xl font-semibold tracking-tight text-[var(--foreground)]">
-                      {viewer.effectiveRole === "STUDENT"
-                        ? "Учебный кабинет"
-                        : "Учебный просмотр"}
-                    </h1>
-                    <p className="mt-1 text-sm leading-6 text-[var(--muted)]">
-                      {viewer.user.email}
-                    </p>
-                  </div>
-                </div>
-
-                <LearningNav />
+          {/* Ряд 1: бренд + кнопки действий */}
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[var(--radius-md)] bg-[#1c2442] text-sm font-semibold text-white">
+                AR
               </div>
-
-              <RolePreviewSwitcher
-                actualRole={viewer.actualRole}
-                effectiveRole={viewer.effectiveRole}
-                previewRole={viewer.previewRole}
-              />
+              <div className="min-w-0">
+                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--muted)]">
+                  Академия риэлторов
+                </p>
+                <h1 className="mt-1 truncate text-2xl font-semibold tracking-tight text-[var(--foreground)]">
+                  {viewer.effectiveRole === "STUDENT"
+                    ? "Учебный кабинет"
+                    : "Учебный просмотр"}
+                </h1>
+                <p className="mt-1 text-sm leading-6 text-[var(--muted)]">
+                  {viewer.user.email}
+                </p>
+              </div>
             </div>
 
-            <div className="flex flex-wrap gap-3 xl:justify-end">
+            <div className="flex shrink-0 flex-wrap items-center gap-3">
               {hasTeamAccess ? (
                 <Button asChild variant="outline">
                   <Link href="/admin">Рабочий кабинет</Link>
@@ -69,6 +58,16 @@ export default async function LearningLayout({
               </Button>
               <LogoutButton />
             </div>
+          </div>
+
+          {/* Ряд 2: навигация + переключатель ролей */}
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+            <LearningNav />
+            <RolePreviewSwitcher
+              actualRole={viewer.actualRole}
+              effectiveRole={viewer.effectiveRole}
+              previewRole={viewer.previewRole}
+            />
           </div>
         </header>
 

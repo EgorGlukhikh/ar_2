@@ -87,29 +87,37 @@ function ProductPreview() {
         </div>
       </article>
 
-      <div className="grid gap-4 xl:col-span-5">
+      <div className="grid grid-cols-1 gap-4 xl:col-span-5 xl:grid-cols-2">
         <article className={publicCardClassName}>
-          <div className={publicIconBoxClassName}>
-            <PlayCircle className="h-5 w-5" />
+          <div className="flex items-start gap-4">
+            <div className={cn(publicIconBoxClassName, "shrink-0")}>
+              <PlayCircle className="h-5 w-5" />
+            </div>
+            <div>
+              <h3 className="text-xl font-semibold leading-7 tracking-[-0.02em] text-[var(--foreground)]">
+                <Copy value="Курс в записи" />
+              </h3>
+              <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
+                <Copy value="Видео, текст, файлы и тесты. Ученик проходит в своем темпе." />
+              </p>
+            </div>
           </div>
-          <h3 className="mt-4 text-2xl font-semibold leading-8 tracking-[-0.02em] text-[var(--foreground)]">
-            <Copy value="Курс в записи" />
-          </h3>
-          <p className="mt-3 text-base leading-7 text-[var(--muted)]">
-            <Copy value="Видео, текст, файлы и тесты. Ученик проходит программу в своем темпе и возвращается к урокам, когда нужно." />
-          </p>
         </article>
 
         <article className={publicCardClassName}>
-          <div className={publicIconBoxClassName}>
-            <Tv className="h-5 w-5" />
+          <div className="flex items-start gap-4">
+            <div className={cn(publicIconBoxClassName, "shrink-0")}>
+              <Tv className="h-5 w-5" />
+            </div>
+            <div>
+              <h3 className="text-xl font-semibold leading-7 tracking-[-0.02em] text-[var(--foreground)]">
+                <Copy value="Онлайн-поток" />
+              </h3>
+              <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
+                <Copy value="Занятия по расписанию, запись и материалы остаются в уроке." />
+              </p>
+            </div>
           </div>
-          <h3 className="mt-4 text-2xl font-semibold leading-8 tracking-[-0.02em] text-[var(--foreground)]">
-            <Copy value="Онлайн-поток" />
-          </h3>
-          <p className="mt-3 text-base leading-7 text-[var(--muted)]">
-            <Copy value="Занятия по расписанию, а после эфира запись, материалы и домашка остаются в том же уроке." />
-          </p>
         </article>
       </div>
     </PageGrid>
@@ -173,7 +181,7 @@ export function LandingExperience({
                 <Copy value="Выбрать курс" />
               </PublicButton>
               <p className="max-w-[260px] text-sm leading-6 text-[var(--muted)]">
-                <Copy value="Есть бесплатные программы. Каталог можно посмотреть без регистрации." />
+                <Copy value="Есть бесплатные и платные программы — выбирай подходящий курс в каталоге." />
               </p>
             </div>
 

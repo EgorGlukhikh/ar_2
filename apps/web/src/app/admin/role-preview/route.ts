@@ -20,7 +20,13 @@ export async function GET(request: Request) {
     return NextResponse.redirect(new URL("/sign-in", request.url));
   }
 
-  const response = NextResponse.redirect(new URL(returnTo, request.url));
+  const forwardedHost = request.headers.get("x-forwarded-host");
+  const forwardedProto = request.headers.get("x-forwarded-proto") || "https";
+  const appBase = forwardedHost
+    ? `${forwardedProto}://${forwardedHost}`
+    : `${requestUrl.protocol}//${requestUrl.host}`;
+
+  const response = NextResponse.redirect(new URL(returnTo, appBase));
 
   if (!requestedRole || requestedRole === USER_ROLES.ADMIN || requestedRole === "OFF") {
     response.cookies.delete(ROLE_PREVIEW_COOKIE);
