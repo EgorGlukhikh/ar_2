@@ -87,7 +87,7 @@ function ProductPreview() {
         </div>
       </article>
 
-      <div className="grid grid-cols-1 gap-4 xl:col-span-5 xl:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 xl:col-span-5">
         <article className={publicCardClassName}>
           <div className="flex items-start gap-4">
             <div className={cn(publicIconBoxClassName, "shrink-0")}>
@@ -134,7 +134,7 @@ export function LandingExperience({
         <header className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[rgba(255,255,255,0.92)] px-6 py-6 shadow-[var(--shadow-sm)] backdrop-blur md:px-8 md:py-6">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
             <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-[var(--radius-md)] bg-[var(--foreground)] text-sm font-semibold text-white">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[var(--radius-md)] bg-[var(--foreground)] text-sm font-semibold text-white">
                 AR
               </div>
               <div className="space-y-1.5">
