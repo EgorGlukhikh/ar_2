@@ -25,16 +25,10 @@ export default async function Home() {
 
   return (
     <main
-      className={`${marketingDisplay.variable} ${marketingBody.variable} ${marketingShellClassName}`}
+      className={`${marketingDisplay.variable} ${marketingBody.variable} font-[family:var(--font-landing-body)]`}
     >
-      <div className={marketingContainerClassName}>
-        <section className={marketingFrameClassName}>
-          <div className={marketingInnerFrameClassName}>
-            <LandingExperience {...homePayload} />
-            <PublicFooter />
-          </div>
-        </section>
-      </div>
+      <LandingExperience {...homePayload} />
+      <PublicFooter />
     </main>
   );
 }
