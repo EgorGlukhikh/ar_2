@@ -10,6 +10,7 @@ import {
   LayoutList,
   MonitorPlay,
   PlayCircle,
+  ShieldCheck,
 } from "lucide-react";
 
 import { MotionReveal } from "@/components/marketing/motion-reveal";
