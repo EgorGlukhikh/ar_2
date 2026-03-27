@@ -168,28 +168,13 @@ export function LandingExperience({
               </p>
             </div>
 
-            <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap">
-              <div className="space-y-3">
-                <PublicButton href="/catalog" className="w-full justify-center sm:w-auto">
-                  <Copy value="Выбрать курс" />
-                </PublicButton>
-                <p className="max-w-[260px] text-sm leading-6 text-[var(--muted)]">
-                  <Copy value="Есть бесплатные программы. Каталог можно посмотреть без регистрации." />
-                </p>
-              </div>
-
-              <div className="space-y-3">
-                <PublicButton
-                  href="/sign-in?role=author"
-                  tone="secondary"
-                  className="w-full justify-center sm:w-auto"
-                >
-                  <Copy value="Для преподавателя" />
-                </PublicButton>
-                <p className="max-w-[260px] text-sm leading-6 text-[var(--muted)]">
-                  <Copy value="Отдельный вход для автора и команды курса." />
-                </p>
-              </div>
+            <div className="space-y-3">
+              <PublicButton href="/catalog" className="w-full justify-center sm:w-auto">
+                <Copy value="Выбрать курс" />
+              </PublicButton>
+              <p className="max-w-[260px] text-sm leading-6 text-[var(--muted)]">
+                <Copy value="Есть бесплатные программы. Каталог можно посмотреть без регистрации." />
+              </p>
             </div>
 
             <CardGrid columns="3">
@@ -434,12 +419,9 @@ export function LandingExperience({
               />
             </div>
 
-            <div className="flex flex-col gap-3 sm:flex-row xl:col-span-4 xl:justify-end">
+            <div className="xl:col-span-4 xl:flex xl:justify-end">
               <PublicButton href="/catalog" className="justify-center">
                 <Copy value="Перейти в каталог" />
-              </PublicButton>
-              <PublicButton href="/sign-in?role=author" tone="ghost" className="justify-center">
-                <Copy value="Для преподавателя" />
               </PublicButton>
             </div>
           </PageGrid>
