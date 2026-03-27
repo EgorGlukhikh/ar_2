@@ -186,7 +186,7 @@ export function LandingExperience({ publishedCourses, courses }: PublicHomePaylo
       </section>
 
       {/* ─── TRUST STRIP ───────────────────────────────────────────── */}
-      <section className="border-b border-[var(--border)] bg-white py-10">
+      <section className="border-b border-[var(--border)] bg-[var(--surface-strong)] py-10">
         <PageContainer>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {trustPoints.map((item, index) => (
@@ -204,7 +204,7 @@ export function LandingExperience({ publishedCourses, courses }: PublicHomePaylo
       </section>
 
       {/* ─── FOR WHOM ──────────────────────────────────────────────── */}
-      <section className="bg-[var(--surface-alt)] py-20" id="value">
+      <section className="bg-white py-20" id="value">
         <PageContainer>
           <div className="space-y-10">
             <SectionLead
@@ -239,17 +239,17 @@ export function LandingExperience({ publishedCourses, courses }: PublicHomePaylo
       </section>
 
       {/* ─── FORMATS ───────────────────────────────────────────────── */}
-      <section className="bg-white py-20" id="formats">
+      <section className="bg-[var(--surface-strong)] py-20" id="formats">
         <PageContainer>
-          <div className="grid gap-12 xl:grid-cols-2 xl:items-center">
+          <div className="space-y-12">
             <SectionLead
               eyebrow="Форматы обучения"
               title="Два формата — один маршрут"
               text="Выбирай самостоятельный темп или живое расписание. В обоих форматах урок содержит всё необходимое: материалы, задание и следующий шаг."
             />
-            <div className="grid gap-4">
+            <div className="grid gap-6 md:grid-cols-2">
               <MotionReveal variant="up" delay={80}>
-                <article className={publicCardClassName}>
+                <article className={cn(publicCardClassName, "h-full")}>
                   <div className="flex items-start gap-4">
                     <div className={cn(publicIconBoxClassName, "shrink-0")}>
                       <PlayCircle className="h-5 w-5" />
@@ -266,7 +266,7 @@ export function LandingExperience({ publishedCourses, courses }: PublicHomePaylo
                 </article>
               </MotionReveal>
               <MotionReveal variant="up" delay={140}>
-                <article className={publicCardClassName}>
+                <article className={cn(publicCardClassName, "h-full")}>
                   <div className="flex items-start gap-4">
                     <div className={cn(publicIconBoxClassName, "shrink-0")}>
                       <Tv className="h-5 w-5" />
@@ -288,7 +288,7 @@ export function LandingExperience({ publishedCourses, courses }: PublicHomePaylo
       </section>
 
       {/* ─── HOW IT WORKS ──────────────────────────────────────────── */}
-      <section className="bg-[var(--surface-alt)] py-20" id="how">
+      <section className="bg-white py-20" id="how">
         <PageContainer>
           <div className="space-y-12">
             <SectionLead
@@ -326,7 +326,7 @@ export function LandingExperience({ publishedCourses, courses }: PublicHomePaylo
       </section>
 
       {/* ─── COURSES ───────────────────────────────────────────────── */}
-      <section className="bg-white py-20" id="courses">
+      <section className="bg-[var(--surface-strong)] py-20" id="courses">
         <PageContainer>
           <div className="space-y-10">
             <div className="flex flex-wrap items-end justify-between gap-4">
@@ -345,7 +345,7 @@ export function LandingExperience({ publishedCourses, courses }: PublicHomePaylo
       </section>
 
       {/* ─── CTA ───────────────────────────────────────────────────── */}
-      <section className="bg-[var(--surface-alt)] py-20">
+      <section className="bg-[var(--surface-strong)] py-20">
         <PageContainer>
           <MotionReveal variant="scale" delay={80}>
             <div className="relative overflow-hidden rounded-[var(--radius-xl)] bg-[var(--primary)] px-6 py-16 text-center shadow-[var(--shadow-brand)] md:px-12">
