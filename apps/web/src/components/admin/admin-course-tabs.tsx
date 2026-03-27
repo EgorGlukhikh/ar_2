@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 type AdminCourseTabsProps = {
   courseId: string;
   showAccessTab?: boolean;
+  className?: string;
 };
 
 const getCourseTabItems = (courseId: string, showAccessTab: boolean) => [
@@ -42,11 +43,12 @@ const getCourseTabItems = (courseId: string, showAccessTab: boolean) => [
 export function AdminCourseTabs({
   courseId,
   showAccessTab = true,
+  className,
 }: AdminCourseTabsProps) {
   const pathname = usePathname();
 
   return (
-    <nav className="flex flex-wrap gap-2 border-t border-[var(--border)] pt-5">
+    <nav className={cn("flex flex-wrap gap-2", className)}>
       {getCourseTabItems(courseId, showAccessTab).map((item) => {
         const Icon = item.icon;
         const isActive = item.exact
