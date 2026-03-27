@@ -4,9 +4,12 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   BookOpen,
+  ClipboardCheck,
   GraduationCap,
+  Layers,
+  LayoutList,
+  MonitorPlay,
   PlayCircle,
-  ShieldCheck,
 } from "lucide-react";
 
 import { MotionReveal } from "@/components/marketing/motion-reveal";
@@ -184,22 +187,34 @@ export function LandingExperience({ publishedCourses, courses }: PublicHomePaylo
       </section>
 
       {/* ─── TRUST STRIP ───────────────────────────────────────────── */}
-      <section className="border-b border-[var(--border)] bg-[var(--surface-strong)] py-6 md:py-8">
-        <PageContainer>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:items-stretch">
-            {trustPoints.map((item, index) => (
-              <MotionReveal key={item} variant="up" delay={index * 60} className="h-full">
-                <div className="flex h-full cursor-default items-start gap-3 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] p-4 shadow-[var(--shadow-sm)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[var(--shadow-md)]">
-                  <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-[var(--primary)]" />
-                  <p className="text-sm leading-6 text-[var(--muted)]">
-                    <Copy value={item} />
-                  </p>
-                </div>
-              </MotionReveal>
-            ))}
-          </div>
-        </PageContainer>
-      </section>
+      {(() => {
+        const trustCards = [
+          { Icon: ClipboardCheck, text: trustPoints[0] },
+          { Icon: Layers,         text: trustPoints[1] },
+          { Icon: MonitorPlay,    text: trustPoints[2] },
+          { Icon: LayoutList,     text: trustPoints[3] },
+        ] as const;
+        return (
+          <section className="border-b border-[var(--border)] bg-[var(--surface-strong)] py-8 md:py-10">
+            <PageContainer>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:items-stretch">
+                {trustCards.map(({ Icon, text }, index) => (
+                  <MotionReveal key={text} variant="up" delay={index * 60} className="h-full">
+                    <div className="flex h-full cursor-default flex-col gap-4 rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow-sm)] transition duration-200 hover:-translate-y-1 hover:shadow-[var(--shadow-md)]">
+                      <div className="flex h-11 w-11 items-center justify-center rounded-[var(--radius-md)] bg-[var(--primary-soft)]">
+                        <Icon className="h-5 w-5 text-[var(--primary)]" />
+                      </div>
+                      <p className="text-sm leading-6 text-[var(--foreground)]">
+                        <Copy value={text} />
+                      </p>
+                    </div>
+                  </MotionReveal>
+                ))}
+              </div>
+            </PageContainer>
+          </section>
+        );
+      })()}
 
       {/* ─── VALUE BENTO ─────────────────────────────────────────────── */}
       <section className="bg-white pt-16 pb-20" id="value">

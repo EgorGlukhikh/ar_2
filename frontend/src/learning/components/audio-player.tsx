@@ -18,6 +18,13 @@ function formatTime(seconds: number): string {
 const SPEED_OPTIONS = [1, 1.5, 2] as const;
 type Speed = (typeof SPEED_OPTIONS)[number];
 
+function resolveAudioSrc(src: string): string {
+  if (src.includes("disk.yandex.ru") || src.includes("yadi.sk")) {
+    return `/api/audio-proxy?url=${encodeURIComponent(src)}`;
+  }
+  return src;
+}
+
 export function AudioPlayer({ src, title }: AudioPlayerProps) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
@@ -78,7 +85,7 @@ export function AudioPlayer({ src, title }: AudioPlayerProps) {
 
   return (
     <div className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow-sm)]">
-      <audio ref={audioRef} src={src} preload="metadata" />
+      <audio ref={audioRef} src={resolveAudioSrc(src)} preload="metadata" />
 
       {title ? (
         <p className="mb-4 text-sm font-semibold text-[var(--foreground)]">{title}</p>
