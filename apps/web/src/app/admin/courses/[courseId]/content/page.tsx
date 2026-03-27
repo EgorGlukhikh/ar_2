@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   createLesson,
+  quickCreateLesson,
   createModule,
   deleteLesson,
   deleteModule,
@@ -266,7 +267,7 @@ export default async function CourseContentPage({
       : "курс в записи и материалах";
 
   return (
-    <section className="grid gap-6 xl:grid-cols-[320px_minmax(0,1fr)]">
+    <section className="grid gap-6 xl:grid-cols-[256px_minmax(0,1fr)]">
       <aside className="space-y-4 xl:sticky xl:top-6 xl:self-start xl:max-h-[calc(100vh-4rem)] xl:overflow-y-auto">
         <CourseStructureTree
           courseId={course.id}
@@ -275,6 +276,7 @@ export default async function CourseContentPage({
           selectedModuleId={selectedModule?.id ?? null}
           selectedLessonId={selectedLesson?.id ?? null}
           createModuleAction={createModule}
+          quickCreateLessonAction={quickCreateLesson}
           repositionLessonAction={repositionLesson}
           repositionModuleAction={repositionModule}
         />

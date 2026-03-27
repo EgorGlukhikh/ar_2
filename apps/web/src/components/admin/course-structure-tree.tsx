@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { ChevronRight, GripVertical, Loader2, Plus, X } from "lucide-react";
 import Link from "next/link";
@@ -34,6 +34,12 @@ type RepositionModuleResult = {
   moduleId: string;
 };
 
+type QuickCreateResult = {
+  courseId: string;
+  moduleId: string;
+  lessonId: string;
+};
+
 type CourseStructureTreeProps = {
   courseId: string;
   courseTitle: string;
@@ -41,6 +47,7 @@ type CourseStructureTreeProps = {
   selectedModuleId: string | null;
   selectedLessonId: string | null;
   createModuleAction: (formData: FormData) => void | Promise<void>;
+  quickCreateLessonAction: (formData: FormData) => Promise<QuickCreateResult>;
   repositionLessonAction: (formData: FormData) => Promise<RepositionLessonResult>;
   repositionModuleAction: (formData: FormData) => Promise<RepositionModuleResult>;
 };
@@ -59,17 +66,9 @@ type DragState =
 
 function buildContentHref(courseId: string, moduleId?: string, lessonId?: string) {
   const search = new URLSearchParams();
-
-  if (moduleId) {
-    search.set("moduleId", moduleId);
-  }
-
-  if (lessonId) {
-    search.set("lessonId", lessonId);
-  }
-
+  if (moduleId) search.set("moduleId", moduleId);
+  if (lessonId) search.set("lessonId", lessonId);
   const query = search.toString();
-
   return query
     ? `/admin/courses/${courseId}/content?${query}`
     : `/admin/courses/${courseId}/content`;
@@ -90,22 +89,24 @@ export function CourseStructureTree({
   selectedModuleId,
   selectedLessonId,
   createModuleAction,
+  quickCreateLessonAction,
   repositionLessonAction,
   repositionModuleAction,
 }: CourseStructureTreeProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+  const [creatingLessonInModule, setCreatingLessonInModule] = useState<string | null>(null);
   const [dragState, setDragState] = useState<DragState>(null);
   const [dropKey, setDropKey] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isAddingModule, setIsAddingModule] = useState(modules.length === 0);
-  const [moduleTitle, setModuleTitle] = useState(getSuggestedModuleTitle(courseTitle, modules.length));
+  const [moduleTitle, setModuleTitle] = useState(
+    getSuggestedModuleTitle(courseTitle, modules.length),
+  );
 
   useEffect(() => {
     setModuleTitle(getSuggestedModuleTitle(courseTitle, modules.length));
-    if (modules.length === 0) {
-      setIsAddingModule(true);
-    }
+    if (modules.length === 0) setIsAddingModule(true);
   }, [courseTitle, modules.length]);
 
   function clearDragState() {
@@ -118,38 +119,45 @@ export function CourseStructureTree({
     setModuleTitle(getSuggestedModuleTitle(courseTitle, modules.length));
   }
 
-  function runLessonReposition(targetModuleId: string, targetLessonId?: string) {
-    if (!dragState || dragState.kind !== "lesson") {
-      return;
-    }
+  function handleQuickCreateLesson(moduleId: string, lessonCount: number) {
+    setCreatingLessonInModule(moduleId);
+    startTransition(async () => {
+      try {
+        setError(null);
+        const fd = new FormData();
+        fd.set("moduleId", moduleId);
+        fd.set("title", `Урок ${lessonCount + 1}`);
+        const result = await quickCreateLessonAction(fd);
+        router.push(
+          buildContentHref(result.courseId, result.moduleId, result.lessonId),
+          { scroll: false },
+        );
+        router.refresh();
+      } catch (e) {
+        setError(e instanceof Error ? e.message : "Не удалось создать урок.");
+      } finally {
+        setCreatingLessonInModule(null);
+      }
+    });
+  }
 
-    if (dragState.lessonId === targetLessonId) {
-      clearDragState();
-      return;
-    }
+  function runLessonReposition(targetModuleId: string, targetLessonId?: string) {
+    if (!dragState || dragState.kind !== "lesson") return;
+    if (dragState.lessonId === targetLessonId) { clearDragState(); return; }
 
     startTransition(async () => {
       try {
         setError(null);
-
         const formData = new FormData();
         formData.set("lessonId", dragState.lessonId);
         formData.set("targetModuleId", targetModuleId);
         formData.set("placement", targetLessonId ? "before" : "end");
-
-        if (targetLessonId) {
-          formData.set("targetLessonId", targetLessonId);
-        }
-
+        if (targetLessonId) formData.set("targetLessonId", targetLessonId);
         const result = await repositionLessonAction(formData);
-        router.push(buildContentHref(result.courseId, result.moduleId, result.lessonId), {
-          scroll: false,
-        });
+        router.push(buildContentHref(result.courseId, result.moduleId, result.lessonId), { scroll: false });
         router.refresh();
       } catch (actionError) {
-        setError(
-          actionError instanceof Error ? actionError.message : "Не удалось переместить урок.",
-        );
+        setError(actionError instanceof Error ? actionError.message : "Не удалось переместить урок.");
       } finally {
         clearDragState();
       }
@@ -157,34 +165,21 @@ export function CourseStructureTree({
   }
 
   function runModuleReposition(targetModuleId?: string) {
-    if (!dragState || dragState.kind !== "module") {
-      return;
-    }
-
-    if (dragState.moduleId === targetModuleId) {
-      clearDragState();
-      return;
-    }
+    if (!dragState || dragState.kind !== "module") return;
+    if (dragState.moduleId === targetModuleId) { clearDragState(); return; }
 
     startTransition(async () => {
       try {
         setError(null);
-
         const formData = new FormData();
         formData.set("moduleId", dragState.moduleId);
         formData.set("placement", targetModuleId ? "before" : "end");
-
-        if (targetModuleId) {
-          formData.set("targetModuleId", targetModuleId);
-        }
-
+        if (targetModuleId) formData.set("targetModuleId", targetModuleId);
         const result = await repositionModuleAction(formData);
         router.push(buildContentHref(result.courseId, result.moduleId), { scroll: false });
         router.refresh();
       } catch (actionError) {
-        setError(
-          actionError instanceof Error ? actionError.message : "Не удалось переместить модуль.",
-        );
+        setError(actionError instanceof Error ? actionError.message : "Не удалось переместить модуль.");
       } finally {
         clearDragState();
       }
@@ -192,119 +187,98 @@ export function CourseStructureTree({
   }
 
   return (
-    <div className="space-y-4">
-      <article className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-white p-4 shadow-sm">
-        <div className="flex items-start justify-between gap-3">
-          <div className="space-y-1">
-            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#7a6548]">
-              Структура курса
-            </p>
-            <h2 className="text-xl font-semibold tracking-tight text-[var(--foreground)]">
-              Модули и уроки
-            </h2>
-          </div>
-
-          {!isAddingModule ? (
-            <Button type="button" size="sm" onClick={() => setIsAddingModule(true)}>
-              <Plus className="mr-2 h-4 w-4" />
-              Добавить модуль
-            </Button>
-          ) : null}
+    <div className="space-y-3">
+      <article className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-white shadow-sm">
+        {/* Header — compact */}
+        <div className="flex items-center justify-between gap-2 px-3 py-3">
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
+            Программа курса
+          </p>
+          <Badge variant="neutral">{modules.reduce((s, m) => s + m.lessons.length, 0)}</Badge>
         </div>
 
         {error ? (
-          <p className="mt-4 rounded-[18px] border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          <p className="mx-3 mb-2 rounded-[14px] border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700">
             {error}
           </p>
         ) : null}
 
         {modules.length === 0 ? (
-          <div className="mt-4 rounded-[22px] border border-dashed border-[var(--border)] bg-[var(--surface)] p-4 text-sm text-[var(--muted)]">
-            Пока модулей нет. Создай первый, и структура курса появится здесь.
-          </div>
+          <p className="mx-3 mb-3 rounded-[14px] border border-dashed border-[var(--border)] bg-[var(--surface)] px-3 py-3 text-xs text-[var(--muted)]">
+            Создай первый модуль — структура курса появится здесь.
+          </p>
         ) : null}
 
-        <div className="mt-4 space-y-3">
+        <div className="space-y-2 px-2 pb-2">
           {modules.map((moduleItem) => {
             const isActiveModule = selectedModuleId === moduleItem.id;
             const moduleDropKey = buildDropKey("module", moduleItem.id);
             const lessonDropKey = buildDropKey("lesson", moduleItem.id);
+            const isCreating = creatingLessonInModule === moduleItem.id && isPending;
 
             return (
               <section
                 key={moduleItem.id}
-                onDragOver={(event) => {
-                  if (!dragState) {
-                    return;
-                  }
-
-                  event.preventDefault();
+                onDragOver={(e) => {
+                  if (!dragState) return;
+                  e.preventDefault();
                   setDropKey(dragState.kind === "module" ? moduleDropKey : lessonDropKey);
                 }}
                 onDragLeave={() => {
-                  if (dropKey === moduleDropKey || dropKey === lessonDropKey) {
-                    setDropKey(null);
-                  }
+                  if (dropKey === moduleDropKey || dropKey === lessonDropKey) setDropKey(null);
                 }}
-                onDrop={(event) => {
-                  event.preventDefault();
-
-                  if (dragState?.kind === "module") {
-                    runModuleReposition(moduleItem.id);
-                    return;
-                  }
-
+                onDrop={(e) => {
+                  e.preventDefault();
+                  if (dragState?.kind === "module") { runModuleReposition(moduleItem.id); return; }
                   runLessonReposition(moduleItem.id);
                 }}
-                className={`rounded-[var(--radius-xl)] border bg-white transition ${
+                className={`rounded-[14px] border transition ${
                   isActiveModule
-                    ? "border-[var(--primary)] shadow-[0_16px_40px_rgba(65,97,255,0.12)]"
-                    : "border-[var(--border)] shadow-sm"
+                    ? "border-[var(--primary)] shadow-[0_8px_24px_rgba(65,97,255,0.10)]"
+                    : "border-[var(--border)]"
                 } ${
                   dropKey === moduleDropKey || dropKey === lessonDropKey
-                    ? "ring-2 ring-[var(--primary)] ring-offset-2 ring-offset-[var(--background)]"
+                    ? "ring-2 ring-[var(--primary)] ring-offset-1"
                     : ""
                 }`}
               >
-                <div className="flex items-center gap-3 px-4 py-3">
+                {/* Module row */}
+                <div className="flex items-center gap-2 px-2 py-2">
                   <button
                     type="button"
                     draggable={!isPending}
                     onDragStart={() => setDragState({ kind: "module", moduleId: moduleItem.id })}
                     onDragEnd={clearDragState}
-                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl border border-[var(--border)] bg-white text-[var(--muted)] transition hover:border-[var(--primary)] hover:text-[var(--foreground)]"
+                    className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg text-[var(--muted)] opacity-40 transition hover:opacity-100"
                     aria-label="Перетащить модуль"
                   >
                     {isPending && dragState?.kind === "module" && dragState.moduleId === moduleItem.id ? (
-                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <Loader2 className="h-3 w-3 animate-spin" />
                     ) : (
-                      <GripVertical className="h-4 w-4" />
+                      <GripVertical className="h-3 w-3" />
                     )}
                   </button>
 
                   <Link
                     href={buildContentHref(courseId, moduleItem.id)}
                     scroll={false}
-                    className="flex min-w-0 flex-1 items-center justify-between gap-3"
+                    className="flex min-w-0 flex-1 items-center justify-between gap-2"
                   >
-                    <div className="min-w-0">
-                      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
-                        Модуль {moduleItem.position}
-                      </p>
-                      <p className="mt-1 truncate text-sm font-semibold text-[var(--foreground)]">
-                        {moduleItem.title}
-                      </p>
-                    </div>
-
-                    <Badge variant="neutral">{moduleItem.lessons.length}</Badge>
+                    <p className="min-w-0 truncate text-xs font-semibold text-[var(--foreground)]">
+                      {moduleItem.title}
+                    </p>
+                    <Badge variant="neutral" className="shrink-0 text-[10px]">
+                      {moduleItem.lessons.length}
+                    </Badge>
                   </Link>
                 </div>
 
-                <div className="border-t border-[var(--border)] px-3 py-3">
+                {/* Lessons */}
+                <div className="border-t border-[var(--border)] px-2 py-1.5">
                   {moduleItem.lessons.length === 0 ? (
-                    <p className="px-1 text-sm text-[var(--muted)]">Пока без уроков.</p>
+                    <p className="px-1 py-1 text-[11px] text-[var(--muted)]">Пока без уроков</p>
                   ) : (
-                    <div className="space-y-1.5">
+                    <div className="space-y-0.5">
                       {moduleItem.lessons.map((lesson, index) => {
                         const isActiveLesson = selectedLessonId === lesson.id;
                         const itemDropKey = buildDropKey("lesson", moduleItem.id, lesson.id);
@@ -314,72 +288,75 @@ export function CourseStructureTree({
                             key={lesson.id}
                             draggable={!isPending}
                             onDragStart={() =>
-                              setDragState({
-                                kind: "lesson",
-                                lessonId: lesson.id,
-                                sourceModuleId: moduleItem.id,
-                              })
+                              setDragState({ kind: "lesson", lessonId: lesson.id, sourceModuleId: moduleItem.id })
                             }
                             onDragEnd={clearDragState}
-                            onDragOver={(event) => {
-                              if (!dragState || dragState.kind !== "lesson") {
-                                return;
-                              }
-
-                              event.preventDefault();
+                            onDragOver={(e) => {
+                              if (!dragState || dragState.kind !== "lesson") return;
+                              e.preventDefault();
                               setDropKey(itemDropKey);
                             }}
                             onDragLeave={() => {
-                              if (dropKey === itemDropKey) {
-                                setDropKey(null);
-                              }
+                              if (dropKey === itemDropKey) setDropKey(null);
                             }}
-                            onDrop={(event) => {
-                              event.preventDefault();
+                            onDrop={(e) => {
+                              e.preventDefault();
                               runLessonReposition(moduleItem.id, lesson.id);
                             }}
-                            className={`rounded-[18px] transition ${
+                            className={`rounded-[10px] transition ${
                               dropKey === itemDropKey
-                                ? "ring-2 ring-[var(--primary)] ring-offset-2 ring-offset-white"
+                                ? "ring-2 ring-[var(--primary)] ring-offset-1"
                                 : ""
                             }`}
                           >
                             <Link
                               href={buildContentHref(courseId, moduleItem.id, lesson.id)}
                               scroll={false}
-                              className={`flex items-center gap-3 rounded-[18px] px-3 py-2.5 transition ${
+                              className={`flex items-center gap-2 rounded-[10px] px-2 py-1.5 transition ${
                                 isActiveLesson
                                   ? "bg-[var(--primary-soft)] text-[var(--foreground)]"
                                   : "text-[var(--muted)] hover:bg-[var(--surface)] hover:text-[var(--foreground)]"
                               }`}
                             >
-                              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-2xl border border-[var(--border)] bg-white text-[var(--muted)]">
-                                {isPending &&
-                                dragState?.kind === "lesson" &&
-                                dragState.lessonId === lesson.id ? (
-                                  <Loader2 className="h-4 w-4 animate-spin" />
+                              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md text-[var(--muted)] opacity-40">
+                                {isPending && dragState?.kind === "lesson" && dragState.lessonId === lesson.id ? (
+                                  <Loader2 className="h-3 w-3 animate-spin" />
                                 ) : (
-                                  <GripVertical className="h-4 w-4" />
+                                  <GripVertical className="h-3 w-3" />
                                 )}
                               </span>
 
                               <div className="min-w-0 flex-1">
-                                <p className="truncate text-sm font-medium text-[var(--foreground)]">
+                                <p className={`truncate text-xs font-medium ${isActiveLesson ? "text-[var(--foreground)]" : "text-[var(--foreground)]"}`}>
                                   {index + 1}. {lesson.title}
                                 </p>
-                                <p className="mt-0.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
-                                  {lessonTypeLabelMap[lesson.type as keyof typeof lessonTypeLabelMap] ??
-                                    lesson.type}
+                                <p className="text-[10px] uppercase tracking-[0.16em] text-[var(--muted)]">
+                                  {lessonTypeLabelMap[lesson.type as keyof typeof lessonTypeLabelMap] ?? lesson.type}
                                 </p>
                               </div>
 
-                              <ChevronRight className="h-4 w-4 shrink-0" />
+                              <ChevronRight className="h-3 w-3 shrink-0 opacity-50" />
                             </Link>
                           </div>
                         );
                       })}
                     </div>
                   )}
+
+                  {/* Quick add lesson button */}
+                  <button
+                    type="button"
+                    disabled={isPending}
+                    onClick={() => handleQuickCreateLesson(moduleItem.id, moduleItem.lessons.length)}
+                    className="mt-1 flex w-full items-center gap-1.5 rounded-[10px] px-2 py-1.5 text-[11px] font-medium text-[var(--muted)] transition hover:bg-[var(--primary-soft)] hover:text-[var(--primary)] disabled:opacity-50"
+                  >
+                    {isCreating ? (
+                      <Loader2 className="h-3 w-3 animate-spin" />
+                    ) : (
+                      <Plus className="h-3 w-3" />
+                    )}
+                    {isCreating ? "Создаю..." : "Добавить урок"}
+                  </button>
                 </div>
               </section>
             );
@@ -387,51 +364,42 @@ export function CourseStructureTree({
 
           {dragState?.kind === "module" ? (
             <div
-              onDragOver={(event) => {
-                event.preventDefault();
-                setDropKey("module:end");
-              }}
-              onDragLeave={() => {
-                if (dropKey === "module:end") {
-                  setDropKey(null);
-                }
-              }}
-              onDrop={(event) => {
-                event.preventDefault();
-                runModuleReposition();
-              }}
-              className={`rounded-[22px] border border-dashed px-4 py-4 text-sm text-[var(--muted)] transition ${
+              onDragOver={(e) => { e.preventDefault(); setDropKey("module:end"); }}
+              onDragLeave={() => { if (dropKey === "module:end") setDropKey(null); }}
+              onDrop={(e) => { e.preventDefault(); runModuleReposition(); }}
+              className={`rounded-[14px] border border-dashed px-3 py-3 text-xs text-[var(--muted)] transition ${
                 dropKey === "module:end"
                   ? "border-[var(--primary)] bg-[var(--primary-soft)]/35 text-[var(--foreground)]"
                   : "border-[var(--border)] bg-white"
               }`}
             >
-              Перетащи модуль сюда, чтобы отправить его в конец списка.
+              Перетащи модуль сюда → в конец
             </div>
           ) : null}
 
           {isAddingModule ? (
             <form
               action={createModuleAction}
-              className="rounded-[22px] border border-dashed border-[var(--primary)] bg-[var(--primary-soft)]/35 p-4"
+              className="rounded-[14px] border border-dashed border-[var(--primary)] bg-[var(--primary-soft)]/35 p-3"
             >
               <input type="hidden" name="courseId" value={courseId} />
-              <div className="space-y-3">
-                <p className="text-sm font-semibold text-[var(--foreground)]">Новый модуль</p>
+              <div className="space-y-2">
+                <p className="text-xs font-semibold text-[var(--foreground)]">Новый раздел</p>
                 <Input
                   name="title"
                   value={moduleTitle}
-                  onChange={(event) => setModuleTitle(event.target.value)}
-                  placeholder="Название модуля"
+                  onChange={(e) => setModuleTitle(e.target.value)}
+                  placeholder="Название раздела"
                   required
+                  className="text-sm"
                 />
                 <div className="flex gap-2">
-                  <Button type="submit" className="flex-1">
-                    Создать модуль
+                  <Button type="submit" size="sm" className="flex-1">
+                    Создать
                   </Button>
                   {modules.length > 0 ? (
-                    <Button type="button" variant="outline" onClick={closeAddModule}>
-                      <X className="h-4 w-4" />
+                    <Button type="button" size="sm" variant="outline" onClick={closeAddModule}>
+                      <X className="h-3 w-3" />
                     </Button>
                   ) : null}
                 </div>
@@ -439,8 +407,19 @@ export function CourseStructureTree({
             </form>
           ) : null}
         </div>
+
+        {/* "Add module" — subtle bottom button, shown only when modules exist */}
+        {modules.length > 0 && !isAddingModule ? (
+          <button
+            type="button"
+            onClick={() => setIsAddingModule(true)}
+            className="flex w-full items-center justify-center gap-1.5 rounded-b-[var(--radius-xl)] border-t border-[var(--border)] px-3 py-2 text-[11px] font-medium text-[var(--muted)] transition hover:bg-[var(--surface)] hover:text-[var(--foreground)]"
+          >
+            <Plus className="h-3 w-3" />
+            Добавить раздел
+          </button>
+        ) : null}
       </article>
     </div>
   );
 }
-

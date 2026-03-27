@@ -382,6 +382,44 @@ async function requireCourseContentEditor(courseId: string) {
   return { user, course };
 }
 
+// ─── Быстрое создание урока (без redirect, возвращает IDs) ───────────────────
+
+export async function quickCreateLesson(formData: FormData): Promise<{
+  courseId: string;
+  moduleId: string;
+  lessonId: string;
+}> {
+  const moduleId = getTrimmedValue(formData, "moduleId");
+  const title = getTrimmedValue(formData, "title") || "Новый урок";
+
+  const { moduleRecord } = await requireModuleContentEditor(moduleId);
+
+  const lastLesson = await prisma.lesson.findFirst({
+    where: { moduleId },
+    orderBy: { position: "desc" },
+    select: { position: true },
+  });
+
+  const position = (lastLesson?.position ?? 0) + 1;
+
+  const lesson = await prisma.lesson.create({
+    data: {
+      moduleId,
+      title,
+      type: LessonType.TEXT,
+      position,
+      isPreview: false,
+    },
+    select: { id: true },
+  });
+
+  refreshAdminRoutes(moduleRecord.courseId);
+
+  return { courseId: moduleRecord.courseId, moduleId, lessonId: lesson.id };
+}
+
+// ─── Служебные функции ────────────────────────────────────────────────────────
+
 async function requireModuleContentEditor(moduleId: string) {
   const moduleRecord = await prisma.module.findUnique({
     where: {
