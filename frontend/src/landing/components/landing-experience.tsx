@@ -1,14 +1,12 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import {
   BookOpen,
-  BriefcaseBusiness,
-  Compass,
   GraduationCap,
   PlayCircle,
   ShieldCheck,
-  Tv,
 } from "lucide-react";
 
 import { MotionReveal } from "@/components/marketing/motion-reveal";
@@ -20,9 +18,10 @@ import {
   SectionLead,
 } from "@/components/marketing/public-primitives";
 import { PageContainer } from "@/components/layout/page-grid";
+import { getPublicCourseCover } from "@/lib/marketing-theme";
 import { formatPublicCopy } from "@/lib/public-copy";
 import { cn } from "@/lib/utils";
-import { audienceCards, roleCopy, trustPoints } from "@shared/public-home/copy";
+import { roleCopy, trustPoints } from "@shared/public-home/copy";
 import type { PublicHomePayload } from "@shared/public-home/types";
 
 import { LandingCourseCarousel } from "./landing-course-carousel";
@@ -203,32 +202,76 @@ export function LandingExperience({ publishedCourses, courses }: PublicHomePaylo
         </PageContainer>
       </section>
 
-      {/* ─── FOR WHOM ──────────────────────────────────────────────── */}
+      {/* ─── VALUE BENTO ─────────────────────────────────────────────── */}
       <section className="bg-white py-20" id="value">
         <PageContainer>
-          <div className="space-y-10">
-            <SectionLead
-              eyebrow="Для кого"
-              title="Один продукт для старта, прокачки и запуска своей программы"
-              text="Каждый сразу узнаёт свой сценарий: начать с базы, закрыть пробел перед сделкой или собрать собственный курс."
-            />
-            <div className="grid gap-5 md:grid-cols-3">
-              {audienceCards.map((card, index) => {
-                const Icon = card.icon;
+          <div className="space-y-5">
+            {/* Top row: 3 large accent cards */}
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
+              <MotionReveal variant="up" delay={0}>
+                <article className="flex min-h-[220px] flex-col rounded-[var(--radius-lg)] bg-[var(--foreground)] p-6">
+                  <h3 className="text-xl font-semibold leading-7 tracking-[-0.02em] text-white">
+                    Войти в профессию без хаоса и месяцев блужданий
+                  </h3>
+                  <p className="mt-3 text-sm leading-7 text-white/64">
+                    Структурированный маршрут с первого дня: программа, уроки, шаблоны и задания в нужном порядке.
+                  </p>
+                </article>
+              </MotionReveal>
+              <MotionReveal variant="up" delay={80}>
+                <article className="flex min-h-[220px] flex-col rounded-[var(--radius-lg)] bg-[var(--surface-strong)] p-6">
+                  <h3 className="text-xl font-semibold leading-7 tracking-[-0.02em] text-[var(--foreground)]">
+                    Закрыть конкретный пробел перед сделкой
+                  </h3>
+                  <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
+                    Короткие программы под задачу. Выбрал тему — прошёл уроки — применил на следующей встрече с клиентом.
+                  </p>
+                </article>
+              </MotionReveal>
+              <MotionReveal variant="up" delay={160}>
+                <article className="flex min-h-[220px] flex-col rounded-[var(--radius-lg)] bg-[var(--primary)] p-6">
+                  <h3 className="text-xl font-semibold leading-7 tracking-[-0.02em] text-white">
+                    Запустить свой курс и вести учеников в системе
+                  </h3>
+                  <p className="mt-3 text-sm leading-7 text-white/72">
+                    Записываешь программу или открываешь поток — платформа ведёт учеников по урокам и собирает прогресс.
+                  </p>
+                </article>
+              </MotionReveal>
+            </div>
+
+            {/* Bottom row: 3 feature cards */}
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
+              {[
+                {
+                  icon: BookOpen,
+                  title: "Материалы в каждом уроке",
+                  text: "Видео, файлы и задания всегда под рукой — не нужно искать по чатам и папкам.",
+                },
+                {
+                  icon: PlayCircle,
+                  title: "Запись или живой поток",
+                  text: "Выбирай формат под удобный темп: самостоятельно или по расписанию с группой.",
+                },
+                {
+                  icon: GraduationCap,
+                  title: "Бесплатный вход в каталог",
+                  text: "Часть программ доступна без оплаты — попробуй до покупки.",
+                },
+              ].map((item, index) => {
+                const Icon = item.icon;
                 return (
-                  <MotionReveal key={card.title} variant="up" delay={index * 80}>
-                    <article className={cn(publicCardClassName, "h-full space-y-4")}>
+                  <MotionReveal key={item.title} variant="up" delay={index * 80}>
+                    <article className={cn(publicCardClassName, "h-full")}>
                       <div className={publicIconBoxClassName}>
                         <Icon className="h-5 w-5" />
                       </div>
-                      <div>
-                        <h3 className="text-lg font-semibold leading-7 tracking-[-0.02em] text-[var(--foreground)]">
-                          <Copy value={card.title} />
-                        </h3>
-                        <p className="mt-2 text-sm leading-7 text-[var(--muted)]">
-                          <Copy value={card.text} />
-                        </p>
-                      </div>
+                      <h3 className="mt-4 text-base font-semibold text-[var(--foreground)]">
+                        {item.title}
+                      </h3>
+                      <p className="mt-1.5 text-sm leading-6 text-[var(--muted)]">
+                        {item.text}
+                      </p>
                     </article>
                   </MotionReveal>
                 );
@@ -239,46 +282,57 @@ export function LandingExperience({ publishedCourses, courses }: PublicHomePaylo
       </section>
 
       {/* ─── FORMATS ───────────────────────────────────────────────── */}
-      <section className="bg-[var(--surface-strong)] py-20" id="formats">
+      <section className="bg-[var(--primary-soft)] py-20" id="formats">
         <PageContainer>
-          <div className="space-y-12">
+          <div className="grid gap-12 xl:grid-cols-2 xl:items-center">
+            {/* Left: SectionLead */}
             <SectionLead
               eyebrow="Форматы обучения"
               title="Два формата — один маршрут"
               text="Выбирай самостоятельный темп или живое расписание. В обоих форматах урок содержит всё необходимое: материалы, задание и следующий шаг."
             />
-            <div className="grid gap-6 md:grid-cols-2">
+
+            {/* Right: 2 image cards */}
+            <div className="grid grid-cols-2 gap-4">
               <MotionReveal variant="up" delay={80}>
-                <article className={cn(publicCardClassName, "h-full")}>
-                  <div className="flex items-start gap-4">
-                    <div className={cn(publicIconBoxClassName, "shrink-0")}>
-                      <PlayCircle className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-semibold leading-7 text-[var(--foreground)]">
-                        Курс в записи
-                      </h3>
-                      <p className="mt-2 text-sm leading-7 text-[var(--muted)]">
-                        Видео, текст, файлы и тесты. Ученик проходит в своём темпе и возвращается к материалам в любое время.
-                      </p>
-                    </div>
+                <article className="group cursor-default overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-sm)] transition-transform duration-300 hover:scale-[1.03]">
+                  <div className="relative h-44 overflow-hidden">
+                    <Image
+                      src={getPublicCourseCover(4)}
+                      alt="Курс в записи"
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                  </div>
+                  <div className="p-4">
+                    <h3 className="text-base font-semibold leading-6 text-[var(--foreground)]">
+                      Курс в записи
+                    </h3>
+                    <p className="mt-1.5 text-sm leading-6 text-[var(--muted)]">
+                      Учишься в своём темпе и возвращаешься к материалам в любое время.
+                    </p>
                   </div>
                 </article>
               </MotionReveal>
               <MotionReveal variant="up" delay={140}>
-                <article className={cn(publicCardClassName, "h-full")}>
-                  <div className="flex items-start gap-4">
-                    <div className={cn(publicIconBoxClassName, "shrink-0")}>
-                      <Tv className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-semibold leading-7 text-[var(--foreground)]">
-                        Онлайн-поток
-                      </h3>
-                      <p className="mt-2 text-sm leading-7 text-[var(--muted)]">
-                        Занятия по расписанию. Запись эфира и материалы остаются в уроке после трансляции.
-                      </p>
-                    </div>
+                <article className="group cursor-default overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-sm)] transition-transform duration-300 hover:scale-[1.03]">
+                  <div className="relative h-44 overflow-hidden">
+                    <Image
+                      src={getPublicCourseCover(5)}
+                      alt="Онлайн-поток"
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                  </div>
+                  <div className="p-4">
+                    <h3 className="text-base font-semibold leading-6 text-[var(--foreground)]">
+                      Онлайн-поток
+                    </h3>
+                    <p className="mt-1.5 text-sm leading-6 text-[var(--muted)]">
+                      Занятия по расписанию. Запись эфира остаётся в уроке после трансляции.
+                    </p>
                   </div>
                 </article>
               </MotionReveal>
@@ -302,13 +356,8 @@ export function LandingExperience({ publishedCourses, courses }: PublicHomePaylo
                 return (
                   <MotionReveal key={step.title} variant="up" delay={index * 80}>
                     <article className={cn(publicCardClassName, "h-full")}>
-                      <div className="flex items-center gap-3">
-                        <span className="min-w-[28px] text-[13px] font-bold tabular-nums tracking-wider text-[var(--muted)]">
-                          0{index + 1}
-                        </span>
-                        <div className={publicIconBoxClassName}>
-                          <Icon className="h-5 w-5" />
-                        </div>
+                      <div className={publicIconBoxClassName}>
+                        <Icon className="h-5 w-5" />
                       </div>
                       <h3 className="mt-4 text-lg font-semibold leading-7 text-[var(--foreground)]">
                         <Copy value={step.title} />
