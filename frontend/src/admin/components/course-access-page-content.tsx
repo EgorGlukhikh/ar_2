@@ -29,8 +29,8 @@ export function CourseAccessPageContent({
     <section className="space-y-6">
       <WorkspacePageHeader
         eyebrow="Доступ к курсу"
-        title="Студенты, выдача доступа и демо-списания"
-        description="Админ управляет доступами вручную: добавляет студента, выдает бесплатный доступ или проводит демо-списание для платного курса."
+        title="Студенты и выдача доступа"
+        description="Администратор управляет доступами вручную: добавляет студента, выдаёт бесплатный доступ или проводит списание для платного курса."
       />
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
@@ -123,7 +123,7 @@ export function CourseAccessPageContent({
           title="Выдать доступ вручную"
           description={
             payload.isPaidCourse
-              ? "Для платного курса выбери: выдать доступ бесплатно или провести демо-списание с автоматическим зачислением."
+              ? "Для платного курса выбери: выдать доступ бесплатно или провести списание с автоматическим зачислением."
               : "Для бесплатного курса достаточно выбрать или создать студента и выдать доступ."
           }
         >
@@ -179,7 +179,7 @@ export function CourseAccessPageContent({
                         defaultValue="free"
                       >
                         <option value="free">Выдать бесплатно</option>
-                        <option value="demo_charge">Провести демо-списание</option>
+                        <option value="demo_charge">Провести списание</option>
                       </Select>
                     </div>
 
@@ -190,7 +190,7 @@ export function CourseAccessPageContent({
                         required
                         className="mt-1 h-4 w-4 rounded border-[var(--border)] text-[var(--primary)]"
                       />
-                      Подтверждаю выдачу доступа для платного курса: либо бесплатно, либо через демо-списание.
+                      Подтверждаю выдачу доступа для платного курса: либо бесплатно, либо через списание.
                     </label>
                   </>
                 ) : null}
@@ -235,7 +235,7 @@ export function CourseAccessPageContent({
                         defaultValue="free"
                       >
                         <option value="free">Выдать бесплатно</option>
-                        <option value="demo_charge">Провести демо-списание</option>
+                        <option value="demo_charge">Провести списание</option>
                       </Select>
                     </div>
 

@@ -9,11 +9,11 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { Button } from "@/components/ui/button";
 import {
   PublicButton,
   SectionLead,
   publicBadgeClassName,
-  publicButtonClassName,
   publicCardClassName,
   publicIconBoxClassName,
 } from "@/components/marketing/public-primitives";
@@ -56,22 +56,18 @@ function CourseAction({
 
   if (!canCheckout) {
     return (
-      <button
-        type="button"
-        disabled
-        className={`${publicButtonClassName("secondary")} w-full justify-center sm:w-auto`}
-      >
+      <Button variant="outline" disabled className="w-full justify-center sm:w-auto">
         {formatPublicCopy("Цена не настроена")}
-      </button>
+      </Button>
     );
   }
 
   return (
     <form action={startDemoCheckout} className="w-full sm:w-auto">
       <input type="hidden" name="courseId" value={courseId} />
-      <button type="submit" className={`${publicButtonClassName("primary")} w-full justify-center`}>
+      <Button type="submit" className="w-full justify-center">
         {formatPublicCopy(actionLabel)}
-      </button>
+      </Button>
     </form>
   );
 }
@@ -246,13 +242,12 @@ export function CatalogPageContent({
                   hasAccess={course.hasAccess}
                 />
 
-                <Link
-                  href={isAuthenticated ? "/learning" : "/sign-in"}
-                  className={`${publicButtonClassName("secondary")} w-full justify-center whitespace-nowrap`}
-                >
-                  {formatPublicCopy(isAuthenticated ? "В кабинет" : "Войти")}
-                  <ArrowUpRight className="h-4 w-4" />
-                </Link>
+                <Button asChild variant="outline" className="w-full justify-center whitespace-nowrap">
+                  <Link href={isAuthenticated ? "/learning" : "/sign-in"}>
+                    {formatPublicCopy(isAuthenticated ? "В кабинет" : "Войти")}
+                    <ArrowUpRight className="h-4 w-4" />
+                  </Link>
+                </Button>
               </div>
 
               <Link

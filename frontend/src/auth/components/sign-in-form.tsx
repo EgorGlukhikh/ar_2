@@ -4,10 +4,9 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
-import {
-  publicButtonClassName,
-  publicInputClassName,
-} from "@/components/marketing/public-primitives";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { formatPublicCopy } from "@/lib/public-copy";
 
 /**
@@ -45,37 +44,28 @@ export function SignInForm({
   }
 
   return (
-    <form
-      action={handleSubmit}
-      className="space-y-5"
-    >
+    <form action={handleSubmit} className="space-y-5">
       <div className="space-y-2">
-        <label className="text-sm font-medium text-[var(--foreground)]" htmlFor="sign-in-email">
-          {formatPublicCopy("Почта")}
-        </label>
-        <input
+        <Label htmlFor="sign-in-email">{formatPublicCopy("Почта")}</Label>
+        <Input
           id="sign-in-email"
           name="email"
           type="email"
           autoComplete="email"
           defaultValue={defaultEmail || ""}
           placeholder="name@example.com"
-          className={publicInputClassName}
           required
         />
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium text-[var(--foreground)]" htmlFor="sign-in-password">
-          {formatPublicCopy("Пароль")}
-        </label>
-        <input
+        <Label htmlFor="sign-in-password">{formatPublicCopy("Пароль")}</Label>
+        <Input
           id="sign-in-password"
           name="password"
           type="password"
           autoComplete="current-password"
           placeholder={formatPublicCopy("Введите пароль")}
-          className={publicInputClassName}
           required
         />
       </div>
@@ -86,13 +76,9 @@ export function SignInForm({
         </p>
       ) : null}
 
-      <button
-        type="submit"
-        className={`${publicButtonClassName("primary")} w-full justify-center`}
-        disabled={pending}
-      >
+      <Button type="submit" className="w-full justify-center" disabled={pending}>
         {pending ? formatPublicCopy("Входим...") : formatPublicCopy("Войти в платформу")}
-      </button>
+      </Button>
     </form>
   );
 }

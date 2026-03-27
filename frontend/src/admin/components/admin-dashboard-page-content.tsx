@@ -28,7 +28,7 @@ export function AdminDashboardPageContent({
       <WorkspacePageHeader
         eyebrow="Панель"
         title="Операционный дашборд"
-        description="Пользователи, курсы, доступы и демонстрационные оплаты."
+        description="Пользователи, курсы, доступы и оплаты."
         actions={
           <>
             <Button asChild>
@@ -58,7 +58,7 @@ export function AdminDashboardPageContent({
       </div>
 
       <div className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
-        <WorkspacePanel eyebrow="Демо-оплаты" title="Динамика по дням">
+        <WorkspacePanel eyebrow="Оплаты" title="Динамика по дням">
           <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-strong)] p-5">
             {hasRevenueData ? (
               <div className="flex h-52 items-end gap-3">
@@ -86,7 +86,7 @@ export function AdminDashboardPageContent({
               </div>
             ) : (
               <div className="flex min-h-52 items-center justify-center rounded-[var(--radius-md)] border border-dashed border-[var(--border)] bg-[var(--surface)] px-6 py-8 text-center text-sm leading-7 text-[var(--muted)]">
-                За выбранный период еще нет демо-оплат. Как только появятся данные, график заполнится автоматически.
+                За выбранный период еще нет оплат. Как только появятся данные, график заполнится автоматически.
               </div>
             )}
           </div>
@@ -112,11 +112,11 @@ export function AdminDashboardPageContent({
       </div>
 
       <div className="grid gap-6 xl:grid-cols-2">
-        <WorkspacePanel eyebrow="Последние оплаты" title="Свежие демо-заказы">
+        <WorkspacePanel eyebrow="Последние оплаты" title="Свежие заказы">
           <div className="space-y-3">
             {payload.recentOrders.length === 0 ? (
               <div className="rounded-[18px] border border-dashed border-[var(--border)] bg-[var(--surface)] px-4 py-4 text-sm leading-6 text-[var(--muted)]">
-                Демо-оплат пока нет.
+                Оплат пока нет.
               </div>
             ) : (
               payload.recentOrders.map((order) => (

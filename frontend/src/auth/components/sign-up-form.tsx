@@ -4,10 +4,9 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
-import {
-  publicButtonClassName,
-  publicInputClassName,
-} from "@/components/marketing/public-primitives";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { formatPublicCopy } from "@/lib/public-copy";
 import type {
   RegisterFieldErrors,
@@ -77,28 +76,19 @@ export function SignUpForm({
 
   function renderError(fieldName: keyof RegisterFieldErrors) {
     const message = fieldErrors[fieldName];
-
-    if (!message) {
-      return null;
-    }
-
-    return (
-      <p className="text-sm text-red-700">{formatPublicCopy(message)}</p>
-    );
+    if (!message) return null;
+    return <p className="text-sm text-red-700">{formatPublicCopy(message)}</p>;
   }
 
   return (
     <form action={handleSubmit} className="space-y-5">
       <div className="space-y-2">
-        <label className="text-sm font-medium text-[var(--foreground)]" htmlFor="register-name">
-          {formatPublicCopy("Имя")}
-        </label>
-        <input
+        <Label htmlFor="register-name">{formatPublicCopy("Имя")}</Label>
+        <Input
           id="register-name"
           name="name"
           type="text"
           autoComplete="name"
-          className={publicInputClassName}
           placeholder={formatPublicCopy("Как к тебе обращаться")}
           required
         />
@@ -106,16 +96,13 @@ export function SignUpForm({
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium text-[var(--foreground)]" htmlFor="register-email">
-          {formatPublicCopy("Почта")}
-        </label>
-        <input
+        <Label htmlFor="register-email">{formatPublicCopy("Почта")}</Label>
+        <Input
           id="register-email"
           name="email"
           type="email"
           autoComplete="email"
           defaultValue={defaultEmail || ""}
-          className={publicInputClassName}
           placeholder="name@example.com"
           required
         />
@@ -123,15 +110,12 @@ export function SignUpForm({
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium text-[var(--foreground)]" htmlFor="register-password">
-          {formatPublicCopy("Пароль")}
-        </label>
-        <input
+        <Label htmlFor="register-password">{formatPublicCopy("Пароль")}</Label>
+        <Input
           id="register-password"
           name="password"
           type="password"
           autoComplete="new-password"
-          className={publicInputClassName}
           placeholder={formatPublicCopy("Не короче 8 символов")}
           required
         />
@@ -139,15 +123,12 @@ export function SignUpForm({
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium text-[var(--foreground)]" htmlFor="register-password-confirmation">
-          {formatPublicCopy("Повтори пароль")}
-        </label>
-        <input
+        <Label htmlFor="register-password-confirmation">{formatPublicCopy("Повтори пароль")}</Label>
+        <Input
           id="register-password-confirmation"
           name="passwordConfirmation"
           type="password"
           autoComplete="new-password"
-          className={publicInputClassName}
           placeholder={formatPublicCopy("Повтори пароль")}
           required
         />
@@ -160,13 +141,9 @@ export function SignUpForm({
         </p>
       ) : null}
 
-      <button
-        type="submit"
-        className={`${publicButtonClassName("primary")} w-full justify-center`}
-        disabled={pending}
-      >
+      <Button type="submit" className="w-full justify-center" disabled={pending}>
         {pending ? formatPublicCopy("Создаем аккаунт...") : formatPublicCopy("Создать аккаунт")}
-      </button>
+      </Button>
     </form>
   );
 }

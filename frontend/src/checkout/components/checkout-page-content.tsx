@@ -1,9 +1,9 @@
 import { CheckCircle2, CreditCard, ShieldCheck, XCircle } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
 import {
   PublicButton,
   SectionLead,
-  publicButtonClassName,
   publicCardClassName,
   publicIconBoxClassName,
 } from "@/components/marketing/public-primitives";
@@ -149,9 +149,9 @@ export function CheckoutPageContent({
               {payload.courseId ? (
                 <form action={startDemoCheckout}>
                   <input type="hidden" name="courseId" value={payload.courseId} />
-                  <button type="submit" className={publicButtonClassName("primary")}>
+                  <Button type="submit">
                     {formatPublicCopy("Оформить заново")}
-                  </button>
+                  </Button>
                 </form>
               ) : null}
               <PublicButton href="/catalog" tone="secondary">
@@ -175,9 +175,9 @@ export function CheckoutPageContent({
               </p>
               <form action={completeDemoPayment} className="mt-6">
                 <input type="hidden" name="orderId" value={payload.orderId} />
-                <button type="submit" className={`${publicButtonClassName("primary")} w-full justify-center`}>
+                <Button type="submit" className="w-full justify-center">
                   {formatPublicCopy("Подтвердить оплату")}
-                </button>
+                </Button>
               </form>
             </article>
 
@@ -195,9 +195,9 @@ export function CheckoutPageContent({
               </p>
               <form action={failDemoPayment} className="mt-6">
                 <input type="hidden" name="orderId" value={payload.orderId} />
-                <button type="submit" className={`${publicButtonClassName("secondary")} w-full justify-center`}>
+                <Button type="submit" variant="outline" className="w-full justify-center">
                   {formatPublicCopy("Отменить заказ")}
-                </button>
+                </Button>
               </form>
             </article>
           </div>
