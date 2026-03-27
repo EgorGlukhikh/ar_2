@@ -102,29 +102,31 @@ export default async function CourseSettingsPage({
         </div>
 
         <div className="mt-6 grid gap-3 md:grid-cols-3">
-          <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4">
-            <FileText className="h-5 w-5 text-[var(--primary)]" />
-            <p className="mt-3 text-sm font-semibold text-[var(--foreground)]">Карточка курса</p>
+          <div className="rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] p-4">
+            <div className="flex items-center gap-2">
+              <FileText className="h-5 w-5 shrink-0 text-[var(--primary)]" />
+              <p className="text-sm font-semibold text-[var(--foreground)]">Карточка курса</p>
+            </div>
             <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
               Название, описание и адрес страницы.
             </p>
           </div>
 
-          <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4">
-            <Tv className="h-5 w-5 text-[var(--primary)]" />
-            <p className="mt-3 text-sm font-semibold text-[var(--foreground)]">
-              Формат обучения
-            </p>
+          <div className="rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] p-4">
+            <div className="flex items-center gap-2">
+              <Tv className="h-5 w-5 shrink-0 text-[var(--primary)]" />
+              <p className="text-sm font-semibold text-[var(--foreground)]">Формат обучения</p>
+            </div>
             <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
               Записи и материалы или живой поток с вебинарами.
             </p>
           </div>
 
-          <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4">
-            <Sparkles className="h-5 w-5 text-[var(--primary)]" />
-            <p className="mt-3 text-sm font-semibold text-[var(--foreground)]">
-              Публикация
-            </p>
+          <div className="rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] p-4">
+            <div className="flex items-center gap-2">
+              <Sparkles className="h-5 w-5 shrink-0 text-[var(--primary)]" />
+              <p className="text-sm font-semibold text-[var(--foreground)]">Публикация</p>
+            </div>
             <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
               Статус публикации и продажи остаются у администратора.
             </p>

@@ -97,32 +97,40 @@ export function CoursesPageContent({
             >
               <div className="grid gap-3 sm:grid-cols-3">
                 <div className="rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-4">
-                  <LayoutTemplate className="h-4 w-4 text-[var(--primary)]" />
-                  <p className="mt-3 text-sm font-medium text-[var(--foreground)]">Карточка</p>
-                  <p className="mt-1 text-sm leading-6 text-[var(--muted)]">
+                  <div className="flex items-center gap-2">
+                    <LayoutTemplate className="h-4 w-4 shrink-0 text-[var(--primary)]" />
+                    <p className="text-sm font-medium text-[var(--foreground)]">Карточка</p>
+                  </div>
+                  <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
                     Название, описание и статус.
                   </p>
                 </div>
                 <div className="rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-4">
-                  <BookOpen className="h-4 w-4 text-[var(--primary)]" />
-                  <p className="mt-3 text-sm font-medium text-[var(--foreground)]">Программа</p>
-                  <p className="mt-1 text-sm leading-6 text-[var(--muted)]">
+                  <div className="flex items-center gap-2">
+                    <BookOpen className="h-4 w-4 shrink-0 text-[var(--primary)]" />
+                    <p className="text-sm font-medium text-[var(--foreground)]">Программа</p>
+                  </div>
+                  <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
                     Модули, уроки и контент.
                   </p>
                 </div>
                 {payload.isAdminMode ? (
                   <div className="rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-4">
-                    <WalletCards className="h-4 w-4 text-[var(--primary)]" />
-                    <p className="mt-3 text-sm font-medium text-[var(--foreground)]">Доступы</p>
-                    <p className="mt-1 text-sm leading-6 text-[var(--muted)]">
+                    <div className="flex items-center gap-2">
+                      <WalletCards className="h-4 w-4 shrink-0 text-[var(--primary)]" />
+                      <p className="text-sm font-medium text-[var(--foreground)]">Доступы</p>
+                    </div>
+                    <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
                       Цена, выдача курса и сценарии доступа.
                     </p>
                   </div>
                 ) : (
                   <div className="rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-4">
-                    <BookOpen className="h-4 w-4 text-[var(--primary)]" />
-                    <p className="mt-3 text-sm font-medium text-[var(--foreground)]">Наполнение</p>
-                    <p className="mt-1 text-sm leading-6 text-[var(--muted)]">
+                    <div className="flex items-center gap-2">
+                      <BookOpen className="h-4 w-4 shrink-0 text-[var(--primary)]" />
+                      <p className="text-sm font-medium text-[var(--foreground)]">Наполнение</p>
+                    </div>
+                    <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
                       Автор работает только с контентом и структурой курса.
                     </p>
                   </div>
