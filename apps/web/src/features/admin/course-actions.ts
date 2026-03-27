@@ -1175,3 +1175,141 @@ export async function repositionModule(formData: FormData) {
     moduleId: parsed.moduleId,
   };
 }
+
+// ─── Массовый импорт уроков ──────────────────────────────────────────────────
+
+export type ImportLessonsResult =
+  | { ok: true; created: number; courseId: string; moduleId: string }
+  | { ok: false; error: string };
+
+export async function importLessons(formData: FormData): Promise<ImportLessonsResult> {
+  const courseId = getTrimmedValue(formData, "courseId");
+  const moduleId = getTrimmedValue(formData, "moduleId");
+
+  await requireCourseContentEditor(courseId);
+
+  // Найти модуль и последнюю позицию
+  const moduleRecord = await prisma.module.findUnique({
+    where: { id: moduleId },
+    select: {
+      id: true,
+      courseId: true,
+      lessons: { orderBy: { position: "desc" }, take: 1, select: { position: true } },
+    },
+  });
+
+  if (!moduleRecord || moduleRecord.courseId !== courseId) {
+    return { ok: false, error: "Модуль не найден" };
+  }
+
+  let nextPosition = (moduleRecord.lessons[0]?.position ?? 0) + 1;
+
+  // Читаем строки таблицы
+  const titles = formData.getAll("row_title").map(String);
+  const rutubeUrls = formData.getAll("row_rutube").map(String);
+  const audioUrls = formData.getAll("row_audio").map(String);
+  const fileUrls = formData.getAll("row_file").map(String);
+
+  const lessonBlockTx = prisma as typeof prisma & {
+    lessonBlock: { createMany(args: unknown): Promise<{ count: number }> };
+  };
+
+  let created = 0;
+
+  for (let i = 0; i < titles.length; i++) {
+    const title = titles[i]?.trim();
+    const rutube = rutubeUrls[i]?.trim();
+    const audio = audioUrls[i]?.trim();
+    const file = fileUrls[i]?.trim();
+
+    // Пропускаем пустые строки
+    if (!title && !rutube) continue;
+
+    const lesson = await prisma.lesson.create({
+      data: {
+        moduleId,
+        title: title || `Урок ${nextPosition}`,
+        type: LessonType.TEXT,
+        position: nextPosition,
+        isPreview: false,
+        ...(rutube
+          ? {
+              videoSourceType: MediaSourceType.RUTUBE_EMBED,
+              videoUrl: rutube,
+            }
+          : {}),
+      },
+      select: { id: true },
+    });
+
+    const blocks: {
+      lessonId: string;
+      blockKey: string;
+      type: string;
+      position: number;
+      title: string;
+      body: string | null;
+      url: string | null;
+      note: string | null;
+      submissionHint: string | null;
+    }[] = [];
+
+    let blockPos = 0;
+
+    if (rutube) {
+      blockPos++;
+      blocks.push({
+        lessonId: lesson.id,
+        blockKey: `${lesson.id}-video`,
+        type: "VIDEO",
+        position: blockPos,
+        title: "Видео урока",
+        body: "",
+        url: null,
+        note: null,
+        submissionHint: null,
+      });
+    }
+
+    if (audio) {
+      blockPos++;
+      blocks.push({
+        lessonId: lesson.id,
+        blockKey: `${lesson.id}-audio`,
+        type: "AUDIO",
+        position: blockPos,
+        title: "Аудио-версия",
+        body: null,
+        url: audio,
+        note: null,
+        submissionHint: null,
+      });
+    }
+
+    if (file) {
+      blockPos++;
+      blocks.push({
+        lessonId: lesson.id,
+        blockKey: `${lesson.id}-file`,
+        type: "FILE",
+        position: blockPos,
+        title: "Материалы урока",
+        body: null,
+        url: file,
+        note: null,
+        submissionHint: null,
+      });
+    }
+
+    if (blocks.length > 0) {
+      await lessonBlockTx.lessonBlock.createMany({ data: blocks });
+    }
+
+    nextPosition++;
+    created++;
+  }
+
+  refreshAdminRoutes(courseId);
+
+  return { ok: true, created, courseId, moduleId };
+}

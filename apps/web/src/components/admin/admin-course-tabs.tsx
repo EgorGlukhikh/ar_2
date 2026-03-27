@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen, CreditCard, Settings2 } from "lucide-react";
+import { BookOpen, CreditCard, Settings2, Upload } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
@@ -22,6 +22,11 @@ const getCourseTabItems = (courseId: string, showAccessTab: boolean) => [
     href: `/admin/courses/${courseId}/content`,
     label: "Программа",
     icon: BookOpen,
+  },
+  {
+    href: `/admin/courses/${courseId}/import`,
+    label: "Импорт уроков",
+    icon: Upload,
   },
   ...(showAccessTab
     ? [
