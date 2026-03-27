@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import {
   EnrollmentStatus,
   HomeworkSubmissionStatus,
@@ -516,9 +518,11 @@ export default async function CourseLearningPage({
                 <div>
                   {selectedEntry.lesson.lessonImageUrl ? (
                     <div className="mb-4 overflow-hidden rounded-[var(--radius-xl)]">
-                      <img
+                      <Image
                         src={selectedEntry.lesson.lessonImageUrl}
                         alt={selectedEntry.lesson.title}
+                        width={900}
+                        height={260}
                         className="w-full object-cover"
                         style={{ maxHeight: "260px" }}
                       />

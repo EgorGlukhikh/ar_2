@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import { PencilLine, X } from "lucide-react";
+import Image from "next/image";
 import { useState } from "react";
 
 import { SystemInfoItem } from "@/components/system/system-ui";
@@ -155,7 +156,7 @@ export function EditableLessonSettingsCard({
             <SystemInfoItem label="Название урока" value={draftTitle} />
             {draftLessonImageUrl ? (
               <SystemInfoItem label="Обложка" value={
-                <img src={draftLessonImageUrl} alt="Обложка урока" className="mt-1 max-h-24 rounded-lg object-cover" />
+                <Image src={draftLessonImageUrl} alt="Обложка урока" width={300} height={96} className="mt-1 max-h-24 rounded-lg object-cover" />
               } />
             ) : null}
             <SystemInfoItem
