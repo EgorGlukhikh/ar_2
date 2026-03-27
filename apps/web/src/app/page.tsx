@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { getPublicHomePayload } from "@backend/public-home/get-public-home-payload";
 
 import { PublicFooter } from "@/components/marketing/public-footer";
-import { LandingExperience } from "@/components/marketing/landing-experience";
+import { LandingExperience } from "@frontend/landing/components/landing-experience";
 import {
   marketingBody,
   marketingContainerClassName,
