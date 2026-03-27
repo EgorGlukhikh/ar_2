@@ -18,7 +18,6 @@ import {
   SectionLead,
 } from "@/components/marketing/public-primitives";
 import { PageContainer } from "@/components/layout/page-grid";
-import { getPublicCourseCover } from "@/lib/marketing-theme";
 import { formatPublicCopy } from "@/lib/public-copy";
 import { cn } from "@/lib/utils";
 import { roleCopy, trustPoints } from "@shared/public-home/copy";
@@ -185,7 +184,7 @@ export function LandingExperience({ publishedCourses, courses }: PublicHomePaylo
       </section>
 
       {/* ─── TRUST STRIP ───────────────────────────────────────────── */}
-      <section className="border-b border-[var(--border)] bg-[var(--surface-strong)] py-8 md:py-8">
+      <section className="border-b border-[var(--border)] bg-[var(--surface-strong)] py-12 md:py-14">
         <PageContainer>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:items-stretch">
             {trustPoints.map((item, index) => (
@@ -203,13 +202,13 @@ export function LandingExperience({ publishedCourses, courses }: PublicHomePaylo
       </section>
 
       {/* ─── VALUE BENTO ─────────────────────────────────────────────── */}
-      <section className="bg-white py-20" id="value">
+      <section className="bg-white pt-16 pb-20" id="value">
         <PageContainer>
           <div className="space-y-5">
             {/* Top row: 3 large accent cards */}
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
               <MotionReveal variant="up" delay={0}>
-                <article className="flex min-h-[220px] flex-col rounded-[var(--radius-lg)] bg-[var(--foreground)] p-6">
+                <article className="flex min-h-[220px] flex-col rounded-[var(--radius-lg)] border border-white/8 bg-[var(--foreground)] p-6 shadow-[var(--shadow-md)]">
                   <h3 className="text-xl font-semibold leading-7 tracking-[-0.02em] text-white">
                     Войти в профессию без хаоса и месяцев блужданий
                   </h3>
@@ -219,7 +218,7 @@ export function LandingExperience({ publishedCourses, courses }: PublicHomePaylo
                 </article>
               </MotionReveal>
               <MotionReveal variant="up" delay={80}>
-                <article className="flex min-h-[220px] flex-col rounded-[var(--radius-lg)] bg-[var(--surface-strong)] p-6">
+                <article className="flex min-h-[220px] flex-col rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-strong)] p-6 shadow-[var(--shadow-sm)]">
                   <h3 className="text-xl font-semibold leading-7 tracking-[-0.02em] text-[var(--foreground)]">
                     Закрыть конкретный пробел перед сделкой
                   </h3>
@@ -229,7 +228,7 @@ export function LandingExperience({ publishedCourses, courses }: PublicHomePaylo
                 </article>
               </MotionReveal>
               <MotionReveal variant="up" delay={160}>
-                <article className="flex min-h-[220px] flex-col rounded-[var(--radius-lg)] bg-[var(--primary)] p-6">
+                <article className="flex min-h-[220px] flex-col rounded-[var(--radius-lg)] border border-indigo-500/20 bg-[var(--primary)] p-6 shadow-[var(--shadow-brand)]">
                   <h3 className="text-xl font-semibold leading-7 tracking-[-0.02em] text-white">
                     Запустить свой курс и вести учеников в системе
                   </h3>
@@ -298,7 +297,7 @@ export function LandingExperience({ publishedCourses, courses }: PublicHomePaylo
                 <article className="group cursor-default overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-sm)] transition-transform duration-300 hover:scale-[1.03]">
                   <div className="relative h-44 overflow-hidden">
                     <Image
-                      src={getPublicCourseCover(4)}
+                      src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80"
                       alt="Курс в записи"
                       fill
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -319,7 +318,7 @@ export function LandingExperience({ publishedCourses, courses }: PublicHomePaylo
                 <article className="group cursor-default overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-sm)] transition-transform duration-300 hover:scale-[1.03]">
                   <div className="relative h-44 overflow-hidden">
                     <Image
-                      src={getPublicCourseCover(5)}
+                      src="https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?auto=format&fit=crop&w=800&q=80"
                       alt="Онлайн-поток"
                       fill
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
