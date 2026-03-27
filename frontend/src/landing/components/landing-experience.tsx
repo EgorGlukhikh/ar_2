@@ -185,12 +185,12 @@ export function LandingExperience({ publishedCourses, courses }: PublicHomePaylo
       </section>
 
       {/* ─── TRUST STRIP ───────────────────────────────────────────── */}
-      <section className="border-b border-[var(--border)] bg-[var(--surface-strong)] py-10">
+      <section className="border-b border-[var(--border)] bg-[var(--surface-strong)] py-8 md:py-8">
         <PageContainer>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:items-stretch">
             {trustPoints.map((item, index) => (
-              <MotionReveal key={item} variant="up" delay={index * 60}>
-                <div className="flex items-start gap-3 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] p-4 shadow-[var(--shadow-sm)]">
+              <MotionReveal key={item} variant="up" delay={index * 60} className="h-full">
+                <div className="flex h-full cursor-default items-start gap-3 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] p-4 shadow-[var(--shadow-sm)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[var(--shadow-md)]">
                   <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-[var(--primary)]" />
                   <p className="text-sm leading-6 text-[var(--muted)]">
                     <Copy value={item} />
