@@ -184,7 +184,7 @@ export function LandingExperience({ publishedCourses, courses }: PublicHomePaylo
       </section>
 
       {/* ─── TRUST STRIP ───────────────────────────────────────────── */}
-      <section className="border-b border-[var(--border)] bg-[var(--surface-strong)] py-12 md:py-14">
+      <section className="border-b border-[var(--border)] bg-[var(--surface-strong)] py-6 md:py-8">
         <PageContainer>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:items-stretch">
             {trustPoints.map((item, index) => (
@@ -208,7 +208,7 @@ export function LandingExperience({ publishedCourses, courses }: PublicHomePaylo
             {/* Top row: 3 large accent cards */}
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
               <MotionReveal variant="up" delay={0}>
-                <article className="flex min-h-[220px] flex-col rounded-[var(--radius-lg)] border border-white/8 bg-[var(--foreground)] p-6 shadow-[var(--shadow-md)]">
+                <article className="flex min-h-[220px] cursor-default flex-col rounded-[var(--radius-lg)] border border-white/8 bg-[var(--foreground)] p-6 shadow-[var(--shadow-md)] transition-all duration-200 hover:-translate-y-1.5 hover:scale-[1.03]">
                   <h3 className="text-xl font-semibold leading-7 tracking-[-0.02em] text-white">
                     Войти в профессию без хаоса и месяцев блужданий
                   </h3>
@@ -218,7 +218,7 @@ export function LandingExperience({ publishedCourses, courses }: PublicHomePaylo
                 </article>
               </MotionReveal>
               <MotionReveal variant="up" delay={80}>
-                <article className="flex min-h-[220px] flex-col rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-strong)] p-6 shadow-[var(--shadow-sm)]">
+                <article className="flex min-h-[220px] cursor-default flex-col rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-strong)] p-6 shadow-[var(--shadow-sm)] transition-all duration-200 hover:-translate-y-1.5 hover:scale-[1.03]">
                   <h3 className="text-xl font-semibold leading-7 tracking-[-0.02em] text-[var(--foreground)]">
                     Закрыть конкретный пробел перед сделкой
                   </h3>
@@ -228,7 +228,7 @@ export function LandingExperience({ publishedCourses, courses }: PublicHomePaylo
                 </article>
               </MotionReveal>
               <MotionReveal variant="up" delay={160}>
-                <article className="flex min-h-[220px] flex-col rounded-[var(--radius-lg)] border border-indigo-500/20 bg-[var(--primary)] p-6 shadow-[var(--shadow-brand)]">
+                <article className="flex min-h-[220px] cursor-default flex-col rounded-[var(--radius-lg)] border border-indigo-500/20 bg-[var(--primary)] p-6 shadow-[var(--shadow-brand)] transition-all duration-200 hover:-translate-y-1.5 hover:scale-[1.03]">
                   <h3 className="text-xl font-semibold leading-7 tracking-[-0.02em] text-white">
                     Запустить свой курс и вести учеников в системе
                   </h3>
