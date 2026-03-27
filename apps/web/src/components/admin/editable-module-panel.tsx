@@ -60,17 +60,15 @@ export function EditableModulePanel({
             <PencilLine className="mr-2 h-4 w-4" />
             {isEditingModule ? "Скрыть редактирование" : "Редактировать модуль"}
           </Button>
-          {lessonsCount > 0 ? (
-            <Button
-              type="button"
-              variant="outline"
-              className="border-[var(--primary)] text-[var(--primary)] hover:bg-[var(--primary-soft)]"
-              onClick={() => setIsAddingLesson((current) => !current)}
-            >
-              <Plus className="mr-2 h-4 w-4" />
-              {isAddingLesson ? "Скрыть форму урока" : "Добавить урок"}
-            </Button>
-          ) : null}
+          <Button
+            type="button"
+            variant="outline"
+            className="border-[var(--primary)] text-[var(--primary)] hover:bg-[var(--primary-soft)]"
+            onClick={() => setIsAddingLesson((current) => !current)}
+          >
+            <Plus className="mr-2 h-4 w-4" />
+            {isAddingLesson ? "Скрыть форму урока" : "Добавить урок"}
+          </Button>
         </div>
       </div>
 
