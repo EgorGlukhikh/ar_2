@@ -90,6 +90,7 @@ const updateLessonSchema = z.object({
   videoSourceType: z.nativeEnum(MediaSourceType).nullable(),
   videoUrl: z.string().trim().optional(),
   videoPlaybackId: z.string().trim().optional(),
+  lessonImageUrl: z.string().trim().optional(),
 });
 
 const lessonBlockSchema = z.discriminatedUnion("type", [
@@ -118,6 +119,12 @@ const lessonBlockSchema = z.discriminatedUnion("type", [
     title: z.string(),
     body: z.string(),
     submissionHint: z.string().optional().default(""),
+  }),
+  z.object({
+    id: z.string().trim().min(1),
+    type: z.literal("AUDIO"),
+    title: z.string(),
+    url: z.string(),
   }),
 ]);
 
@@ -800,6 +807,7 @@ export async function updateLesson(formData: FormData) {
     videoSourceType: getOptionalValue(formData, "videoSourceType") ?? null,
     videoUrl: getOptionalValue(formData, "videoUrl"),
     videoPlaybackId: getOptionalValue(formData, "videoPlaybackId"),
+    lessonImageUrl: getOptionalValue(formData, "lessonImageUrl"),
   });
 
   const { moduleRecord } = await requireModuleContentEditor(parsed.moduleId);
@@ -828,6 +836,7 @@ export async function updateLesson(formData: FormData) {
         type: resolvedType,
         isPreview: parsed.isPreview,
         accessAfterDays: parsed.accessAfterDays,
+        lessonImageUrl: parsed.lessonImageUrl ?? null,
         content: contentPayload ? contentPayload : Prisma.JsonNull,
         ...(hasVideoFields
           ? {

@@ -2490,6 +2490,7 @@ export const LessonScalarFieldEnum = {
   isPreview: 'isPreview',
   accessAfterDays: 'accessAfterDays',
   content: 'content',
+  lessonImageUrl: 'lessonImageUrl',
   videoSourceType: 'videoSourceType',
   videoUrl: 'videoUrl',
   videoPlaybackId: 'videoPlaybackId',

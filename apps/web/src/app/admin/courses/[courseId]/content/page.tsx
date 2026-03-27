@@ -153,6 +153,7 @@ export default async function CourseContentPage({
               excerpt: true,
               isPreview: true,
               accessAfterDays: true,
+              lessonImageUrl: true,
               content: true,
               videoSourceType: true,
               videoUrl: true,
@@ -285,6 +286,7 @@ export default async function CourseContentPage({
               excerpt={selectedLesson.excerpt ?? ""}
               accessAfterDays={selectedLesson.accessAfterDays ?? null}
               isPreview={selectedLesson.isPreview}
+              lessonImageUrl={selectedLesson.lessonImageUrl ?? ""}
             />
             {hasHomeworkBlock ? (
               <EditableHomeworkRulesCard

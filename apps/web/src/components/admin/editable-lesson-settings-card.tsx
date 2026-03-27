@@ -16,6 +16,7 @@ type EditableLessonSettingsCardProps = {
   excerpt: string;
   accessAfterDays: number | null;
   isPreview: boolean;
+  lessonImageUrl?: string;
   className?: string;
 };
 
@@ -25,6 +26,7 @@ export function EditableLessonSettingsCard({
   excerpt,
   accessAfterDays,
   isPreview,
+  lessonImageUrl,
   className,
 }: EditableLessonSettingsCardProps) {
   const [isEditing, setIsEditing] = useState(false);
@@ -34,12 +36,14 @@ export function EditableLessonSettingsCard({
     accessAfterDays === null ? "" : String(accessAfterDays),
   );
   const [draftIsPreview, setDraftIsPreview] = useState(isPreview);
+  const [draftLessonImageUrl, setDraftLessonImageUrl] = useState(lessonImageUrl ?? "");
 
   function resetDraft() {
     setDraftTitle(title);
     setDraftExcerpt(excerpt);
     setDraftAccessAfterDays(accessAfterDays === null ? "" : String(accessAfterDays));
     setDraftIsPreview(isPreview);
+    setDraftLessonImageUrl(lessonImageUrl ?? "");
     setIsEditing(false);
   }
 
@@ -49,6 +53,7 @@ export function EditableLessonSettingsCard({
       <input type="hidden" name="excerpt" value={draftExcerpt} form={formId} />
       <input type="hidden" name="accessAfterDays" value={draftAccessAfterDays} form={formId} />
       <input type="hidden" name="isPreview" value={draftIsPreview ? "true" : "false"} form={formId} />
+      <input type="hidden" name="lessonImageUrl" value={draftLessonImageUrl} form={formId} />
 
       <div className="flex flex-wrap items-start justify-between gap-4 px-5 py-5">
         <div>
@@ -104,6 +109,16 @@ export function EditableLessonSettingsCard({
               />
             </div>
 
+            <div className="space-y-2">
+              <Label htmlFor="lesson-image-url-editor">Обложка урока (URL)</Label>
+              <Input
+                id="lesson-image-url-editor"
+                value={draftLessonImageUrl}
+                onChange={(event) => setDraftLessonImageUrl(event.target.value)}
+                placeholder="https://..."
+              />
+            </div>
+
             <div className="grid gap-4">
               <div className="space-y-2">
                 <Label htmlFor="lesson-access-after-editor">Открыть через дней</Label>
@@ -138,6 +153,11 @@ export function EditableLessonSettingsCard({
         ) : (
           <div className="grid gap-3">
             <SystemInfoItem label="Название урока" value={draftTitle} />
+            {draftLessonImageUrl ? (
+              <SystemInfoItem label="Обложка" value={
+                <img src={draftLessonImageUrl} alt="Обложка урока" className="mt-1 max-h-24 rounded-lg object-cover" />
+              } />
+            ) : null}
             <SystemInfoItem
               label="Доступ"
               value={draftAccessAfterDays ? `Через ${draftAccessAfterDays} дн.` : "Сразу"}

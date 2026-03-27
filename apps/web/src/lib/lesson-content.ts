@@ -15,7 +15,7 @@ export type LessonAttachment = {
   note?: string;
 };
 
-export type LessonBlockType = "TEXT" | "VIDEO" | "FILE" | "HOMEWORK";
+export type LessonBlockType = "TEXT" | "VIDEO" | "FILE" | "HOMEWORK" | "AUDIO";
 
 export type LessonBlock =
   | {
@@ -44,6 +44,12 @@ export type LessonBlock =
       body: string;
       submissionHint?: string;
       questions?: HomeworkQuestion[];
+    }
+  | {
+      id: string;
+      type: "AUDIO";
+      title: string;
+      url: string;
     };
 
 export type PersistedLessonBlockRecord = {
@@ -78,6 +84,10 @@ function getDefaultTitle(type: LessonBlockType, index: number) {
 
   if (type === "HOMEWORK") {
     return "Домашнее задание";
+  }
+
+  if (type === "AUDIO") {
+    return `Аудио ${index + 1}`;
   }
 
   return `Материал ${index + 1}`;
@@ -134,6 +144,12 @@ function normalizeLessonBlock(block: LessonBlock, index: number): LessonBlock | 
       submissionHint,
       questions,
     };
+  }
+
+  if (block.type === "AUDIO") {
+    const url = block.url.trim();
+    if (!url) return null;
+    return { id, type: "AUDIO" as const, title, url };
   }
 
   const url = block.url.trim();
@@ -213,6 +229,18 @@ function parseStructuredContentBlock(
         body: typeof item.body === "string" ? item.body : "",
         submissionHint: decodedHomeworkPayload.hint,
         questions: decodedHomeworkPayload.questions,
+      },
+      index,
+    );
+  }
+
+  if (item.type === "AUDIO") {
+    return normalizeLessonBlock(
+      {
+        id: normalizeBlockId(item.id, index),
+        type: "AUDIO",
+        title: typeof item.title === "string" ? item.title : "",
+        url: typeof item.url === "string" ? item.url : "",
       },
       index,
     );
@@ -332,6 +360,18 @@ export function extractLessonBlocksFromRecords(
         return;
       }
 
+      if (block.type === "AUDIO") {
+        if (block.url) {
+          normalizedBlocks.push({
+            id: block.blockKey,
+            type: "AUDIO",
+            title: block.title,
+            url: block.url,
+          });
+        }
+        return;
+      }
+
       normalizedBlocks.push({
         id: normalizeBlockId(block.blockKey, index),
         type: "TEXT",
@@ -425,6 +465,15 @@ export function buildLessonContentFromBlocks(
       };
     }
 
+    if (block.type === "AUDIO") {
+      return {
+        id: block.id,
+        type: "AUDIO" as const,
+        title: block.title,
+        url: block.url,
+      };
+    }
+
     return {
       id: block.id,
       type: "FILE" as const,
@@ -451,7 +500,7 @@ export function buildPersistedLessonBlocks(blocks: LessonBlock[]) {
       block.type === "TEXT" || block.type === "VIDEO" || block.type === "HOMEWORK"
         ? block.body ?? ""
         : null,
-    url: block.type === "FILE" ? block.url : null,
+    url: block.type === "FILE" || block.type === "AUDIO" ? block.url : null,
     note: block.type === "FILE" ? block.note ?? "" : null,
     submissionHint:
       block.type === "HOMEWORK"

@@ -1,0 +1,58 @@
+{
+  "courseId": "ЗАМЕНИ_НА_ID_КУРСА",
+  "moduleId": "ЗАМЕНИ_НА_ID_МОДУЛЯ",
+  "lessons": [
+    {
+      "position": 1,
+      "title": "Урок 1 — Название урока",
+      "excerpt": "Краткое описание урока",
+      "lessonImageUrl": "https://...",
+      "blocks": [
+        {
+          "type": "VIDEO",
+          "title": "Видео урока",
+          "rutube": "https://rutube.ru/video/private/f0bd5d947d6a52bac47742331fd05c23/?p=5EOpLa6joSAplcfswBPk7g"
+        },
+        {
+          "type": "AUDIO",
+          "title": "Аудио-версия",
+          "url": "https://disk.yandex.ru/d/ВАШ_ПУТЬ"
+        },
+        {
+          "type": "TEXT",
+          "title": "Транскрипция",
+          "textFile": "texts/lesson-01.txt"
+        },
+        {
+          "type": "FILE",
+          "title": "Презентация",
+          "url": "https://disk.yandex.ru/d/ВАШ_ПУТЬ",
+          "note": "Слайды к уроку"
+        }
+      ]
+    },
+    {
+      "position": 2,
+      "title": "Урок 2 — Название урока",
+      "blocks": [
+        {
+          "type": "VIDEO",
+          "rutube": "https://rutube.ru/video/private/4770992faa1052e59b2a81e664bb8717/?p=2oago8vW-LTbDOQcSCpdmQ"
+        },
+        {
+          "type": "AUDIO",
+          "url": "https://disk.yandex.ru/d/ВАШ_ПУТЬ"
+        },
+        {
+          "type": "TEXT",
+          "textFile": "texts/lesson-02.txt"
+        },
+        {
+          "type": "FILE",
+          "title": "Презентация",
+          "url": "https://disk.yandex.ru/d/ВАШ_ПУТЬ"
+        }
+      ]
+    }
+  ]
+}

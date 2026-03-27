@@ -5,8 +5,9 @@ import {
 } from "@academy/db";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ClipboardCheck, FileText, Link2, Paperclip, PlayCircle } from "lucide-react";
+import { ClipboardCheck, Download, FileText, Headphones, Link2, Paperclip, PlayCircle } from "lucide-react";
 
+import { AudioPlayer } from "@/components/learning/audio-player";
 import { LessonEngagementTracker } from "@/components/learning/lesson-engagement-tracker";
 import { LessonVideoPlayer } from "@/components/learning/lesson-video-player";
 import { Badge } from "@/components/ui/badge";
@@ -53,7 +54,7 @@ function getRenderableBlocks(lesson: {
   content: unknown;
   lessonBlocks?: {
     blockKey: string;
-    type: "TEXT" | "VIDEO" | "FILE" | "HOMEWORK";
+    type: "TEXT" | "VIDEO" | "FILE" | "HOMEWORK" | "AUDIO";
     position: number;
     title: string;
     body: string | null;
@@ -513,6 +514,16 @@ export default async function CourseLearningPage({
                 </div>
 
                 <div>
+                  {selectedEntry.lesson.lessonImageUrl ? (
+                    <div className="mb-4 overflow-hidden rounded-[var(--radius-xl)]">
+                      <img
+                        src={selectedEntry.lesson.lessonImageUrl}
+                        alt={selectedEntry.lesson.title}
+                        className="w-full object-cover"
+                        style={{ maxHeight: "260px" }}
+                      />
+                    </div>
+                  ) : null}
                   <p className="text-sm uppercase tracking-[0.2em] text-[var(--muted)]">
                     {selectedEntry.module.title}
                   </p>
@@ -660,20 +671,46 @@ export default async function CourseLearningPage({
 
                               <a
                                 href={block.url}
+                                download
                                 target="_blank"
                                 rel="noreferrer"
-                                className="mt-5 flex items-center justify-between gap-3 rounded-2xl border border-[var(--border)] bg-white px-4 py-4 transition hover:border-[var(--primary)]"
+                                className="mt-5 flex items-center gap-3 rounded-2xl border border-[var(--border)] bg-white px-4 py-4 transition hover:border-[var(--primary)]"
                               >
-                                <div className="min-w-0">
+                                <Paperclip className="h-5 w-5 shrink-0 text-[var(--primary)]" />
+                                <div className="min-w-0 flex-1">
                                   <p className="font-medium text-[var(--foreground)]">
-                                    Открыть материал
+                                    Скачать материал
                                   </p>
                                   <p className="mt-1 break-all text-sm text-[var(--muted)]">
                                     {block.url}
                                   </p>
                                 </div>
-                                <Badge variant="default">Открыть</Badge>
+                                <Download className="h-4 w-4 shrink-0 text-[var(--muted)]" />
                               </a>
+                            </section>
+                          );
+                        }
+
+                        if (block.type === "AUDIO") {
+                          return (
+                            <section
+                              key={block.id}
+                              className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-6"
+                            >
+                              <div className="mb-4 flex items-start gap-3">
+                                <div className="rounded-2xl bg-white p-3 text-[#6d28d9] shadow-sm">
+                                  <Headphones className="h-5 w-5" />
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                  <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
+                                    Аудио
+                                  </p>
+                                  <h3 className="mt-2 text-xl font-semibold tracking-tight text-[var(--foreground)]">
+                                    {block.title}
+                                  </h3>
+                                </div>
+                              </div>
+                              <AudioPlayer src={block.url} />
                             </section>
                           );
                         }

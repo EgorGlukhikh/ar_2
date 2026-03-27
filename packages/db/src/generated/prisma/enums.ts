@@ -53,7 +53,8 @@ export const LessonContentBlockType = {
   TEXT: 'TEXT',
   VIDEO: 'VIDEO',
   FILE: 'FILE',
-  HOMEWORK: 'HOMEWORK'
+  HOMEWORK: 'HOMEWORK',
+  AUDIO: 'AUDIO'
 } as const
 
 export type LessonContentBlockType = (typeof LessonContentBlockType)[keyof typeof LessonContentBlockType]

@@ -40,6 +40,7 @@ enum LessonContentBlockType {
   VIDEO
   FILE
   HOMEWORK
+  AUDIO
 }
 
 enum MediaSourceType {
@@ -233,6 +234,7 @@ model Lesson {
   isPreview          Boolean          @default(false)
   accessAfterDays    Int?
   content            Json?
+  lessonImageUrl     String?
   videoSourceType    MediaSourceType?
   videoUrl           String?
   videoPlaybackId    String?

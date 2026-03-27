@@ -5,6 +5,7 @@ import {
   ChevronUp,
   ClipboardCheck,
   GripVertical,
+  Headphones,
   Paperclip,
   PencilLine,
   Plus,
@@ -87,6 +88,13 @@ const blockTypeOptions: BlockTypeOption[] = [
     description: "Домашняя работа и правила сдачи для студента.",
     accentClassName: "bg-[#fff0f0] text-[#b42318]",
   },
+  {
+    type: "AUDIO",
+    label: "Аудио",
+    icon: Headphones,
+    description: "Аудио-дорожка или подкаст — ссылка на MP3 или аудио-файл.",
+    accentClassName: "bg-[#f5f0ff] text-[#6d28d9]",
+  },
 ];
 
 function createBlock(type: LessonBlock["type"], order: number): LessonBlock {
@@ -124,6 +132,15 @@ function createBlock(type: LessonBlock["type"], order: number): LessonBlock {
     };
   }
 
+  if (type === "AUDIO") {
+    return {
+      id,
+      type,
+      title: `Аудио ${order}`,
+      url: "",
+    };
+  }
+
   return {
     id,
     type,
@@ -155,6 +172,10 @@ function getBlockPreview(block: LessonBlock) {
 
   if (block.type === "FILE") {
     return block.url.trim() || "Добавь ссылку на материал.";
+  }
+
+  if (block.type === "AUDIO") {
+    return block.url.trim() || "Добавь ссылку на аудио-файл.";
   }
 
   if (block.questions && block.questions.length > 0) {
@@ -731,6 +752,21 @@ export function LessonBlockStudio({
                         placeholder="Что это за файл и когда его открыть"
                       />
                     </div>
+                  </div>
+                ) : null}
+
+                {block.type === "AUDIO" ? (
+                  <div className="space-y-2">
+                    <Label htmlFor={`block-audio-url-${block.id}`}>Ссылка на аудио</Label>
+                    <Input
+                      id={`block-audio-url-${block.id}`}
+                      value={block.url}
+                      onChange={(event) =>
+                        updateBlock(block.id, { url: event.target.value } as Partial<LessonBlock>)
+                      }
+                      placeholder="https://disk.yandex.ru/... или прямая ссылка на MP3"
+                    />
+                    <p className="text-xs text-[var(--muted)]">Поддерживаются прямые ссылки на MP3-файл или аудио-хостинги с поддержкой потоковой передачи.</p>
                   </div>
                 ) : null}
 
