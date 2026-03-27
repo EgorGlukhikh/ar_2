@@ -77,7 +77,7 @@ export default async function AdminEmailsPage() {
         description="Здесь видно, какие письма уже ушли студентам, что стоит в очереди, что было доставлено и какие письма уже открывали."
         actions={
           <>
-            <form action={processEmailQueueNow}>
+            <form action={processEmailQueueNow} className="contents">
               <Button type="submit">Обработать очередь сейчас</Button>
             </form>
             <Button asChild variant="outline">
