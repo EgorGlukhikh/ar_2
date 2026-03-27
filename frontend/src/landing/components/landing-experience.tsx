@@ -186,12 +186,12 @@ export function LandingExperience({ publishedCourses, courses }: PublicHomePaylo
       </section>
 
       {/* ─── TRUST STRIP ───────────────────────────────────────────── */}
-      <section className="border-b border-[var(--border)] bg-white py-8">
+      <section className="border-b border-[var(--border)] bg-white py-10">
         <PageContainer>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {trustPoints.map((item, index) => (
               <MotionReveal key={item} variant="up" delay={index * 60}>
-                <div className="flex items-start gap-3">
+                <div className="flex items-start gap-3 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] p-4 shadow-[var(--shadow-sm)]">
                   <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-[var(--primary)]" />
                   <p className="text-sm leading-6 text-[var(--muted)]">
                     <Copy value={item} />
@@ -206,32 +206,29 @@ export function LandingExperience({ publishedCourses, courses }: PublicHomePaylo
       {/* ─── FOR WHOM ──────────────────────────────────────────────── */}
       <section className="bg-[var(--surface-alt)] py-20" id="value">
         <PageContainer>
-          <div className="grid gap-12 xl:grid-cols-[360px_1fr] xl:items-start">
-            <div>
-              <SectionLead
-                eyebrow="Для кого"
-                title="Один продукт для старта, прокачки и запуска своей программы"
-                text="Каждый сразу узнаёт свой сценарий: начать с базы, закрыть пробел перед сделкой или собрать собственный курс."
-              />
-            </div>
+          <div className="space-y-10">
+            <SectionLead
+              eyebrow="Для кого"
+              title="Один продукт для старта, прокачки и запуска своей программы"
+              text="Каждый сразу узнаёт свой сценарий: начать с базы, закрыть пробел перед сделкой или собрать собственный курс."
+            />
             <div className="grid gap-5 md:grid-cols-3">
               {audienceCards.map((card, index) => {
                 const Icon = card.icon;
                 return (
                   <MotionReveal key={card.title} variant="up" delay={index * 80}>
-                    <article className={cn(publicCardClassName, "h-full")}>
+                    <article className={cn(publicCardClassName, "h-full space-y-4")}>
                       <div className={publicIconBoxClassName}>
                         <Icon className="h-5 w-5" />
                       </div>
-                      <p className="mt-4 text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--muted)]">
-                        <Copy value={card.eyebrow} />
-                      </p>
-                      <h3 className="mt-2 text-lg font-semibold leading-7 tracking-[-0.02em] text-[var(--foreground)]">
-                        <Copy value={card.title} />
-                      </h3>
-                      <p className="mt-2 text-sm leading-7 text-[var(--muted)]">
-                        <Copy value={card.text} />
-                      </p>
+                      <div>
+                        <h3 className="text-lg font-semibold leading-7 tracking-[-0.02em] text-[var(--foreground)]">
+                          <Copy value={card.title} />
+                        </h3>
+                        <p className="mt-2 text-sm leading-7 text-[var(--muted)]">
+                          <Copy value={card.text} />
+                        </p>
+                      </div>
                     </article>
                   </MotionReveal>
                 );
@@ -244,7 +241,7 @@ export function LandingExperience({ publishedCourses, courses }: PublicHomePaylo
       {/* ─── FORMATS ───────────────────────────────────────────────── */}
       <section className="bg-white py-20" id="formats">
         <PageContainer>
-          <div className="grid gap-12 xl:grid-cols-2 xl:items-start">
+          <div className="grid gap-12 xl:grid-cols-2 xl:items-center">
             <SectionLead
               eyebrow="Форматы обучения"
               title="Два формата — один маршрут"

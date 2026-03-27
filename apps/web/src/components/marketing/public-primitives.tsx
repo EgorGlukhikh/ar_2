@@ -48,7 +48,7 @@ export function publicButtonClassName(
   }
 
   if (tone === "ghost") {
-    return "inline-flex min-h-[var(--control-height)] items-center justify-center gap-2 rounded-[var(--control-radius)] border border-white/30 bg-transparent px-5 py-3 text-base font-semibold text-white transition duration-200 hover:bg-white/8 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent [&_svg]:h-[18px] [&_svg]:w-[18px] [&_svg]:text-current";
+    return "inline-flex min-h-[var(--control-height)] items-center justify-center gap-2 rounded-[var(--control-radius)] border-2 border-white/50 bg-transparent px-5 py-3 text-base font-semibold text-white transition duration-200 hover:border-white/70 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent [&_svg]:h-[18px] [&_svg]:w-[18px] [&_svg]:text-current";
   }
 
   if (tone === "dark") {
