@@ -49,7 +49,7 @@ function getLessonBlocks(lesson: {
   content: unknown;
   lessonBlocks?: {
     blockKey: string;
-    type: "TEXT" | "VIDEO" | "FILE" | "HOMEWORK";
+    type: "TEXT" | "VIDEO" | "FILE" | "HOMEWORK" | "AUDIO";
     position: number;
     title: string;
     body: string | null;

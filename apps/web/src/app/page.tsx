@@ -5,14 +5,7 @@ import { getPublicHomePayload } from "@backend/public-home/get-public-home-paylo
 
 import { PublicFooter } from "@/components/marketing/public-footer";
 import { LandingExperience } from "@frontend/landing/components/landing-experience";
-import {
-  marketingBody,
-  marketingContainerClassName,
-  marketingDisplay,
-  marketingFrameClassName,
-  marketingInnerFrameClassName,
-  marketingShellClassName,
-} from "@/lib/marketing-theme";
+import { marketingBody, marketingDisplay } from "@/lib/marketing-theme";
 
 export default async function Home() {
   const session = await auth();
