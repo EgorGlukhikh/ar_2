@@ -5,7 +5,10 @@ import { usePathname } from "next/navigation";
 
 import { cn } from "@/lib/utils";
 
-const navItems = [{ href: "/learning", label: "Мои курсы" }];
+const navItems = [
+  { href: "/learning", label: "Мои курсы" },
+  { href: "/learning/profile", label: "Профиль" },
+];
 
 export function LearningNav() {
   const pathname = usePathname();
