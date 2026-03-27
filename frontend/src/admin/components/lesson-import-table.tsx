@@ -52,7 +52,7 @@ export function LessonImportTable({ courseId, moduleId }: LessonImportTableProps
     setRows((prev) => (prev.length > 1 ? prev.filter((r) => r.id !== id) : prev));
   }
 
-  const filledRows = rows.filter((r) => r.title.trim() || r.rutube.trim());
+  const filledRows = rows.filter((r) => r.title.trim() || r.rutube.trim()).length;
 
   function handleSubmit() {
     const formData = new FormData();
