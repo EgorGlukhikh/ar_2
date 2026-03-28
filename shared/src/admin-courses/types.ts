@@ -3,6 +3,9 @@ export type AdminCoursesListItem = {
   title: string;
   slug: string;
   description: string | null;
+  topic: string | null;
+  tags: string[];
+  coverUrl: string | null;
   statusLabel: string;
   statusVariant: "default" | "neutral" | "success" | "warning";
   moduleCount: number;

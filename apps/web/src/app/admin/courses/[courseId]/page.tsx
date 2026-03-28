@@ -6,8 +6,6 @@ import {
   Sparkles,
   Tv,
 } from "lucide-react";
-
-import { TIMEZONE_OPTIONS } from "@/lib/timezones";
 import { notFound } from "next/navigation";
 
 import { CourseDeliveryFormat, CourseStatus, prisma } from "@academy/db";
@@ -21,6 +19,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { deleteCourse, updateCourse } from "@/features/admin/course-actions";
 import { canEditCourseContent } from "@/lib/admin";
 import { courseStatusLabelMap } from "@/lib/labels";
+import { TIMEZONE_OPTIONS } from "@/lib/timezones";
 import { requireAdminViewer } from "@/lib/viewer";
 
 type CourseSettingsPageProps = {
@@ -49,6 +48,8 @@ export default async function CourseSettingsPage({
       title: true,
       slug: true,
       description: true,
+      topic: true,
+      tags: true,
       status: true,
       deliveryFormat: true,
       scheduleTimezone: true,
@@ -99,8 +100,8 @@ export default async function CourseSettingsPage({
             Основная информация
           </h2>
           <p className="text-sm leading-7 text-[var(--muted)]">
-            Здесь задаются понятные для ученика и автора вещи: название курса, формат обучения,
-            описание и автоматически собранный адрес страницы.
+            Здесь задаются понятные для ученика и автора вещи: название курса, формат
+            обучения, описание, тема и теги, а также автоматически собранный адрес страницы.
           </p>
         </div>
 
@@ -111,7 +112,7 @@ export default async function CourseSettingsPage({
               <p className="text-sm font-semibold text-[var(--foreground)]">Карточка курса</p>
             </div>
             <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
-              Название, описание и адрес страницы.
+              Название, описание, тема и адрес страницы.
             </p>
           </div>
 
@@ -162,6 +163,34 @@ export default async function CourseSettingsPage({
             />
           </div>
 
+          <div className="grid gap-5 md:grid-cols-2">
+            <div className="space-y-2">
+              <Label htmlFor="topic">Тема курса</Label>
+              <Input
+                id="topic"
+                name="topic"
+                defaultValue={course.topic ?? ""}
+                placeholder="Например, Переговоры, документы, безопасность"
+              />
+              <p className="text-sm leading-6 text-[var(--muted)]">
+                Тема нужна для видимой структуры внутри админского каталога.
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="tags">Теги</Label>
+              <Input
+                id="tags"
+                name="tags"
+                defaultValue={course.tags.join(", ")}
+                placeholder="fair housing, privacy, показы"
+              />
+              <p className="text-sm leading-6 text-[var(--muted)]">
+                Пиши через запятую. Теги используются в фильтрах и группировке курсов.
+              </p>
+            </div>
+          </div>
+
           <div className="space-y-2">
             <Label htmlFor="coverUrl">Обложка курса (URL изображения)</Label>
             <Input
@@ -171,7 +200,8 @@ export default async function CourseSettingsPage({
               placeholder="https://images.unsplash.com/photo-..."
             />
             <p className="text-sm leading-6 text-[var(--muted)]">
-              Вставь ссылку на изображение. Рекомендуемое соотношение 16:9. Отображается в шапке курса и каталоге.
+              Вставь ссылку на изображение. Рекомендуемое соотношение 16:9. Отображается
+              в шапке курса и каталоге.
             </p>
           </div>
 
@@ -195,7 +225,9 @@ export default async function CourseSettingsPage({
                 defaultValue={course.scheduleTimezone}
               >
                 {TIMEZONE_OPTIONS.map((tz) => (
-                  <option key={tz.value} value={tz.value}>{tz.label}</option>
+                  <option key={tz.value} value={tz.value}>
+                    {tz.label}
+                  </option>
                 ))}
               </Select>
             </div>
@@ -252,7 +284,7 @@ export default async function CourseSettingsPage({
           </h2>
 
           <div className="mt-5 space-y-3 text-sm leading-7 text-[var(--muted)]">
-            <p>1. Проверь карточку и описание курса.</p>
+            <p>1. Проверь карточку, тему и теги курса.</p>
             <p>2. Открой программу и собери модули, уроки, эфиры, записи и материалы.</p>
             <p>
               3. Формат курса сейчас:{" "}
@@ -263,8 +295,8 @@ export default async function CourseSettingsPage({
             </p>
             {course.deliveryFormat === CourseDeliveryFormat.LIVE_COHORT ? (
               <p className="rounded-[18px] border border-[var(--border)] bg-[var(--surface)] px-4 py-3">
-                Вебинарные занятия фиксируются по выбранному часовому поясу. После эфира в уроке
-                можно оставить запись и материалы.
+                Вебинарные занятия фиксируются по выбранному часовому поясу. После эфира
+                в уроке можно оставить запись и материалы.
               </p>
             ) : null}
           </div>
@@ -310,8 +342,8 @@ export default async function CourseSettingsPage({
               <ShieldAlert className="h-5 w-5" />
             </div>
             <p className="mt-4 text-sm leading-7 text-[var(--muted)]">
-              Вместе с курсом удалятся модули, уроки, прогресс и доступы студентов. Используй
-              этот сценарий только если курс действительно больше не нужен.
+              Вместе с курсом удалятся модули, уроки, прогресс и доступы студентов.
+              Используй этот сценарий только если курс действительно больше не нужен.
             </p>
 
             <div className="mt-8">

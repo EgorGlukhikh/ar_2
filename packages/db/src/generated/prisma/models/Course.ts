@@ -29,6 +29,7 @@ export type CourseMinAggregateOutputType = {
   slug: string | null
   title: string | null
   description: string | null
+  topic: string | null
   status: $Enums.CourseStatus | null
   deliveryFormat: $Enums.CourseDeliveryFormat | null
   scheduleTimezone: string | null
@@ -43,6 +44,7 @@ export type CourseMaxAggregateOutputType = {
   slug: string | null
   title: string | null
   description: string | null
+  topic: string | null
   status: $Enums.CourseStatus | null
   deliveryFormat: $Enums.CourseDeliveryFormat | null
   scheduleTimezone: string | null
@@ -57,6 +59,8 @@ export type CourseCountAggregateOutputType = {
   slug: number
   title: number
   description: number
+  topic: number
+  tags: number
   status: number
   deliveryFormat: number
   scheduleTimezone: number
@@ -73,6 +77,7 @@ export type CourseMinAggregateInputType = {
   slug?: true
   title?: true
   description?: true
+  topic?: true
   status?: true
   deliveryFormat?: true
   scheduleTimezone?: true
@@ -87,6 +92,7 @@ export type CourseMaxAggregateInputType = {
   slug?: true
   title?: true
   description?: true
+  topic?: true
   status?: true
   deliveryFormat?: true
   scheduleTimezone?: true
@@ -101,6 +107,8 @@ export type CourseCountAggregateInputType = {
   slug?: true
   title?: true
   description?: true
+  topic?: true
+  tags?: true
   status?: true
   deliveryFormat?: true
   scheduleTimezone?: true
@@ -188,6 +196,8 @@ export type CourseGroupByOutputType = {
   slug: string
   title: string
   description: string | null
+  topic: string | null
+  tags: string[]
   status: $Enums.CourseStatus
   deliveryFormat: $Enums.CourseDeliveryFormat
   scheduleTimezone: string
@@ -223,6 +233,8 @@ export type CourseWhereInput = {
   slug?: Prisma.StringFilter<"Course"> | string
   title?: Prisma.StringFilter<"Course"> | string
   description?: Prisma.StringNullableFilter<"Course"> | string | null
+  topic?: Prisma.StringNullableFilter<"Course"> | string | null
+  tags?: Prisma.StringNullableListFilter<"Course">
   status?: Prisma.EnumCourseStatusFilter<"Course"> | $Enums.CourseStatus
   deliveryFormat?: Prisma.EnumCourseDeliveryFormatFilter<"Course"> | $Enums.CourseDeliveryFormat
   scheduleTimezone?: Prisma.StringFilter<"Course"> | string
@@ -243,6 +255,8 @@ export type CourseOrderByWithRelationInput = {
   slug?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  topic?: Prisma.SortOrderInput | Prisma.SortOrder
+  tags?: Prisma.SortOrder
   status?: Prisma.SortOrder
   deliveryFormat?: Prisma.SortOrder
   scheduleTimezone?: Prisma.SortOrder
@@ -266,6 +280,8 @@ export type CourseWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.CourseWhereInput | Prisma.CourseWhereInput[]
   title?: Prisma.StringFilter<"Course"> | string
   description?: Prisma.StringNullableFilter<"Course"> | string | null
+  topic?: Prisma.StringNullableFilter<"Course"> | string | null
+  tags?: Prisma.StringNullableListFilter<"Course">
   status?: Prisma.EnumCourseStatusFilter<"Course"> | $Enums.CourseStatus
   deliveryFormat?: Prisma.EnumCourseDeliveryFormatFilter<"Course"> | $Enums.CourseDeliveryFormat
   scheduleTimezone?: Prisma.StringFilter<"Course"> | string
@@ -286,6 +302,8 @@ export type CourseOrderByWithAggregationInput = {
   slug?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  topic?: Prisma.SortOrderInput | Prisma.SortOrder
+  tags?: Prisma.SortOrder
   status?: Prisma.SortOrder
   deliveryFormat?: Prisma.SortOrder
   scheduleTimezone?: Prisma.SortOrder
@@ -306,6 +324,8 @@ export type CourseScalarWhereWithAggregatesInput = {
   slug?: Prisma.StringWithAggregatesFilter<"Course"> | string
   title?: Prisma.StringWithAggregatesFilter<"Course"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"Course"> | string | null
+  topic?: Prisma.StringNullableWithAggregatesFilter<"Course"> | string | null
+  tags?: Prisma.StringNullableListFilter<"Course">
   status?: Prisma.EnumCourseStatusWithAggregatesFilter<"Course"> | $Enums.CourseStatus
   deliveryFormat?: Prisma.EnumCourseDeliveryFormatWithAggregatesFilter<"Course"> | $Enums.CourseDeliveryFormat
   scheduleTimezone?: Prisma.StringWithAggregatesFilter<"Course"> | string
@@ -320,6 +340,8 @@ export type CourseCreateInput = {
   slug: string
   title: string
   description?: string | null
+  topic?: string | null
+  tags?: Prisma.CourseCreatetagsInput | string[]
   status?: $Enums.CourseStatus
   deliveryFormat?: $Enums.CourseDeliveryFormat
   scheduleTimezone?: string
@@ -339,6 +361,8 @@ export type CourseUncheckedCreateInput = {
   slug: string
   title: string
   description?: string | null
+  topic?: string | null
+  tags?: Prisma.CourseCreatetagsInput | string[]
   status?: $Enums.CourseStatus
   deliveryFormat?: $Enums.CourseDeliveryFormat
   scheduleTimezone?: string
@@ -358,6 +382,8 @@ export type CourseUpdateInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.CourseUpdatetagsInput | string[]
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   deliveryFormat?: Prisma.EnumCourseDeliveryFormatFieldUpdateOperationsInput | $Enums.CourseDeliveryFormat
   scheduleTimezone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -377,6 +403,8 @@ export type CourseUncheckedUpdateInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.CourseUpdatetagsInput | string[]
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   deliveryFormat?: Prisma.EnumCourseDeliveryFormatFieldUpdateOperationsInput | $Enums.CourseDeliveryFormat
   scheduleTimezone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -396,6 +424,8 @@ export type CourseCreateManyInput = {
   slug: string
   title: string
   description?: string | null
+  topic?: string | null
+  tags?: Prisma.CourseCreatetagsInput | string[]
   status?: $Enums.CourseStatus
   deliveryFormat?: $Enums.CourseDeliveryFormat
   scheduleTimezone?: string
@@ -410,6 +440,8 @@ export type CourseUpdateManyMutationInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.CourseUpdatetagsInput | string[]
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   deliveryFormat?: Prisma.EnumCourseDeliveryFormatFieldUpdateOperationsInput | $Enums.CourseDeliveryFormat
   scheduleTimezone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -423,6 +455,8 @@ export type CourseUncheckedUpdateManyInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.CourseUpdatetagsInput | string[]
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   deliveryFormat?: Prisma.EnumCourseDeliveryFormatFieldUpdateOperationsInput | $Enums.CourseDeliveryFormat
   scheduleTimezone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -442,11 +476,21 @@ export type CourseOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type StringNullableListFilter<$PrismaModel = never> = {
+  equals?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
+  has?: string | Prisma.StringFieldRefInput<$PrismaModel> | null
+  hasEvery?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
+  hasSome?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
+  isEmpty?: boolean
+}
+
 export type CourseCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   slug?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  topic?: Prisma.SortOrder
+  tags?: Prisma.SortOrder
   status?: Prisma.SortOrder
   deliveryFormat?: Prisma.SortOrder
   scheduleTimezone?: Prisma.SortOrder
@@ -461,6 +505,7 @@ export type CourseMaxOrderByAggregateInput = {
   slug?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  topic?: Prisma.SortOrder
   status?: Prisma.SortOrder
   deliveryFormat?: Prisma.SortOrder
   scheduleTimezone?: Prisma.SortOrder
@@ -475,6 +520,7 @@ export type CourseMinOrderByAggregateInput = {
   slug?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  topic?: Prisma.SortOrder
   status?: Prisma.SortOrder
   deliveryFormat?: Prisma.SortOrder
   scheduleTimezone?: Prisma.SortOrder
@@ -534,6 +580,15 @@ export type CourseUncheckedUpdateManyWithoutAuthorNestedInput = {
   update?: Prisma.CourseUpdateWithWhereUniqueWithoutAuthorInput | Prisma.CourseUpdateWithWhereUniqueWithoutAuthorInput[]
   updateMany?: Prisma.CourseUpdateManyWithWhereWithoutAuthorInput | Prisma.CourseUpdateManyWithWhereWithoutAuthorInput[]
   deleteMany?: Prisma.CourseScalarWhereInput | Prisma.CourseScalarWhereInput[]
+}
+
+export type CourseCreatetagsInput = {
+  set: string[]
+}
+
+export type CourseUpdatetagsInput = {
+  set?: string[]
+  push?: string | string[]
 }
 
 export type EnumCourseStatusFieldUpdateOperationsInput = {
@@ -623,6 +678,8 @@ export type CourseCreateWithoutAuthorInput = {
   slug: string
   title: string
   description?: string | null
+  topic?: string | null
+  tags?: Prisma.CourseCreatetagsInput | string[]
   status?: $Enums.CourseStatus
   deliveryFormat?: $Enums.CourseDeliveryFormat
   scheduleTimezone?: string
@@ -641,6 +698,8 @@ export type CourseUncheckedCreateWithoutAuthorInput = {
   slug: string
   title: string
   description?: string | null
+  topic?: string | null
+  tags?: Prisma.CourseCreatetagsInput | string[]
   status?: $Enums.CourseStatus
   deliveryFormat?: $Enums.CourseDeliveryFormat
   scheduleTimezone?: string
@@ -688,6 +747,8 @@ export type CourseScalarWhereInput = {
   slug?: Prisma.StringFilter<"Course"> | string
   title?: Prisma.StringFilter<"Course"> | string
   description?: Prisma.StringNullableFilter<"Course"> | string | null
+  topic?: Prisma.StringNullableFilter<"Course"> | string | null
+  tags?: Prisma.StringNullableListFilter<"Course">
   status?: Prisma.EnumCourseStatusFilter<"Course"> | $Enums.CourseStatus
   deliveryFormat?: Prisma.EnumCourseDeliveryFormatFilter<"Course"> | $Enums.CourseDeliveryFormat
   scheduleTimezone?: Prisma.StringFilter<"Course"> | string
@@ -702,6 +763,8 @@ export type CourseCreateWithoutModulesInput = {
   slug: string
   title: string
   description?: string | null
+  topic?: string | null
+  tags?: Prisma.CourseCreatetagsInput | string[]
   status?: $Enums.CourseStatus
   deliveryFormat?: $Enums.CourseDeliveryFormat
   scheduleTimezone?: string
@@ -720,6 +783,8 @@ export type CourseUncheckedCreateWithoutModulesInput = {
   slug: string
   title: string
   description?: string | null
+  topic?: string | null
+  tags?: Prisma.CourseCreatetagsInput | string[]
   status?: $Enums.CourseStatus
   deliveryFormat?: $Enums.CourseDeliveryFormat
   scheduleTimezone?: string
@@ -754,6 +819,8 @@ export type CourseUpdateWithoutModulesInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.CourseUpdatetagsInput | string[]
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   deliveryFormat?: Prisma.EnumCourseDeliveryFormatFieldUpdateOperationsInput | $Enums.CourseDeliveryFormat
   scheduleTimezone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -772,6 +839,8 @@ export type CourseUncheckedUpdateWithoutModulesInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.CourseUpdatetagsInput | string[]
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   deliveryFormat?: Prisma.EnumCourseDeliveryFormatFieldUpdateOperationsInput | $Enums.CourseDeliveryFormat
   scheduleTimezone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -790,6 +859,8 @@ export type CourseCreateWithoutEnrollmentsInput = {
   slug: string
   title: string
   description?: string | null
+  topic?: string | null
+  tags?: Prisma.CourseCreatetagsInput | string[]
   status?: $Enums.CourseStatus
   deliveryFormat?: $Enums.CourseDeliveryFormat
   scheduleTimezone?: string
@@ -808,6 +879,8 @@ export type CourseUncheckedCreateWithoutEnrollmentsInput = {
   slug: string
   title: string
   description?: string | null
+  topic?: string | null
+  tags?: Prisma.CourseCreatetagsInput | string[]
   status?: $Enums.CourseStatus
   deliveryFormat?: $Enums.CourseDeliveryFormat
   scheduleTimezone?: string
@@ -842,6 +915,8 @@ export type CourseUpdateWithoutEnrollmentsInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.CourseUpdatetagsInput | string[]
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   deliveryFormat?: Prisma.EnumCourseDeliveryFormatFieldUpdateOperationsInput | $Enums.CourseDeliveryFormat
   scheduleTimezone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -860,6 +935,8 @@ export type CourseUncheckedUpdateWithoutEnrollmentsInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.CourseUpdatetagsInput | string[]
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   deliveryFormat?: Prisma.EnumCourseDeliveryFormatFieldUpdateOperationsInput | $Enums.CourseDeliveryFormat
   scheduleTimezone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -878,6 +955,8 @@ export type CourseCreateWithoutProductsInput = {
   slug: string
   title: string
   description?: string | null
+  topic?: string | null
+  tags?: Prisma.CourseCreatetagsInput | string[]
   status?: $Enums.CourseStatus
   deliveryFormat?: $Enums.CourseDeliveryFormat
   scheduleTimezone?: string
@@ -896,6 +975,8 @@ export type CourseUncheckedCreateWithoutProductsInput = {
   slug: string
   title: string
   description?: string | null
+  topic?: string | null
+  tags?: Prisma.CourseCreatetagsInput | string[]
   status?: $Enums.CourseStatus
   deliveryFormat?: $Enums.CourseDeliveryFormat
   scheduleTimezone?: string
@@ -930,6 +1011,8 @@ export type CourseUpdateWithoutProductsInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.CourseUpdatetagsInput | string[]
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   deliveryFormat?: Prisma.EnumCourseDeliveryFormatFieldUpdateOperationsInput | $Enums.CourseDeliveryFormat
   scheduleTimezone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -948,6 +1031,8 @@ export type CourseUncheckedUpdateWithoutProductsInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.CourseUpdatetagsInput | string[]
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   deliveryFormat?: Prisma.EnumCourseDeliveryFormatFieldUpdateOperationsInput | $Enums.CourseDeliveryFormat
   scheduleTimezone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -966,6 +1051,8 @@ export type CourseCreateWithoutEmailsInput = {
   slug: string
   title: string
   description?: string | null
+  topic?: string | null
+  tags?: Prisma.CourseCreatetagsInput | string[]
   status?: $Enums.CourseStatus
   deliveryFormat?: $Enums.CourseDeliveryFormat
   scheduleTimezone?: string
@@ -984,6 +1071,8 @@ export type CourseUncheckedCreateWithoutEmailsInput = {
   slug: string
   title: string
   description?: string | null
+  topic?: string | null
+  tags?: Prisma.CourseCreatetagsInput | string[]
   status?: $Enums.CourseStatus
   deliveryFormat?: $Enums.CourseDeliveryFormat
   scheduleTimezone?: string
@@ -1018,6 +1107,8 @@ export type CourseUpdateWithoutEmailsInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.CourseUpdatetagsInput | string[]
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   deliveryFormat?: Prisma.EnumCourseDeliveryFormatFieldUpdateOperationsInput | $Enums.CourseDeliveryFormat
   scheduleTimezone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1036,6 +1127,8 @@ export type CourseUncheckedUpdateWithoutEmailsInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.CourseUpdatetagsInput | string[]
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   deliveryFormat?: Prisma.EnumCourseDeliveryFormatFieldUpdateOperationsInput | $Enums.CourseDeliveryFormat
   scheduleTimezone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1054,6 +1147,8 @@ export type CourseCreateWithoutLessonSessionsInput = {
   slug: string
   title: string
   description?: string | null
+  topic?: string | null
+  tags?: Prisma.CourseCreatetagsInput | string[]
   status?: $Enums.CourseStatus
   deliveryFormat?: $Enums.CourseDeliveryFormat
   scheduleTimezone?: string
@@ -1072,6 +1167,8 @@ export type CourseUncheckedCreateWithoutLessonSessionsInput = {
   slug: string
   title: string
   description?: string | null
+  topic?: string | null
+  tags?: Prisma.CourseCreatetagsInput | string[]
   status?: $Enums.CourseStatus
   deliveryFormat?: $Enums.CourseDeliveryFormat
   scheduleTimezone?: string
@@ -1106,6 +1203,8 @@ export type CourseUpdateWithoutLessonSessionsInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.CourseUpdatetagsInput | string[]
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   deliveryFormat?: Prisma.EnumCourseDeliveryFormatFieldUpdateOperationsInput | $Enums.CourseDeliveryFormat
   scheduleTimezone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1124,6 +1223,8 @@ export type CourseUncheckedUpdateWithoutLessonSessionsInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.CourseUpdatetagsInput | string[]
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   deliveryFormat?: Prisma.EnumCourseDeliveryFormatFieldUpdateOperationsInput | $Enums.CourseDeliveryFormat
   scheduleTimezone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1142,6 +1243,8 @@ export type CourseCreateManyAuthorInput = {
   slug: string
   title: string
   description?: string | null
+  topic?: string | null
+  tags?: Prisma.CourseCreatetagsInput | string[]
   status?: $Enums.CourseStatus
   deliveryFormat?: $Enums.CourseDeliveryFormat
   scheduleTimezone?: string
@@ -1155,6 +1258,8 @@ export type CourseUpdateWithoutAuthorInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.CourseUpdatetagsInput | string[]
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   deliveryFormat?: Prisma.EnumCourseDeliveryFormatFieldUpdateOperationsInput | $Enums.CourseDeliveryFormat
   scheduleTimezone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1173,6 +1278,8 @@ export type CourseUncheckedUpdateWithoutAuthorInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.CourseUpdatetagsInput | string[]
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   deliveryFormat?: Prisma.EnumCourseDeliveryFormatFieldUpdateOperationsInput | $Enums.CourseDeliveryFormat
   scheduleTimezone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1191,6 +1298,8 @@ export type CourseUncheckedUpdateManyWithoutAuthorInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.CourseUpdatetagsInput | string[]
   status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
   deliveryFormat?: Prisma.EnumCourseDeliveryFormatFieldUpdateOperationsInput | $Enums.CourseDeliveryFormat
   scheduleTimezone?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1271,6 +1380,8 @@ export type CourseSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   slug?: boolean
   title?: boolean
   description?: boolean
+  topic?: boolean
+  tags?: boolean
   status?: boolean
   deliveryFormat?: boolean
   scheduleTimezone?: boolean
@@ -1292,6 +1403,8 @@ export type CourseSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   slug?: boolean
   title?: boolean
   description?: boolean
+  topic?: boolean
+  tags?: boolean
   status?: boolean
   deliveryFormat?: boolean
   scheduleTimezone?: boolean
@@ -1307,6 +1420,8 @@ export type CourseSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   slug?: boolean
   title?: boolean
   description?: boolean
+  topic?: boolean
+  tags?: boolean
   status?: boolean
   deliveryFormat?: boolean
   scheduleTimezone?: boolean
@@ -1322,6 +1437,8 @@ export type CourseSelectScalar = {
   slug?: boolean
   title?: boolean
   description?: boolean
+  topic?: boolean
+  tags?: boolean
   status?: boolean
   deliveryFormat?: boolean
   scheduleTimezone?: boolean
@@ -1331,7 +1448,7 @@ export type CourseSelectScalar = {
   updatedAt?: boolean
 }
 
-export type CourseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "title" | "description" | "status" | "deliveryFormat" | "scheduleTimezone" | "coverUrl" | "authorId" | "createdAt" | "updatedAt", ExtArgs["result"]["course"]>
+export type CourseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "title" | "description" | "topic" | "tags" | "status" | "deliveryFormat" | "scheduleTimezone" | "coverUrl" | "authorId" | "createdAt" | "updatedAt", ExtArgs["result"]["course"]>
 export type CourseInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   author?: boolean | Prisma.Course$authorArgs<ExtArgs>
   modules?: boolean | Prisma.Course$modulesArgs<ExtArgs>
@@ -1363,6 +1480,8 @@ export type $CoursePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     slug: string
     title: string
     description: string | null
+    topic: string | null
+    tags: string[]
     status: $Enums.CourseStatus
     deliveryFormat: $Enums.CourseDeliveryFormat
     scheduleTimezone: string
@@ -1803,6 +1922,8 @@ export interface CourseFieldRefs {
   readonly slug: Prisma.FieldRef<"Course", 'String'>
   readonly title: Prisma.FieldRef<"Course", 'String'>
   readonly description: Prisma.FieldRef<"Course", 'String'>
+  readonly topic: Prisma.FieldRef<"Course", 'String'>
+  readonly tags: Prisma.FieldRef<"Course", 'String[]'>
   readonly status: Prisma.FieldRef<"Course", 'CourseStatus'>
   readonly deliveryFormat: Prisma.FieldRef<"Course", 'CourseDeliveryFormat'>
   readonly scheduleTimezone: Prisma.FieldRef<"Course", 'String'>

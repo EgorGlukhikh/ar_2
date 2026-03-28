@@ -2456,6 +2456,8 @@ export const CourseScalarFieldEnum = {
   slug: 'slug',
   title: 'title',
   description: 'description',
+  topic: 'topic',
+  tags: 'tags',
   status: 'status',
   deliveryFormat: 'deliveryFormat',
   scheduleTimezone: 'scheduleTimezone',

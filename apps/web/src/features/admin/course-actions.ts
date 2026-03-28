@@ -28,6 +28,8 @@ import {
 const createCourseSchema = z.object({
   title: z.string().trim().min(3),
   description: z.string().trim().optional(),
+  topic: z.string().trim().max(80).optional(),
+  tags: z.array(z.string().trim().min(1).max(32)).max(12).default([]),
   status: z.nativeEnum(CourseStatus),
   deliveryFormat: z.nativeEnum(CourseDeliveryFormat).default(CourseDeliveryFormat.CLASSIC),
   scheduleTimezone: z.string().trim().min(1).default("Europe/Moscow"),
@@ -240,6 +242,23 @@ function getTrimmedValue(formData: FormData, key: string) {
 function getOptionalValue(formData: FormData, key: string) {
   const value = getTrimmedValue(formData, key);
   return value.length > 0 ? value : undefined;
+}
+
+function getTagListValue(formData: FormData, key: string) {
+  const rawValue = getTrimmedValue(formData, key);
+
+  if (!rawValue) {
+    return [];
+  }
+
+  return Array.from(
+    new Set(
+      rawValue
+        .split(/[\n,]/)
+        .map((value) => value.trim().replace(/\s+/g, " "))
+        .filter(Boolean),
+    ),
+  ).slice(0, 12);
 }
 
 function getOptionalNumber(formData: FormData, key: string) {
@@ -573,6 +592,8 @@ export async function createCourse(formData: FormData) {
   const parsed = createCourseSchema.parse({
     title: getTrimmedValue(formData, "title"),
     description: getOptionalValue(formData, "description"),
+    topic: getOptionalValue(formData, "topic"),
+    tags: getTagListValue(formData, "tags"),
     status: getTrimmedValue(formData, "status"),
     deliveryFormat:
       getTrimmedValue(formData, "deliveryFormat") || CourseDeliveryFormat.CLASSIC,
@@ -591,6 +612,8 @@ export async function createCourse(formData: FormData) {
         title: parsed.title,
         slug,
         description: parsed.description,
+        topic: parsed.topic,
+        tags: parsed.tags,
         status: parsed.status,
         deliveryFormat: parsed.deliveryFormat,
         scheduleTimezone: parsed.scheduleTimezone,
@@ -643,6 +666,8 @@ export async function updateCourse(formData: FormData) {
     courseId: getTrimmedValue(formData, "courseId"),
     title: getTrimmedValue(formData, "title"),
     description: getOptionalValue(formData, "description"),
+    topic: getOptionalValue(formData, "topic"),
+    tags: getTagListValue(formData, "tags"),
     status: getTrimmedValue(formData, "status"),
     deliveryFormat:
       getTrimmedValue(formData, "deliveryFormat") || CourseDeliveryFormat.CLASSIC,
@@ -680,6 +705,8 @@ export async function updateCourse(formData: FormData) {
       title: parsed.title,
       slug,
       description: parsed.description,
+      topic: parsed.topic ?? null,
+      tags: parsed.tags,
       deliveryFormat: parsed.deliveryFormat,
       scheduleTimezone: parsed.scheduleTimezone,
       coverUrl: parsed.coverUrl ?? null,

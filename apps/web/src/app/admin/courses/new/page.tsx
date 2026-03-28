@@ -165,6 +165,30 @@ export default async function NewCoursePage() {
           </div>
 
           <div className="space-y-2">
+            <Label htmlFor="topic">Тема курса</Label>
+            <Input
+              id="topic"
+              name="topic"
+              placeholder="Например, Переговоры, безопасность, документы"
+            />
+            <p className="text-sm leading-6 text-[var(--muted)]">
+              Тема помогает команде быстрее находить похожие программы в каталоге курсов.
+            </p>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="tags">Теги</Label>
+            <Input
+              id="tags"
+              name="tags"
+              placeholder="fair housing, privacy, показы"
+            />
+            <p className="text-sm leading-6 text-[var(--muted)]">
+              Пиши через запятую. Теги нужны для фильтров, группировки и будущей навигации.
+            </p>
+          </div>
+
+          <div className="space-y-2">
             <Label htmlFor="scheduleTimezone">Часовой пояс расписания</Label>
             <Select id="scheduleTimezone" name="scheduleTimezone" defaultValue="Europe/Moscow">
               {TIMEZONE_OPTIONS.map((tz) => (
@@ -204,4 +228,3 @@ export default async function NewCoursePage() {
     </section>
   );
 }
-
