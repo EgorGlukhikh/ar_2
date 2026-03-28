@@ -12,6 +12,22 @@ import {
 } from "./auth.repository";
 import { verifyPassword } from "./password";
 
+function normalizeEnvValue(key: "APP_BASE_URL" | "AUTH_URL" | "NEXTAUTH_URL") {
+  const value = process.env[key];
+
+  if (!value) {
+    return undefined;
+  }
+
+  const normalizedValue = value.trim();
+  process.env[key] = normalizedValue;
+  return normalizedValue;
+}
+
+normalizeEnvValue("APP_BASE_URL");
+normalizeEnvValue("AUTH_URL");
+normalizeEnvValue("NEXTAUTH_URL");
+
 const credentialsSchema = z.object({
   email: z.email().trim().toLowerCase(),
   password: z.string().min(5),
