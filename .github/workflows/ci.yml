@@ -1,0 +1,93 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: academy_platform
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d academy_platform"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/academy_platform?schema=public
+      AUTH_SECRET: ci-auth-secret
+      AUTH_TRUST_HOST: "true"
+      AUTH_URL: http://127.0.0.1:3000
+      NEXTAUTH_URL: http://127.0.0.1:3000
+      APP_BASE_URL: http://127.0.0.1:3000
+      ADMIN_EMAIL: test@mail.ru
+      ADMIN_PASSWORD: "123456"
+      EMAIL_PROVIDER: mock
+      EMAIL_FROM_EMAIL: academy@example.com
+      EMAIL_FROM_NAME: Academy CI
+      VIDEO_PROVIDER: mock
+      PAYMENT_PROVIDER: demo
+      CRON_SECRET: ci-cron-secret
+      PORT: 3000
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Prepare database
+        run: |
+          npm run db:generate
+          npm run db:push
+          npm run db:seed
+          npm run db:sync-lesson-blocks
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Build
+        run: npm run build
+
+      - name: Start application
+        run: npm run start --workspace @academy/web > /tmp/academy-web.log 2>&1 &
+
+      - name: Wait for healthcheck
+        run: |
+          for attempt in {1..30}; do
+            if curl -fsS http://127.0.0.1:3000/api/health > /dev/null; then
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "Application failed to become healthy in time."
+          cat /tmp/academy-web.log
+          exit 1
+
+      - name: Smoke critical routes
+        run: npm run smoke
+
+      - name: Print application log on failure
+        if: failure()
+        run: cat /tmp/academy-web.log

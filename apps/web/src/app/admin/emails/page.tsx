@@ -4,7 +4,6 @@ import { Clock3, Eye, MailWarning, Send } from "lucide-react";
 import { EmailKind, EmailStatus, prisma } from "@academy/db";
 
 import { processEmailQueueNow } from "@/features/email/actions";
-import { processDueEmailQueue } from "@/features/email/service";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -33,8 +32,6 @@ function formatDateTime(value?: Date | null) {
 }
 
 export default async function AdminEmailsPage() {
-  await processDueEmailQueue();
-
   const [emailStats, emails] = await Promise.all([
     prisma.emailMessage.groupBy({
       by: ["status"],
@@ -237,4 +234,3 @@ export default async function AdminEmailsPage() {
     </section>
   );
 }
-

@@ -9,7 +9,7 @@ import { z } from "zod";
 import {
   findAccountByProviderAccountId,
   findUserByEmail,
-} from "../../../database/src/auth/auth.repository";
+} from "./auth.repository";
 import { verifyPassword } from "./password";
 
 const credentialsSchema = z.object({
