@@ -32,7 +32,10 @@ function Copy({ value, className }: { value: string; className?: string }) {
 export function LandingCourseCarousel({ courses }: { courses: PublicCourseCard[] }) {
   const [cardsPerView, setCardsPerView] = useState(3);
   const [page, setPage] = useState(0);
-  const [previewCourse, setPreviewCourse] = useState<PublicCourseCard | null>(null);
+  const [previewCourse, setPreviewCourse] = useState<{
+    course: PublicCourseCard;
+    coverIndex: number;
+  } | null>(null);
 
   useEffect(() => {
     function syncCardsPerView() {
@@ -104,7 +107,7 @@ export function LandingCourseCarousel({ courses }: { courses: PublicCourseCard[]
                   className={cn(
                     "min-h-12 min-w-12 rounded-[var(--control-radius)] border px-4 text-sm font-semibold transition",
                     page === index
-                      ? "border-[var(--primary)] bg-[var(--primary)] text-[var(--primary-foreground)] shadow-[var(--shadow-brand)]"
+                      ? "border-[var(--primary)] bg-[var(--primary)] !text-white shadow-[var(--shadow-brand)]"
                       : "border-[var(--border-strong)] bg-[var(--surface)] text-[var(--foreground)] hover:bg-[var(--surface-strong)]",
                   )}
                 >
@@ -143,7 +146,10 @@ export function LandingCourseCarousel({ courses }: { courses: PublicCourseCard[]
 
           return (
             <MotionReveal key={course.id} variant="scale" delay={index * 100} className="h-full">
-              <article className={cn(publicCardClassName, "h-full")}>
+              <article
+                className={cn(publicCardClassName, "h-full cursor-pointer")}
+                onClick={() => setPreviewCourse({ course, coverIndex: index + page * cardsPerView })}
+              >
                 <div className="relative h-56 overflow-hidden rounded-[var(--radius-md)]">
                   <Image
                     src={getPublicCourseCover(index + page * cardsPerView)}
@@ -169,14 +175,10 @@ export function LandingCourseCarousel({ courses }: { courses: PublicCourseCard[]
                   <Copy value={copy?.description ?? course.description} />
                 </p>
 
-                <button
-                  type="button"
-                  onClick={() => setPreviewCourse(course)}
-                  className="mt-5 inline-flex items-center gap-2 text-base font-medium text-[var(--primary)] transition hover:text-[var(--primary-hover)]"
-                >
+                <span className="mt-5 inline-flex items-center gap-2 text-base font-medium text-[var(--primary)] transition hover:text-[var(--primary-hover)]">
                   <Copy value="Смотреть программу" />
                   <ArrowRight className="h-4 w-4" />
-                </button>
+                </span>
               </article>
             </MotionReveal>
           );
@@ -185,11 +187,11 @@ export function LandingCourseCarousel({ courses }: { courses: PublicCourseCard[]
 
       {previewCourse ? (
         <CoursePreviewModal
-          course={previewCourse}
+          course={previewCourse.course}
+          coverSrc={getPublicCourseCover(previewCourse.coverIndex)}
           onClose={() => setPreviewCourse(null)}
         />
       ) : null}
     </div>
   );
 }
-

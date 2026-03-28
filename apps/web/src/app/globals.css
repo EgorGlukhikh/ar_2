@@ -157,36 +157,37 @@ label {
 .aurora-orb {
   position: absolute;
   border-radius: 9999px;
-  filter: blur(80px);
+  filter: blur(60px);
   pointer-events: none;
   will-change: transform;
+  mix-blend-mode: screen;
 }
 
 .aurora-orb-1 {
-  width: 640px;
-  height: 640px;
-  background: radial-gradient(circle, rgba(99, 102, 241, 0.45) 0%, transparent 70%);
-  top: -200px;
-  left: -80px;
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.7) 0%, transparent 65%);
+  top: -160px;
+  left: -40px;
   animation: aurora-drift-1 14s ease-in-out infinite alternate;
 }
 
 .aurora-orb-2 {
-  width: 420px;
-  height: 420px;
-  background: radial-gradient(circle, rgba(139, 92, 246, 0.30) 0%, transparent 70%);
-  top: 20%;
-  right: -60px;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.55) 0%, transparent 65%);
+  top: 15%;
+  right: -30px;
   animation: aurora-drift-2 11s ease-in-out infinite alternate;
   animation-delay: -4s;
 }
 
 .aurora-orb-3 {
-  width: 360px;
-  height: 360px;
-  background: radial-gradient(circle, rgba(167, 139, 250, 0.25) 0%, transparent 70%);
-  bottom: -80px;
-  left: 38%;
+  width: 440px;
+  height: 440px;
+  background: radial-gradient(circle, rgba(167, 139, 250, 0.5) 0%, transparent 65%);
+  bottom: -60px;
+  left: 35%;
   animation: aurora-drift-3 16s ease-in-out infinite alternate;
   animation-delay: -8s;
 }

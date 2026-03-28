@@ -1,6 +1,7 @@
 "use client";
 
 import { BookOpen, Clock, User, X } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect } from "react";
 
@@ -8,10 +9,11 @@ import type { PublicCourseCard } from "@shared/public-home/types";
 
 type CoursePreviewModalProps = {
   course: PublicCourseCard;
+  coverSrc?: string;
   onClose: () => void;
 };
 
-export function CoursePreviewModal({ course, onClose }: CoursePreviewModalProps) {
+export function CoursePreviewModal({ course, coverSrc, onClose }: CoursePreviewModalProps) {
   const durationHours = Math.max(1, Math.ceil((course.lessonCount * 15) / 60));
 
   useEffect(() => {
@@ -38,6 +40,13 @@ export function CoursePreviewModal({ course, onClose }: CoursePreviewModalProps)
 
       {/* Modal panel */}
       <div className="relative z-10 flex max-h-[92dvh] w-full max-w-xl flex-col rounded-t-[28px] bg-white shadow-2xl sm:rounded-[28px]">
+
+        {/* ── Cover image ── */}
+        {coverSrc ? (
+          <div className="relative h-48 w-full shrink-0 overflow-hidden rounded-t-[28px] sm:rounded-t-[28px]">
+            <Image src={coverSrc} alt={course.title} fill className="object-cover" />
+          </div>
+        ) : null}
 
         {/* ── Header ── */}
         <div className="flex items-start justify-between gap-4 px-6 pt-6 pb-4">
@@ -123,7 +132,7 @@ export function CoursePreviewModal({ course, onClose }: CoursePreviewModalProps)
           <Link
             href="/sign-up"
             onClick={onClose}
-            className="flex w-full items-center justify-center rounded-[var(--control-radius)] bg-[var(--primary)] py-3.5 text-sm font-semibold text-[var(--primary-foreground)] shadow-[var(--shadow-brand)] transition hover:opacity-90 active:scale-[0.98]"
+            className="flex w-full items-center justify-center rounded-[var(--control-radius)] bg-[var(--primary)] py-3.5 text-sm font-semibold !text-white shadow-[var(--shadow-brand)] transition hover:opacity-90 active:scale-[0.98]"
           >
             Получить доступ
           </Link>

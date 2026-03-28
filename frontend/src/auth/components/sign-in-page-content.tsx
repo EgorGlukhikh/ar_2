@@ -54,7 +54,7 @@ export function SignInPageContent({
                 className={cn(
                   "min-h-[40px] rounded-[10px] px-5 text-sm font-semibold transition duration-200",
                   activeTab === tab.id
-                    ? "bg-[var(--primary)] text-[var(--primary-foreground)] shadow-[var(--shadow-brand)]"
+                    ? "bg-[var(--primary)] !text-white shadow-[var(--shadow-brand)]"
                     : "text-[var(--foreground)] hover:bg-[var(--surface)]",
                 )}
               >
@@ -130,4 +130,3 @@ export function SignInPageContent({
     </AuthShell>
   );
 }
-

@@ -35,7 +35,7 @@ export function AuthMethodButton({
       className={cn(
         "group flex min-h-[72px] w-full items-center justify-between gap-4 rounded-[var(--radius-lg)] border px-5 py-4 text-left transition",
         tone === "primary" &&
-          "border-[var(--primary)] bg-[var(--primary)] text-[var(--primary-foreground)] shadow-[var(--shadow-brand)]",
+          "border-[var(--primary)] bg-[var(--primary)] !text-white shadow-[var(--shadow-brand)]",
         tone === "secondary" &&
           "border-[var(--border-strong)] bg-[var(--surface)] text-[var(--foreground)] hover:bg-[var(--surface-strong)]",
         isYandex &&
