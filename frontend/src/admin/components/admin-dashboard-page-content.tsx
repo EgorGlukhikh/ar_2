@@ -1,16 +1,53 @@
 ﻿import Link from "next/link";
-import { BarChart3, CreditCard, Users } from "lucide-react";
+import { BarChart3, BookOpen, CreditCard, TrendingUp, UserCheck, Users } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   WorkspacePageHeader,
   WorkspacePanel,
-  WorkspaceStatCard,
 } from "@/components/workspace/workspace-primitives";
 import type { AdminDashboardPayload } from "@shared/admin-dashboard/types";
+import { AdminStatCard } from "./admin-stat-card";
 
-const dashboardIcons = [Users, Users, BarChart3, Users, CreditCard, CreditCard];
+const STAT_CONFIG = [
+  {
+    icon: Users,
+    href: "/admin/users",
+    accentColor: "#4f46e5",
+    accentBg: "#eef2ff",
+  },
+  {
+    icon: UserCheck,
+    href: "/admin/users",
+    accentColor: "#7c3aed",
+    accentBg: "#f5f3ff",
+  },
+  {
+    icon: BookOpen,
+    href: "/admin/courses",
+    accentColor: "#059669",
+    accentBg: "#ecfdf5",
+  },
+  {
+    icon: Users,
+    href: "/admin/users",
+    accentColor: "#d97706",
+    accentBg: "#fffbeb",
+  },
+  {
+    icon: CreditCard,
+    href: null,
+    accentColor: "#ea580c",
+    accentBg: "#fff7ed",
+  },
+  {
+    icon: TrendingUp,
+    href: null,
+    accentColor: "#0d9488",
+    accentBg: "#f0fdfa",
+  },
+] as const;
 
 export function AdminDashboardPageContent({
   payload,
@@ -43,15 +80,23 @@ export function AdminDashboardPageContent({
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {payload.stats.map((item, index) => {
-          const Icon = dashboardIcons[index] ?? BarChart3;
+          const cfg = STAT_CONFIG[index] ?? {
+            icon: BarChart3,
+            href: null,
+            accentColor: "var(--primary)",
+            accentBg: "var(--primary-soft)",
+          };
 
           return (
-            <WorkspaceStatCard
+            <AdminStatCard
               key={item.label}
               label={item.label}
               value={item.value}
               hint={item.hint}
-              icon={Icon}
+              icon={cfg.icon}
+              href={cfg.href}
+              accentColor={cfg.accentColor}
+              accentBg={cfg.accentBg}
             />
           );
         })}
