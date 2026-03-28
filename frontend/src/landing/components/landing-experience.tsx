@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
+  ArrowRight,
   BookOpen,
   ClipboardCheck,
   GraduationCap,
@@ -38,10 +39,12 @@ function StatCounter({
   target,
   label,
   formatValue,
+  valueLabel,
 }: {
   target: number;
   label: string;
   formatValue?: (n: number) => string;
+  valueLabel?: string;
 }) {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
@@ -73,10 +76,13 @@ function StatCounter({
   }, [target]);
 
   return (
-    <div ref={ref}>
-      <p className="text-2xl font-bold text-white">
+    <div ref={ref} className="min-w-0">
+      <p className="text-[1.7rem] font-bold leading-none text-white sm:text-2xl">
         {formatValue ? formatValue(count) : count}
       </p>
+      {valueLabel ? (
+        <p className="mt-1 text-sm font-semibold text-white/88">{valueLabel}</p>
+      ) : null}
       <p className="mt-1 text-[12px] leading-5 text-white/44">{label}</p>
     </div>
   );
@@ -88,6 +94,14 @@ function programsLabel(count: number) {
   if (mod10 === 1 && mod100 !== 11) return `${count} программа`;
   if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return `${count} программы`;
   return `${count} программ`;
+}
+
+function programWord(count: number) {
+  const mod10 = count % 10;
+  const mod100 = count % 100;
+  if (mod10 === 1 && mod100 !== 11) return "программа";
+  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return "программы";
+  return "программ";
 }
 
 export function LandingExperience({ publishedCourses, courses }: PublicHomePayload) {
@@ -175,11 +189,11 @@ export function LandingExperience({ publishedCourses, courses }: PublicHomePaylo
                   </PublicButton>
                 </div>
 
-                <div className="grid grid-cols-3 gap-4 border-t border-white/10 pt-8">
+                <div className="grid grid-cols-3 gap-3 border-t border-white/10 pt-8 text-center sm:gap-4 sm:text-left">
                   <StatCounter
                     target={publishedCourses}
                     label="в каталоге"
-                    formatValue={programsLabel}
+                    valueLabel={programWord(publishedCourses)}
                   />
                   <StatCounter
                     target={2}
@@ -194,8 +208,13 @@ export function LandingExperience({ publishedCourses, courses }: PublicHomePaylo
               </div>
 
               {/* Right: feature card */}
-              <MotionReveal variant="right" immediate delay={120}>
-                <div className={cn(publicGradientCardClassName)}>
+              <MotionReveal
+                variant="right"
+                immediate
+                delay={120}
+                className="mx-auto h-full w-full max-w-[640px] xl:mx-0"
+              >
+                <div className={cn(publicGradientCardClassName, "h-full")}>
                   <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/60">
                     Что получает студент
                   </p>
@@ -251,16 +270,16 @@ export function LandingExperience({ publishedCourses, courses }: PublicHomePaylo
           { Icon: LayoutList,     text: trustPoints[3] },
         ] as const;
         return (
-          <section className="border-b border-[var(--border)] bg-[var(--surface-strong)] py-8 md:py-10">
-            <PageContainer>
-              <div className="mx-auto grid max-w-5xl grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:items-stretch">
+          <section className="border-b border-[var(--border)] bg-[var(--surface-strong)] py-10 md:py-14">
+            <PageContainer className="flex justify-center">
+              <div className="grid w-full max-w-5xl grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 {trustCards.map(({ Icon, text }, index) => (
                   <MotionReveal key={text} variant="up" delay={index * 60} className="h-full">
-                    <div className="flex h-full cursor-default flex-col items-center text-center gap-4 rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow-sm)] transition duration-200 hover:-translate-y-1 hover:shadow-[var(--shadow-md)]">
+                    <div className="flex min-h-[188px] h-full cursor-default flex-col items-center justify-start gap-4 rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-5 text-center shadow-[var(--shadow-sm)] transition duration-200 hover:-translate-y-1 hover:shadow-[var(--shadow-md)]">
                       <div className="flex h-11 w-11 items-center justify-center rounded-[var(--radius-md)] bg-[var(--primary-soft)]">
                         <Icon className="h-5 w-5 text-[var(--primary)]" />
                       </div>
-                      <p className="text-sm leading-6 text-[var(--foreground)]">
+                      <p className="max-w-[22ch] text-sm leading-6 text-[var(--foreground)]">
                         <Copy value={text} />
                       </p>
                     </div>
@@ -363,9 +382,19 @@ export function LandingExperience({ publishedCourses, courses }: PublicHomePaylo
             />
 
             {/* Right: 2 image cards */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between md:hidden">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
+                  <Copy value="Смахни вбок" />
+                </p>
+                <span className="inline-flex items-center gap-1 text-sm font-semibold text-[var(--primary)] animate-[pulse_1.8s_ease-in-out_infinite]">
+                  <Copy value="Ещё форматы" />
+                  <ArrowRight className="h-4 w-4" />
+                </span>
+              </div>
+              <div className="-mx-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:mx-0 md:grid md:grid-cols-2 md:overflow-visible md:px-0 md:pb-0">
               <MotionReveal variant="up" delay={80}>
-                <article className="group cursor-default overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-sm)] transition-transform duration-300 hover:scale-[1.03]">
+                <article className="group flex h-full min-w-[78vw] max-w-[78vw] snap-center flex-col overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-sm)] transition-transform duration-300 hover:scale-[1.03] sm:min-w-[420px] sm:max-w-[420px] md:min-w-0 md:max-w-none">
                   <div className="relative h-44 overflow-hidden">
                     <Image
                       src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80"
@@ -375,7 +404,7 @@ export function LandingExperience({ publishedCourses, courses }: PublicHomePaylo
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                   </div>
-                  <div className="p-4">
+                  <div className="flex flex-1 flex-col p-4">
                     <h3 className="text-base font-semibold leading-6 text-[var(--foreground)]">
                       Курс в записи
                     </h3>
@@ -386,7 +415,7 @@ export function LandingExperience({ publishedCourses, courses }: PublicHomePaylo
                 </article>
               </MotionReveal>
               <MotionReveal variant="up" delay={140}>
-                <article className="group cursor-default overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-sm)] transition-transform duration-300 hover:scale-[1.03]">
+                <article className="group flex h-full min-w-[78vw] max-w-[78vw] snap-center flex-col overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-sm)] transition-transform duration-300 hover:scale-[1.03] sm:min-w-[420px] sm:max-w-[420px] md:min-w-0 md:max-w-none">
                   <div className="relative h-44 overflow-hidden">
                     <Image
                       src="https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?auto=format&fit=crop&w=800&q=80"
@@ -396,7 +425,7 @@ export function LandingExperience({ publishedCourses, courses }: PublicHomePaylo
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                   </div>
-                  <div className="p-4">
+                  <div className="flex flex-1 flex-col p-4">
                     <h3 className="text-base font-semibold leading-6 text-[var(--foreground)]">
                       Онлайн-поток
                     </h3>
@@ -406,6 +435,7 @@ export function LandingExperience({ publishedCourses, courses }: PublicHomePaylo
                   </div>
                 </article>
               </MotionReveal>
+            </div>
             </div>
           </div>
         </PageContainer>
