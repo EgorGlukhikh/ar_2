@@ -253,7 +253,7 @@ export function LandingExperience({ publishedCourses, courses }: PublicHomePaylo
         return (
           <section className="border-b border-[var(--border)] bg-[var(--surface-strong)] py-8 md:py-10">
             <PageContainer>
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:items-stretch">
+              <div className="mx-auto grid max-w-5xl grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:items-stretch">
                 {trustCards.map(({ Icon, text }, index) => (
                   <MotionReveal key={text} variant="up" delay={index * 60} className="h-full">
                     <div className="flex h-full cursor-default flex-col items-center text-center gap-4 rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow-sm)] transition duration-200 hover:-translate-y-1 hover:shadow-[var(--shadow-md)]">
