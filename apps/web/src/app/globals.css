@@ -153,6 +153,69 @@ label {
   transform: translate3d(0, 18px, 0) scale(0.985);
 }
 
+/* ─── AURORA ORB ANIMATION ────────────────────────────────────────── */
+.aurora-orb {
+  position: absolute;
+  border-radius: 9999px;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.aurora-orb-1 {
+  width: 640px;
+  height: 640px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.32) 0%, transparent 70%);
+  top: -200px;
+  left: -80px;
+  animation: aurora-drift-1 14s ease-in-out infinite alternate;
+}
+
+.aurora-orb-2 {
+  width: 420px;
+  height: 420px;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.22) 0%, transparent 70%);
+  top: 20%;
+  right: -60px;
+  animation: aurora-drift-2 11s ease-in-out infinite alternate;
+  animation-delay: -4s;
+}
+
+.aurora-orb-3 {
+  width: 360px;
+  height: 360px;
+  background: radial-gradient(circle, rgba(167, 139, 250, 0.18) 0%, transparent 70%);
+  bottom: -80px;
+  left: 38%;
+  animation: aurora-drift-3 16s ease-in-out infinite alternate;
+  animation-delay: -8s;
+}
+
+@keyframes aurora-drift-1 {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(110px, 70px) scale(1.12); }
+}
+
+@keyframes aurora-drift-2 {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(-90px, 55px) scale(0.88); }
+}
+
+@keyframes aurora-drift-3 {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(55px, -50px) scale(1.08); }
+}
+
+/* ─── FLOAT ANIMATIONS (CTA cards) ───────────────────────────────── */
+@keyframes float-up {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-10px); }
+}
+
+@keyframes float-down {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(10px); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -174,5 +237,9 @@ label {
     filter: none !important;
     transform: none !important;
     transition: none !important;
+  }
+
+  .aurora-orb {
+    display: none;
   }
 }

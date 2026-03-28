@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -31,6 +32,54 @@ import { LandingCourseCarousel } from "./landing-course-carousel";
 
 function Copy({ value, className }: { value: string; className?: string }) {
   return <span className={className}>{formatPublicCopy(value)}</span>;
+}
+
+function StatCounter({
+  target,
+  label,
+  formatValue,
+}: {
+  target: number;
+  label: string;
+  formatValue?: (n: number) => string;
+}) {
+  const [count, setCount] = useState(0);
+  const ref = useRef<HTMLDivElement>(null);
+  const started = useRef(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !started.current) {
+          started.current = true;
+          const steps = 40;
+          const duration = 1000;
+          let step = 0;
+          const timer = setInterval(() => {
+            step++;
+            const progress = step / steps;
+            const eased = 1 - Math.pow(1 - progress, 3);
+            setCount(Math.round(eased * target));
+            if (step >= steps) clearInterval(timer);
+          }, duration / steps);
+        }
+      },
+      { threshold: 0.6 },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [target]);
+
+  return (
+    <div ref={ref}>
+      <p className="text-2xl font-bold text-white">
+        {formatValue ? formatValue(count) : count}
+      </p>
+      <p className="mt-1 text-[12px] leading-5 text-white/44">{label}</p>
+    </div>
+  );
 }
 
 function programsLabel(count: number) {
@@ -93,8 +142,12 @@ export function LandingExperience({ publishedCourses, courses }: PublicHomePaylo
       </header>
 
       {/* ─── HERO ──────────────────────────────────────────────────── */}
-      <section className="bg-[var(--foreground)] pb-20 pt-16">
-        <PageContainer>
+      <section className="relative overflow-hidden bg-[var(--foreground)] pb-20 pt-16">
+        {/* Aurora orbs */}
+        <div className="aurora-orb aurora-orb-1" aria-hidden />
+        <div className="aurora-orb aurora-orb-2" aria-hidden />
+        <div className="aurora-orb aurora-orb-3" aria-hidden />
+        <PageContainer className="relative z-10">
           <MotionReveal variant="soft" immediate>
             <div className="grid gap-12 xl:grid-cols-2 xl:items-center">
 
@@ -123,18 +176,20 @@ export function LandingExperience({ publishedCourses, courses }: PublicHomePaylo
                 </div>
 
                 <div className="grid grid-cols-3 gap-4 border-t border-white/10 pt-8">
-                  <div>
-                    <p className="text-2xl font-bold text-white">{programsLabel(publishedCourses)}</p>
-                    <p className="mt-1 text-[12px] leading-5 text-white/44">в каталоге</p>
-                  </div>
-                  <div>
-                    <p className="text-2xl font-bold text-white">2</p>
-                    <p className="mt-1 text-[12px] leading-5 text-white/44">формата обучения</p>
-                  </div>
-                  <div>
-                    <p className="text-2xl font-bold text-white">100%</p>
-                    <p className="mt-1 text-[12px] leading-5 text-white/44">материалов внутри</p>
-                  </div>
+                  <StatCounter
+                    target={publishedCourses}
+                    label="в каталоге"
+                    formatValue={programsLabel}
+                  />
+                  <StatCounter
+                    target={2}
+                    label="формата обучения"
+                  />
+                  <StatCounter
+                    target={100}
+                    label="материалов внутри"
+                    formatValue={(n) => `${n}%`}
+                  />
                 </div>
               </div>
 
@@ -201,7 +256,7 @@ export function LandingExperience({ publishedCourses, courses }: PublicHomePaylo
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:items-stretch">
                 {trustCards.map(({ Icon, text }, index) => (
                   <MotionReveal key={text} variant="up" delay={index * 60} className="h-full">
-                    <div className="flex h-full cursor-default flex-col gap-4 rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow-sm)] transition duration-200 hover:-translate-y-1 hover:shadow-[var(--shadow-md)]">
+                    <div className="flex h-full cursor-default flex-col items-center text-center gap-4 rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow-sm)] transition duration-200 hover:-translate-y-1 hover:shadow-[var(--shadow-md)]">
                       <div className="flex h-11 w-11 items-center justify-center rounded-[var(--radius-md)] bg-[var(--primary-soft)]">
                         <Icon className="h-5 w-5 text-[var(--primary)]" />
                       </div>
@@ -424,13 +479,17 @@ export function LandingExperience({ publishedCourses, courses }: PublicHomePaylo
 
               {/* Флоатящие карточки — левая сторона */}
               <div className="pointer-events-none absolute left-8 top-1/2 hidden -translate-y-1/2 space-y-3 xl:block" aria-hidden>
-                <div className="-rotate-6 rounded-[var(--radius-md)] bg-white px-4 py-3 text-left shadow-[var(--shadow-md)]">
-                  <p className="text-[11px] font-medium text-[var(--muted)]">Следующий урок</p>
-                  <p className="mt-1 text-sm font-semibold text-[var(--foreground)]">Работа с продавцом</p>
+                <div className="animate-[float-up_6s_ease-in-out_infinite]">
+                  <div className="-rotate-6 rounded-[var(--radius-md)] bg-white px-4 py-3 text-left shadow-[var(--shadow-md)]">
+                    <p className="text-[11px] font-medium text-[var(--muted)]">Следующий урок</p>
+                    <p className="mt-1 text-sm font-semibold text-[var(--foreground)]">Работа с продавцом</p>
+                  </div>
                 </div>
-                <div className="rotate-3 rounded-[var(--radius-md)] bg-white px-4 py-3 text-left shadow-[var(--shadow-md)]">
-                  <p className="text-2xl font-bold text-[var(--primary)]">75%</p>
-                  <p className="text-[11px] font-medium text-[var(--muted)]">Пройдено</p>
+                <div className="animate-[float-down_5s_ease-in-out_infinite_-2s]">
+                  <div className="rotate-3 rounded-[var(--radius-md)] bg-white px-4 py-3 text-left shadow-[var(--shadow-md)]">
+                    <p className="text-2xl font-bold text-[var(--primary)]">75%</p>
+                    <p className="text-[11px] font-medium text-[var(--muted)]">Пройдено</p>
+                  </div>
                 </div>
               </div>
 
@@ -451,13 +510,17 @@ export function LandingExperience({ publishedCourses, courses }: PublicHomePaylo
 
               {/* Флоатящие карточки — правая сторона */}
               <div className="pointer-events-none absolute right-8 top-1/2 hidden -translate-y-1/2 space-y-3 xl:block" aria-hidden>
-                <div className="rotate-6 rounded-[var(--radius-md)] bg-white px-4 py-3 text-left shadow-[var(--shadow-md)]">
-                  <p className="text-2xl font-bold text-[var(--foreground)]">{programsLabel(publishedCourses)}</p>
-                  <p className="text-[11px] font-medium text-[var(--muted)]">в каталоге</p>
+                <div className="animate-[float-down_7s_ease-in-out_infinite_-3s]">
+                  <div className="rotate-6 rounded-[var(--radius-md)] bg-white px-4 py-3 text-left shadow-[var(--shadow-md)]">
+                    <p className="text-2xl font-bold text-[var(--foreground)]">{programsLabel(publishedCourses)}</p>
+                    <p className="text-[11px] font-medium text-[var(--muted)]">в каталоге</p>
+                  </div>
                 </div>
-                <div className="-rotate-3 rounded-[var(--radius-md)] bg-white px-4 py-3 text-left shadow-[var(--shadow-md)]">
-                  <p className="text-[11px] font-medium text-[var(--muted)]">Средний прогресс</p>
-                  <p className="mt-1 text-sm font-semibold text-[var(--foreground)]">+15% за неделю</p>
+                <div className="animate-[float-up_5.5s_ease-in-out_infinite_-1s]">
+                  <div className="-rotate-3 rounded-[var(--radius-md)] bg-white px-4 py-3 text-left shadow-[var(--shadow-md)]">
+                    <p className="text-[11px] font-medium text-[var(--muted)]">Средний прогресс</p>
+                    <p className="mt-1 text-sm font-semibold text-[var(--foreground)]">+15% за неделю</p>
+                  </div>
                 </div>
               </div>
 

@@ -83,7 +83,7 @@ export async function getPublicHomePayload(): Promise<PublicHomePayload> {
       description: course.description ?? "",
       lessonCount,
       priceLabel,
-      authorName: course.author?.name ?? "Академия риэлторов",
+      authorName: course.author?.name === "Юра" ? "Юрий Паршиков" : (course.author?.name ?? "Академия риэлторов"),
       modules: course.modules.map((mod) => ({
         id: mod.id,
         title: mod.title,
