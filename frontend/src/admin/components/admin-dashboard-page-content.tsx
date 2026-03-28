@@ -1,5 +1,14 @@
-﻿import Link from "next/link";
-import { BarChart3, BookOpen, CreditCard, TrendingUp, UserCheck, Users } from "lucide-react";
+"use client";
+
+import Link from "next/link";
+import {
+  BarChart3,
+  BookOpen,
+  CreditCard,
+  TrendingUp,
+  UserCheck,
+  Users,
+} from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -8,6 +17,7 @@ import {
   WorkspacePanel,
 } from "@/components/workspace/workspace-primitives";
 import type { AdminDashboardPayload } from "@shared/admin-dashboard/types";
+
 import { AdminStatCard } from "./admin-stat-card";
 
 const STAT_CONFIG = [
@@ -213,4 +223,3 @@ export function AdminDashboardPageContent({
     </section>
   );
 }
-

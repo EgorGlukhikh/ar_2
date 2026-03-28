@@ -1,5 +1,4 @@
 import { auth } from "@academy/auth";
-import { redirect } from "next/navigation";
 
 import { getPublicHomePayload } from "@backend/public-home/get-public-home-payload";
 
@@ -8,11 +7,7 @@ import { LandingExperience } from "@frontend/landing/components/landing-experien
 import { marketingBody, marketingDisplay } from "@/lib/marketing-theme";
 
 export default async function Home() {
-  const session = await auth();
-
-  if (session?.user) {
-    redirect("/after-sign-in");
-  }
+  await auth();
 
   const homePayload = await getPublicHomePayload();
 
