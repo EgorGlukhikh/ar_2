@@ -37,6 +37,21 @@
 - `npm run build`
 - `npm run smoke` — проверка ключевых маршрутов по уже запущенному приложению, использует `SMOKE_BASE_URL`
 
+## Контент уроков
+
+Текущая block-based модель урока поддерживает:
+
+- `TEXT`
+- `VIDEO`
+- `FILE`
+- `HOMEWORK`
+- `AUDIO`
+
+Для локального/mock media flow:
+
+- managed video и audio могут сохраняться в Postgres;
+- playback идет через защищенные app routes с поддержкой `Range`, чтобы браузерный плеер корректно работал с seek/partial content.
+
 ## Railway
 
 Текущий production flow разделен на отдельные шаги:
@@ -78,4 +93,6 @@
 - `docs/contributing.md` — как добавлять новые фичи человеку и через AI
 - `docs/runbook.md` — локальный запуск, Railway release/bootstrap и smoke-check
 - `docs/current-implementation-roadmap.md` — продуктовый и технический контекст
+- `docs/service-handoff-2026-03-29.md` — срез по текущей архитектуре, media pipeline и operational контексту
+- `docs/ui-polish-roadmap-2026.md` — список идей и текущая волна косметических UI-улучшений
 - GitHub issue `#1` — хронология ключевых этапов разработки
