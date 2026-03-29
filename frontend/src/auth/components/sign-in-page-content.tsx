@@ -37,8 +37,6 @@ export function SignInPageContent({
     <AuthShell
       title="Вход в обучающую платформу"
       text="Открой учебный кабинет или рабочий контур с одного экрана. Можно войти по почте и паролю или через Яндекс ID."
-      sideTitle="Войти"
-      sideText="Если почта уже есть в системе, вход через Яндекс подключится к тому же аккаунту. Новый вход через Яндекс создаст обычный учебный профиль."
     >
       <AuthCard className="overflow-hidden border-[rgba(148,163,184,0.18)] bg-white/92 p-0 shadow-[0_18px_60px_rgba(15,23,42,0.08)]">
         <div className="border-b border-[var(--border)] px-5 py-4">
@@ -66,20 +64,17 @@ export function SignInPageContent({
 
         <div className="space-y-6 px-5 py-6 sm:px-6 sm:py-7">
           <div className="space-y-2">
-            <p className="text-[12px] font-medium uppercase leading-4 tracking-[0.18em] text-[var(--muted)]">
-              {formatPublicCopy(activeTab === "sign-in" ? "Вход" : "Регистрация")}
-            </p>
             <h2 className="text-[30px] font-semibold leading-[1.02] tracking-[-0.03em] text-[var(--foreground)]">
               {formatPublicCopy(
                 activeTab === "sign-in"
-                  ? "Войти в платформу"
+                  ? "Войти"
                   : "Создать новый аккаунт",
               )}
             </h2>
             <p className="max-w-[560px] text-[15px] leading-6 text-[var(--muted)]">
               {formatPublicCopy(
                 activeTab === "sign-in"
-                  ? "Войди по почте и паролю. Если удобнее, ниже можно продолжить через Яндекс ID."
+                  ? "Войди по почте и паролю. Если удобнее, можно продолжить через Яндекс ID."
                   : "Регистрация открывает учебный профиль. Роль автора, куратора или администратора назначается отдельно внутри платформы.",
               )}
             </p>

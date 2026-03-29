@@ -4,7 +4,6 @@ import { redirect } from "next/navigation";
 import { getPublicAuthScreenPayload } from "@backend/public-auth/get-public-auth-screen-payload";
 import { SignInPageContent } from "@frontend/auth/components/sign-in-page-content";
 
-import { PublicFooter } from "@/components/marketing/public-footer";
 import {
   marketingBody,
   marketingContainerClassName,
@@ -40,7 +39,6 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
         <section className={marketingFrameClassName}>
           <div className={marketingInnerFrameClassName}>
             <SignInPageContent payload={payload} />
-            <PublicFooter />
           </div>
         </section>
       </div>
