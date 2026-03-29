@@ -135,7 +135,8 @@ export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
 
 export const EmailProviderType = {
   MOCK: 'MOCK',
-  RESEND: 'RESEND'
+  RESEND: 'RESEND',
+  SMTP: 'SMTP'
 } as const
 
 export type EmailProviderType = (typeof EmailProviderType)[keyof typeof EmailProviderType]

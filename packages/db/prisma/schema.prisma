@@ -98,6 +98,7 @@ enum PaymentStatus {
 enum EmailProviderType {
   MOCK
   RESEND
+  SMTP
 }
 
 enum EmailKind {

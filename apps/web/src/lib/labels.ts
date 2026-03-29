@@ -98,6 +98,7 @@ export const paymentProviderLabelMap: Record<PaymentProviderType, string> = {
 export const emailProviderLabelMap: Record<EmailProviderType, string> = {
   MOCK: "Внутренний контур",
   RESEND: "Resend",
+  SMTP: "SMTP",
 };
 
 export const emailStatusLabelMap: Record<EmailStatus, string> = {

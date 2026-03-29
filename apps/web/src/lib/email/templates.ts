@@ -65,6 +65,27 @@ export type RenderedEmailTemplate = {
   text: string;
 };
 
+const templateEmojiMap: Record<EmailTemplateKey, string> = {
+  "student-account-created": "👋",
+  "student-account-updated": "🔑",
+  "course-access-granted": "🎓",
+  "payment-success": "💳",
+  "student-welcome-1": "✨",
+  "student-welcome-2": "🧭",
+  "student-welcome-3": "📘",
+  "student-welcome-4": "🔄",
+  "student-welcome-5": "🚀",
+  "student-reengage-no-start": "⏳",
+  "student-reengage-stalled": "🪄",
+  "expert-welcome-1": "🎙️",
+  "expert-welcome-2": "🧩",
+  "expert-welcome-3": "📣",
+  "campaign-course-launch": "🔥",
+  "campaign-live-intake": "📅",
+  "campaign-catalog-return": "👀",
+  "campaign-expert-invite": "🤝",
+};
+
 function escapeHtml(value: string) {
   return value
     .replaceAll("&", "&amp;")
@@ -282,6 +303,27 @@ export function renderPaymentSuccessTemplate(
     ctaUrl: input.learningUrl,
     replyEmail: input.replyEmail,
   });
+}
+
+function decorateRenderedTemplate(
+  key: EmailTemplateKey,
+  rendered: RenderedEmailTemplate,
+): RenderedEmailTemplate {
+  const emoji = templateEmojiMap[key];
+
+  if (!emoji) {
+    return rendered;
+  }
+
+  return {
+    ...rendered,
+    subject: `${emoji} ${rendered.subject}`,
+    text: `${emoji} ${rendered.text}`,
+    html: rendered.html.replace(
+      /<h1([^>]*)>/,
+      `<h1$1><span style="display:inline-block;margin-right:10px;">${emoji}</span>`,
+    ),
+  };
 }
 
 function renderStudentAutomationTemplate(
@@ -593,71 +635,89 @@ export function renderTemplateByKey(
   }
 
   if (key.startsWith("student-welcome") || key.startsWith("student-reengage")) {
-    return renderStudentAutomationTemplate(
-      key as Extract<
-        EmailTemplateKey,
-        | "student-welcome-1"
-        | "student-welcome-2"
-        | "student-welcome-3"
-        | "student-welcome-4"
-        | "student-welcome-5"
-        | "student-reengage-no-start"
-        | "student-reengage-stalled"
-      >,
-      input,
+    return decorateRenderedTemplate(
+      key,
+      renderStudentAutomationTemplate(
+        key as Extract<
+          EmailTemplateKey,
+          | "student-welcome-1"
+          | "student-welcome-2"
+          | "student-welcome-3"
+          | "student-welcome-4"
+          | "student-welcome-5"
+          | "student-reengage-no-start"
+          | "student-reengage-stalled"
+        >,
+        input,
+      ),
     );
   }
 
   if (key === "student-account-created" || key === "student-account-updated") {
-    return renderStudentAccountCreatedTemplate({
-      studentName: input.recipientName,
-      email: "student@example.com",
-      password: "TempPass123",
-      signInUrl: input.links.signInUrl,
-      isExistingAccount: key === "student-account-updated",
-      replyEmail: input.replyEmail,
-    });
+    return decorateRenderedTemplate(
+      key,
+      renderStudentAccountCreatedTemplate({
+        studentName: input.recipientName,
+        email: "student@example.com",
+        password: "TempPass123",
+        signInUrl: input.links.signInUrl,
+        isExistingAccount: key === "student-account-updated",
+        replyEmail: input.replyEmail,
+      }),
+    );
   }
 
   if (key === "course-access-granted") {
-    return renderCourseAccessGrantedTemplate({
-      studentName: input.recipientName,
-      courseTitle: input.courseTitle ?? "Новый курс",
-      courseUrl: input.links.courseUrl ?? input.links.learningUrl,
-      replyEmail: input.replyEmail,
-    });
+    return decorateRenderedTemplate(
+      key,
+      renderCourseAccessGrantedTemplate({
+        studentName: input.recipientName,
+        courseTitle: input.courseTitle ?? "Новый курс",
+        courseUrl: input.links.courseUrl ?? input.links.learningUrl,
+        replyEmail: input.replyEmail,
+      }),
+    );
   }
 
   if (key === "payment-success") {
-    return renderPaymentSuccessTemplate({
-      studentName: input.recipientName,
-      courseTitle: input.courseTitle ?? "Новый курс",
-      amountLabel: input.amountLabel ?? "3 490,00 ₽",
-      learningUrl: input.links.courseUrl ?? input.links.learningUrl,
-      replyEmail: input.replyEmail,
-    });
+    return decorateRenderedTemplate(
+      key,
+      renderPaymentSuccessTemplate({
+        studentName: input.recipientName,
+        courseTitle: input.courseTitle ?? "Новый курс",
+        amountLabel: input.amountLabel ?? "3 490,00 ₽",
+        learningUrl: input.links.courseUrl ?? input.links.learningUrl,
+        replyEmail: input.replyEmail,
+      }),
+    );
   }
 
   if (key.startsWith("expert-welcome")) {
-    return renderExpertAutomationTemplate(
-      key as Extract<
-        EmailTemplateKey,
-        "expert-welcome-1" | "expert-welcome-2" | "expert-welcome-3"
-      >,
-      input,
+    return decorateRenderedTemplate(
+      key,
+      renderExpertAutomationTemplate(
+        key as Extract<
+          EmailTemplateKey,
+          "expert-welcome-1" | "expert-welcome-2" | "expert-welcome-3"
+        >,
+        input,
+      ),
     );
   }
 
   if (key.startsWith("campaign-")) {
-    return renderCampaignTemplate(
-      key as Extract<
-        EmailTemplateKey,
-        | "campaign-course-launch"
-        | "campaign-live-intake"
-        | "campaign-catalog-return"
-        | "campaign-expert-invite"
-      >,
-      input,
+    return decorateRenderedTemplate(
+      key,
+      renderCampaignTemplate(
+        key as Extract<
+          EmailTemplateKey,
+          | "campaign-course-launch"
+          | "campaign-live-intake"
+          | "campaign-catalog-return"
+          | "campaign-expert-invite"
+        >,
+        input,
+      ),
     );
   }
 

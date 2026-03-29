@@ -104,14 +104,30 @@ function createPreferenceToken() {
   return randomBytes(24).toString("hex");
 }
 
-function mapProviderNameToDb(name: "mock" | "resend") {
-  return name === "resend" ? EmailProviderType.RESEND : EmailProviderType.MOCK;
+function mapProviderNameToDb(name: "mock" | "resend" | "smtp") {
+  if (name === "resend") {
+    return EmailProviderType.RESEND;
+  }
+
+  if (name === "smtp") {
+    return EmailProviderType.SMTP;
+  }
+
+  return EmailProviderType.MOCK;
 }
 
 function getConfiguredProviderName() {
-  return (process.env.EMAIL_PROVIDER || "mock").toLowerCase() === "resend"
-    ? "resend"
-    : "mock";
+  const provider = (process.env.EMAIL_PROVIDER || "mock").toLowerCase();
+
+  if (provider === "resend") {
+    return "resend";
+  }
+
+  if (provider === "smtp" || provider === "yandex-smtp") {
+    return "smtp";
+  }
+
+  return "mock";
 }
 
 function getEmailSender() {
@@ -1750,15 +1766,19 @@ export async function requeueEmailMessage(messageId: string) {
 export function getEmailSystemConfig() {
   const sender = getEmailSender();
   const replyTo = getEmailReplyTo();
+  const provider = getConfiguredProviderName();
 
   return {
-    provider: getConfiguredProviderName(),
+    provider,
     sender,
     replyTo,
     appBaseUrl: getAppBaseUrl(),
     hasResendApiKey: Boolean(process.env.RESEND_API_KEY),
     hasResendFromEmail: Boolean(process.env.RESEND_FROM_EMAIL),
     hasResendWebhookSecret: Boolean(process.env.RESEND_WEBHOOK_SECRET),
+    hasSmtpHost: Boolean(process.env.SMTP_HOST || provider === "smtp"),
+    hasSmtpUser: Boolean(process.env.SMTP_USER),
+    hasSmtpPassword: Boolean(process.env.SMTP_PASSWORD),
     hasCronSecret: Boolean(process.env.CRON_SECRET),
   };
 }

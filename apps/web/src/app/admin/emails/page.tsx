@@ -268,7 +268,11 @@ export default async function AdminEmailsPage() {
               Провайдер
             </p>
             <p className="mt-3 text-lg font-semibold text-[var(--foreground)]">
-              {config.provider === "resend" ? "Resend" : "Mock"}
+              {config.provider === "resend"
+                ? "Resend"
+                : config.provider === "smtp"
+                  ? "SMTP"
+                  : "Mock"}
             </p>
             <p className="mt-2 text-sm text-[var(--muted)]">{config.sender.fromEmail}</p>
           </div>
@@ -636,22 +640,67 @@ export default async function AdminEmailsPage() {
             {
               label: "EMAIL_PROVIDER",
               value: config.provider,
-              ok: config.provider === "resend",
+              ok: config.provider === "resend" || config.provider === "smtp",
             },
             {
               label: "RESEND_API_KEY",
-              value: config.hasResendApiKey ? "подключен" : "не задан",
-              ok: config.hasResendApiKey,
+              value:
+                config.provider === "resend"
+                  ? config.hasResendApiKey
+                    ? "подключен"
+                    : "не задан"
+                  : "не нужен для текущего провайдера",
+              ok: config.provider === "resend" ? config.hasResendApiKey : true,
             },
             {
               label: "RESEND_FROM_EMAIL",
-              value: config.hasResendFromEmail ? "подключен" : "не задан",
-              ok: config.hasResendFromEmail,
+              value:
+                config.provider === "resend"
+                  ? config.hasResendFromEmail
+                    ? "подключен"
+                    : "не задан"
+                  : "не нужен для текущего провайдера",
+              ok: config.provider === "resend" ? config.hasResendFromEmail : true,
             },
             {
               label: "RESEND_WEBHOOK_SECRET",
-              value: config.hasResendWebhookSecret ? "подключен" : "не задан",
-              ok: config.hasResendWebhookSecret,
+              value:
+                config.provider === "resend"
+                  ? config.hasResendWebhookSecret
+                    ? "подключен"
+                    : "не задан"
+                  : "не нужен для текущего провайдера",
+              ok: config.provider === "resend" ? config.hasResendWebhookSecret : true,
+            },
+            {
+              label: "SMTP_HOST",
+              value:
+                config.provider === "smtp"
+                  ? config.hasSmtpHost
+                    ? "подключен"
+                    : "не задан"
+                  : "не нужен для текущего провайдера",
+              ok: config.provider === "smtp" ? config.hasSmtpHost : true,
+            },
+            {
+              label: "SMTP_USER",
+              value:
+                config.provider === "smtp"
+                  ? config.hasSmtpUser
+                    ? "подключен"
+                    : "не задан"
+                  : "не нужен для текущего провайдера",
+              ok: config.provider === "smtp" ? config.hasSmtpUser : true,
+            },
+            {
+              label: "SMTP_PASSWORD",
+              value:
+                config.provider === "smtp"
+                  ? config.hasSmtpPassword
+                    ? "подключен"
+                    : "не задан"
+                  : "не нужен для текущего провайдера",
+              ok: config.provider === "smtp" ? config.hasSmtpPassword : true,
             },
             {
               label: "CRON_SECRET",
