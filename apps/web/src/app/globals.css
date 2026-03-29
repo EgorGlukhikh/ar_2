@@ -208,6 +208,127 @@ label {
 }
 
 /* ─── FLOAT ANIMATIONS (CTA cards) ───────────────────────────────── */
+/* Hero background system */
+.hero-stage {
+  --hero-pointer-x: 50%;
+  --hero-pointer-y: 38%;
+}
+
+.hero-ambient,
+.hero-squares {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.hero-ambient-gradient {
+  background:
+    radial-gradient(circle at 18% 20%, rgba(61, 90, 241, 0.28), transparent 34%),
+    radial-gradient(circle at 82% 16%, rgba(106, 72, 216, 0.24), transparent 28%),
+    radial-gradient(circle at 70% 78%, rgba(188, 88, 148, 0.18), transparent 34%),
+    linear-gradient(132deg, #0b122a 0%, #172554 34%, #312e81 68%, #4c1d95 100%);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 180% 180%;
+  animation: hero-gradient-pan 20s ease-in-out infinite alternate;
+}
+
+.hero-ambient-spotlight {
+  background:
+    radial-gradient(
+      circle at var(--hero-pointer-x) var(--hero-pointer-y),
+      rgba(255, 255, 255, 0.12) 0%,
+      rgba(129, 140, 248, 0.1) 16%,
+      rgba(244, 114, 182, 0.07) 30%,
+      transparent 54%
+    );
+  mix-blend-mode: screen;
+  opacity: 0.95;
+}
+
+.hero-ambient-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-position: center;
+  background-size: 64px 64px;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.72), transparent 88%);
+  opacity: 0.22;
+}
+
+.hero-square {
+  position: absolute;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+  box-shadow:
+    0 18px 60px rgba(15, 23, 42, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  will-change: transform;
+}
+
+.hero-square-1 {
+  top: 12%;
+  left: 8%;
+  width: 108px;
+  height: 108px;
+  animation: hero-square-float-a 24s ease-in-out infinite;
+}
+
+.hero-square-2 {
+  top: 18%;
+  right: 13%;
+  width: 62px;
+  height: 62px;
+  animation: hero-square-float-b 18s ease-in-out infinite;
+}
+
+.hero-square-3 {
+  right: 20%;
+  bottom: 19%;
+  width: 148px;
+  height: 148px;
+  animation: hero-square-float-c 28s ease-in-out infinite;
+}
+
+.hero-square-4 {
+  left: 42%;
+  bottom: 8%;
+  width: 74px;
+  height: 74px;
+  animation: hero-square-float-b 22s ease-in-out infinite reverse;
+}
+
+.hero-square-5 {
+  top: 56%;
+  left: 22%;
+  width: 38px;
+  height: 38px;
+  animation: hero-square-float-a 16s ease-in-out infinite reverse;
+}
+
+@keyframes hero-gradient-pan {
+  from {
+    background-position: 0% 0%, 0% 0%, 0% 0%, 0% 50%;
+  }
+  to {
+    background-position: 0% 0%, 0% 0%, 0% 0%, 100% 50%;
+  }
+}
+
+@keyframes hero-square-float-a {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  50% { transform: translate3d(28px, -20px, 0) rotate(10deg); }
+}
+
+@keyframes hero-square-float-b {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  50% { transform: translate3d(-24px, 18px, 0) rotate(-12deg); }
+}
+
+@keyframes hero-square-float-c {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
+  50% { transform: translate3d(18px, -26px, 0) rotate(8deg) scale(1.06); }
+}
+
 @keyframes float-up {
   0%, 100% { transform: translateY(0); }
   50%       { transform: translateY(-10px); }
@@ -241,7 +362,9 @@ label {
     transition: none !important;
   }
 
-  .aurora-orb {
+  .aurora-orb,
+  .hero-ambient,
+  .hero-squares {
     display: none;
   }
 }

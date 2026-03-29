@@ -111,6 +111,56 @@ export function LandingExperience({
 }: PublicHomePayload & {
   viewerName?: string | null;
 }) {
+  const heroRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const hero = heroRef.current;
+    const supportsInteractivePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+    if (
+      !hero ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+      !supportsInteractivePointer
+    ) {
+      return;
+    }
+
+    let frame = 0;
+    let targetX = 50;
+    let targetY = 38;
+    let currentX = 50;
+    let currentY = 38;
+
+    const updatePointer = () => {
+      currentX += (targetX - currentX) * 0.08;
+      currentY += (targetY - currentY) * 0.08;
+      hero.style.setProperty("--hero-pointer-x", `${currentX.toFixed(2)}%`);
+      hero.style.setProperty("--hero-pointer-y", `${currentY.toFixed(2)}%`);
+      frame = window.requestAnimationFrame(updatePointer);
+    };
+
+    const handlePointerMove = (event: PointerEvent) => {
+      const rect = hero.getBoundingClientRect();
+      targetX = ((event.clientX - rect.left) / rect.width) * 100;
+      targetY = ((event.clientY - rect.top) / rect.height) * 100;
+    };
+
+    const handlePointerLeave = () => {
+      targetX = 50;
+      targetY = 38;
+    };
+
+    hero.addEventListener("pointermove", handlePointerMove);
+    hero.addEventListener("pointerleave", handlePointerLeave);
+    frame = window.requestAnimationFrame(updatePointer);
+
+    return () => {
+      hero.removeEventListener("pointermove", handlePointerMove);
+      hero.removeEventListener("pointerleave", handlePointerLeave);
+      window.cancelAnimationFrame(frame);
+    };
+  }, []);
+
   return (
     <div>
 
@@ -171,11 +221,20 @@ export function LandingExperience({
       </header>
 
       {/* ─── HERO ──────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-[var(--foreground)] pb-20 pt-16">
-        {/* Aurora orbs */}
-        <div className="aurora-orb aurora-orb-1" aria-hidden />
-        <div className="aurora-orb aurora-orb-2" aria-hidden />
-        <div className="aurora-orb aurora-orb-3" aria-hidden />
+      <section
+        ref={heroRef}
+        className="hero-stage relative overflow-hidden bg-[var(--foreground)] pb-20 pt-16"
+      >
+        <div className="hero-ambient hero-ambient-gradient" aria-hidden />
+        <div className="hero-ambient hero-ambient-spotlight" aria-hidden />
+        <div className="hero-ambient hero-ambient-grid" aria-hidden />
+        <div className="hero-squares" aria-hidden>
+          <span className="hero-square hero-square-1" />
+          <span className="hero-square hero-square-2" />
+          <span className="hero-square hero-square-3" />
+          <span className="hero-square hero-square-4" />
+          <span className="hero-square hero-square-5" />
+        </div>
         <PageContainer className="relative z-10">
           <MotionReveal variant="soft" immediate>
             <div className="grid gap-12 xl:grid-cols-2 xl:items-center">
