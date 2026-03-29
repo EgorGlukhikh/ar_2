@@ -170,7 +170,7 @@ export default async function NewCoursePage() {
             </p>
           </div>
 
-          <div className="space-y-2">
+          <div id="course-topic-field" className="space-y-2">
             <Label htmlFor="topic">Тема курса</Label>
             <Input
               id="topic"
@@ -182,7 +182,7 @@ export default async function NewCoursePage() {
             </p>
           </div>
 
-          <div className="space-y-2">
+          <div id="course-tags-field" className="space-y-2">
             <Label htmlFor="tags">Теги</Label>
             <Input
               id="tags"
@@ -218,7 +218,7 @@ export default async function NewCoursePage() {
             </p>
           </div>
 
-          <div className="space-y-2">
+          <div id="course-first-module-field" className="space-y-2">
             <Label htmlFor="firstModuleTitle">Название первого модуля</Label>
             <Input
               id="firstModuleTitle"

@@ -1,15 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { CircleHelp, Sparkles, X } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { ArrowLeft, ArrowRight, CircleHelp, Sparkles, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
-const STORAGE_KEY = "academy.admin.course-create-onboarding.v1.dismissed";
+const STORAGE_KEY = "academy.admin.course-create-onboarding.v2.dismissed";
 const DESKTOP_BREAKPOINT = 1100;
 const CARD_WIDTH = 304;
 const CARD_GAP = 22;
 const VIEWPORT_GAP = 16;
+const CARD_HEIGHT = 224;
 
 type HintPlacement = "top" | "right" | "bottom" | "left";
 
@@ -53,16 +54,28 @@ const hintDefinitions: HintDefinition[] = [
     placement: "bottom",
   },
   {
+    targetId: "course-topic-field",
+    title: "Тема курса",
+    body: "Тема помогает быстро понять фокус программы и позже пригодится для внутренней навигации по каталогу.",
+    placement: "bottom",
+  },
+  {
     targetId: "course-structure-mode-field",
     title: "Структура курса",
     body: "Для цепочки равных уроков подойдет единый поток. Для иерархии и подтем лучше модули.",
-    placement: "bottom",
+    placement: "left",
   },
   {
     targetId: "course-timezone-field",
     title: "Часовой пояс",
     body: "Это особенно важно для вебинаров, чтобы расписание и эфиры не съехали по времени.",
     placement: "left",
+  },
+  {
+    targetId: "course-first-module-field",
+    title: "Первый модуль",
+    body: "Можно сразу задать стартовый раздел курса, чтобы после создания не собирать структуру с нуля.",
+    placement: "top",
   },
 ];
 
@@ -76,12 +89,12 @@ function resolveCardPosition(
   viewportWidth: number,
   viewportHeight: number,
 ) {
-  const centeredTop = rect.top + rect.height / 2 - 88;
+  const centeredTop = rect.top + rect.height / 2 - CARD_HEIGHT / 2;
   const centeredLeft = rect.left + rect.width / 2 - CARD_WIDTH / 2;
 
   const positions = {
     top: {
-      top: rect.top - 176 - CARD_GAP,
+      top: rect.top - CARD_HEIGHT - CARD_GAP,
       left: centeredLeft,
     },
     right: {
@@ -101,7 +114,7 @@ function resolveCardPosition(
   const selected = positions[placement];
 
   return {
-    top: clamp(selected.top, VIEWPORT_GAP, viewportHeight - 176 - VIEWPORT_GAP),
+    top: clamp(selected.top, VIEWPORT_GAP, viewportHeight - CARD_HEIGHT - VIEWPORT_GAP),
     left: clamp(selected.left, VIEWPORT_GAP, viewportWidth - CARD_WIDTH - VIEWPORT_GAP),
   };
 }
@@ -110,7 +123,8 @@ export function CourseCreationOnboarding() {
   const [isVisible, setIsVisible] = useState(false);
   const [isReady, setIsReady] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
-  const [hints, setHints] = useState<MeasuredHint[]>([]);
+  const [activeStep, setActiveStep] = useState(0);
+  const [measuredHint, setMeasuredHint] = useState<MeasuredHint | null>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -121,6 +135,12 @@ export function CourseCreationOnboarding() {
     setIsVisible(window.localStorage.getItem(STORAGE_KEY) !== "dismissed");
     setIsReady(true);
   }, []);
+
+  const totalSteps = hintDefinitions.length;
+  const activeHintDefinition = useMemo(
+    () => hintDefinitions[activeStep] ?? null,
+    [activeStep],
+  );
 
   useEffect(() => {
     if (!isReady || typeof window === "undefined") {
@@ -140,56 +160,56 @@ export function CourseCreationOnboarding() {
   }, [isReady]);
 
   useEffect(() => {
-    if (!isVisible || !isDesktop || typeof window === "undefined") {
+    if (!isVisible || !activeHintDefinition || typeof window === "undefined") {
       return;
     }
 
-    const measureHints = () => {
+    const syncActiveHint = () => {
       const viewportWidth = window.innerWidth;
       const viewportHeight = window.innerHeight;
+      const target = document.getElementById(activeHintDefinition.targetId);
 
-      const nextHints = hintDefinitions
-        .map((hint) => {
-          const target = document.getElementById(hint.targetId);
+      if (!target) {
+        setMeasuredHint(null);
+        return;
+      }
 
-          if (!target) {
-            return null;
-          }
+      target.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+        inline: "nearest",
+      });
 
-          const rect = target.getBoundingClientRect();
-          const cardStyle = resolveCardPosition(
-            rect,
-            hint.placement,
-            viewportWidth,
-            viewportHeight,
-          );
+      const rect = target.getBoundingClientRect();
+      const cardStyle = resolveCardPosition(
+        rect,
+        activeHintDefinition.placement,
+        viewportWidth,
+        viewportHeight,
+      );
 
-          return {
-            ...hint,
-            cardStyle,
-            highlightStyle: {
-              top: rect.top - 8,
-              left: rect.left - 8,
-              width: rect.width + 16,
-              height: rect.height + 16,
-            },
-          } satisfies MeasuredHint;
-        })
-        .filter((hint): hint is MeasuredHint => Boolean(hint));
-
-      setHints(nextHints);
+      setMeasuredHint({
+        ...activeHintDefinition,
+        cardStyle,
+        highlightStyle: {
+          top: rect.top - 8,
+          left: rect.left - 8,
+          width: rect.width + 16,
+          height: rect.height + 16,
+        },
+      });
     };
 
-    const frameId = window.requestAnimationFrame(measureHints);
-    window.addEventListener("resize", measureHints);
-    window.addEventListener("scroll", measureHints, true);
+    const frameId = window.requestAnimationFrame(syncActiveHint);
+    window.addEventListener("resize", syncActiveHint);
+    window.addEventListener("scroll", syncActiveHint, true);
 
     return () => {
       window.cancelAnimationFrame(frameId);
-      window.removeEventListener("resize", measureHints);
-      window.removeEventListener("scroll", measureHints, true);
+      window.removeEventListener("resize", syncActiveHint);
+      window.removeEventListener("scroll", syncActiveHint, true);
     };
-  }, [isVisible, isDesktop]);
+  }, [activeHintDefinition, isVisible]);
 
   const handleDismiss = () => {
     if (typeof window !== "undefined") {
@@ -200,7 +220,21 @@ export function CourseCreationOnboarding() {
   };
 
   const handleReopen = () => {
+    setActiveStep(0);
     setIsVisible(true);
+  };
+
+  const handleNext = () => {
+    if (activeStep >= totalSteps - 1) {
+      handleDismiss();
+      return;
+    }
+
+    setActiveStep((current) => Math.min(current + 1, totalSteps - 1));
+  };
+
+  const handleBack = () => {
+    setActiveStep((current) => Math.max(current - 1, 0));
   };
 
   return (
@@ -233,7 +267,7 @@ export function CourseCreationOnboarding() {
                       Небольшая памятка перед созданием курса
                     </h2>
                     <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
-                      Подсветили ключевые поля, чтобы курс было проще собрать с первого раза.
+                      Покажем ключевые поля по шагам, чтобы курс было проще собрать с первого раза.
                     </p>
                   </div>
                 </div>
@@ -254,48 +288,92 @@ export function CourseCreationOnboarding() {
 
           {isDesktop ? (
             <>
-              {hints.map((hint) => (
+              {measuredHint ? (
                 <div
-                  key={`${hint.targetId}-highlight`}
+                  key={`${measuredHint.targetId}-highlight`}
                   className="absolute rounded-[26px] border border-[color:color-mix(in_srgb,var(--primary)_34%,white)] bg-[color:color-mix(in_srgb,var(--primary)_12%,white)] shadow-[0_24px_50px_rgba(79,70,229,0.16)]"
-                  style={hint.highlightStyle}
+                  style={measuredHint.highlightStyle}
                 />
-              ))}
+              ) : null}
 
-              {hints.map((hint) => (
+              {measuredHint ? (
                 <article
-                  key={hint.targetId}
+                  key={measuredHint.targetId}
                   className="pointer-events-auto absolute w-[304px] rounded-[26px] border border-[color:color-mix(in_srgb,var(--primary)_16%,white)] bg-white/98 p-5 shadow-[0_28px_60px_rgba(15,23,42,0.18)]"
-                  style={hint.cardStyle}
+                  style={measuredHint.cardStyle}
                 >
-                  <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[var(--primary)]">
-                    {hint.title}
+                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
+                    Шаг {activeStep + 1} из {totalSteps}
                   </p>
-                  <p className="mt-3 text-sm leading-7 text-[var(--foreground)]">{hint.body}</p>
+                  <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[var(--primary)]">
+                    {measuredHint.title}
+                  </p>
+                  <p className="mt-3 text-sm leading-7 text-[var(--foreground)]">
+                    {measuredHint.body}
+                  </p>
+                  <div className="mt-5 flex items-center justify-between gap-3">
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={handleBack}
+                      disabled={activeStep === 0}
+                    >
+                      <ArrowLeft className="mr-2 h-4 w-4" />
+                      Назад
+                    </Button>
+                    <div className="flex items-center gap-2">
+                      <Button type="button" variant="ghost" size="sm" onClick={handleDismiss}>
+                        Пропустить
+                      </Button>
+                      <Button type="button" size="sm" onClick={handleNext}>
+                        {activeStep === totalSteps - 1 ? "Готово" : "Дальше"}
+                        {activeStep === totalSteps - 1 ? null : (
+                          <ArrowRight className="ml-2 h-4 w-4" />
+                        )}
+                      </Button>
+                    </div>
+                  </div>
                 </article>
-              ))}
+              ) : null}
             </>
           ) : (
             <div className="pointer-events-auto absolute inset-x-4 bottom-4">
               <div className="rounded-[30px] border border-white/70 bg-white/96 p-5 shadow-[0_30px_70px_rgba(15,23,42,0.18)]">
-                <div className="space-y-4">
-                  {hintDefinitions.map((hint) => (
-                    <div
-                      key={hint.targetId}
-                      className="rounded-[22px] border border-[var(--border)] bg-[var(--surface)] px-4 py-4"
-                    >
-                      <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[var(--primary)]">
-                        {hint.title}
-                      </p>
-                      <p className="mt-2 text-sm leading-7 text-[var(--foreground)]">{hint.body}</p>
-                    </div>
-                  ))}
+                <div className="rounded-[22px] border border-[var(--border)] bg-[var(--surface)] px-4 py-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
+                    Шаг {activeStep + 1} из {totalSteps}
+                  </p>
+                  <p className="mt-2 text-sm font-semibold uppercase tracking-[0.18em] text-[var(--primary)]">
+                    {activeHintDefinition?.title}
+                  </p>
+                  <p className="mt-2 text-sm leading-7 text-[var(--foreground)]">
+                    {activeHintDefinition?.body}
+                  </p>
                 </div>
 
-                <div className="mt-5 flex justify-end">
-                  <Button type="button" onClick={handleDismiss}>
-                    Понятно
+                <div className="mt-5 flex items-center justify-between gap-3">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleBack}
+                    disabled={activeStep === 0}
+                  >
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    Назад
                   </Button>
+                  <div className="flex items-center gap-2">
+                    <Button type="button" variant="ghost" size="sm" onClick={handleDismiss}>
+                      Пропустить
+                    </Button>
+                    <Button type="button" size="sm" onClick={handleNext}>
+                      {activeStep === totalSteps - 1 ? "Готово" : "Дальше"}
+                      {activeStep === totalSteps - 1 ? null : (
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                      )}
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
