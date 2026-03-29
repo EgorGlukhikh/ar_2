@@ -1,4 +1,5 @@
-import { prisma, type UserRole } from "@academy/db";
+import { prisma, type Prisma, type UserRole } from "@academy/db";
+import { derivePersonNameFields } from "@academy/shared";
 
 type OAuthAccountInput = {
   userId: string;
@@ -17,6 +18,8 @@ type OAuthAccountInput = {
 type CreateCredentialsUserInput = {
   email: string;
   name?: string | null;
+  firstName?: string | null;
+  lastName?: string | null;
   passwordHash: string;
   role?: UserRole;
 };
@@ -24,6 +27,8 @@ type CreateCredentialsUserInput = {
 type CreateOAuthUserWithAccountInput = {
   email: string;
   name?: string | null;
+  firstName?: string | null;
+  lastName?: string | null;
   image?: string | null;
   role?: UserRole;
 } & Omit<OAuthAccountInput, "userId">;
@@ -54,29 +59,45 @@ export async function findAccountByProviderAccountId(
 }
 
 export async function createCredentialsUser(input: CreateCredentialsUserInput) {
+  const personName = derivePersonNameFields(input);
+
   return prisma.user.create({
     data: {
       email: input.email,
-      name: input.name,
+      name: personName.fullName,
+      firstName: personName.firstName,
+      lastName: personName.lastName,
       passwordHash: input.passwordHash,
       role: input.role,
-    },
+    } as Prisma.UserCreateInput,
   });
 }
 
 export async function attachPasswordToExistingUser(
   userId: string,
   passwordHash: string,
-  name?: string | null,
+  input?: {
+    name?: string | null;
+    firstName?: string | null;
+    lastName?: string | null;
+  },
 ) {
+  const personName = derivePersonNameFields(input ?? {});
+
   return prisma.user.update({
     where: {
       id: userId,
     },
     data: {
       passwordHash,
-      ...(name ? { name } : {}),
-    },
+      ...(input
+        ? {
+            name: personName.fullName,
+            firstName: personName.firstName,
+            lastName: personName.lastName,
+          }
+        : {}),
+    } as Prisma.UserUpdateInput,
   });
 }
 
@@ -101,10 +122,14 @@ export async function linkOAuthAccountToUser(input: OAuthAccountInput) {
 export async function createOAuthUserWithAccount(
   input: CreateOAuthUserWithAccountInput,
 ) {
+  const personName = derivePersonNameFields(input);
+
   return prisma.user.create({
     data: {
       email: input.email,
-      name: input.name,
+      name: personName.fullName,
+      firstName: personName.firstName,
+      lastName: personName.lastName,
       image: input.image,
       role: input.role,
       accounts: {
@@ -121,6 +146,6 @@ export async function createOAuthUserWithAccount(
           session_state: input.session_state ?? undefined,
         },
       },
-    },
+    } as Prisma.UserCreateInput,
   });
 }

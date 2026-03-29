@@ -1,4 +1,4 @@
-import { prisma } from "@academy/db";
+import { prisma, type Prisma } from "@academy/db";
 
 import { ProfilePageContent } from "@/components/learning/profile-page-content";
 
@@ -11,6 +11,8 @@ export default async function ProfilePage() {
     where: { id: user.id },
     select: {
       name: true,
+      firstName: true,
+      lastName: true,
       email: true,
       phone: true,
       telegram: true,
@@ -20,13 +22,15 @@ export default async function ProfilePage() {
           isMarketingEnabled: true,
         },
       },
-    },
+    } as Prisma.UserSelect,
   });
 
   return (
     <ProfilePageContent
       profile={{
         name: profile.name,
+        firstName: profile.firstName,
+        lastName: profile.lastName,
         email: profile.email,
         phone: profile.phone,
         telegram: profile.telegram,

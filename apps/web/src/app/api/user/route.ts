@@ -9,6 +9,8 @@ export async function GET() {
       ? {
           id: session.user.id,
           email: session.user.email,
+          firstName: session.user.firstName,
+          lastName: session.user.lastName,
           name: session.user.name,
           role: session.user.role,
         }

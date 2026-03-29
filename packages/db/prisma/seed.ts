@@ -35,12 +35,16 @@ async function main() {
     create: {
       email: adminEmail,
       name: "Test Admin",
+      firstName: "Test",
+      lastName: "Admin",
       role: UserRole.ADMIN,
       emailVerified: new Date(),
       passwordHash,
     },
     update: {
       name: "Test Admin",
+      firstName: "Test",
+      lastName: "Admin",
       role: UserRole.ADMIN,
       emailVerified: new Date(),
       passwordHash,

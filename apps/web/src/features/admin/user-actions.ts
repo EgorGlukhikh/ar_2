@@ -6,9 +6,10 @@ import {
   PaymentProviderType,
   PaymentStatus,
   prisma,
+  type Prisma,
 } from "@academy/db";
 import { hashPassword } from "@academy/auth";
-import { USER_ROLES } from "@academy/shared";
+import { USER_ROLES, derivePersonNameFields } from "@academy/shared";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
@@ -254,24 +255,32 @@ export async function createWorkspaceMember(formData: FormData) {
   let isNewUser = false;
 
   if (existingUser) {
+    const personName = derivePersonNameFields({ name: parsed.name });
+
     await prisma.user.update({
       where: {
         id: existingUser.id,
       },
       data: {
-        name: parsed.name,
+        name: personName.fullName,
+        firstName: personName.firstName,
+        lastName: personName.lastName,
         passwordHash,
-      },
+      } as Prisma.UserUpdateInput,
     });
   } else {
+    const personName = derivePersonNameFields({ name: parsed.name });
+
     const user = await prisma.user.create({
       data: {
         email: parsed.email,
-        name: parsed.name,
+        name: personName.fullName,
+        firstName: personName.firstName,
+        lastName: personName.lastName,
         passwordHash,
         emailVerified: new Date(),
         role: parsed.role,
-      },
+      } as Prisma.UserCreateInput,
     });
 
     userId = user.id;
@@ -286,9 +295,11 @@ export async function createWorkspaceMember(formData: FormData) {
       select: {
         id: true,
         email: true,
+        firstName: true,
+        lastName: true,
         name: true,
         role: true,
-      },
+      } as Prisma.UserSelect,
     });
 
     if (workspaceUser) {
@@ -346,24 +357,32 @@ export async function createStudent(formData: FormData) {
   let isNewStudent = false;
 
   if (existingUser) {
+    const personName = derivePersonNameFields({ name: parsed.name });
+
     await prisma.user.update({
       where: {
         id: existingUser.id,
       },
       data: {
-        name: parsed.name,
+        name: personName.fullName,
+        firstName: personName.firstName,
+        lastName: personName.lastName,
         passwordHash,
-      },
+      } as Prisma.UserUpdateInput,
     });
   } else {
+    const personName = derivePersonNameFields({ name: parsed.name });
+
     const user = await prisma.user.create({
       data: {
         email: parsed.email,
-        name: parsed.name,
+        name: personName.fullName,
+        firstName: personName.firstName,
+        lastName: personName.lastName,
         passwordHash,
         emailVerified: new Date(),
         role: USER_ROLES.STUDENT,
-      },
+      } as Prisma.UserCreateInput,
     });
 
     userId = user.id;
@@ -379,9 +398,11 @@ export async function createStudent(formData: FormData) {
           select: {
             id: true,
             email: true,
+            firstName: true,
+            lastName: true,
             name: true,
             role: true,
-          },
+          } as Prisma.UserSelect,
         })
       : Promise.resolve(null),
     parsed.courseId
@@ -470,8 +491,10 @@ export async function enrollStudentInCourse(formData: FormData) {
       select: {
         id: true,
         email: true,
+        firstName: true,
+        lastName: true,
         name: true,
-      },
+      } as Prisma.UserSelect,
     }),
     prisma.course.findUnique({
       where: {

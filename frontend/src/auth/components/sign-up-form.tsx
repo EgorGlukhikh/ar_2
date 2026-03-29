@@ -40,7 +40,8 @@ export function SignUpForm({
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        name: String(formData.get("name") ?? ""),
+        firstName: String(formData.get("firstName") ?? ""),
+        lastName: String(formData.get("lastName") ?? ""),
         email,
         password,
         passwordConfirmation: String(formData.get("passwordConfirmation") ?? ""),
@@ -67,7 +68,9 @@ export function SignUpForm({
     setPending(false);
 
     if (!signInResult || signInResult.error) {
-      setFormError("Аккаунт создан, но автоматический вход не сработал. Попробуй войти вручную.");
+      setFormError(
+        "Аккаунт создан, но автоматический вход не сработал. Попробуй войти вручную.",
+      );
       return;
     }
 
@@ -83,17 +86,31 @@ export function SignUpForm({
 
   return (
     <form action={handleSubmit} className="space-y-5">
-      <div className="space-y-2">
-        <Label htmlFor="register-name">{formatPublicCopy("Имя")}</Label>
-        <Input
-          id="register-name"
-          name="name"
-          type="text"
-          autoComplete="name"
-          placeholder={formatPublicCopy("Как к тебе обращаться")}
-          required
-        />
-        {renderError("name")}
+      <div className="grid gap-5 sm:grid-cols-2">
+        <div className="space-y-2">
+          <Label htmlFor="register-first-name">{formatPublicCopy("Имя")}</Label>
+          <Input
+            id="register-first-name"
+            name="firstName"
+            type="text"
+            autoComplete="given-name"
+            placeholder={formatPublicCopy("Как к тебе обращаться")}
+            required
+          />
+          {renderError("firstName")}
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="register-last-name">{formatPublicCopy("Фамилия")}</Label>
+          <Input
+            id="register-last-name"
+            name="lastName"
+            type="text"
+            autoComplete="family-name"
+            placeholder={formatPublicCopy("Можно оставить пустым")}
+          />
+          {renderError("lastName")}
+        </div>
       </div>
 
       <div className="space-y-2">
@@ -124,7 +141,9 @@ export function SignUpForm({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="register-password-confirmation">{formatPublicCopy("Повтори пароль")}</Label>
+        <Label htmlFor="register-password-confirmation">
+          {formatPublicCopy("Повтори пароль")}
+        </Label>
         <Input
           id="register-password-confirmation"
           name="passwordConfirmation"
@@ -163,7 +182,9 @@ export function SignUpForm({
       ) : null}
 
       <Button type="submit" className="w-full justify-center" disabled={pending}>
-        {pending ? formatPublicCopy("Создаем аккаунт...") : formatPublicCopy("Создать аккаунт")}
+        {pending
+          ? formatPublicCopy("Создаём аккаунт...")
+          : formatPublicCopy("Создать аккаунт")}
       </Button>
     </form>
   );

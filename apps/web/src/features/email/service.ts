@@ -13,9 +13,12 @@ import {
   prisma,
   type Course,
   type Order,
-  type User,
 } from "@academy/db";
-import { USER_ROLES } from "@academy/shared";
+import {
+  USER_ROLES,
+  composeFullName,
+  resolveFirstName,
+} from "@academy/shared";
 
 import { emailTemplateCatalogMap, type EmailTemplateKey } from "@/lib/email/catalog";
 import { getEmailProvider } from "@/lib/email/provider";
@@ -66,7 +69,18 @@ type ProcessQueueOptions = {
 type RecipientSummary = {
   id: string;
   email: string;
+  firstName: string | null;
+  lastName: string | null;
   name: string | null;
+};
+
+type EmailRecipientUser = {
+  id: string;
+  email: string;
+  name: string | null;
+  firstName?: string | null;
+  lastName?: string | null;
+  role?: string | null;
 };
 
 function getAppBaseUrl() {
@@ -301,7 +315,28 @@ export async function getEmailPreferenceByToken(preferenceToken: string) {
         },
       },
     },
-  });
+  }) as Promise<
+    | {
+        id: string;
+        userId: string;
+        audienceType: EmailAudienceType;
+        isMarketingEnabled: boolean;
+        marketingSource: string | null;
+        consentText: string | null;
+        subscribedAt: Date | null;
+        unsubscribedAt: Date | null;
+        preferenceToken: string;
+        createdAt: Date;
+        updatedAt: Date;
+        user: {
+          id: string;
+          email: string;
+          name: string | null;
+          role: string;
+        };
+      }
+    | null
+  >;
 }
 
 export async function updateEmailPreferenceForUser(input: {
@@ -375,13 +410,19 @@ function getAudienceTypeForRole(role?: string | null) {
   return role === USER_ROLES.AUTHOR ? EmailAudienceType.EXPERT : EmailAudienceType.STUDENT;
 }
 
-function resolveRecipientName(name?: string | null, email?: string | null) {
-  const trimmedName = name?.trim();
-  if (trimmedName) {
-    return trimmedName;
+function resolveRecipientName(input: {
+  firstName?: string | null;
+  lastName?: string | null;
+  name?: string | null;
+  email?: string | null;
+}) {
+  const firstName = resolveFirstName(input);
+
+  if (firstName) {
+    return firstName;
   }
 
-  const emailLocalPart = email?.split("@")[0]?.trim();
+  const emailLocalPart = input.email?.split("@")[0]?.trim();
   if (emailLocalPart) {
     return emailLocalPart
       .replace(/[._-]+/g, " ")
@@ -454,6 +495,8 @@ async function queueRenderedTemplateEmail(args: {
   dedupeKey?: string;
   toEmail: string;
   toName?: string | null;
+  recipientFirstName?: string | null;
+  recipientLastName?: string | null;
   amountLabel?: string;
   scheduledAt?: Date;
   metadata?: Record<string, unknown>;
@@ -466,7 +509,12 @@ async function queueRenderedTemplateEmail(args: {
       trackingToken,
       userId: args.userId,
       templateKey: args.templateKey,
-      recipientName: resolveRecipientName(args.toName, args.toEmail),
+      recipientName: resolveRecipientName({
+        firstName: args.recipientFirstName,
+        lastName: args.recipientLastName,
+        name: args.toName,
+        email: args.toEmail,
+      }),
       courseId: args.courseId,
       courseSlug: args.courseSlug,
       courseTitle: args.courseTitle,
@@ -556,7 +604,7 @@ async function syncCampaignStatus(campaignId: string) {
 }
 
 export async function queueStudentAccountCreatedEmail(input: {
-  user: Pick<User, "id" | "email" | "name" | "role">;
+  user: EmailRecipientUser & { role: string };
   password: string;
   isExistingAccount?: boolean;
 }) {
@@ -571,7 +619,12 @@ export async function queueStudentAccountCreatedEmail(input: {
   const trackingToken = createTrackingToken();
   const replyTo = getEmailReplyTo();
   const template = renderStudentAccountCreatedTemplate({
-    studentName: resolveRecipientName(input.user.name, input.user.email),
+    studentName: resolveRecipientName({
+      firstName: input.user.firstName,
+      lastName: input.user.lastName,
+      name: input.user.name,
+      email: input.user.email,
+    }),
     email: input.user.email,
     password: input.password,
     signInUrl: buildTrackedUrl(trackingToken, signInUrl),
@@ -592,7 +645,7 @@ export async function queueStudentAccountCreatedEmail(input: {
     preheader: template.preheader,
     trackingToken,
     toEmail: input.user.email,
-    toName: input.user.name,
+    toName: composeFullName(input.user.firstName, input.user.lastName) ?? input.user.name,
     htmlBody: template.html,
     textBody: template.text,
     replyToEmail: replyTo.replyToEmail,
@@ -606,13 +659,18 @@ export async function queueStudentAccountCreatedEmail(input: {
 }
 
 export async function queueCourseAccessGrantedEmail(input: {
-  user: Pick<User, "id" | "email" | "name">;
+  user: EmailRecipientUser;
   course: Pick<Course, "id" | "title">;
 }) {
   const trackingToken = createTrackingToken();
   const replyTo = getEmailReplyTo();
   const template = renderCourseAccessGrantedTemplate({
-    studentName: resolveRecipientName(input.user.name, input.user.email),
+    studentName: resolveRecipientName({
+      firstName: input.user.firstName,
+      lastName: input.user.lastName,
+      name: input.user.name,
+      email: input.user.email,
+    }),
     courseTitle: input.course.title,
     courseUrl: buildTrackedUrl(
       trackingToken,
@@ -630,7 +688,7 @@ export async function queueCourseAccessGrantedEmail(input: {
     preheader: template.preheader,
     trackingToken,
     toEmail: input.user.email,
-    toName: input.user.name,
+    toName: composeFullName(input.user.firstName, input.user.lastName) ?? input.user.name,
     htmlBody: template.html,
     textBody: template.text,
     replyToEmail: replyTo.replyToEmail,
@@ -643,7 +701,7 @@ export async function queueCourseAccessGrantedEmail(input: {
 }
 
 export async function queuePaymentSuccessEmail(input: {
-  user: Pick<User, "id" | "email" | "name">;
+  user: EmailRecipientUser;
   course: Pick<Course, "id" | "title">;
   order: Pick<Order, "id" | "totalAmount" | "currency">;
   amountLabel: string;
@@ -651,7 +709,12 @@ export async function queuePaymentSuccessEmail(input: {
   const trackingToken = createTrackingToken();
   const replyTo = getEmailReplyTo();
   const template = renderPaymentSuccessTemplate({
-    studentName: resolveRecipientName(input.user.name, input.user.email),
+    studentName: resolveRecipientName({
+      firstName: input.user.firstName,
+      lastName: input.user.lastName,
+      name: input.user.name,
+      email: input.user.email,
+    }),
     courseTitle: input.course.title,
     amountLabel: input.amountLabel,
     learningUrl: buildTrackedUrl(
@@ -672,7 +735,7 @@ export async function queuePaymentSuccessEmail(input: {
     preheader: template.preheader,
     trackingToken,
     toEmail: input.user.email,
-    toName: input.user.name,
+    toName: composeFullName(input.user.firstName, input.user.lastName) ?? input.user.name,
     htmlBody: template.html,
     textBody: template.text,
     replyToEmail: replyTo.replyToEmail,
@@ -686,7 +749,7 @@ export async function queuePaymentSuccessEmail(input: {
 }
 
 export async function queueStudentMarketingSequence(input: {
-  user: Pick<User, "id" | "email" | "name" | "role">;
+  user: EmailRecipientUser & { role: string };
 }) {
   await ensureEmailPreference({
     userId: input.user.id,
@@ -717,7 +780,9 @@ export async function queueStudentMarketingSequence(input: {
       sequenceStep: item.step,
       dedupeKey: `marketing-sequence:${input.user.id}:${item.step}`,
       toEmail: input.user.email,
-      toName: input.user.name,
+      toName: composeFullName(input.user.firstName, input.user.lastName) ?? input.user.name,
+      recipientFirstName: input.user.firstName,
+      recipientLastName: input.user.lastName,
       scheduledAt: item.scheduledAt,
       metadata: {
         scenario: "student-welcome-sequence",
@@ -730,7 +795,7 @@ export async function queueStudentMarketingSequence(input: {
 }
 
 export async function queueExpertMarketingSequence(input: {
-  user: Pick<User, "id" | "email" | "name" | "role">;
+  user: EmailRecipientUser & { role: string };
 }) {
   await ensureEmailPreference({
     userId: input.user.id,
@@ -756,7 +821,9 @@ export async function queueExpertMarketingSequence(input: {
       campaignKey: "expert-welcome-sequence",
       dedupeKey: `expert-sequence:${input.user.id}:${item.key}`,
       toEmail: input.user.email,
-      toName: input.user.name,
+      toName: composeFullName(input.user.firstName, input.user.lastName) ?? input.user.name,
+      recipientFirstName: input.user.firstName,
+      recipientLastName: input.user.lastName,
       scheduledAt: item.scheduledAt,
       metadata: {
         scenario: "expert-welcome-sequence",
@@ -795,6 +862,8 @@ async function queueTriggeredAutomations() {
         select: {
           id: true,
           email: true,
+          firstName: true,
+          lastName: true,
           name: true,
         },
       },
@@ -805,7 +874,7 @@ async function queueTriggeredAutomations() {
           slug: true,
         },
       },
-    },
+    } as Prisma.EnrollmentSelect,
   });
 
   for (const enrollment of notStartedEnrollments) {
@@ -836,7 +905,11 @@ async function queueTriggeredAutomations() {
       templateKey: "student-reengage-no-start",
       dedupeKey: `student-reengage-no-start:${enrollment.user.id}:${enrollment.course.id}`,
       toEmail: enrollment.user.email,
-      toName: enrollment.user.name,
+      toName:
+        composeFullName(enrollment.user.firstName, enrollment.user.lastName) ??
+        enrollment.user.name,
+      recipientFirstName: enrollment.user.firstName,
+      recipientLastName: enrollment.user.lastName,
       metadata: {
         scenario: "student-reengage-no-start",
       },
@@ -865,6 +938,8 @@ async function queueTriggeredAutomations() {
         select: {
           id: true,
           email: true,
+          firstName: true,
+          lastName: true,
           name: true,
         },
       },
@@ -875,7 +950,7 @@ async function queueTriggeredAutomations() {
           slug: true,
         },
       },
-    },
+    } as Prisma.EnrollmentSelect,
   });
 
   for (const enrollment of activeEnrollments) {
@@ -909,7 +984,11 @@ async function queueTriggeredAutomations() {
       templateKey: "student-reengage-stalled",
       dedupeKey: `student-reengage-stalled:${enrollment.user.id}:${enrollment.course.id}`,
       toEmail: enrollment.user.email,
-      toName: enrollment.user.name,
+      toName:
+        composeFullName(enrollment.user.firstName, enrollment.user.lastName) ??
+        enrollment.user.name,
+      recipientFirstName: enrollment.user.firstName,
+      recipientLastName: enrollment.user.lastName,
       metadata: {
         scenario: "student-reengage-stalled",
       },
@@ -1325,8 +1404,10 @@ async function selectRecipientsForSegment(
         select: {
           id: true,
           email: true,
+          firstName: true,
+          lastName: true,
           name: true,
-        },
+        } as Prisma.UserSelect,
       });
     case EmailCampaignSegment.STUDENTS_WITHOUT_PURCHASE:
       return prisma.user.findMany({
@@ -1341,8 +1422,10 @@ async function selectRecipientsForSegment(
         select: {
           id: true,
           email: true,
+          firstName: true,
+          lastName: true,
           name: true,
-        },
+        } as Prisma.UserSelect,
       });
     case EmailCampaignSegment.STUDENTS_WITH_PURCHASE:
       return prisma.user.findMany({
@@ -1357,8 +1440,10 @@ async function selectRecipientsForSegment(
         select: {
           id: true,
           email: true,
+          firstName: true,
+          lastName: true,
           name: true,
-        },
+        } as Prisma.UserSelect,
       });
     case EmailCampaignSegment.STUDENTS_ENROLLED_IN_COURSE:
       if (!courseId) {
@@ -1378,8 +1463,10 @@ async function selectRecipientsForSegment(
         select: {
           id: true,
           email: true,
+          firstName: true,
+          lastName: true,
           name: true,
-        },
+        } as Prisma.UserSelect,
       });
     case EmailCampaignSegment.INACTIVE_STUDENTS: {
       const inactivityCutoff = addDays(new Date(), -30);
@@ -1406,8 +1493,10 @@ async function selectRecipientsForSegment(
         select: {
           id: true,
           email: true,
+          firstName: true,
+          lastName: true,
           name: true,
-        },
+        } as Prisma.UserSelect,
       });
     }
     case EmailCampaignSegment.ALL_OPTED_IN_EXPERTS:
@@ -1424,8 +1513,10 @@ async function selectRecipientsForSegment(
         select: {
           id: true,
           email: true,
+          firstName: true,
+          lastName: true,
           name: true,
-        },
+        } as Prisma.UserSelect,
       });
   }
 }
@@ -1515,7 +1606,9 @@ export async function createEmailCampaign(input: {
       recipientSegment: input.segment,
       dedupeKey: `campaign:${campaign.id}:${recipient.id}`,
       toEmail: recipient.email,
-      toName: recipient.name,
+      toName: composeFullName(recipient.firstName, recipient.lastName) ?? recipient.name,
+      recipientFirstName: recipient.firstName,
+      recipientLastName: recipient.lastName,
       scheduledAt,
       metadata: {
         scenario: "manual-campaign",

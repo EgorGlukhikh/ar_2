@@ -9,6 +9,8 @@ import { updateUserProfile } from "@/features/profile/actions";
 
 type ProfileData = {
   name: string | null;
+  firstName: string | null;
+  lastName: string | null;
   email: string;
   phone: string | null;
   telegram: string | null;
@@ -80,13 +82,22 @@ export function ProfilePageContent({ profile }: { profile: ProfileData }) {
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid gap-5 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="name">ФИО</Label>
+                  <Label htmlFor="firstName">Имя</Label>
                   <Input
-                    id="name"
-                    name="name"
-                    defaultValue={profile.name ?? ""}
-                    placeholder="Иванов Иван Иванович"
+                    id="firstName"
+                    name="firstName"
+                    defaultValue={profile.firstName ?? ""}
+                    placeholder="Егор"
                     autoFocus
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="lastName">Фамилия</Label>
+                  <Input
+                    id="lastName"
+                    name="lastName"
+                    defaultValue={profile.lastName ?? ""}
+                    placeholder="Глухих"
                   />
                 </div>
                 <div className="space-y-2">
@@ -156,7 +167,8 @@ export function ProfilePageContent({ profile }: { profile: ProfileData }) {
           ) : (
             <div className="grid gap-6 sm:grid-cols-2">
               <Field label="Email" value={profile.email} />
-              <Field label="ФИО" value={profile.name} placeholder="Не указано" />
+              <Field label="Имя" value={profile.firstName} placeholder="Не указано" />
+              <Field label="Фамилия" value={profile.lastName} placeholder="Не указана" />
               <Field label="Телефон" value={profile.phone} placeholder="Не указан" />
               <Field label="Telegram" value={profile.telegram} placeholder="Не указан" />
               <Field label="Город" value={profile.city} placeholder="Не указан" />

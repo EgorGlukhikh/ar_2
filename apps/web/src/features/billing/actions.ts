@@ -363,6 +363,8 @@ export async function completeDemoPayment(formData: FormData) {
       user: {
         id: user.id,
         email: user.email ?? "",
+        firstName: user.firstName ?? null,
+        lastName: user.lastName ?? null,
         name: user.name ?? null,
       },
       course,

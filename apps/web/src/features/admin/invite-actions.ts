@@ -3,8 +3,8 @@
 import { randomBytes } from "node:crypto";
 
 import { hashPassword } from "@academy/auth";
-import { prisma } from "@academy/db";
-import { USER_ROLES } from "@academy/shared";
+import { prisma, type Prisma } from "@academy/db";
+import { USER_ROLES, derivePersonNameFields } from "@academy/shared";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -149,6 +149,7 @@ export async function acceptWorkspaceInvite(formData: FormData) {
   }
 
   const passwordHash = await hashPassword(parsed.password);
+  const personName = derivePersonNameFields({ name: parsed.name });
 
   const acceptedUser = existingUser
     ? await prisma.user.update({
@@ -156,10 +157,12 @@ export async function acceptWorkspaceInvite(formData: FormData) {
           id: existingUser.id,
         },
         data: {
-          name: parsed.name,
+          name: personName.fullName,
+          firstName: personName.firstName,
+          lastName: personName.lastName,
           passwordHash,
           emailVerified: new Date(),
-        },
+        } as Prisma.UserUpdateInput,
         select: {
           id: true,
         },
@@ -167,11 +170,13 @@ export async function acceptWorkspaceInvite(formData: FormData) {
     : await prisma.user.create({
         data: {
           email: invite.email,
-          name: parsed.name,
+          name: personName.fullName,
+          firstName: personName.firstName,
+          lastName: personName.lastName,
           passwordHash,
           emailVerified: new Date(),
           role: invite.role,
-        },
+        } as Prisma.UserCreateInput,
         select: {
           id: true,
         },

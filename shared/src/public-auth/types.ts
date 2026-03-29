@@ -1,7 +1,8 @@
 export type AuthTab = "sign-in" | "register";
 
 export type RegisterRequest = {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
   passwordConfirmation: string;
@@ -18,6 +19,8 @@ export type RegisterResponse =
       user: {
         id: string;
         email: string;
+        firstName: string | null;
+        lastName: string | null;
         name: string | null;
         role: string;
       };

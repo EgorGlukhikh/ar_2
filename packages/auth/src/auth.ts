@@ -1,5 +1,5 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import { prisma } from "@academy/db";
+import { prisma, type Prisma } from "@academy/db";
 import { USER_ROLES } from "@academy/shared";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -76,11 +76,18 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           return null;
         }
 
+        const normalizedUser = user as typeof user & {
+          firstName?: string | null;
+          lastName?: string | null;
+        };
+
         return {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          role: user.role ?? USER_ROLES.STUDENT,
+          id: normalizedUser.id,
+          email: normalizedUser.email,
+          name: normalizedUser.name,
+          firstName: normalizedUser.firstName ?? null,
+          lastName: normalizedUser.lastName ?? null,
+          role: normalizedUser.role ?? USER_ROLES.STUDENT,
         };
       },
     }),
@@ -129,15 +136,33 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     jwt: async ({ token, user }) => {
       if (user) {
         token.role = user.role;
+        token.firstName = user.firstName ?? null;
+        token.lastName = user.lastName ?? null;
       }
 
-      if (token.sub && !token.role) {
+      if (
+        token.sub &&
+        (!token.role || token.firstName === undefined || token.lastName === undefined)
+      ) {
         const dbUser = await prisma.user.findUnique({
           where: { id: token.sub },
-          select: { role: true },
+          select: {
+            role: true,
+            firstName: true,
+            lastName: true,
+          } as Prisma.UserSelect,
         });
+        const normalizedDbUser = dbUser as
+          | {
+              role?: string | null;
+              firstName?: string | null;
+              lastName?: string | null;
+            }
+          | null;
 
-        token.role = dbUser?.role ?? USER_ROLES.STUDENT;
+        token.role = normalizedDbUser?.role ?? USER_ROLES.STUDENT;
+        token.firstName = normalizedDbUser?.firstName ?? null;
+        token.lastName = normalizedDbUser?.lastName ?? null;
       }
 
       return token;
@@ -146,6 +171,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (session.user) {
         session.user.id = token.sub ?? "";
         session.user.role = (token.role as string) ?? USER_ROLES.STUDENT;
+        session.user.firstName = (token.firstName as string | null | undefined) ?? null;
+        session.user.lastName = (token.lastName as string | null | undefined) ?? null;
       }
 
       return session;

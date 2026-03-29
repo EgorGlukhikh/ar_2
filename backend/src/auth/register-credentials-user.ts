@@ -1,4 +1,4 @@
-import { USER_ROLES } from "@academy/shared";
+import { USER_ROLES, composeFullName } from "@academy/shared";
 import { z } from "zod";
 
 import { hashPassword } from "../../../packages/auth/src/password";
@@ -15,7 +15,8 @@ import type {
 
 const registerSchema = z
   .object({
-    name: z.string().trim().min(2, "Укажи имя."),
+    firstName: z.string().trim().min(2, "Укажи имя."),
+    lastName: z.string().trim().max(120, "Фамилия слишком длинная."),
     email: z.email("Укажи корректный email.").trim().toLowerCase(),
     password: z
       .string()
@@ -72,27 +73,36 @@ export async function registerCredentialsUser(
   }
 
   const passwordHash = await hashPassword(parsed.data.password);
+  const fullName = composeFullName(parsed.data.firstName, parsed.data.lastName);
 
   const user = existingUser
-    ? await attachPasswordToExistingUser(
-        existingUser.id,
-        passwordHash,
-        existingUser.name ?? parsed.data.name,
-      )
+    ? await attachPasswordToExistingUser(existingUser.id, passwordHash, {
+        name: existingUser.name ?? fullName,
+        firstName: parsed.data.firstName,
+        lastName: parsed.data.lastName,
+      })
     : await createCredentialsUser({
         email: parsed.data.email,
-        name: parsed.data.name,
+        name: fullName,
+        firstName: parsed.data.firstName,
+        lastName: parsed.data.lastName,
         passwordHash,
         role: USER_ROLES.STUDENT,
       });
+  const normalizedUser = user as typeof user & {
+    firstName?: string | null;
+    lastName?: string | null;
+  };
 
   return {
     ok: true,
     user: {
-      id: user.id,
-      email: user.email,
-      name: user.name ?? null,
-      role: user.role,
+      id: normalizedUser.id,
+      email: normalizedUser.email,
+      firstName: normalizedUser.firstName ?? null,
+      lastName: normalizedUser.lastName ?? null,
+      name: normalizedUser.name ?? null,
+      role: normalizedUser.role,
     },
   };
 }
