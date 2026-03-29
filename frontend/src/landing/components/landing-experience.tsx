@@ -359,8 +359,14 @@ export function LandingExperience({
       })()}
 
       {/* ─── VALUE BENTO ─────────────────────────────────────────────── */}
-      <section className="bg-white pt-16 pb-20" id="value">
-        <PageContainer>
+      <section className="value-stage relative overflow-hidden bg-white pt-16 pb-20" id="value">
+        <div className="value-squares" aria-hidden>
+          <span className="value-square value-square-1" />
+          <span className="value-square value-square-2" />
+          <span className="value-square value-square-3" />
+          <span className="value-square value-square-4" />
+        </div>
+        <PageContainer className="relative z-10">
           <div className="space-y-10">
             <SectionLead
               eyebrow="Кому подойдет платформа"

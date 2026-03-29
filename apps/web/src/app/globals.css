@@ -305,6 +305,60 @@ label {
   animation: hero-square-float-a 16s ease-in-out infinite reverse;
 }
 
+.value-stage {
+  isolation: isolate;
+}
+
+.value-squares {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.value-square {
+  position: absolute;
+  border: 1px solid rgba(96, 165, 250, 0.16);
+  background: linear-gradient(180deg, rgba(191, 219, 254, 0.26), rgba(219, 234, 254, 0.08));
+  box-shadow:
+    0 18px 46px rgba(148, 163, 184, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(8px);
+  will-change: transform;
+}
+
+.value-square-1 {
+  top: 14%;
+  left: -1.5rem;
+  width: 104px;
+  height: 104px;
+  animation: value-square-float-a 20s ease-in-out infinite;
+}
+
+.value-square-2 {
+  top: 9%;
+  right: 8%;
+  width: 68px;
+  height: 68px;
+  animation: value-square-float-b 18s ease-in-out infinite;
+}
+
+.value-square-3 {
+  right: -1rem;
+  bottom: 16%;
+  width: 128px;
+  height: 128px;
+  animation: value-square-float-c 24s ease-in-out infinite;
+}
+
+.value-square-4 {
+  left: 32%;
+  bottom: 7%;
+  width: 52px;
+  height: 52px;
+  animation: value-square-float-b 16s ease-in-out infinite reverse;
+}
+
 @keyframes hero-gradient-pan {
   from {
     background-position: 0% 0%, 0% 0%, 0% 0%, 0% 50%;
@@ -327,6 +381,21 @@ label {
 @keyframes hero-square-float-c {
   0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
   50% { transform: translate3d(18px, -26px, 0) rotate(8deg) scale(1.06); }
+}
+
+@keyframes value-square-float-a {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  50% { transform: translate3d(14px, -18px, 0) rotate(8deg); }
+}
+
+@keyframes value-square-float-b {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  50% { transform: translate3d(-16px, 12px, 0) rotate(-7deg); }
+}
+
+@keyframes value-square-float-c {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
+  50% { transform: translate3d(10px, -14px, 0) rotate(6deg) scale(1.04); }
 }
 
 @keyframes float-up {
@@ -364,7 +433,8 @@ label {
 
   .aurora-orb,
   .hero-ambient,
-  .hero-squares {
+  .hero-squares,
+  .value-squares {
     display: none;
   }
 }
