@@ -7,7 +7,6 @@ import {
   ArrowRight,
   BookOpen,
   ClipboardCheck,
-  GraduationCap,
   Layers,
   LayoutList,
   MonitorPlay,
@@ -26,7 +25,7 @@ import {
 import { PageContainer } from "@/components/layout/page-grid";
 import { formatPublicCopy } from "@/lib/public-copy";
 import { cn } from "@/lib/utils";
-import { roleCopy, trustPoints } from "@shared/public-home/copy";
+import { audienceCards, roleCopy, trustPoints } from "@shared/public-home/copy";
 import type { PublicHomePayload } from "@shared/public-home/types";
 
 import { LandingCourseCarousel } from "./landing-course-carousel";
@@ -184,24 +183,33 @@ export function LandingExperience({
               <div className="space-y-8">
                 <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/8 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-white/60">
                   <ShieldCheck className="h-3.5 w-3.5 shrink-0" />
-                  Обучение по недвижимости
+                  <Copy value={roleCopy.learn.eyebrow} />
                 </span>
 
                 <h1 className="max-w-[14ch] text-[clamp(2.6rem,5.8vw,4.4rem)] font-semibold leading-[0.96] tracking-[-0.04em] text-white">
-                  <Copy value="Закрывай сделки увереннее и учись без хаоса." />
+                  <Copy value={roleCopy.learn.title} />
                 </h1>
 
                 <p className="max-w-[44ch] text-[17px] leading-8 text-white/64">
-                  <Copy value="Короткие практичные программы для риэлторов: записи, онлайн-потоки, задания, шаблоны и материалы в каждом уроке. Открыл курс, понял маршрут, пошел применять в работе." />
+                  <Copy value={roleCopy.learn.text} />
                 </p>
 
                 <div className="flex flex-wrap gap-3">
-                  <PublicButton href="/catalog">
-                    <Copy value="Выбрать курс" />
+                  <PublicButton href={roleCopy.learn.primaryHref}>
+                    <Copy value={roleCopy.learn.primaryLabel} />
                   </PublicButton>
-                  <PublicButton href="/sign-in" tone="ghost">
-                    <Copy value="Войти в кабинет" />
+                  <PublicButton href={roleCopy.learn.secondaryHref} tone="ghost">
+                    <Copy value={roleCopy.learn.secondaryLabel} />
                   </PublicButton>
+                </div>
+
+                <div className="grid gap-3 border-t border-white/10 pt-5 text-sm leading-6 text-white/62 sm:grid-cols-2">
+                  <p className="max-w-[28ch]">
+                    <Copy value={roleCopy.learn.primaryHint} />
+                  </p>
+                  <p className="max-w-[28ch]">
+                    <Copy value={roleCopy.learn.secondaryHint} />
+                  </p>
                 </div>
 
                 <div className="grid grid-cols-3 gap-3 border-t border-white/10 pt-8 text-center sm:gap-4 sm:text-left">
@@ -231,42 +239,26 @@ export function LandingExperience({
               >
                 <div className={cn(publicGradientCardClassName, "mx-auto w-full")}>
                   <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/60">
-                    Что получает студент
+                    <Copy value={roleCopy.learn.heroCardEyebrow} />
                   </p>
                   <h2 className="mt-4 max-w-[22ch] text-2xl font-semibold leading-[1.08] tracking-[-0.02em] text-white">
-                    <Copy value="Курс, материалы, задания и прогресс — в одном интерфейсе" />
+                    <Copy value={roleCopy.learn.heroCardTitle} />
                   </h2>
                   <div className="mt-6 grid gap-3">
-                    {[
-                      {
-                        title: "Маршрут обучения",
-                        text: "Каталог, карточка курса, уроки и прогресс читаются без лишнего служебного шума.",
-                      },
-                      {
-                        title: "Наполнение урока",
-                        text: "Видео, текст, файлы и задания остаются внутри урока и не теряются по дороге.",
-                      },
-                      {
-                        title: "Следующий шаг",
-                        text: "После выбора программы сразу понятно, что делать дальше и как перейти к учёбе.",
-                      },
-                    ].map((item) => (
+                    {roleCopy.learn.heroCardPoints.map((item) => (
                       <div
-                        key={item.title}
+                        key={item}
                         className="rounded-[var(--radius-md)] border border-white/12 bg-white/8 px-4 py-3"
                       >
-                        <p className="text-sm font-semibold text-white">
-                          <Copy value={item.title} />
-                        </p>
-                        <p className="mt-1 text-sm leading-6 text-white/70">
-                          <Copy value={item.text} />
+                        <p className="text-sm leading-6 text-white/78">
+                          <Copy value={item} />
                         </p>
                       </div>
                     ))}
                   </div>
                   <div className="mt-6">
                     <PublicButton href="/catalog" tone="ghost">
-                      <Copy value="Открыть каталог" />
+                      <Copy value={roleCopy.learn.heroCardCta} />
                     </PublicButton>
                   </div>
                 </div>
@@ -285,12 +277,12 @@ export function LandingExperience({
           { Icon: LayoutList,     text: trustPoints[3] },
         ] as const;
         return (
-          <section className="border-b border-[var(--border)] bg-[var(--surface-strong)] py-12 md:py-16">
+          <section className="border-b border-[var(--border)] bg-[var(--surface-strong)] py-12 md:py-14">
             <PageContainer className="grid place-items-center">
               <div className="grid w-full max-w-[1080px] grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 {trustCards.map(({ Icon, text }, index) => (
                   <MotionReveal key={text} variant="up" delay={index * 60} className="h-full">
-                    <div className="flex min-h-[188px] h-full cursor-default flex-col items-center justify-start gap-4 rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-5 text-center shadow-[var(--shadow-sm)] transition duration-200 hover:-translate-y-1 hover:shadow-[var(--shadow-md)]">
+                    <div className="flex min-h-[188px] h-full cursor-default flex-col items-center justify-center gap-4 rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-5 text-center shadow-[var(--shadow-sm)] transition duration-200 hover:-translate-y-1 hover:shadow-[var(--shadow-md)]">
                       <div className="flex h-11 w-11 items-center justify-center rounded-[var(--radius-md)] bg-[var(--primary-soft)]">
                         <Icon className="h-5 w-5 text-[var(--primary)]" />
                       </div>
@@ -309,39 +301,55 @@ export function LandingExperience({
       {/* ─── VALUE BENTO ─────────────────────────────────────────────── */}
       <section className="bg-white pt-16 pb-20" id="value">
         <PageContainer>
-          <div className="space-y-5">
+          <div className="space-y-10">
+            <SectionLead
+              eyebrow="Кому подойдет платформа"
+              title="Учиться, усиливать практику или превращать экспертизу в продукт"
+              text="Платформа подходит тем, кто хочет войти в профессию, быстро закрывать рабочие задачи в текущей практике или оформить собственную экспертизу в образовательный продукт."
+            />
+
             {/* Top row: 3 large accent cards */}
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
-              <MotionReveal variant="up" delay={0}>
-                <article className="flex min-h-[220px] cursor-default flex-col rounded-[var(--radius-lg)] border border-white/8 bg-[var(--foreground)] p-6 shadow-[var(--shadow-md)] transition-all duration-200 hover:-translate-y-1.5 hover:scale-[1.03]">
-                  <h3 className="text-xl font-semibold leading-7 tracking-[-0.02em] text-white">
-                    Войти в профессию без хаоса и месяцев блужданий
-                  </h3>
-                  <p className="mt-3 text-sm leading-7 text-white/64">
-                    Структурированный маршрут с первого дня: программа, уроки, шаблоны и задания в нужном порядке.
-                  </p>
-                </article>
-              </MotionReveal>
-              <MotionReveal variant="up" delay={80}>
-                <article className="flex min-h-[220px] cursor-default flex-col rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-strong)] p-6 shadow-[var(--shadow-sm)] transition-all duration-200 hover:-translate-y-1.5 hover:scale-[1.03]">
-                  <h3 className="text-xl font-semibold leading-7 tracking-[-0.02em] text-[var(--foreground)]">
-                    Закрыть конкретный пробел перед сделкой
-                  </h3>
-                  <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
-                    Короткие программы под задачу. Выбрал тему — прошёл уроки — применил на следующей встрече с клиентом.
-                  </p>
-                </article>
-              </MotionReveal>
-              <MotionReveal variant="up" delay={160}>
-                <article className="flex min-h-[220px] cursor-default flex-col rounded-[var(--radius-lg)] border border-indigo-500/20 bg-[var(--primary)] p-6 shadow-[var(--shadow-brand)] transition-all duration-200 hover:-translate-y-1.5 hover:scale-[1.03]">
-                  <h3 className="text-xl font-semibold leading-7 tracking-[-0.02em] text-white">
-                    Запустить свой курс и вести учеников в системе
-                  </h3>
-                  <p className="mt-3 text-sm leading-7 text-white/72">
-                    Записываешь программу или открываешь поток — платформа ведёт учеников по урокам и собирает прогресс.
-                  </p>
-                </article>
-              </MotionReveal>
+              {audienceCards.map((item, index) => (
+                <MotionReveal key={item.title} variant="up" delay={index * 80}>
+                  <article
+                    className={cn(
+                      "flex min-h-[240px] cursor-default flex-col rounded-[var(--radius-lg)] p-6 transition-all duration-200 hover:-translate-y-1.5 hover:scale-[1.03]",
+                      index === 0 &&
+                        "border border-white/8 bg-[var(--foreground)] shadow-[var(--shadow-md)]",
+                      index === 1 &&
+                        "border border-[var(--border)] bg-[var(--surface-strong)] shadow-[var(--shadow-sm)]",
+                      index === 2 &&
+                        "border border-indigo-500/20 bg-[var(--primary)] shadow-[var(--shadow-brand)]",
+                    )}
+                  >
+                    <p
+                      className={cn(
+                        "text-[11px] font-semibold uppercase tracking-[0.18em]",
+                        index === 1 ? "text-[var(--muted)]" : "text-white/60",
+                      )}
+                    >
+                      <Copy value={item.eyebrow} />
+                    </p>
+                    <h3
+                      className={cn(
+                        "mt-4 text-xl font-semibold leading-7 tracking-[-0.02em]",
+                        index === 1 ? "text-[var(--foreground)]" : "text-white",
+                      )}
+                    >
+                      <Copy value={item.title} />
+                    </h3>
+                    <p
+                      className={cn(
+                        "mt-3 text-sm leading-7",
+                        index === 1 ? "text-[var(--muted)]" : "text-white/72",
+                      )}
+                    >
+                      <Copy value={item.text} />
+                    </p>
+                  </article>
+                </MotionReveal>
+              ))}
             </div>
 
             {/* Bottom row: 3 feature cards */}
@@ -349,18 +357,18 @@ export function LandingExperience({
               {[
                 {
                   icon: BookOpen,
-                  title: "Материалы в каждом уроке",
-                  text: "Видео, файлы и задания всегда под рукой — не нужно искать по чатам и папкам.",
+                  title: "Материалы и шаблоны внутри урока",
+                  text: "Видео, конспекты, файлы, шаблоны и задания находятся там, где ученик их реально использует.",
                 },
                 {
                   icon: PlayCircle,
-                  title: "Запись или живой поток",
-                  text: "Выбирай формат под удобный темп: самостоятельно или по расписанию с группой.",
+                  title: "Запись и поток в одной логике",
+                  text: "Можно учиться в своём темпе или идти по расписанию, не меняя платформу и не теряя маршрут.",
                 },
                 {
-                  icon: GraduationCap,
-                  title: "Бесплатный вход в каталог",
-                  text: "Часть программ доступна без оплаты — попробуй до покупки.",
+                  icon: LayoutList,
+                  title: "Эксперт может запустить свой курс",
+                  text: "Если у пользователя есть сильная практика, её можно оформить в продукт, опубликовать и продавать на платформе.",
                 },
               ].map((item, index) => {
                 const Icon = item.icon;
@@ -393,7 +401,7 @@ export function LandingExperience({
             <SectionLead
               eyebrow="Форматы обучения"
               title="Два формата — один маршрут"
-              text="Выбирай самостоятельный темп или живое расписание. В обоих форматах урок содержит всё необходимое: материалы, задание и следующий шаг."
+              text="Выбирай удобный темп, а не меняй логику обучения. И в записи, и в живом потоке ученик проходит один и тот же понятный маршрут: урок, материалы, задание, следующий шаг."
             />
 
             {/* Right: 2 image cards */}
@@ -462,8 +470,8 @@ export function LandingExperience({
           <div className="space-y-12">
             <SectionLead
               eyebrow="Как это работает"
-              title="Выбираешь программу, проходишь уроки и применяешь в сделке"
-              text="Маршрут читается за несколько секунд: курс, уроки, задание, результат."
+              title={roleCopy.learn.processTitle}
+              text={roleCopy.learn.processText}
             />
             <div className="grid gap-6 md:grid-cols-3">
               {roleCopy.learn.steps.map((step, index) => {
@@ -496,8 +504,8 @@ export function LandingExperience({
             <div className="flex flex-wrap items-end justify-between gap-4">
               <SectionLead
                 eyebrow="Каталог"
-                title="Выбирай программу под задачу сделки"
-                text="В карточке курса сразу видно формат, объём, цену и чему научишься."
+                title="Выбирай программу под текущую задачу, а не по общему описанию"
+                text="До покупки видно формат, цену, структуру и чему именно посвящён курс. Это помогает выбирать обучение осознанно, а не на уровне обещаний."
               />
               <PublicButton href="/catalog" tone="secondary">
                 <Copy value="Все курсы" />
@@ -541,14 +549,17 @@ export function LandingExperience({
               {/* Центр */}
               <div className="relative mx-auto max-w-[480px] space-y-6">
                 <h2 className="text-[clamp(1.8rem,4vw,2.6rem)] font-semibold leading-[1.08] tracking-[-0.03em] text-white">
-                  <Copy value="Выбери курс и начни с шага, который нужен тебе сейчас" />
+                  <Copy value="Выбери программу под свою задачу или преврати свою экспертизу в курс" />
                 </h2>
                 <p className="text-[16px] leading-7 text-white/72">
-                  <Copy value="Открой каталог, посмотри форматы и начни с программы, которая даст понятный результат уже в ближайшей сделке." />
+                  <Copy value="Можно зайти как ученик, выбрать обучение под текущую задачу и сразу понять маршрут. А если у тебя уже есть сильная практика, её можно упаковать в курс и вывести в каталог." />
                 </p>
-                <div className="flex justify-center">
+                <div className="flex flex-wrap justify-center gap-3">
                   <PublicButton href="/catalog" tone="secondary">
                     <Copy value="Перейти в каталог" />
+                  </PublicButton>
+                  <PublicButton href="/sign-in?role=author" tone="ghost">
+                    <Copy value="Разместить свой курс" />
                   </PublicButton>
                 </div>
               </div>
