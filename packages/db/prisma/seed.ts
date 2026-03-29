@@ -3,7 +3,7 @@ import { hash } from "bcryptjs";
 import { prisma, UserRole } from "../src/index.js";
 import { seedShowcaseAcademy } from "./showcase-seed.js";
 
-const adminEmail = process.env.ADMIN_EMAIL ?? "test@mail.ru";
+const adminEmail = process.env.ADMIN_EMAIL ?? "gluhih_nashe@mail.ru";
 const adminPassword = process.env.ADMIN_PASSWORD ?? "123456";
 const bootstrapUserEmail = process.env.BOOTSTRAP_USER_EMAIL?.trim().toLowerCase();
 const bootstrapUserPassword = process.env.BOOTSTRAP_USER_PASSWORD;

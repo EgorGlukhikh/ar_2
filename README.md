@@ -25,7 +25,7 @@
 
 Тестовый админ по умолчанию:
 
-- email: `test@mail.ru`
+- email: `gluhih_nashe@mail.ru`
 - password: `123456`
 
 Дополнительный workspace-пользователь создается только через `BOOTSTRAP_USER_*`.
