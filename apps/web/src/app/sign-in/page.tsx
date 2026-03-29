@@ -26,7 +26,7 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
 
   return (
     <main
-      className={`${marketingDisplay.variable} ${marketingBody.variable} min-h-screen overflow-hidden bg-[var(--background)] font-[family:var(--font-landing-body)] text-[var(--foreground)]`}
+      className={`${marketingDisplay.variable} ${marketingBody.variable} min-h-screen bg-[var(--background)] overflow-hidden font-[family:var(--font-landing-body)] text-[var(--foreground)]`}
     >
       <SignInPageContent payload={payload} />
     </main>
