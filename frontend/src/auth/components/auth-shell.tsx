@@ -1,20 +1,18 @@
-﻿import type { ReactNode } from "react";
-import { CheckCircle2, ShieldCheck, Sparkles, UserRound } from "lucide-react";
+import type { ReactNode } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowLeft, CheckCircle2 } from "lucide-react";
 
-import { AuthCard } from "./auth-card";
-
-import { publicGradientCardClassName, publicIconBoxClassName } from "@/components/marketing/public-primitives";
 import { formatPublicCopy } from "@/lib/public-copy";
-import { cn } from "@/lib/utils";
 
 const benefits = [
   "Один вход для ученика, автора и внутренней команды.",
-  "Яндекс работает как быстрый вход и регистрация для студента.",
-  "Если email уже есть в системе, новый способ входа привяжется к тому же аккаунту.",
+  "Яндекс работает как быстрый вход или регистрация без отдельного пароля.",
+  "Если почта уже есть в системе, новый вход подтянется к тому же аккаунту.",
 ];
 
 /**
- * Purpose: page-level auth layout with a dedicated visual identity, not a generic marketing block.
+ * Purpose: auth layout with a clear split-screen composition for marketing-style entry pages.
  */
 export function AuthShell({
   title,
@@ -30,73 +28,90 @@ export function AuthShell({
   children: ReactNode;
 }) {
   return (
-    <section className="grid gap-8 xl:grid-cols-[0.92fr_1.08fr] xl:items-start">
-      <div className="space-y-6">
-        <AuthCard className="bg-[var(--surface-strong)]">
-          <p className="text-[12px] font-medium uppercase leading-4 tracking-[0.18em] text-[var(--muted)]">
-            {formatPublicCopy("Доступ в платформу")}
+    <section className="overflow-hidden rounded-[32px] border border-[rgba(148,163,184,0.18)] bg-white shadow-[0_24px_80px_rgba(15,23,42,0.12)] xl:grid xl:min-h-[760px] xl:grid-cols-[1.06fr_0.94fr]">
+      <div className="relative overflow-hidden bg-[linear-gradient(180deg,#6f84f5_0%,#8ea2ff_100%)] px-7 py-7 text-white sm:px-10 sm:py-10 xl:flex xl:flex-col xl:justify-between xl:px-12 xl:py-12">
+        <div className="relative z-10 flex items-start justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <div className="flex h-16 w-16 items-center justify-center rounded-[20px] bg-white/14 text-2xl font-semibold tracking-[-0.04em] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.22)] backdrop-blur">
+              AR
+            </div>
+            <div className="space-y-1">
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/72">
+                {formatPublicCopy("Обучающая платформа")}
+              </p>
+              <h1 className="text-[clamp(1.6rem,3vw,2.5rem)] font-semibold leading-[0.95] tracking-[-0.04em] text-white">
+                {formatPublicCopy("Академия риэлторов")}
+              </h1>
+            </div>
+          </div>
+
+          <Link
+            href="/"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/16 bg-white/10 text-white/88 transition hover:bg-white/16"
+            aria-label="Вернуться на главную"
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </Link>
+        </div>
+
+        <div className="relative z-10 mt-10 max-w-[520px] space-y-5 xl:mt-16">
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/70">
+            {formatPublicCopy("Доступ в систему")}
           </p>
-          <h1 className="mt-4 max-w-[12ch] text-[clamp(2rem,4vw,3rem)] font-semibold leading-[1.04] tracking-[-0.03em] text-[var(--foreground)]">
+          <h2 className="max-w-[10ch] text-[clamp(2.4rem,6vw,4.75rem)] font-semibold leading-[0.9] tracking-[-0.055em] text-white">
             {formatPublicCopy(title)}
-          </h1>
-          <p className="mt-4 max-w-[560px] text-[16px] leading-7 text-[var(--muted)]">
+          </h2>
+          <p className="max-w-[46ch] text-[15px] leading-7 text-white/78 sm:text-base">
             {formatPublicCopy(text)}
           </p>
-        </AuthCard>
+        </div>
 
-        <div className={publicGradientCardClassName}>
-          <p className="text-[12px] font-medium uppercase leading-4 tracking-[0.18em] text-white/72">
-            {formatPublicCopy("Что получаешь после входа")}
-          </p>
-          <h2 className="mt-4 max-w-[14ch] text-[30px] font-semibold leading-9 tracking-[-0.02em] text-white">
-            {formatPublicCopy(sideTitle)}
-          </h2>
-          <p className="mt-4 max-w-[560px] text-base leading-7 text-white/84">
-            {formatPublicCopy(sideText)}
-          </p>
-
-          <div className="mt-6 grid gap-3">
-            {benefits.map((item) => (
-              <div
-                key={item}
-                className="flex items-start gap-3 rounded-[var(--radius-md)] border border-white/15 bg-white/10 p-4"
-              >
-                <CheckCircle2 className="mt-1 h-5 w-5 flex-none text-white" />
-                <p className="text-sm leading-6 text-white/88">
-                  {formatPublicCopy(item)}
-                </p>
-              </div>
-            ))}
+        <div className="relative z-10 mt-10 flex justify-center xl:mt-6 xl:justify-start">
+          <div className="relative w-full max-w-[620px]">
+            <div className="absolute inset-0 translate-y-10 rounded-[40px] bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.26),rgba(255,255,255,0)_72%)] blur-2xl" />
+            <Image
+              src="/illustrations/continuous-learning.svg"
+              alt="Иллюстрация обучения"
+              width={620}
+              height={552}
+              priority
+              className="relative h-auto w-full drop-shadow-[0_28px_60px_rgba(34,39,92,0.38)]"
+            />
           </div>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-3">
-          {[
-            { icon: UserRound, label: "Один аккаунт", value: "Учеба, курсы и доступы" },
-            { icon: ShieldCheck, label: "Связка по email", value: "Без дублей профиля" },
-            { icon: Sparkles, label: "Быстрый вход", value: "Почта или Яндекс" },
-          ].map((item) => {
-            const Icon = item.icon;
-
-            return (
-              <AuthCard key={item.label}>
-                <div className={cn(publicIconBoxClassName, "h-10 w-10 rounded-[var(--icon-radius-sm)]")}>
-                  <Icon className="h-4 w-4" />
-                </div>
-                <p className="mt-4 text-[12px] font-medium uppercase leading-4 tracking-[0.18em] text-[var(--muted)]">
-                  {formatPublicCopy(item.label)}
+        <div className="relative z-10 mt-8 grid gap-3 sm:grid-cols-3 xl:mt-6 xl:max-w-[700px]">
+          {benefits.map((item) => (
+            <div
+              key={item}
+              className="rounded-[22px] border border-white/14 bg-white/10 px-4 py-4 backdrop-blur-[8px]"
+            >
+              <div className="flex items-start gap-3">
+                <CheckCircle2 className="mt-0.5 h-4.5 w-4.5 flex-none text-white" />
+                <p className="text-sm leading-6 text-white/84">
+                  {formatPublicCopy(item)}
                 </p>
-                <p className="mt-3 text-lg font-semibold leading-7 text-[var(--foreground)]">
-                  {formatPublicCopy(item.value)}
-                </p>
-              </AuthCard>
-            );
-          })}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
-      <div className="space-y-4">{children}</div>
+      <div className="flex items-center bg-[linear-gradient(180deg,#ffffff_0%,#fbfcff_100%)] px-5 py-6 sm:px-8 sm:py-8 xl:px-10 xl:py-10">
+        <div className="mx-auto w-full max-w-[520px]">
+          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
+            {formatPublicCopy("Авторизация")}
+          </p>
+          <h3 className="max-w-[12ch] text-[clamp(2rem,4vw,3.25rem)] font-semibold leading-[0.95] tracking-[-0.04em] text-[var(--foreground)]">
+            {formatPublicCopy(sideTitle)}
+          </h3>
+          <p className="mt-4 max-w-[44ch] text-[15px] leading-7 text-[var(--muted)]">
+            {formatPublicCopy(sideText)}
+          </p>
+
+          <div className="mt-8">{children}</div>
+        </div>
+      </div>
     </section>
   );
 }
-

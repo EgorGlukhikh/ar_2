@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import { signIn } from "next-auth/react";
@@ -35,14 +35,14 @@ export function SignInPageContent({
 
   return (
     <AuthShell
-      title="Вход и регистрация без лишних шагов."
-      text="Открой учебный кабинет или рабочий контур с одного экрана. Можно войти по почте и паролю или через Яндекс."
-      sideTitle="После входа платформа сама откроет нужный раздел."
-      sideText="Если почта уже есть в системе, вход через Яндекс подключится к тому же аккаунту. Новый вход через Яндекс создает обычный учебный профиль."
+      title="Вход в обучающую платформу"
+      text="Открой учебный кабинет или рабочий контур с одного экрана. Можно войти по почте и паролю или через Яндекс ID."
+      sideTitle="Войти"
+      sideText="Если почта уже есть в системе, вход через Яндекс подключится к тому же аккаунту. Новый вход через Яндекс создаст обычный учебный профиль."
     >
-      <AuthCard className="overflow-hidden p-0">
-        <div className="border-b border-[var(--border)] p-3">
-          <div className="inline-flex rounded-[var(--control-radius)] border border-[var(--border)] bg-[var(--surface-strong)] p-1 shadow-[var(--shadow-sm)]">
+      <AuthCard className="overflow-hidden border-[rgba(148,163,184,0.18)] bg-white/92 p-0 shadow-[0_18px_60px_rgba(15,23,42,0.08)]">
+        <div className="border-b border-[var(--border)] px-5 py-4">
+          <div className="inline-flex rounded-[18px] border border-[var(--border)] bg-[var(--surface-strong)] p-1 shadow-[var(--shadow-sm)]">
             {([
               { id: "sign-in", label: "Вход" },
               { id: "register", label: "Регистрация" },
@@ -52,7 +52,7 @@ export function SignInPageContent({
                 type="button"
                 onClick={() => setActiveTab(tab.id)}
                 className={cn(
-                  "min-h-[40px] rounded-[10px] px-5 text-sm font-semibold transition duration-200",
+                  "min-h-[42px] rounded-[14px] px-5 text-sm font-semibold transition duration-200",
                   activeTab === tab.id
                     ? "bg-[var(--primary)] !text-white shadow-[var(--shadow-brand)]"
                     : "text-[var(--foreground)] hover:bg-[var(--surface)]",
@@ -64,22 +64,22 @@ export function SignInPageContent({
           </div>
         </div>
 
-        <div className="space-y-6 p-6">
+        <div className="space-y-6 px-5 py-6 sm:px-6 sm:py-7">
           <div className="space-y-2">
             <p className="text-[12px] font-medium uppercase leading-4 tracking-[0.18em] text-[var(--muted)]">
               {formatPublicCopy(activeTab === "sign-in" ? "Вход" : "Регистрация")}
             </p>
-            <h2 className="text-[28px] font-semibold leading-9 tracking-[-0.02em] text-[var(--foreground)]">
+            <h2 className="text-[30px] font-semibold leading-[1.02] tracking-[-0.03em] text-[var(--foreground)]">
               {formatPublicCopy(
                 activeTab === "sign-in"
-                  ? "Открыть свой кабинет"
+                  ? "Войти в платформу"
                   : "Создать новый аккаунт",
               )}
             </h2>
             <p className="max-w-[560px] text-[15px] leading-6 text-[var(--muted)]">
               {formatPublicCopy(
                 activeTab === "sign-in"
-                  ? "Войди по почте и паролю или используй Яндекс, если он привязан к твоей почте."
+                  ? "Войди по почте и паролю. Если удобнее, ниже можно продолжить через Яндекс ID."
                   : "Регистрация открывает учебный профиль. Роль автора, куратора или администратора назначается отдельно внутри платформы.",
               )}
             </p>
@@ -99,32 +99,31 @@ export function SignInPageContent({
             </div>
           ) : null}
 
-          {payload.isYandexEnabled ? (
-            <>
-              <AuthMethodButton
-                label="Войти через Яндекс"
-                hint="Быстрый вход без отдельного пароля, если почта уже известна системе."
-                icon="Я"
-                onClick={handleYandexSignIn}
-                pending={yandexPending}
-                tone="yandex"
-              />
-
-              <div className="flex items-center gap-4">
-                <div className="h-px flex-1 bg-[var(--border)]" />
-                <span className="text-sm text-[var(--muted)]">
-                  {formatPublicCopy("или")}
-                </span>
-                <div className="h-px flex-1 bg-[var(--border)]" />
-              </div>
-            </>
-          ) : null}
-
           {activeTab === "sign-in" ? (
             <SignInForm defaultEmail={payload.defaultEmail} />
           ) : (
             <SignUpForm defaultEmail={payload.defaultEmail} />
           )}
+
+          {payload.isYandexEnabled ? (
+            <>
+              <div className="flex items-center gap-4 pt-1">
+                <div className="h-px flex-1 bg-[var(--border)]" />
+                <span className="text-sm uppercase tracking-[0.12em] text-[var(--muted)]">
+                  {formatPublicCopy("или")}
+                </span>
+                <div className="h-px flex-1 bg-[var(--border)]" />
+              </div>
+
+              <AuthMethodButton
+                label="Войти с Яндекс ID"
+                icon="Я"
+                onClick={handleYandexSignIn}
+                pending={yandexPending}
+                tone="yandex"
+              />
+            </>
+          ) : null}
         </div>
       </AuthCard>
     </AuthShell>

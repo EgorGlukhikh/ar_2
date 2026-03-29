@@ -77,7 +77,7 @@ export function SignInForm({
       ) : null}
 
       <Button type="submit" className="w-full justify-center" disabled={pending}>
-        {pending ? formatPublicCopy("Входим...") : formatPublicCopy("Войти в платформу")}
+        {pending ? formatPublicCopy("Входим...") : formatPublicCopy("Войти")}
       </Button>
     </form>
   );
