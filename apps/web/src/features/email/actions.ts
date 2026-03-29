@@ -158,7 +158,7 @@ export async function updateEmailPreferenceByTokenAction(formData: FormData) {
     enabled,
     source: "email-preferences-page",
     consentText:
-      "Пользователь самостоятельно изменил маркетинговую подписку на странице настроек писем.",
+      "Пользователь самостоятельно изменил согласие на информационные и рекламные рассылки на странице управления подпиской.",
   });
 
   refreshEmailRoutes();

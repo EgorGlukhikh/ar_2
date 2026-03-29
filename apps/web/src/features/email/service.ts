@@ -375,6 +375,25 @@ function getAudienceTypeForRole(role?: string | null) {
   return role === USER_ROLES.AUTHOR ? EmailAudienceType.EXPERT : EmailAudienceType.STUDENT;
 }
 
+function resolveRecipientName(name?: string | null, email?: string | null) {
+  const trimmedName = name?.trim();
+  if (trimmedName) {
+    return trimmedName;
+  }
+
+  const emailLocalPart = email?.split("@")[0]?.trim();
+  if (emailLocalPart) {
+    return emailLocalPart
+      .replace(/[._-]+/g, " ")
+      .split(/\s+/)
+      .filter(Boolean)
+      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+      .join(" ");
+  }
+
+  return "Коллега";
+}
+
 async function buildRuntimeTemplateContext(args: {
   trackingToken: string;
   userId?: string;
@@ -447,7 +466,7 @@ async function queueRenderedTemplateEmail(args: {
       trackingToken,
       userId: args.userId,
       templateKey: args.templateKey,
-      recipientName: args.toName || args.toEmail,
+      recipientName: resolveRecipientName(args.toName, args.toEmail),
       courseId: args.courseId,
       courseSlug: args.courseSlug,
       courseTitle: args.courseTitle,
@@ -552,7 +571,7 @@ export async function queueStudentAccountCreatedEmail(input: {
   const trackingToken = createTrackingToken();
   const replyTo = getEmailReplyTo();
   const template = renderStudentAccountCreatedTemplate({
-    studentName: input.user.name || input.user.email,
+    studentName: resolveRecipientName(input.user.name, input.user.email),
     email: input.user.email,
     password: input.password,
     signInUrl: buildTrackedUrl(trackingToken, signInUrl),
@@ -593,7 +612,7 @@ export async function queueCourseAccessGrantedEmail(input: {
   const trackingToken = createTrackingToken();
   const replyTo = getEmailReplyTo();
   const template = renderCourseAccessGrantedTemplate({
-    studentName: input.user.name || input.user.email,
+    studentName: resolveRecipientName(input.user.name, input.user.email),
     courseTitle: input.course.title,
     courseUrl: buildTrackedUrl(
       trackingToken,
@@ -632,7 +651,7 @@ export async function queuePaymentSuccessEmail(input: {
   const trackingToken = createTrackingToken();
   const replyTo = getEmailReplyTo();
   const template = renderPaymentSuccessTemplate({
-    studentName: input.user.name || input.user.email,
+    studentName: resolveRecipientName(input.user.name, input.user.email),
     courseTitle: input.course.title,
     amountLabel: input.amountLabel,
     learningUrl: buildTrackedUrl(
