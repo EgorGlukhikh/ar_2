@@ -189,7 +189,7 @@ export default async function CourseSettingsPage({
                 id="tags"
                 name="tags"
                 defaultValue={course.tags.join(", ")}
-                placeholder="fair housing, privacy, показы"
+                placeholder="равный доступ, конфиденциальность, показы"
               />
               <p className="text-sm leading-6 text-[var(--muted)]">
                 Пиши через запятую. Теги используются в фильтрах и группировке курсов.

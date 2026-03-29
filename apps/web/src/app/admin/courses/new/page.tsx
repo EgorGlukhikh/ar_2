@@ -187,7 +187,7 @@ export default async function NewCoursePage() {
             <Input
               id="tags"
               name="tags"
-              placeholder="fair housing, privacy, показы"
+              placeholder="равный доступ, конфиденциальность, показы"
             />
             <p className="text-sm leading-6 text-[var(--muted)]">
               Пиши через запятую. Теги нужны для фильтров, группировки и будущей навигации.
