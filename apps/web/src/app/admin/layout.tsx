@@ -6,6 +6,7 @@ import { USER_ROLES } from "@academy/shared";
 
 import { LogoutButton } from "@/components/auth/logout-button";
 import { AdminNav } from "@/components/admin/admin-nav";
+import { AcademyMark } from "@/components/brand/academy-mark";
 import { Button } from "@/components/ui/button";
 import { RolePreviewSwitcher } from "@/components/workspace/role-preview-switcher";
 import { canCreateCourses } from "@/lib/admin";
@@ -45,8 +46,8 @@ export default async function AdminLayout({
           {/* Row 1: brand + action buttons */}
           <div className="flex items-center justify-between gap-4 py-3">
             <div className="flex items-center gap-3">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--foreground)] text-[11px] font-bold text-white shadow-sm">
-                AR
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--foreground)] text-white shadow-sm">
+                <AcademyMark className="w-[18px]" title="Академия риэлторов" />
               </div>
               <div className="min-w-0">
                 <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--muted)] leading-none">

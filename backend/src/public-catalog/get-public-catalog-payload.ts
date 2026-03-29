@@ -58,6 +58,14 @@ export async function getPublicCatalogPayload(
       canCheckout: Boolean(defaultPrice),
       isFree,
       hasAccess,
+      modules: course.modules.map((module) => ({
+        id: module.id,
+        title: module.title,
+        lessons: module.lessons.map((lesson) => ({
+          id: lesson.id,
+          title: lesson.title,
+        })),
+      })),
     };
   });
 

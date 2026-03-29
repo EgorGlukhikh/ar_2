@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { AcademyMark } from "@/components/brand/academy-mark";
 import { PageContainer } from "@/components/layout/page-grid";
 
 export function PublicFooter() {
@@ -9,8 +10,8 @@ export function PublicFooter() {
         <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
           <div className="space-y-3">
             <div className="flex items-center gap-3">
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[var(--radius-sm)] bg-white/10 text-xs font-bold text-white">
-                AR
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[var(--radius-sm)] bg-white/10 text-white">
+                <AcademyMark className="w-5" title="Академия риэлторов" />
               </div>
               <p className="text-sm font-semibold text-white">Академия риэлторов</p>
             </div>

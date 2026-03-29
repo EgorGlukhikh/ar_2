@@ -14,6 +14,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 
+import { AcademyMark } from "@/components/brand/academy-mark";
 import { MotionReveal } from "@/components/marketing/motion-reveal";
 import {
   PublicButton,
@@ -117,8 +118,8 @@ export function LandingExperience({
       <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-white/96 backdrop-blur-sm">
         <PageContainer className="flex min-h-16 items-center justify-between gap-4 py-3">
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[var(--radius-sm)] bg-[var(--foreground)] text-xs font-bold text-white">
-              AR
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[var(--radius-sm)] bg-[var(--foreground)] text-white">
+              <AcademyMark className="w-5" title="Академия риэлторов" />
             </div>
             <span className="hidden text-sm font-semibold text-[var(--foreground)] sm:block">
               Академия риэлторов

@@ -5,6 +5,7 @@ import { auth } from "@academy/auth";
 import { getPublicCatalogPayload } from "@backend/public-catalog/get-public-catalog-payload";
 import { CatalogPageContent } from "@frontend/catalog/components/catalog-page-content";
 
+import { AcademyMark } from "@/components/brand/academy-mark";
 import { PageContainer } from "@/components/layout/page-grid";
 import { PublicFooter } from "@/components/marketing/public-footer";
 import { PublicButton } from "@/components/marketing/public-primitives";
@@ -23,8 +24,8 @@ export default async function CatalogPage() {
       <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-white/96 backdrop-blur-sm">
         <PageContainer className="flex h-16 items-center justify-between gap-4 py-0">
           <Link href="/" className="flex items-center gap-3">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[var(--radius-sm)] bg-[var(--foreground)] text-xs font-bold text-white">
-              AR
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[var(--radius-sm)] bg-[var(--foreground)] text-white">
+              <AcademyMark className="w-5" title="Академия риэлторов" />
             </div>
             <span className="hidden text-sm font-semibold text-[var(--foreground)] sm:block">
               Академия риэлторов

@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 
+import { AcademyMark } from "@/components/brand/academy-mark";
 import { LogoutButton } from "@/components/auth/logout-button";
 import { LearningNav } from "@/components/learning/learning-nav";
 import { Button } from "@/components/ui/button";
@@ -29,8 +30,8 @@ export default async function LearningLayout({
           {/* Row 1: brand + actions */}
           <div className="flex items-center justify-between gap-4 py-3">
             <div className="flex items-center gap-3">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#1c2442] text-[11px] font-bold text-white shadow-sm">
-                AR
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#1c2442] text-white shadow-sm">
+                <AcademyMark className="w-[18px]" title="Академия риэлторов" />
               </div>
               <div className="min-w-0">
                 <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--muted)] leading-none">

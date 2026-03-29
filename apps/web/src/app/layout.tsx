@@ -17,6 +17,16 @@ const mono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "Академия риэлторов",
   description: "Платформа обучения, управления курсами и прогрессом студентов",
+  icons: {
+    icon: [
+      {
+        url: "/brand/academy-mark.svg",
+        type: "image/svg+xml",
+      },
+    ],
+    shortcut: ["/brand/academy-mark.svg"],
+    apple: ["/brand/academy-mark.svg"],
+  },
 };
 
 export default function RootLayout({

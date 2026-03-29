@@ -1,6 +1,8 @@
 import type { ReactNode } from "react";
 import Image from "next/image";
 
+import { AcademyMark } from "@/components/brand/academy-mark";
+
 /**
  * Purpose: full-screen auth split layout.
  */
@@ -15,8 +17,8 @@ export function AuthShell({
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(255,255,255,0.18),transparent_26%),radial-gradient(circle_at_72%_76%,rgba(255,255,255,0.16),transparent_30%)]" />
 
         <div className="relative z-10 flex items-start gap-4">
-          <div className="flex h-18 w-18 items-center justify-center rounded-[24px] bg-white/14 text-[32px] font-semibold tracking-[-0.04em] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.22)] backdrop-blur">
-            AR
+          <div className="flex h-18 w-18 items-center justify-center rounded-[24px] bg-white/14 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.22)] backdrop-blur">
+            <AcademyMark className="w-9" title="Академия риэлторов" />
           </div>
           <div className="pt-1">
             <div className="text-[15px] font-medium text-white/84">

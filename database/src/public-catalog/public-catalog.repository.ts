@@ -24,10 +24,17 @@ export async function listPublishedCatalogCourses(userId?: string) {
     },
     include: {
       modules: {
+        orderBy: {
+          position: "asc",
+        },
         include: {
           lessons: {
+            orderBy: {
+              position: "asc",
+            },
             select: {
               id: true,
+              title: true,
             },
           },
         },

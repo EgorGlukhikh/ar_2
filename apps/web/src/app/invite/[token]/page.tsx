@@ -4,6 +4,7 @@ import { ArrowRight, CheckCircle2, Mail, ShieldCheck, UserPlus2 } from "lucide-r
 import { USER_ROLES } from "@academy/shared";
 
 import { acceptWorkspaceInvite, getWorkspaceInviteByToken } from "@/features/admin/invite-actions";
+import { AcademyMark } from "@/components/brand/academy-mark";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -72,8 +73,8 @@ export default async function InvitePage({ params }: InvitePageProps) {
           <div className={marketingInnerFrameClassName}>
             <header className="flex flex-col gap-4 border-b border-black/5 pb-6 md:flex-row md:items-center md:justify-between">
               <div className="flex items-center gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#1c2442] text-sm font-semibold text-white">
-                  AR
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#1c2442] text-white">
+                  <AcademyMark className="w-7" title="Академия риэлторов" />
                 </div>
                 <div>
                   <p className="font-[family:var(--font-landing-display)] text-lg font-semibold text-[#1c2442]">
