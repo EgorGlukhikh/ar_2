@@ -622,51 +622,52 @@ export function LandingExperience({
                 </span>
               </div>
               <div className="w-full overflow-hidden">
-              <div className="flex w-full snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:grid md:grid-cols-2 md:overflow-visible md:pb-0">
-              <MotionReveal variant="up" delay={80} className="shrink-0 snap-center md:min-w-0">
-                <article className="group flex h-full w-[84%] min-w-[84%] max-w-[340px] flex-col overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-sm)] transition-transform duration-300 hover:scale-[1.03] sm:max-w-[420px] md:w-auto md:min-w-0 md:max-w-none">
-                  <div className="relative h-44 overflow-hidden">
-                    <Image
-                      src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80"
-                      alt="Курс в записи"
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-                  </div>
-                  <div className="flex flex-1 flex-col p-4">
-                    <h3 className="text-base font-semibold leading-6 text-[var(--foreground)]">
-                      Курс в записи
-                    </h3>
-                    <p className="mt-1.5 text-sm leading-6 text-[var(--muted)]">
-                      Учишься в своём темпе и возвращаешься к материалам в любое время.
-                    </p>
-                  </div>
-                </article>
-              </MotionReveal>
-              <MotionReveal variant="up" delay={140} className="shrink-0 snap-center md:min-w-0">
-                <article className="group flex h-full w-[84%] min-w-[84%] max-w-[340px] flex-col overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-sm)] transition-transform duration-300 hover:scale-[1.03] sm:max-w-[420px] md:w-auto md:min-w-0 md:max-w-none">
-                  <div className="relative h-44 overflow-hidden">
-                    <Image
-                      src="https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?auto=format&fit=crop&w=800&q=80"
-                      alt="Онлайн-поток"
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-                  </div>
-                  <div className="flex flex-1 flex-col p-4">
-                    <h3 className="text-base font-semibold leading-6 text-[var(--foreground)]">
-                      Онлайн-поток
-                    </h3>
-                    <p className="mt-1.5 text-sm leading-6 text-[var(--muted)]">
-                      Занятия по расписанию. Запись эфира остаётся в уроке после трансляции.
-                    </p>
-                  </div>
-                </article>
-              </MotionReveal>
-            </div>
-            </div>
+                <div className="flex items-stretch gap-4 overflow-x-auto overscroll-x-contain pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:grid md:grid-cols-2 md:overflow-visible md:pb-0">
+                  <MotionReveal variant="up" delay={80} className="shrink-0 snap-center md:min-w-0">
+                    <article className="group flex h-full min-h-[320px] w-[84%] min-w-[84%] max-w-[340px] flex-col overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-sm)] transition-transform duration-300 hover:scale-[1.03] sm:max-w-[420px] md:w-auto md:min-w-0 md:max-w-none">
+                      <div className="relative h-44 overflow-hidden rounded-t-[var(--radius-lg)]">
+                        <Image
+                          src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80"
+                          alt="Курс в записи"
+                          fill
+                          className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                      </div>
+                      <div className="flex flex-1 flex-col p-4">
+                        <h3 className="text-base font-semibold leading-6 text-[var(--foreground)]">
+                          Курс в записи
+                        </h3>
+                        <p className="mt-1.5 text-sm leading-6 text-[var(--muted)]">
+                          Учишься в своём темпе и возвращаешься к материалам в любое время.
+                        </p>
+                      </div>
+                    </article>
+                  </MotionReveal>
+
+                  <MotionReveal variant="up" delay={140} className="shrink-0 snap-center md:min-w-0">
+                    <article className="group flex h-full min-h-[320px] w-[84%] min-w-[84%] max-w-[340px] flex-col overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-sm)] transition-transform duration-300 hover:scale-[1.03] sm:max-w-[420px] md:w-auto md:min-w-0 md:max-w-none">
+                      <div className="relative h-44 overflow-hidden rounded-t-[var(--radius-lg)]">
+                        <Image
+                          src="https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?auto=format&fit=crop&w=800&q=80"
+                          alt="Онлайн-поток"
+                          fill
+                          className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                      </div>
+                      <div className="flex flex-1 flex-col p-4">
+                        <h3 className="text-base font-semibold leading-6 text-[var(--foreground)]">
+                          Онлайн-поток
+                        </h3>
+                        <p className="mt-1.5 text-sm leading-6 text-[var(--muted)]">
+                          Занятия по расписанию. Запись эфира остаётся в уроке после трансляции.
+                        </p>
+                      </div>
+                    </article>
+                  </MotionReveal>
+                </div>
+              </div>
             </div>
           </div>
         </PageContainer>
