@@ -1,5 +1,6 @@
 import { auth } from "@academy/auth";
-import { USER_ROLES } from "@academy/shared";
+import { prisma } from "@academy/db";
+import { USER_ROLES, type UserRole } from "@academy/shared";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -11,6 +12,109 @@ import {
   prepareManagedVideoUpload,
   refreshLessonVideoAsset,
 } from "@/features/admin/video-service";
+import { canEditCourseContent } from "@/lib/admin";
+
+function isWorkspaceRole(value: string | undefined | null): value is UserRole {
+  return Object.values(USER_ROLES).includes(value as (typeof USER_ROLES)[keyof typeof USER_ROLES]);
+}
+
+async function canEditLessonVideoByLessonId(
+  actor: {
+    id: string;
+    email?: string | null;
+    name?: string | null;
+    role?: string | null;
+  },
+  lessonId: string,
+) {
+  if (!actor.id || !isWorkspaceRole(actor.role)) {
+    return false;
+  }
+
+  const role = actor.role;
+
+  const lesson = await prisma.lesson.findUnique({
+    where: {
+      id: lessonId,
+    },
+    select: {
+      module: {
+        select: {
+          course: {
+            select: {
+              authorId: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  if (!lesson) {
+    return false;
+  }
+
+  return canEditCourseContent(
+    {
+      id: actor.id,
+      email: actor.email,
+      name: actor.name,
+      role,
+    },
+    lesson.module.course.authorId,
+  );
+}
+
+async function canEditLessonVideoByAssetId(
+  actor: {
+    id: string;
+    email?: string | null;
+    name?: string | null;
+    role?: string | null;
+  },
+  assetId: string,
+) {
+  if (!actor.id || !isWorkspaceRole(actor.role)) {
+    return false;
+  }
+
+  const role = actor.role;
+
+  const asset = await prisma.videoAsset.findUnique({
+    where: {
+      id: assetId,
+    },
+    select: {
+      lesson: {
+        select: {
+          module: {
+            select: {
+              course: {
+                select: {
+                  authorId: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+
+  if (!asset) {
+    return false;
+  }
+
+  return canEditCourseContent(
+    {
+      id: actor.id,
+      email: actor.email,
+      name: actor.name,
+      role,
+    },
+    asset.lesson.module.course.authorId,
+  );
+}
 
 const requestSchema = z.discriminatedUnion("action", [
   z.object({
@@ -52,12 +156,16 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  if (session.user.role !== USER_ROLES.ADMIN) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-  }
-
   try {
     const payload = requestSchema.parse(await request.json());
+    const allowed =
+      "lessonId" in payload
+        ? await canEditLessonVideoByLessonId(session.user, payload.lessonId)
+        : await canEditLessonVideoByAssetId(session.user, payload.assetId);
+
+    if (!allowed) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
 
     switch (payload.action) {
       case "createUploadSession": {

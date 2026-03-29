@@ -6,6 +6,7 @@ import {
   ClipboardCheck,
   GripVertical,
   Headphones,
+  LoaderCircle,
   Paperclip,
   PencilLine,
   Plus,
@@ -49,6 +50,12 @@ type LessonBlockStudioProps = {
   fallbackVideoSourceType?: string | null;
   fallbackVideoUrl?: string | null;
   fallbackVideoPlaybackId?: string | null;
+};
+
+type AudioUploadState = {
+  pending: boolean;
+  error: string | null;
+  filename: string | null;
 };
 
 type BlockTypeOption = {
@@ -197,6 +204,18 @@ function getQuestionTypeLabel(type: HomeworkQuestion["type"]) {
   return "Свободный ответ";
 }
 
+function isManagedLessonAudioUrl(value: string) {
+  return value.startsWith("/api/lesson-audio/");
+}
+
+function formatFileSize(sizeInBytes: number) {
+  if (sizeInBytes >= 1024 * 1024) {
+    return `${(sizeInBytes / (1024 * 1024)).toFixed(1)} МБ`;
+  }
+
+  return `${Math.max(1, Math.round(sizeInBytes / 1024))} КБ`;
+}
+
 export function LessonBlockStudio({
   lessonId,
   initialBlocks,
@@ -212,6 +231,7 @@ export function LessonBlockStudio({
   );
   const [editingIds, setEditingIds] = useState<string[]>([]);
   const [isPickerOpen, setIsPickerOpen] = useState(false);
+  const [audioUploads, setAudioUploads] = useState<Record<string, AudioUploadState>>({});
 
   const hasVideoBlock = useMemo(() => blocks.some((block) => block.type === "VIDEO"), [blocks]);
   const hasHomeworkBlock = useMemo(
@@ -256,6 +276,60 @@ export function LessonBlockStudio({
     ensureExpanded(nextBlock.id);
     startEditing(nextBlock.id);
     setIsPickerOpen(false);
+  }
+
+  async function uploadAudioFile(blockId: string, file: File) {
+    setAudioUploads((current) => ({
+      ...current,
+      [blockId]: {
+        pending: true,
+        error: null,
+        filename: file.name,
+      },
+    }));
+
+    try {
+      const formData = new FormData();
+      formData.set("lessonId", lessonId);
+      formData.set("blockKey", blockId);
+      formData.set("file", file);
+
+      const response = await fetch("/api/admin/lesson-audio", {
+        method: "POST",
+        body: formData,
+      });
+
+      const payload = (await response.json()) as {
+        error?: string;
+        file?: { url: string; filename: string; sizeInBytes: number };
+      };
+
+      if (!response.ok || !payload.file) {
+        throw new Error(payload.error || "Не удалось загрузить аудио.");
+      }
+
+      const uploadedFile = payload.file;
+
+      updateBlock(blockId, { url: uploadedFile.url } as Partial<LessonBlock>);
+
+      setAudioUploads((current) => ({
+        ...current,
+        [blockId]: {
+          pending: false,
+          error: null,
+          filename: `${uploadedFile.filename} • ${formatFileSize(uploadedFile.sizeInBytes)}`,
+        },
+      }));
+    } catch (error) {
+      setAudioUploads((current) => ({
+        ...current,
+        [blockId]: {
+          pending: false,
+          error: error instanceof Error ? error.message : "Не удалось загрузить аудио.",
+          filename: file.name,
+        },
+      }));
+    }
   }
 
   function updateBlock(id: string, patch: Partial<LessonBlock>) {
@@ -510,13 +584,13 @@ export function LessonBlockStudio({
         </Fragment>
       ))}
 
-      <div className="rounded-[28px] border border-[var(--border)] bg-[linear-gradient(180deg,_#fbfcff_0%,_#f5f7ff_100%)] p-5">
+      <div className="overflow-hidden rounded-[32px] border border-[rgba(135,148,176,0.18)] bg-[linear-gradient(135deg,rgba(251,252,255,0.98)_0%,rgba(242,246,255,0.96)_52%,rgba(255,248,241,0.96)_100%)] p-6 shadow-[0_28px_70px_rgba(33,41,74,0.08)]">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div className="space-y-2">
-            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--muted)]">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[var(--muted)]">
               Холст урока
             </p>
-            <h3 className="text-2xl font-semibold tracking-tight text-[var(--foreground)]">
+            <h3 className="text-[clamp(1.8rem,2.2vw,2.4rem)] font-semibold tracking-[-0.03em] text-[var(--foreground)]">
               Структура урока по блокам
             </h3>
             <p className="max-w-2xl text-sm leading-7 text-[var(--muted)]">
@@ -525,13 +599,23 @@ export function LessonBlockStudio({
             </p>
           </div>
 
-          <div className="flex flex-wrap gap-2 lg:max-w-[420px] lg:justify-end">
-            <Badge variant="neutral">Всего блоков {blocks.length}</Badge>
-            <Badge variant="neutral">Текста {textBlockCount}</Badge>
-            <Badge variant={hasVideoBlock ? "success" : "neutral"}>
+          <div className="flex flex-wrap gap-2 lg:max-w-[480px] lg:justify-end">
+            <Badge variant="neutral" className="bg-[rgba(255,255,255,0.78)] backdrop-blur">
+              Всего блоков {blocks.length}
+            </Badge>
+            <Badge variant="neutral" className="bg-[rgba(255,255,255,0.78)] backdrop-blur">
+              Текста {textBlockCount}
+            </Badge>
+            <Badge
+              variant={hasVideoBlock ? "success" : "neutral"}
+              className="bg-[rgba(255,255,255,0.78)] backdrop-blur"
+            >
               {hasVideoBlock ? "Видео добавлено" : "Без видео"}
             </Badge>
-            <Badge variant={hasHomeworkBlock ? "warning" : "neutral"}>
+            <Badge
+              variant={hasHomeworkBlock ? "warning" : "neutral"}
+              className="bg-[rgba(255,255,255,0.78)] backdrop-blur"
+            >
               {hasHomeworkBlock ? "Есть задание" : "Без домашки"}
             </Badge>
           </div>
@@ -539,7 +623,7 @@ export function LessonBlockStudio({
       </div>
 
       {blocks.length > 0 ? (
-        <div className="rounded-[22px] border border-[var(--border)] bg-[var(--surface)] px-5 py-4">
+        <div className="rounded-[24px] border border-[rgba(135,148,176,0.16)] bg-[rgba(255,255,255,0.82)] px-5 py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.7)]">
           <p className="text-sm leading-7 text-[var(--foreground)]">
             Блоки ниже по умолчанию открываются в режиме просмотра. Если нужно изменить
             содержимое конкретного блока, нажми «Редактировать» в его шапке.
@@ -548,11 +632,11 @@ export function LessonBlockStudio({
       ) : null}
 
       {blocks.length === 0 ? (
-        <div className="rounded-[28px] border border-dashed border-[var(--border)] bg-[var(--surface)] p-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--muted)]">
+        <div className="rounded-[32px] border border-dashed border-[rgba(135,148,176,0.24)] bg-[linear-gradient(180deg,rgba(255,255,255,0.95)_0%,rgba(247,249,255,0.95)_100%)] p-8 shadow-[0_22px_55px_rgba(33,41,74,0.05)]">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[var(--muted)]">
             Пустой урок
           </p>
-          <h3 className="mt-2 text-2xl font-semibold tracking-tight text-[var(--foreground)]">
+          <h3 className="mt-2 text-[clamp(1.8rem,2vw,2.3rem)] font-semibold tracking-[-0.03em] text-[var(--foreground)]">
             Добавь первый блок
           </h3>
           <p className="mt-2 max-w-2xl text-sm leading-7 text-[var(--muted)]">
@@ -575,38 +659,40 @@ export function LessonBlockStudio({
         const Icon = meta.icon;
 
         return (
-          <section
-            key={block.id}
-            draggable
-            onDragStart={() => setDraggedId(block.id)}
-            onDragOver={(event) => event.preventDefault()}
-            onDrop={() => handleDrop(block.id)}
-            className="overflow-hidden rounded-[28px] border border-[var(--border)] bg-white shadow-sm"
+            <section
+              key={block.id}
+              draggable
+              onDragStart={() => setDraggedId(block.id)}
+              onDragOver={(event) => event.preventDefault()}
+              onDrop={() => handleDrop(block.id)}
+            className="overflow-hidden rounded-[30px] border border-[rgba(135,148,176,0.16)] bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(252,253,255,0.98)_100%)] shadow-[0_20px_52px_rgba(33,41,74,0.07)]"
           >
-            <header className="flex flex-wrap items-start justify-between gap-4 border-b border-[var(--border)] px-5 py-4">
+            <header className="relative flex flex-wrap items-start justify-between gap-4 border-b border-[rgba(135,148,176,0.14)] px-5 py-5">
               <button
                 type="button"
                 onClick={() => toggleExpanded(block.id)}
                 className="flex min-w-0 flex-1 items-start gap-3 text-left"
               >
                 <div
-                  className={`mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl ${meta.accentClassName}`}
+                  className={`mt-0.5 flex h-12 w-12 shrink-0 items-center justify-center rounded-[18px] shadow-[0_14px_28px_rgba(33,41,74,0.08)] ${meta.accentClassName}`}
                 >
                   <Icon className="h-5 w-5" />
                 </div>
 
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
-                    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[var(--muted)]">
                       Блок {index + 1}
                     </p>
-                    <Badge variant="neutral">{meta.label}</Badge>
+                    <Badge variant="neutral" className="bg-[rgba(246,248,253,0.9)]">
+                      {meta.label}
+                    </Badge>
                     {block.type === "HOMEWORK" && block.questions && block.questions.length > 0 ? (
                       <Badge variant="warning">Вопросов {block.questions.length}</Badge>
                     ) : null}
                   </div>
 
-                  <h3 className="mt-2 truncate text-lg font-semibold tracking-tight text-[var(--foreground)]">
+                  <h3 className="mt-2 truncate text-xl font-semibold tracking-[-0.03em] text-[var(--foreground)]">
                     {isEditing
                       ? `Редактирование: ${block.title || meta.label}`
                       : block.title || meta.label}
@@ -624,6 +710,7 @@ export function LessonBlockStudio({
                   type="button"
                   size="sm"
                   variant="outline"
+                  className="bg-[rgba(255,255,255,0.88)]"
                   onClick={() =>
                     isEditing ? stopEditing(block.id) : startEditing(block.id)
                   }
@@ -634,7 +721,7 @@ export function LessonBlockStudio({
 
                 <button
                   type="button"
-                  className="rounded-2xl border border-[var(--border)] bg-white p-2 text-[var(--muted)] transition hover:border-[var(--primary)] hover:text-[var(--foreground)]"
+                  className="rounded-2xl border border-[rgba(135,148,176,0.18)] bg-[rgba(255,255,255,0.88)] p-2 text-[var(--muted)] transition hover:border-[var(--primary)] hover:text-[var(--foreground)]"
                   aria-label="Перетащить блок"
                 >
                   <GripVertical className="h-4 w-4" />
@@ -643,7 +730,7 @@ export function LessonBlockStudio({
                 <button
                   type="button"
                   onClick={() => toggleExpanded(block.id)}
-                  className="rounded-2xl border border-[var(--border)] bg-white p-2 text-[var(--muted)] transition hover:border-[var(--primary)] hover:text-[var(--foreground)]"
+                  className="rounded-2xl border border-[rgba(135,148,176,0.18)] bg-[rgba(255,255,255,0.88)] p-2 text-[var(--muted)] transition hover:border-[var(--primary)] hover:text-[var(--foreground)]"
                   aria-label={isExpanded ? "Свернуть блок" : "Развернуть блок"}
                 >
                   {isExpanded ? (
@@ -656,7 +743,7 @@ export function LessonBlockStudio({
                 <button
                   type="button"
                   onClick={() => removeBlock(block.id)}
-                  className="rounded-2xl border border-red-200 bg-white p-2 text-red-500 transition hover:bg-red-50"
+                  className="rounded-2xl border border-red-200 bg-[rgba(255,255,255,0.88)] p-2 text-red-500 transition hover:bg-red-50"
                   aria-label="Удалить блок"
                 >
                   <X className="h-4 w-4" />
@@ -756,17 +843,72 @@ export function LessonBlockStudio({
                 ) : null}
 
                 {block.type === "AUDIO" ? (
-                  <div className="space-y-2">
-                    <Label htmlFor={`block-audio-url-${block.id}`}>Ссылка на аудио</Label>
-                    <Input
-                      id={`block-audio-url-${block.id}`}
-                      value={block.url}
-                      onChange={(event) =>
-                        updateBlock(block.id, { url: event.target.value } as Partial<LessonBlock>)
-                      }
-                      placeholder="https://disk.yandex.ru/... или прямая ссылка на MP3"
-                    />
-                    <p className="text-xs text-[var(--muted)]">Поддерживаются прямые ссылки на MP3-файл или аудио-хостинги с поддержкой потоковой передачи.</p>
+                  <div className="grid gap-4 md:grid-cols-[minmax(0,1.2fr)_320px]">
+                    <div className="space-y-2">
+                      <Label htmlFor={`block-audio-url-${block.id}`}>Ссылка на аудио</Label>
+                      <Input
+                        id={`block-audio-url-${block.id}`}
+                        value={block.url}
+                        onChange={(event) =>
+                          updateBlock(block.id, { url: event.target.value } as Partial<LessonBlock>)
+                        }
+                        placeholder="https://disk.yandex.ru/... или прямая ссылка на MP3"
+                      />
+                      <p className="text-xs text-[var(--muted)]">
+                        Можно оставить внешнюю ссылку или загрузить файл справа. После загрузки в
+                        поле появится внутренний URL платформы.
+                      </p>
+                    </div>
+
+                    <div className="rounded-[22px] border border-[var(--border)] bg-[var(--surface)] p-4">
+                      <div className="space-y-3">
+                        <div>
+                          <p className="text-sm font-semibold text-[var(--foreground)]">
+                            Загрузить аудио-файл
+                          </p>
+                          <p className="mt-1 text-sm leading-6 text-[var(--muted)]">
+                            Поддерживаются MP3, M4A, WAV и OGG до 20 МБ.
+                          </p>
+                        </div>
+
+                        <Input
+                          type="file"
+                          accept="audio/*,.mp3,.m4a,.wav,.ogg"
+                          disabled={audioUploads[block.id]?.pending}
+                          onChange={(event) => {
+                            const file = event.target.files?.[0];
+                            if (!file) {
+                              return;
+                            }
+
+                            void uploadAudioFile(block.id, file);
+                            event.currentTarget.value = "";
+                          }}
+                        />
+
+                        <div className="rounded-[18px] border border-[var(--border)] bg-white px-4 py-3 text-sm">
+                          {audioUploads[block.id]?.pending ? (
+                            <span className="inline-flex items-center gap-2 text-[var(--foreground)]">
+                              <LoaderCircle className="h-4 w-4 animate-spin" />
+                              Загружаю файл...
+                            </span>
+                          ) : audioUploads[block.id]?.error ? (
+                            <span className="text-red-600">{audioUploads[block.id]?.error}</span>
+                          ) : isManagedLessonAudioUrl(block.url) ? (
+                            <span className="text-[var(--foreground)]">
+                              Файл загружен в платформу
+                              {audioUploads[block.id]?.filename
+                                ? `: ${audioUploads[block.id]?.filename}`
+                                : "."}
+                            </span>
+                          ) : (
+                            <span className="text-[var(--muted)]">
+                              Пока используется внешняя ссылка или аудио еще не загружено.
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 ) : null}
 
@@ -998,7 +1140,7 @@ export function LessonBlockStudio({
       })}
 
       {blocks.length > 0 ? (
-        <div className="rounded-[28px] border border-dashed border-[var(--border)] bg-[var(--surface)] p-4">
+        <div className="rounded-[30px] border border-dashed border-[rgba(135,148,176,0.24)] bg-[linear-gradient(180deg,rgba(255,255,255,0.94)_0%,rgba(247,249,255,0.94)_100%)] p-4 shadow-[0_18px_46px_rgba(33,41,74,0.05)]">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="text-sm font-semibold text-[var(--foreground)]">
@@ -1019,13 +1161,13 @@ export function LessonBlockStudio({
 
       {isPickerOpen ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#18203b]/30 p-4 backdrop-blur-sm">
-          <div className="w-full max-w-3xl rounded-[28px] border border-[var(--border)] bg-white p-5 shadow-[0_32px_100px_rgba(28,36,66,0.18)]">
+          <div className="w-full max-w-3xl rounded-[32px] border border-[rgba(135,148,176,0.2)] bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(248,250,255,0.98)_100%)] p-6 shadow-[0_40px_120px_rgba(28,36,66,0.2)]">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--muted)]">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[var(--muted)]">
                   Добавить блок {blocks.length + 1}
                 </p>
-                <h3 className="mt-2 text-2xl font-semibold tracking-tight text-[var(--foreground)]">
+                <h3 className="mt-2 text-[clamp(1.8rem,2vw,2.3rem)] font-semibold tracking-[-0.03em] text-[var(--foreground)]">
                   Выбери тип блока
                 </h3>
                 <p className="mt-2 text-sm leading-7 text-[var(--muted)]">
@@ -1057,10 +1199,10 @@ export function LessonBlockStudio({
                     type="button"
                     disabled={disabled}
                     onClick={() => addBlock(option.type)}
-                    className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-4 text-left transition hover:border-[var(--primary)] hover:bg-white disabled:cursor-not-allowed disabled:opacity-50"
+                    className="rounded-[26px] border border-[rgba(135,148,176,0.18)] bg-[rgba(255,255,255,0.84)] p-5 text-left transition hover:border-[var(--primary)] hover:bg-white hover:shadow-[0_18px_42px_rgba(33,41,74,0.08)] disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     <div
-                      className={`flex h-11 w-11 items-center justify-center rounded-2xl shadow-sm ${option.accentClassName}`}
+                      className={`flex h-12 w-12 items-center justify-center rounded-[18px] shadow-[0_14px_28px_rgba(33,41,74,0.08)] ${option.accentClassName}`}
                     >
                       <Icon className="h-5 w-5" />
                     </div>
@@ -1082,4 +1224,3 @@ export function LessonBlockStudio({
     </div>
   );
 }
-

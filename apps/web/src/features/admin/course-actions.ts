@@ -882,6 +882,12 @@ export async function updateLesson(formData: FormData) {
   const contentPayload = buildLessonContentFromBlocks(blocks);
   const resolvedType = resolveLessonTypeFromBlocks(blocks, parsed.type);
   const homeworkBlock = blocks.find((block) => block.type === "HOMEWORK");
+  const managedAudioBlockKeys = blocks
+    .filter(
+      (block): block is Extract<LessonBlock, { type: "AUDIO" }> =>
+        block.type === "AUDIO" && block.url.startsWith("/api/lesson-audio/"),
+    )
+    .map((block) => block.id);
 
   await prisma.$transaction(async (tx) => {
     const lessonBlockTx = tx as Prisma.TransactionClient & {
@@ -934,6 +940,19 @@ export async function updateLesson(formData: FormData) {
         })),
       });
     }
+
+    await tx.lessonAudioFile.deleteMany({
+      where: {
+        lessonId: parsed.lessonId,
+        ...(managedAudioBlockKeys.length > 0
+          ? {
+              blockKey: {
+                notIn: managedAudioBlockKeys,
+              },
+            }
+          : {}),
+      },
+    });
 
     if (homeworkBlock) {
       await tx.homeworkAssignment.upsert({

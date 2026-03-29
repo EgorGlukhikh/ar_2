@@ -245,6 +245,7 @@ model Lesson {
   module             Module           @relation(fields: [moduleId], references: [id], onDelete: Cascade)
   progress           LessonProgress[]
   lessonBlocks       LessonBlock[]
+  audioFiles         LessonAudioFile[]
   homeworkAssignment HomeworkAssignment?
   videoAsset         VideoAsset?
   lessonSessions     LessonSession[]
@@ -272,6 +273,22 @@ model LessonBlock {
   @@index([lessonId, type])
 }
 
+model LessonAudioFile {
+  id          String   @id @default(cuid())
+  lessonId     String
+  blockKey     String
+  filename     String
+  mimeType     String?
+  sizeInBytes  Int
+  data         Bytes
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  lesson       Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([lessonId, blockKey])
+  @@index([lessonId, createdAt])
+}
+
 model VideoAsset {
   id                     String            @id @default(cuid())
   lessonId               String            @unique
@@ -286,6 +303,7 @@ model VideoAsset {
   playerUrl              String?
   uploadUrl              String?
   sourceUrl              String?
+  fileData               Bytes?
   requiresSignedPlayback Boolean           @default(false)
   metadata               Json?
   errorMessage           String?

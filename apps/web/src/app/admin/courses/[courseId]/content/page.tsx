@@ -328,11 +328,11 @@ export default async function CourseContentPage({
             />
 
             {course.deliveryFormat === CourseDeliveryFormat.LIVE_COHORT ? (
-              <article className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow-sm)]">
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
+              <article className="rounded-[28px] border border-[rgba(135,148,176,0.18)] bg-[linear-gradient(135deg,rgba(255,255,255,0.96)_0%,rgba(245,248,255,0.98)_58%,rgba(243,252,248,0.96)_100%)] p-6 shadow-[0_20px_56px_rgba(33,41,74,0.07)]">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
                   Формат курса
                 </p>
-                <h3 className="mt-2 text-xl font-semibold text-[var(--foreground)]">
+                <h3 className="mt-3 text-2xl font-semibold tracking-[-0.03em] text-[var(--foreground)]">
                   Онлайн-курс с вебинарами
                 </h3>
                 <p className="mt-2 text-sm leading-7 text-[var(--muted)]">
@@ -395,7 +395,7 @@ export default async function CourseContentPage({
                   <input type="hidden" name="type" value={selectedLesson.type} />
 
                   <div className="space-y-6">
-                    <article className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-6 shadow-[var(--shadow-sm)]">
+                    <article className="rounded-[32px] border border-[rgba(135,148,176,0.16)] bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(250,251,255,0.98)_100%)] p-6 shadow-[0_28px_70px_rgba(33,41,74,0.07)]">
                       <LessonBlockStudio
                         lessonId={selectedLesson.id}
                         initialBlocks={selectedLessonBlocks}
@@ -406,7 +406,7 @@ export default async function CourseContentPage({
                       />
                     </article>
 
-                    <div className="flex flex-wrap items-center gap-3 rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] px-5 py-5 shadow-[var(--shadow-sm)]">
+                    <div className="flex flex-wrap items-center gap-3 rounded-[28px] border border-[rgba(135,148,176,0.16)] bg-[linear-gradient(180deg,rgba(255,255,255,0.96)_0%,rgba(245,248,255,0.96)_100%)] px-5 py-5 shadow-[0_20px_52px_rgba(33,41,74,0.06)]">
                       <Button type="submit">
                         <Save className="mr-2 h-4 w-4" />
                         Сохранить урок

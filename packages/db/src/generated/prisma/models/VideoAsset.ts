@@ -48,6 +48,7 @@ export type VideoAssetMinAggregateOutputType = {
   playerUrl: string | null
   uploadUrl: string | null
   sourceUrl: string | null
+  fileData: runtime.Bytes | null
   requiresSignedPlayback: boolean | null
   errorMessage: string | null
   createdAt: Date | null
@@ -68,6 +69,7 @@ export type VideoAssetMaxAggregateOutputType = {
   playerUrl: string | null
   uploadUrl: string | null
   sourceUrl: string | null
+  fileData: runtime.Bytes | null
   requiresSignedPlayback: boolean | null
   errorMessage: string | null
   createdAt: Date | null
@@ -88,6 +90,7 @@ export type VideoAssetCountAggregateOutputType = {
   playerUrl: number
   uploadUrl: number
   sourceUrl: number
+  fileData: number
   requiresSignedPlayback: number
   metadata: number
   errorMessage: number
@@ -119,6 +122,7 @@ export type VideoAssetMinAggregateInputType = {
   playerUrl?: true
   uploadUrl?: true
   sourceUrl?: true
+  fileData?: true
   requiresSignedPlayback?: true
   errorMessage?: true
   createdAt?: true
@@ -139,6 +143,7 @@ export type VideoAssetMaxAggregateInputType = {
   playerUrl?: true
   uploadUrl?: true
   sourceUrl?: true
+  fileData?: true
   requiresSignedPlayback?: true
   errorMessage?: true
   createdAt?: true
@@ -159,6 +164,7 @@ export type VideoAssetCountAggregateInputType = {
   playerUrl?: true
   uploadUrl?: true
   sourceUrl?: true
+  fileData?: true
   requiresSignedPlayback?: true
   metadata?: true
   errorMessage?: true
@@ -267,6 +273,7 @@ export type VideoAssetGroupByOutputType = {
   playerUrl: string | null
   uploadUrl: string | null
   sourceUrl: string | null
+  fileData: runtime.Bytes | null
   requiresSignedPlayback: boolean
   metadata: runtime.JsonValue | null
   errorMessage: string | null
@@ -311,6 +318,7 @@ export type VideoAssetWhereInput = {
   playerUrl?: Prisma.StringNullableFilter<"VideoAsset"> | string | null
   uploadUrl?: Prisma.StringNullableFilter<"VideoAsset"> | string | null
   sourceUrl?: Prisma.StringNullableFilter<"VideoAsset"> | string | null
+  fileData?: Prisma.BytesNullableFilter<"VideoAsset"> | runtime.Bytes | null
   requiresSignedPlayback?: Prisma.BoolFilter<"VideoAsset"> | boolean
   metadata?: Prisma.JsonNullableFilter<"VideoAsset">
   errorMessage?: Prisma.StringNullableFilter<"VideoAsset"> | string | null
@@ -333,6 +341,7 @@ export type VideoAssetOrderByWithRelationInput = {
   playerUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   uploadUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   sourceUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  fileData?: Prisma.SortOrderInput | Prisma.SortOrder
   requiresSignedPlayback?: Prisma.SortOrder
   metadata?: Prisma.SortOrderInput | Prisma.SortOrder
   errorMessage?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -358,6 +367,7 @@ export type VideoAssetWhereUniqueInput = Prisma.AtLeast<{
   playerUrl?: Prisma.StringNullableFilter<"VideoAsset"> | string | null
   uploadUrl?: Prisma.StringNullableFilter<"VideoAsset"> | string | null
   sourceUrl?: Prisma.StringNullableFilter<"VideoAsset"> | string | null
+  fileData?: Prisma.BytesNullableFilter<"VideoAsset"> | runtime.Bytes | null
   requiresSignedPlayback?: Prisma.BoolFilter<"VideoAsset"> | boolean
   metadata?: Prisma.JsonNullableFilter<"VideoAsset">
   errorMessage?: Prisma.StringNullableFilter<"VideoAsset"> | string | null
@@ -380,6 +390,7 @@ export type VideoAssetOrderByWithAggregationInput = {
   playerUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   uploadUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   sourceUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  fileData?: Prisma.SortOrderInput | Prisma.SortOrder
   requiresSignedPlayback?: Prisma.SortOrder
   metadata?: Prisma.SortOrderInput | Prisma.SortOrder
   errorMessage?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -409,6 +420,7 @@ export type VideoAssetScalarWhereWithAggregatesInput = {
   playerUrl?: Prisma.StringNullableWithAggregatesFilter<"VideoAsset"> | string | null
   uploadUrl?: Prisma.StringNullableWithAggregatesFilter<"VideoAsset"> | string | null
   sourceUrl?: Prisma.StringNullableWithAggregatesFilter<"VideoAsset"> | string | null
+  fileData?: Prisma.BytesNullableWithAggregatesFilter<"VideoAsset"> | runtime.Bytes | null
   requiresSignedPlayback?: Prisma.BoolWithAggregatesFilter<"VideoAsset"> | boolean
   metadata?: Prisma.JsonNullableWithAggregatesFilter<"VideoAsset">
   errorMessage?: Prisma.StringNullableWithAggregatesFilter<"VideoAsset"> | string | null
@@ -429,6 +441,7 @@ export type VideoAssetCreateInput = {
   playerUrl?: string | null
   uploadUrl?: string | null
   sourceUrl?: string | null
+  fileData?: runtime.Bytes | null
   requiresSignedPlayback?: boolean
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errorMessage?: string | null
@@ -451,6 +464,7 @@ export type VideoAssetUncheckedCreateInput = {
   playerUrl?: string | null
   uploadUrl?: string | null
   sourceUrl?: string | null
+  fileData?: runtime.Bytes | null
   requiresSignedPlayback?: boolean
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errorMessage?: string | null
@@ -471,6 +485,7 @@ export type VideoAssetUpdateInput = {
   playerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   uploadUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fileData?: Prisma.NullableBytesFieldUpdateOperationsInput | runtime.Bytes | null
   requiresSignedPlayback?: Prisma.BoolFieldUpdateOperationsInput | boolean
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -493,6 +508,7 @@ export type VideoAssetUncheckedUpdateInput = {
   playerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   uploadUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fileData?: Prisma.NullableBytesFieldUpdateOperationsInput | runtime.Bytes | null
   requiresSignedPlayback?: Prisma.BoolFieldUpdateOperationsInput | boolean
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -514,6 +530,7 @@ export type VideoAssetCreateManyInput = {
   playerUrl?: string | null
   uploadUrl?: string | null
   sourceUrl?: string | null
+  fileData?: runtime.Bytes | null
   requiresSignedPlayback?: boolean
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errorMessage?: string | null
@@ -534,6 +551,7 @@ export type VideoAssetUpdateManyMutationInput = {
   playerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   uploadUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fileData?: Prisma.NullableBytesFieldUpdateOperationsInput | runtime.Bytes | null
   requiresSignedPlayback?: Prisma.BoolFieldUpdateOperationsInput | boolean
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -555,6 +573,7 @@ export type VideoAssetUncheckedUpdateManyInput = {
   playerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   uploadUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fileData?: Prisma.NullableBytesFieldUpdateOperationsInput | runtime.Bytes | null
   requiresSignedPlayback?: Prisma.BoolFieldUpdateOperationsInput | boolean
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -581,6 +600,7 @@ export type VideoAssetCountOrderByAggregateInput = {
   playerUrl?: Prisma.SortOrder
   uploadUrl?: Prisma.SortOrder
   sourceUrl?: Prisma.SortOrder
+  fileData?: Prisma.SortOrder
   requiresSignedPlayback?: Prisma.SortOrder
   metadata?: Prisma.SortOrder
   errorMessage?: Prisma.SortOrder
@@ -606,6 +626,7 @@ export type VideoAssetMaxOrderByAggregateInput = {
   playerUrl?: Prisma.SortOrder
   uploadUrl?: Prisma.SortOrder
   sourceUrl?: Prisma.SortOrder
+  fileData?: Prisma.SortOrder
   requiresSignedPlayback?: Prisma.SortOrder
   errorMessage?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -626,6 +647,7 @@ export type VideoAssetMinOrderByAggregateInput = {
   playerUrl?: Prisma.SortOrder
   uploadUrl?: Prisma.SortOrder
   sourceUrl?: Prisma.SortOrder
+  fileData?: Prisma.SortOrder
   requiresSignedPlayback?: Prisma.SortOrder
   errorMessage?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -680,6 +702,10 @@ export type EnumVideoAssetStatusFieldUpdateOperationsInput = {
   set?: $Enums.VideoAssetStatus
 }
 
+export type NullableBytesFieldUpdateOperationsInput = {
+  set?: runtime.Bytes | null
+}
+
 export type VideoAssetCreateWithoutLessonInput = {
   id?: string
   provider?: $Enums.VideoProviderType
@@ -693,6 +719,7 @@ export type VideoAssetCreateWithoutLessonInput = {
   playerUrl?: string | null
   uploadUrl?: string | null
   sourceUrl?: string | null
+  fileData?: runtime.Bytes | null
   requiresSignedPlayback?: boolean
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errorMessage?: string | null
@@ -713,6 +740,7 @@ export type VideoAssetUncheckedCreateWithoutLessonInput = {
   playerUrl?: string | null
   uploadUrl?: string | null
   sourceUrl?: string | null
+  fileData?: runtime.Bytes | null
   requiresSignedPlayback?: boolean
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errorMessage?: string | null
@@ -749,6 +777,7 @@ export type VideoAssetUpdateWithoutLessonInput = {
   playerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   uploadUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fileData?: Prisma.NullableBytesFieldUpdateOperationsInput | runtime.Bytes | null
   requiresSignedPlayback?: Prisma.BoolFieldUpdateOperationsInput | boolean
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -769,6 +798,7 @@ export type VideoAssetUncheckedUpdateWithoutLessonInput = {
   playerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   uploadUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sourceUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fileData?: Prisma.NullableBytesFieldUpdateOperationsInput | runtime.Bytes | null
   requiresSignedPlayback?: Prisma.BoolFieldUpdateOperationsInput | boolean
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -792,6 +822,7 @@ export type VideoAssetSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   playerUrl?: boolean
   uploadUrl?: boolean
   sourceUrl?: boolean
+  fileData?: boolean
   requiresSignedPlayback?: boolean
   metadata?: boolean
   errorMessage?: boolean
@@ -814,6 +845,7 @@ export type VideoAssetSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   playerUrl?: boolean
   uploadUrl?: boolean
   sourceUrl?: boolean
+  fileData?: boolean
   requiresSignedPlayback?: boolean
   metadata?: boolean
   errorMessage?: boolean
@@ -836,6 +868,7 @@ export type VideoAssetSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   playerUrl?: boolean
   uploadUrl?: boolean
   sourceUrl?: boolean
+  fileData?: boolean
   requiresSignedPlayback?: boolean
   metadata?: boolean
   errorMessage?: boolean
@@ -858,6 +891,7 @@ export type VideoAssetSelectScalar = {
   playerUrl?: boolean
   uploadUrl?: boolean
   sourceUrl?: boolean
+  fileData?: boolean
   requiresSignedPlayback?: boolean
   metadata?: boolean
   errorMessage?: boolean
@@ -865,7 +899,7 @@ export type VideoAssetSelectScalar = {
   updatedAt?: boolean
 }
 
-export type VideoAssetOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "lessonId" | "provider" | "sourceType" | "status" | "originalFilename" | "mimeType" | "sizeInBytes" | "externalAssetId" | "playbackId" | "playerUrl" | "uploadUrl" | "sourceUrl" | "requiresSignedPlayback" | "metadata" | "errorMessage" | "createdAt" | "updatedAt", ExtArgs["result"]["videoAsset"]>
+export type VideoAssetOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "lessonId" | "provider" | "sourceType" | "status" | "originalFilename" | "mimeType" | "sizeInBytes" | "externalAssetId" | "playbackId" | "playerUrl" | "uploadUrl" | "sourceUrl" | "fileData" | "requiresSignedPlayback" | "metadata" | "errorMessage" | "createdAt" | "updatedAt", ExtArgs["result"]["videoAsset"]>
 export type VideoAssetInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   lesson?: boolean | Prisma.LessonDefaultArgs<ExtArgs>
 }
@@ -895,6 +929,7 @@ export type $VideoAssetPayload<ExtArgs extends runtime.Types.Extensions.Internal
     playerUrl: string | null
     uploadUrl: string | null
     sourceUrl: string | null
+    fileData: runtime.Bytes | null
     requiresSignedPlayback: boolean
     metadata: runtime.JsonValue | null
     errorMessage: string | null
@@ -1337,6 +1372,7 @@ export interface VideoAssetFieldRefs {
   readonly playerUrl: Prisma.FieldRef<"VideoAsset", 'String'>
   readonly uploadUrl: Prisma.FieldRef<"VideoAsset", 'String'>
   readonly sourceUrl: Prisma.FieldRef<"VideoAsset", 'String'>
+  readonly fileData: Prisma.FieldRef<"VideoAsset", 'Bytes'>
   readonly requiresSignedPlayback: Prisma.FieldRef<"VideoAsset", 'Boolean'>
   readonly metadata: Prisma.FieldRef<"VideoAsset", 'Json'>
   readonly errorMessage: Prisma.FieldRef<"VideoAsset", 'String'>

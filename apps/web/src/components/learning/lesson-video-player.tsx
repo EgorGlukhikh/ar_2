@@ -1,13 +1,28 @@
-﻿import { MediaSourceType, VideoAssetStatus, VideoProviderType } from "@academy/db";
+type MediaSourceTypeValue =
+  | "RUTUBE_EMBED"
+  | "EXTERNAL_EMBED"
+  | "MANAGED_UPLOAD"
+  | "CLOUD_IMPORT"
+  | null;
+
+type VideoAssetStatusValue =
+  | "DRAFT"
+  | "PENDING_UPLOAD"
+  | "IMPORTING"
+  | "PROCESSING"
+  | "READY"
+  | "ERROR";
+
+type VideoProviderValue = "MOCK" | "CLOUDFLARE_STREAM";
 
 type LessonVideoPlayerProps = {
-  videoSourceType?: MediaSourceType | null;
+  videoSourceType?: MediaSourceTypeValue;
   videoUrl?: string | null;
   videoPlaybackId?: string | null;
   videoAsset?: {
-    provider: VideoProviderType;
-    sourceType: MediaSourceType;
-    status: VideoAssetStatus;
+    provider: VideoProviderValue;
+    sourceType: Exclude<MediaSourceTypeValue, null>;
+    status: VideoAssetStatusValue;
     playerUrl: string | null;
     sourceUrl: string | null;
     playbackId: string | null;
@@ -17,16 +32,35 @@ type LessonVideoPlayerProps = {
 };
 
 function canRenderEmbed(
-  sourceType?: MediaSourceType | null,
+  sourceType?: MediaSourceTypeValue,
   playerUrl?: string | null,
 ) {
   return Boolean(
     playerUrl &&
-      (sourceType === MediaSourceType.RUTUBE_EMBED ||
-        sourceType === MediaSourceType.EXTERNAL_EMBED ||
-        sourceType === MediaSourceType.MANAGED_UPLOAD ||
-        sourceType === MediaSourceType.CLOUD_IMPORT),
+      (sourceType === "RUTUBE_EMBED" ||
+        sourceType === "EXTERNAL_EMBED" ||
+        sourceType === "MANAGED_UPLOAD" ||
+        sourceType === "CLOUD_IMPORT"),
   );
+}
+
+function canRenderNativeVideo(
+  provider?: VideoProviderValue | null,
+  playerUrl?: string | null,
+) {
+  if (!playerUrl) {
+    return false;
+  }
+
+  if (playerUrl.startsWith("/api/lesson-video/")) {
+    return true;
+  }
+
+  if (provider === "MOCK") {
+    return true;
+  }
+
+  return /\.(mp4|m4v|webm|ogg|mov)(?:[?#].*)?$/i.test(playerUrl);
 }
 
 export function LessonVideoPlayer({
@@ -40,7 +74,7 @@ export function LessonVideoPlayer({
   const playerUrl = videoAsset?.playerUrl ?? videoUrl ?? null;
   const playbackId = videoAsset?.playbackId ?? videoPlaybackId ?? null;
 
-  if (videoAsset?.status === VideoAssetStatus.ERROR) {
+  if (videoAsset?.status === "ERROR") {
     return (
       <div className="rounded-[var(--radius-xl)] border border-red-200 bg-red-50 p-6 text-sm leading-7 text-red-700">
         Видео не удалось подготовить к воспроизведению.
@@ -51,9 +85,9 @@ export function LessonVideoPlayer({
 
   if (
     videoAsset &&
-    (videoAsset.status === VideoAssetStatus.PENDING_UPLOAD ||
-      videoAsset.status === VideoAssetStatus.IMPORTING ||
-      videoAsset.status === VideoAssetStatus.PROCESSING)
+    (videoAsset.status === "PENDING_UPLOAD" ||
+      videoAsset.status === "IMPORTING" ||
+      videoAsset.status === "PROCESSING")
   ) {
     return (
       <div className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-6">
@@ -89,6 +123,22 @@ export function LessonVideoPlayer({
     );
   }
 
+  if (canRenderNativeVideo(videoAsset?.provider, playerUrl)) {
+    return (
+      <div className="overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border)] bg-black">
+        <div className="aspect-video">
+          <video
+            className="h-full w-full"
+            controls
+            preload="metadata"
+            playsInline
+            src={playerUrl ?? undefined}
+          />
+        </div>
+      </div>
+    );
+  }
+
   if (videoAsset || sourceType || playbackId) {
     return (
       <div className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-6">
@@ -106,4 +156,3 @@ export function LessonVideoPlayer({
 
   return null;
 }
-

@@ -447,10 +447,6 @@ export type HomeworkSubmissionFileUncheckedUpdateManyWithoutSubmissionNestedInpu
   deleteMany?: Prisma.HomeworkSubmissionFileScalarWhereInput | Prisma.HomeworkSubmissionFileScalarWhereInput[]
 }
 
-export type BytesFieldUpdateOperationsInput = {
-  set?: runtime.Bytes
-}
-
 export type HomeworkSubmissionFileCreateWithoutSubmissionInput = {
   id?: string
   filename: string

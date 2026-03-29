@@ -392,6 +392,7 @@ export const ModelName = {
   Module: 'Module',
   Lesson: 'Lesson',
   LessonBlock: 'LessonBlock',
+  LessonAudioFile: 'LessonAudioFile',
   VideoAsset: 'VideoAsset',
   Enrollment: 'Enrollment',
   LessonProgress: 'LessonProgress',
@@ -425,7 +426,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "account" | "session" | "verificationToken" | "course" | "module" | "lesson" | "lessonBlock" | "videoAsset" | "enrollment" | "lessonProgress" | "homeworkAssignment" | "homeworkReview" | "homeworkSubmission" | "homeworkSubmissionFile" | "product" | "price" | "order" | "orderItem" | "payment" | "emailMessage" | "emailEvent" | "emailLinkClick" | "workspaceInvite" | "lessonSession" | "lessonSessionEvent"
+    modelProps: "user" | "account" | "session" | "verificationToken" | "course" | "module" | "lesson" | "lessonBlock" | "lessonAudioFile" | "videoAsset" | "enrollment" | "lessonProgress" | "homeworkAssignment" | "homeworkReview" | "homeworkSubmission" | "homeworkSubmissionFile" | "product" | "price" | "order" | "orderItem" | "payment" | "emailMessage" | "emailEvent" | "emailLinkClick" | "workspaceInvite" | "lessonSession" | "lessonSessionEvent"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1018,6 +1019,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.LessonBlockCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.LessonBlockCountAggregateOutputType> | number
+        }
+      }
+    }
+    LessonAudioFile: {
+      payload: Prisma.$LessonAudioFilePayload<ExtArgs>
+      fields: Prisma.LessonAudioFileFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.LessonAudioFileFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonAudioFilePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.LessonAudioFileFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonAudioFilePayload>
+        }
+        findFirst: {
+          args: Prisma.LessonAudioFileFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonAudioFilePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.LessonAudioFileFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonAudioFilePayload>
+        }
+        findMany: {
+          args: Prisma.LessonAudioFileFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonAudioFilePayload>[]
+        }
+        create: {
+          args: Prisma.LessonAudioFileCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonAudioFilePayload>
+        }
+        createMany: {
+          args: Prisma.LessonAudioFileCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.LessonAudioFileCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonAudioFilePayload>[]
+        }
+        delete: {
+          args: Prisma.LessonAudioFileDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonAudioFilePayload>
+        }
+        update: {
+          args: Prisma.LessonAudioFileUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonAudioFilePayload>
+        }
+        deleteMany: {
+          args: Prisma.LessonAudioFileDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.LessonAudioFileUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.LessonAudioFileUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonAudioFilePayload>[]
+        }
+        upsert: {
+          args: Prisma.LessonAudioFileUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LessonAudioFilePayload>
+        }
+        aggregate: {
+          args: Prisma.LessonAudioFileAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateLessonAudioFile>
+        }
+        groupBy: {
+          args: Prisma.LessonAudioFileGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LessonAudioFileGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.LessonAudioFileCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LessonAudioFileCountAggregateOutputType> | number
         }
       }
     }
@@ -2521,6 +2596,21 @@ export const LessonBlockScalarFieldEnum = {
 export type LessonBlockScalarFieldEnum = (typeof LessonBlockScalarFieldEnum)[keyof typeof LessonBlockScalarFieldEnum]
 
 
+export const LessonAudioFileScalarFieldEnum = {
+  id: 'id',
+  lessonId: 'lessonId',
+  blockKey: 'blockKey',
+  filename: 'filename',
+  mimeType: 'mimeType',
+  sizeInBytes: 'sizeInBytes',
+  data: 'data',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type LessonAudioFileScalarFieldEnum = (typeof LessonAudioFileScalarFieldEnum)[keyof typeof LessonAudioFileScalarFieldEnum]
+
+
 export const VideoAssetScalarFieldEnum = {
   id: 'id',
   lessonId: 'lessonId',
@@ -2535,6 +2625,7 @@ export const VideoAssetScalarFieldEnum = {
   playerUrl: 'playerUrl',
   uploadUrl: 'uploadUrl',
   sourceUrl: 'sourceUrl',
+  fileData: 'fileData',
   requiresSignedPlayback: 'requiresSignedPlayback',
   metadata: 'metadata',
   errorMessage: 'errorMessage',
@@ -3015,6 +3106,20 @@ export type ListEnumLessonContentBlockTypeFieldRefInput<$PrismaModel> = FieldRef
 
 
 /**
+ * Reference to a field of type 'Bytes'
+ */
+export type BytesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Bytes'>
+    
+
+
+/**
+ * Reference to a field of type 'Bytes[]'
+ */
+export type ListBytesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Bytes[]'>
+    
+
+
+/**
  * Reference to a field of type 'VideoProviderType'
  */
 export type EnumVideoProviderTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'VideoProviderType'>
@@ -3067,20 +3172,6 @@ export type EnumHomeworkSubmissionStatusFieldRefInput<$PrismaModel> = FieldRefIn
  * Reference to a field of type 'HomeworkSubmissionStatus[]'
  */
 export type ListEnumHomeworkSubmissionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HomeworkSubmissionStatus[]'>
-    
-
-
-/**
- * Reference to a field of type 'Bytes'
- */
-export type BytesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Bytes'>
-    
-
-
-/**
- * Reference to a field of type 'Bytes[]'
- */
-export type ListBytesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Bytes[]'>
     
 
 
@@ -3284,6 +3375,7 @@ export type GlobalOmitConfig = {
   module?: Prisma.ModuleOmit
   lesson?: Prisma.LessonOmit
   lessonBlock?: Prisma.LessonBlockOmit
+  lessonAudioFile?: Prisma.LessonAudioFileOmit
   videoAsset?: Prisma.VideoAssetOmit
   enrollment?: Prisma.EnrollmentOmit
   lessonProgress?: Prisma.LessonProgressOmit

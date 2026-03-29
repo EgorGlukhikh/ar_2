@@ -13,6 +13,18 @@ import { getVideoProvider } from "@/lib/video/provider";
 
 type EmbedSourceType = "RUTUBE_EMBED" | "EXTERNAL_EMBED";
 
+function buildManagedMockVideoUrl(assetId: string) {
+  return `/api/lesson-video/${assetId}`;
+}
+
+function looksLikeDirectVideoUrl(url?: string | null) {
+  if (!url) {
+    return false;
+  }
+
+  return /\.(mp4|m4v|webm|ogg|mov)(?:[?#].*)?$/i.test(url);
+}
+
 function parseRutubeVideo(url: string) {
   const value = url.trim();
   let parsedUrl: URL;
@@ -140,9 +152,14 @@ function getManagedPlayerUrl(
   provider: VideoProviderType,
   playbackId?: string | null,
   playerUrl?: string | null,
+  assetId?: string | null,
 ) {
   if (playerUrl) {
     return playerUrl;
+  }
+
+  if (provider === VideoProviderType.MOCK && assetId) {
+    return buildManagedMockVideoUrl(assetId);
   }
 
   if (
@@ -220,10 +237,11 @@ export async function prepareManagedVideoUpload(input: {
       sizeInBytes: input.sizeInBytes,
       externalAssetId: session.externalAssetId,
       uploadUrl: session.uploadUrl,
-      sourceUrl: null,
-      playerUrl: null,
-      playbackId: null,
-      errorMessage: null,
+        sourceUrl: null,
+        fileData: null,
+        playerUrl: null,
+        playbackId: null,
+        errorMessage: null,
       metadata: {
         expiresAt: session.expiresAt.toISOString(),
       } satisfies Prisma.JsonObject,
@@ -303,6 +321,7 @@ export async function finalizeManagedVideoUpload(input: {
     asset.provider,
     snapshot.playbackId,
     snapshot.playerUrl,
+    asset.id,
   );
 
   await prisma.$transaction([
@@ -355,7 +374,10 @@ export async function importLessonVideoFromUrl(input: {
   const playerUrl = getManagedPlayerUrl(
     mapProviderNameToDb(provider.name),
     result.playbackId ?? null,
-    result.playerUrl ?? null,
+    result.playerUrl ??
+      (provider.name === "mock" && looksLikeDirectVideoUrl(result.sourceUrl)
+        ? result.sourceUrl
+        : null),
   );
 
   await prisma.$transaction([
@@ -532,6 +554,7 @@ export async function refreshLessonVideoAsset(input: { assetId: string }) {
     asset.provider,
     snapshot.playbackId,
     snapshot.playerUrl,
+    asset.id,
   );
 
   await prisma.$transaction([

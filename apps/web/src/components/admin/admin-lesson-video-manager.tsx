@@ -184,7 +184,23 @@ export function AdminLessonVideoManager({
           throw new Error("Не удалось создать сессию загрузки.");
         }
 
-        if (!uploadUrl.startsWith("mock://")) {
+        if (uploadUrl.startsWith("mock://")) {
+          const fileFormData = new FormData();
+          fileFormData.append("assetId", assetId);
+          fileFormData.append("file", managedFile);
+
+          const uploadResponse = await fetch("/api/admin/video/upload", {
+            method: "POST",
+            body: fileFormData,
+          });
+
+          if (!uploadResponse.ok) {
+            const payload = (await uploadResponse.json().catch(() => null)) as
+              | { error?: string }
+              | null;
+            throw new Error(payload?.error || "Файл не загрузился в платформу.");
+          }
+        } else {
           const fileFormData = new FormData();
           fileFormData.append("file", managedFile);
 
@@ -284,26 +300,36 @@ export function AdminLessonVideoManager({
   }
 
   return (
-    <section className="space-y-4 rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-4">
+    <section className="space-y-5 rounded-[30px] border border-[rgba(135,148,176,0.2)] bg-[linear-gradient(180deg,rgba(255,255,255,0.95)_0%,rgba(247,249,255,0.98)_100%)] p-5 shadow-[0_20px_60px_rgba(33,41,74,0.08)]">
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-        <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
+        <div className="space-y-1">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[var(--muted)]">
             Видео
           </p>
-          <h3 className="mt-1 text-lg font-semibold text-[var(--foreground)]">
-            Ссылка или файл
+          <h3 className="text-xl font-semibold tracking-tight text-[var(--foreground)]">
+            Управление источником урока
           </h3>
+          <p className="text-sm leading-6 text-[var(--muted)]">
+            Подключай embed, импортируй ссылку или загружай локальный файл прямо в урок.
+          </p>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
           {initialAsset ? (
-            <Badge variant={statusVariantMap[initialAsset.status] ?? "neutral"}>
+            <Badge
+              variant={statusVariantMap[initialAsset.status] ?? "neutral"}
+              className="shadow-[0_10px_24px_rgba(24,32,59,0.06)]"
+            >
               {statusLabelMap[initialAsset.status] ?? initialAsset.status}
             </Badge>
           ) : hasVideo ? (
-            <Badge variant="neutral">Подключено</Badge>
+            <Badge variant="neutral" className="shadow-[0_10px_24px_rgba(24,32,59,0.06)]">
+              Подключено
+            </Badge>
           ) : (
-            <Badge variant="neutral">Без видео</Badge>
+            <Badge variant="neutral" className="shadow-[0_10px_24px_rgba(24,32,59,0.06)]">
+              Без видео
+            </Badge>
           )}
 
           {initialAsset?.id ? (
@@ -334,15 +360,18 @@ export function AdminLessonVideoManager({
       </div>
 
       {(initialAsset || hasVideo) ? (
-        <div className="rounded-[18px] border border-[var(--border)] bg-white px-4 py-3 text-sm text-[var(--muted)]">
-          <p>
-            Текущее видео:{" "}
+        <div className="rounded-[24px] border border-[rgba(135,148,176,0.18)] bg-[rgba(255,255,255,0.88)] px-5 py-4 text-sm text-[var(--muted)] shadow-[inset_0_1px_0_rgba(255,255,255,0.8)]">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
+            Текущее состояние
+          </p>
+          <p className="mt-2">
+            Источник:{" "}
             <span className="font-medium text-[var(--foreground)]">
               {initialAsset?.sourceType ?? fallbackVideoSourceType ?? "подключено"}
             </span>
           </p>
           {initialAsset?.playerUrl || initialAsset?.sourceUrl || fallbackVideoUrl ? (
-            <p className="mt-1 truncate">
+            <p className="mt-2 truncate rounded-2xl bg-[rgba(244,247,255,0.92)] px-3 py-2 text-[13px]">
               {initialAsset?.playerUrl ?? initialAsset?.sourceUrl ?? fallbackVideoUrl}
             </p>
           ) : null}
@@ -353,73 +382,100 @@ export function AdminLessonVideoManager({
       ) : null}
 
       {message ? (
-        <p className="rounded-xl bg-emerald-50 px-4 py-3 text-sm text-emerald-700">{message}</p>
+        <p className="rounded-[22px] border border-emerald-200 bg-[linear-gradient(180deg,#effdf5_0%,#e8faef_100%)] px-4 py-3 text-sm text-emerald-700">
+          {message}
+        </p>
       ) : null}
 
       {error ? (
-        <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p>
+        <p className="rounded-[22px] border border-red-200 bg-[linear-gradient(180deg,#fff4f4_0%,#ffeded_100%)] px-4 py-3 text-sm text-red-700">
+          {error}
+        </p>
       ) : null}
 
-      <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_auto]">
-        <div className="space-y-2">
-          <Label htmlFor={`video-link-${lessonId}`}>Ссылка на видео</Label>
-          <Input
-            id={`video-link-${lessonId}`}
-            value={videoUrl}
-            onChange={(event) => setVideoUrl(event.target.value)}
-            placeholder="RUTUBE private/public, ссылка плеера или прямая ссылка"
-          />
-        </div>
-
-        <div className="flex items-end">
-          <Button type="button" onClick={handleVideoLink} disabled={pendingAction !== null}>
-            <Link2 className="mr-2 h-4 w-4" />
-            {pendingAction === "video-link" ? "Подключаем..." : "Подключить"}
-          </Button>
-        </div>
-      </div>
-
-      <div className="rounded-[var(--radius-lg)] border border-dashed border-[var(--border)] bg-white px-4 py-4">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div className="min-w-0">
-            <p className="text-sm font-medium text-[var(--foreground)]">Или загрузи файл</p>
-            <p className="mt-1 truncate text-sm text-[var(--muted)]">
-              {managedFile ? `Выбран файл: ${managedFile.name}` : "Файл пока не выбран."}
+      <div className="grid gap-4 xl:grid-cols-2">
+        <div className="rounded-[26px] border border-[rgba(135,148,176,0.18)] bg-[rgba(255,255,255,0.88)] p-4 shadow-[0_14px_32px_rgba(33,41,74,0.05)]">
+          <div className="space-y-2">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
+              Ссылка
             </p>
+            <h4 className="text-base font-semibold text-[var(--foreground)]">
+              Подключить внешнее видео
+            </h4>
           </div>
 
-          <div className="flex flex-wrap gap-2">
-            <input
-              ref={fileInputRef}
-              id={`managed-video-${lessonId}`}
-              type="file"
-              accept="video/*"
-              className="hidden"
-              onChange={(event) => {
-                const file = event.target.files?.[0] ?? null;
-                setManagedFile(file);
-              }}
-            />
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => fileInputRef.current?.click()}
-            >
-              <Plus className="mr-2 h-4 w-4" />
-              Выбрать файл
-            </Button>
-            <Button
-              type="button"
-              onClick={handleManagedUpload}
-              disabled={pendingAction !== null}
-            >
-              <Upload className="mr-2 h-4 w-4" />
-              {pendingAction === "managed-upload" ? "Загружаем..." : "Загрузить"}
-            </Button>
+          <div className="mt-4 grid gap-3 lg:grid-cols-[minmax(0,1fr)_auto]">
+            <div className="space-y-2">
+              <Label htmlFor={`video-link-${lessonId}`}>Ссылка на видео</Label>
+              <Input
+                id={`video-link-${lessonId}`}
+                value={videoUrl}
+                onChange={(event) => setVideoUrl(event.target.value)}
+                placeholder="RUTUBE private/public, ссылка плеера или прямая ссылка"
+              />
+            </div>
+
+            <div className="flex items-end">
+              <Button type="button" onClick={handleVideoLink} disabled={pendingAction !== null}>
+                <Link2 className="mr-2 h-4 w-4" />
+                {pendingAction === "video-link" ? "Подключаем..." : "Подключить"}
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        <div className="rounded-[26px] border border-dashed border-[rgba(135,148,176,0.28)] bg-[linear-gradient(180deg,rgba(248,250,255,0.94)_0%,rgba(255,255,255,0.94)_100%)] px-4 py-4 shadow-[0_14px_32px_rgba(33,41,74,0.05)]">
+          <div className="space-y-1">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
+              Файл
+            </p>
+            <h4 className="text-base font-semibold text-[var(--foreground)]">
+              Загрузить локальное видео
+            </h4>
+          </div>
+
+          <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="min-w-0">
+              <p className="text-sm font-medium text-[var(--foreground)]">
+                Файл для managed upload
+              </p>
+              <p className="mt-1 truncate text-sm text-[var(--muted)]">
+                {managedFile ? `Выбран файл: ${managedFile.name}` : "Файл пока не выбран."}
+              </p>
+            </div>
+
+            <div className="flex flex-wrap gap-2">
+              <input
+                ref={fileInputRef}
+                id={`managed-video-${lessonId}`}
+                type="file"
+                accept="video/*"
+                className="hidden"
+                onChange={(event) => {
+                  const file = event.target.files?.[0] ?? null;
+                  setManagedFile(file);
+                }}
+              />
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <Plus className="mr-2 h-4 w-4" />
+                Выбрать файл
+              </Button>
+              <Button
+                type="button"
+                onClick={handleManagedUpload}
+                disabled={pendingAction !== null}
+              >
+                <Upload className="mr-2 h-4 w-4" />
+                {pendingAction === "managed-upload" ? "Загружаем..." : "Загрузить"}
+              </Button>
+            </div>
           </div>
         </div>
       </div>
     </section>
   );
 }
-
