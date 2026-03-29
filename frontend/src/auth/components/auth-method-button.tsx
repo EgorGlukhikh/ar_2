@@ -39,7 +39,7 @@ export function AuthMethodButton({
         tone === "secondary" &&
           "border-[var(--border-strong)] bg-[var(--surface)] text-[var(--foreground)] hover:bg-[var(--surface-strong)]",
         isYandex &&
-          "min-h-14 rounded-[20px] border-black bg-black text-white shadow-[0_20px_45px_rgba(15,23,42,0.18)] hover:bg-black",
+          "min-h-[56px] rounded-[18px] border-black bg-black px-4 py-3 text-white shadow-[0_18px_38px_rgba(15,23,42,0.16)] hover:bg-black",
         isLocked && "cursor-not-allowed opacity-60",
       )}
     >
@@ -49,7 +49,7 @@ export function AuthMethodButton({
             "flex items-center justify-center text-sm font-semibold",
             tone === "primary" && "h-11 w-11 rounded-[var(--icon-radius)] bg-white/16 text-white",
             tone === "secondary" && "h-11 w-11 rounded-[var(--icon-radius)] bg-[#FC3F1D] text-white",
-            isYandex && "h-11 w-11 rounded-full bg-[#FC3F1D] text-[26px] leading-none text-white",
+            isYandex && "h-10 w-10 rounded-full bg-[#FC3F1D] text-[24px] leading-none text-white",
           )}
         >
           {pending ? (
@@ -63,7 +63,7 @@ export function AuthMethodButton({
           <p
             className={cn(
               "text-base font-semibold leading-6",
-              isYandex && "text-[17px] font-medium tracking-[-0.01em] text-white sm:text-[18px]",
+              isYandex && "text-[16px] font-medium tracking-[-0.01em] text-white sm:text-[17px]",
             )}
           >
             {label}
