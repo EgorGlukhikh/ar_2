@@ -104,13 +104,19 @@ function programWord(count: number) {
   return "программ";
 }
 
-export function LandingExperience({ publishedCourses, courses }: PublicHomePayload) {
+export function LandingExperience({
+  publishedCourses,
+  courses,
+  viewerName,
+}: PublicHomePayload & {
+  viewerName?: string | null;
+}) {
   return (
     <div>
 
       {/* ─── STICKY HEADER ─────────────────────────────────────────── */}
       <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-white/96 backdrop-blur-sm">
-        <PageContainer className="flex h-16 items-center justify-between gap-4 py-0">
+        <PageContainer className="flex min-h-16 items-center justify-between gap-4 py-3">
           <div className="flex items-center gap-3">
             <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[var(--radius-sm)] bg-[var(--foreground)] text-xs font-bold text-white">
               AR
@@ -141,15 +147,24 @@ export function LandingExperience({ publishedCourses, courses }: PublicHomePaylo
             </Link>
           </nav>
 
-          <div className="flex shrink-0 items-center gap-3">
-            <Link
-              href="/sign-in"
-              className="text-sm font-semibold text-[var(--foreground)] transition-colors hover:text-[var(--primary)]"
-            >
-              Войти
-            </Link>
+          <div className="flex shrink-0 items-center gap-4 md:gap-5">
+            {viewerName ? (
+              <Link
+                href="/learning/profile#profile-settings"
+                className="text-sm font-semibold text-[var(--foreground)] underline decoration-[var(--border-strong)] underline-offset-4 transition-colors hover:text-[var(--primary)] hover:decoration-[var(--primary)]"
+              >
+                {`Привет, ${viewerName}.`}
+              </Link>
+            ) : (
+              <Link
+                href="/sign-in"
+                className="text-sm font-semibold text-[var(--foreground)] transition-colors hover:text-[var(--primary)]"
+              >
+                Войти
+              </Link>
+            )}
             <PublicButton href="/catalog">
-              <Copy value="Подобрать курс" />
+              Подобрать курс
             </PublicButton>
           </div>
         </PageContainer>

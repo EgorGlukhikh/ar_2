@@ -7,15 +7,19 @@ import { LandingExperience } from "@frontend/landing/components/landing-experien
 import { marketingBody, marketingDisplay } from "@/lib/marketing-theme";
 
 export default async function Home() {
-  await auth();
+  const session = await auth();
 
   const homePayload = await getPublicHomePayload();
+  const viewerName =
+    session?.user?.name?.trim() ||
+    session?.user?.email?.split("@")[0] ||
+    null;
 
   return (
     <main
       className={`${marketingDisplay.variable} ${marketingBody.variable} font-[family:var(--font-landing-body)]`}
     >
-      <LandingExperience {...homePayload} />
+      <LandingExperience {...homePayload} viewerName={viewerName} />
       <PublicFooter />
     </main>
   );

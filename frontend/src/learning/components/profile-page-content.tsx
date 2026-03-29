@@ -54,7 +54,10 @@ export function ProfilePageContent({ profile }: { profile: ProfileData }) {
   }
 
   return (
-    <div className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-sm)]">
+    <div
+      id="profile-settings"
+      className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-sm)]"
+    >
       {/* Header */}
       <div className="flex items-center justify-between border-b border-[var(--border)] px-6 py-5">
         <div>
