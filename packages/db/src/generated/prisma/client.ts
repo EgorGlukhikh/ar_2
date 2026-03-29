@@ -162,6 +162,16 @@ export type EmailMessage = Prisma.EmailMessageModel
  */
 export type EmailEvent = Prisma.EmailEventModel
 /**
+ * Model EmailPreference
+ * 
+ */
+export type EmailPreference = Prisma.EmailPreferenceModel
+/**
+ * Model EmailCampaign
+ * 
+ */
+export type EmailCampaign = Prisma.EmailCampaignModel
+/**
  * Model EmailLinkClick
  * 
  */

@@ -75,6 +75,8 @@ export const ModelName = {
   Payment: 'Payment',
   EmailMessage: 'EmailMessage',
   EmailEvent: 'EmailEvent',
+  EmailPreference: 'EmailPreference',
+  EmailCampaign: 'EmailCampaign',
   EmailLinkClick: 'EmailLinkClick',
   WorkspaceInvite: 'WorkspaceInvite',
   LessonSession: 'LessonSession',
@@ -441,27 +443,36 @@ export const EmailMessageScalarFieldEnum = {
   userId: 'userId',
   courseId: 'courseId',
   orderId: 'orderId',
+  campaignId: 'campaignId',
   provider: 'provider',
   kind: 'kind',
   status: 'status',
   templateKey: 'templateKey',
   campaignKey: 'campaignKey',
+  recipientSegment: 'recipientSegment',
   sequenceStep: 'sequenceStep',
   dedupeKey: 'dedupeKey',
   trackingToken: 'trackingToken',
   subject: 'subject',
+  preheader: 'preheader',
   fromEmail: 'fromEmail',
   fromName: 'fromName',
+  replyToEmail: 'replyToEmail',
+  replyToName: 'replyToName',
   toEmail: 'toEmail',
   toName: 'toName',
   htmlBody: 'htmlBody',
   textBody: 'textBody',
   scheduledAt: 'scheduledAt',
+  nextAttemptAt: 'nextAttemptAt',
+  attemptCount: 'attemptCount',
+  maxAttempts: 'maxAttempts',
   sentAt: 'sentAt',
   deliveredAt: 'deliveredAt',
   openedAt: 'openedAt',
   clickedAt: 'clickedAt',
   failedAt: 'failedAt',
+  canceledAt: 'canceledAt',
   providerMessageId: 'providerMessageId',
   lastError: 'lastError',
   metadata: 'metadata',
@@ -483,6 +494,48 @@ export const EmailEventScalarFieldEnum = {
 } as const
 
 export type EmailEventScalarFieldEnum = (typeof EmailEventScalarFieldEnum)[keyof typeof EmailEventScalarFieldEnum]
+
+
+export const EmailPreferenceScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  audienceType: 'audienceType',
+  isMarketingEnabled: 'isMarketingEnabled',
+  marketingSource: 'marketingSource',
+  consentText: 'consentText',
+  subscribedAt: 'subscribedAt',
+  unsubscribedAt: 'unsubscribedAt',
+  preferenceToken: 'preferenceToken',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EmailPreferenceScalarFieldEnum = (typeof EmailPreferenceScalarFieldEnum)[keyof typeof EmailPreferenceScalarFieldEnum]
+
+
+export const EmailCampaignScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  templateKey: 'templateKey',
+  segment: 'segment',
+  status: 'status',
+  createdById: 'createdById',
+  courseId: 'courseId',
+  scheduledAt: 'scheduledAt',
+  launchedAt: 'launchedAt',
+  pausedAt: 'pausedAt',
+  canceledAt: 'canceledAt',
+  completedAt: 'completedAt',
+  subjectSnapshot: 'subjectSnapshot',
+  preheaderSnapshot: 'preheaderSnapshot',
+  recipientCount: 'recipientCount',
+  lastError: 'lastError',
+  metadata: 'metadata',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EmailCampaignScalarFieldEnum = (typeof EmailCampaignScalarFieldEnum)[keyof typeof EmailCampaignScalarFieldEnum]
 
 
 export const EmailLinkClickScalarFieldEnum = {

@@ -28,10 +28,14 @@ export type AggregateEmailMessage = {
 
 export type EmailMessageAvgAggregateOutputType = {
   sequenceStep: number | null
+  attemptCount: number | null
+  maxAttempts: number | null
 }
 
 export type EmailMessageSumAggregateOutputType = {
   sequenceStep: number | null
+  attemptCount: number | null
+  maxAttempts: number | null
 }
 
 export type EmailMessageMinAggregateOutputType = {
@@ -39,27 +43,36 @@ export type EmailMessageMinAggregateOutputType = {
   userId: string | null
   courseId: string | null
   orderId: string | null
+  campaignId: string | null
   provider: $Enums.EmailProviderType | null
   kind: $Enums.EmailKind | null
   status: $Enums.EmailStatus | null
   templateKey: string | null
   campaignKey: string | null
+  recipientSegment: $Enums.EmailCampaignSegment | null
   sequenceStep: number | null
   dedupeKey: string | null
   trackingToken: string | null
   subject: string | null
+  preheader: string | null
   fromEmail: string | null
   fromName: string | null
+  replyToEmail: string | null
+  replyToName: string | null
   toEmail: string | null
   toName: string | null
   htmlBody: string | null
   textBody: string | null
   scheduledAt: Date | null
+  nextAttemptAt: Date | null
+  attemptCount: number | null
+  maxAttempts: number | null
   sentAt: Date | null
   deliveredAt: Date | null
   openedAt: Date | null
   clickedAt: Date | null
   failedAt: Date | null
+  canceledAt: Date | null
   providerMessageId: string | null
   lastError: string | null
   createdAt: Date | null
@@ -71,27 +84,36 @@ export type EmailMessageMaxAggregateOutputType = {
   userId: string | null
   courseId: string | null
   orderId: string | null
+  campaignId: string | null
   provider: $Enums.EmailProviderType | null
   kind: $Enums.EmailKind | null
   status: $Enums.EmailStatus | null
   templateKey: string | null
   campaignKey: string | null
+  recipientSegment: $Enums.EmailCampaignSegment | null
   sequenceStep: number | null
   dedupeKey: string | null
   trackingToken: string | null
   subject: string | null
+  preheader: string | null
   fromEmail: string | null
   fromName: string | null
+  replyToEmail: string | null
+  replyToName: string | null
   toEmail: string | null
   toName: string | null
   htmlBody: string | null
   textBody: string | null
   scheduledAt: Date | null
+  nextAttemptAt: Date | null
+  attemptCount: number | null
+  maxAttempts: number | null
   sentAt: Date | null
   deliveredAt: Date | null
   openedAt: Date | null
   clickedAt: Date | null
   failedAt: Date | null
+  canceledAt: Date | null
   providerMessageId: string | null
   lastError: string | null
   createdAt: Date | null
@@ -103,27 +125,36 @@ export type EmailMessageCountAggregateOutputType = {
   userId: number
   courseId: number
   orderId: number
+  campaignId: number
   provider: number
   kind: number
   status: number
   templateKey: number
   campaignKey: number
+  recipientSegment: number
   sequenceStep: number
   dedupeKey: number
   trackingToken: number
   subject: number
+  preheader: number
   fromEmail: number
   fromName: number
+  replyToEmail: number
+  replyToName: number
   toEmail: number
   toName: number
   htmlBody: number
   textBody: number
   scheduledAt: number
+  nextAttemptAt: number
+  attemptCount: number
+  maxAttempts: number
   sentAt: number
   deliveredAt: number
   openedAt: number
   clickedAt: number
   failedAt: number
+  canceledAt: number
   providerMessageId: number
   lastError: number
   metadata: number
@@ -135,10 +166,14 @@ export type EmailMessageCountAggregateOutputType = {
 
 export type EmailMessageAvgAggregateInputType = {
   sequenceStep?: true
+  attemptCount?: true
+  maxAttempts?: true
 }
 
 export type EmailMessageSumAggregateInputType = {
   sequenceStep?: true
+  attemptCount?: true
+  maxAttempts?: true
 }
 
 export type EmailMessageMinAggregateInputType = {
@@ -146,27 +181,36 @@ export type EmailMessageMinAggregateInputType = {
   userId?: true
   courseId?: true
   orderId?: true
+  campaignId?: true
   provider?: true
   kind?: true
   status?: true
   templateKey?: true
   campaignKey?: true
+  recipientSegment?: true
   sequenceStep?: true
   dedupeKey?: true
   trackingToken?: true
   subject?: true
+  preheader?: true
   fromEmail?: true
   fromName?: true
+  replyToEmail?: true
+  replyToName?: true
   toEmail?: true
   toName?: true
   htmlBody?: true
   textBody?: true
   scheduledAt?: true
+  nextAttemptAt?: true
+  attemptCount?: true
+  maxAttempts?: true
   sentAt?: true
   deliveredAt?: true
   openedAt?: true
   clickedAt?: true
   failedAt?: true
+  canceledAt?: true
   providerMessageId?: true
   lastError?: true
   createdAt?: true
@@ -178,27 +222,36 @@ export type EmailMessageMaxAggregateInputType = {
   userId?: true
   courseId?: true
   orderId?: true
+  campaignId?: true
   provider?: true
   kind?: true
   status?: true
   templateKey?: true
   campaignKey?: true
+  recipientSegment?: true
   sequenceStep?: true
   dedupeKey?: true
   trackingToken?: true
   subject?: true
+  preheader?: true
   fromEmail?: true
   fromName?: true
+  replyToEmail?: true
+  replyToName?: true
   toEmail?: true
   toName?: true
   htmlBody?: true
   textBody?: true
   scheduledAt?: true
+  nextAttemptAt?: true
+  attemptCount?: true
+  maxAttempts?: true
   sentAt?: true
   deliveredAt?: true
   openedAt?: true
   clickedAt?: true
   failedAt?: true
+  canceledAt?: true
   providerMessageId?: true
   lastError?: true
   createdAt?: true
@@ -210,27 +263,36 @@ export type EmailMessageCountAggregateInputType = {
   userId?: true
   courseId?: true
   orderId?: true
+  campaignId?: true
   provider?: true
   kind?: true
   status?: true
   templateKey?: true
   campaignKey?: true
+  recipientSegment?: true
   sequenceStep?: true
   dedupeKey?: true
   trackingToken?: true
   subject?: true
+  preheader?: true
   fromEmail?: true
   fromName?: true
+  replyToEmail?: true
+  replyToName?: true
   toEmail?: true
   toName?: true
   htmlBody?: true
   textBody?: true
   scheduledAt?: true
+  nextAttemptAt?: true
+  attemptCount?: true
+  maxAttempts?: true
   sentAt?: true
   deliveredAt?: true
   openedAt?: true
   clickedAt?: true
   failedAt?: true
+  canceledAt?: true
   providerMessageId?: true
   lastError?: true
   metadata?: true
@@ -330,27 +392,36 @@ export type EmailMessageGroupByOutputType = {
   userId: string | null
   courseId: string | null
   orderId: string | null
+  campaignId: string | null
   provider: $Enums.EmailProviderType
   kind: $Enums.EmailKind
   status: $Enums.EmailStatus
   templateKey: string
   campaignKey: string | null
+  recipientSegment: $Enums.EmailCampaignSegment | null
   sequenceStep: number | null
   dedupeKey: string | null
   trackingToken: string
   subject: string
+  preheader: string | null
   fromEmail: string
   fromName: string | null
+  replyToEmail: string | null
+  replyToName: string | null
   toEmail: string
   toName: string | null
   htmlBody: string
   textBody: string | null
   scheduledAt: Date
+  nextAttemptAt: Date | null
+  attemptCount: number
+  maxAttempts: number
   sentAt: Date | null
   deliveredAt: Date | null
   openedAt: Date | null
   clickedAt: Date | null
   failedAt: Date | null
+  canceledAt: Date | null
   providerMessageId: string | null
   lastError: string | null
   metadata: runtime.JsonValue | null
@@ -386,33 +457,43 @@ export type EmailMessageWhereInput = {
   userId?: Prisma.StringNullableFilter<"EmailMessage"> | string | null
   courseId?: Prisma.StringNullableFilter<"EmailMessage"> | string | null
   orderId?: Prisma.StringNullableFilter<"EmailMessage"> | string | null
+  campaignId?: Prisma.StringNullableFilter<"EmailMessage"> | string | null
   provider?: Prisma.EnumEmailProviderTypeFilter<"EmailMessage"> | $Enums.EmailProviderType
   kind?: Prisma.EnumEmailKindFilter<"EmailMessage"> | $Enums.EmailKind
   status?: Prisma.EnumEmailStatusFilter<"EmailMessage"> | $Enums.EmailStatus
   templateKey?: Prisma.StringFilter<"EmailMessage"> | string
   campaignKey?: Prisma.StringNullableFilter<"EmailMessage"> | string | null
+  recipientSegment?: Prisma.EnumEmailCampaignSegmentNullableFilter<"EmailMessage"> | $Enums.EmailCampaignSegment | null
   sequenceStep?: Prisma.IntNullableFilter<"EmailMessage"> | number | null
   dedupeKey?: Prisma.StringNullableFilter<"EmailMessage"> | string | null
   trackingToken?: Prisma.StringFilter<"EmailMessage"> | string
   subject?: Prisma.StringFilter<"EmailMessage"> | string
+  preheader?: Prisma.StringNullableFilter<"EmailMessage"> | string | null
   fromEmail?: Prisma.StringFilter<"EmailMessage"> | string
   fromName?: Prisma.StringNullableFilter<"EmailMessage"> | string | null
+  replyToEmail?: Prisma.StringNullableFilter<"EmailMessage"> | string | null
+  replyToName?: Prisma.StringNullableFilter<"EmailMessage"> | string | null
   toEmail?: Prisma.StringFilter<"EmailMessage"> | string
   toName?: Prisma.StringNullableFilter<"EmailMessage"> | string | null
   htmlBody?: Prisma.StringFilter<"EmailMessage"> | string
   textBody?: Prisma.StringNullableFilter<"EmailMessage"> | string | null
   scheduledAt?: Prisma.DateTimeFilter<"EmailMessage"> | Date | string
+  nextAttemptAt?: Prisma.DateTimeNullableFilter<"EmailMessage"> | Date | string | null
+  attemptCount?: Prisma.IntFilter<"EmailMessage"> | number
+  maxAttempts?: Prisma.IntFilter<"EmailMessage"> | number
   sentAt?: Prisma.DateTimeNullableFilter<"EmailMessage"> | Date | string | null
   deliveredAt?: Prisma.DateTimeNullableFilter<"EmailMessage"> | Date | string | null
   openedAt?: Prisma.DateTimeNullableFilter<"EmailMessage"> | Date | string | null
   clickedAt?: Prisma.DateTimeNullableFilter<"EmailMessage"> | Date | string | null
   failedAt?: Prisma.DateTimeNullableFilter<"EmailMessage"> | Date | string | null
+  canceledAt?: Prisma.DateTimeNullableFilter<"EmailMessage"> | Date | string | null
   providerMessageId?: Prisma.StringNullableFilter<"EmailMessage"> | string | null
   lastError?: Prisma.StringNullableFilter<"EmailMessage"> | string | null
   metadata?: Prisma.JsonNullableFilter<"EmailMessage">
   createdAt?: Prisma.DateTimeFilter<"EmailMessage"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"EmailMessage"> | Date | string
   course?: Prisma.XOR<Prisma.CourseNullableScalarRelationFilter, Prisma.CourseWhereInput> | null
+  campaign?: Prisma.XOR<Prisma.EmailCampaignNullableScalarRelationFilter, Prisma.EmailCampaignWhereInput> | null
   order?: Prisma.XOR<Prisma.OrderNullableScalarRelationFilter, Prisma.OrderWhereInput> | null
   user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   events?: Prisma.EmailEventListRelationFilter
@@ -424,33 +505,43 @@ export type EmailMessageOrderByWithRelationInput = {
   userId?: Prisma.SortOrderInput | Prisma.SortOrder
   courseId?: Prisma.SortOrderInput | Prisma.SortOrder
   orderId?: Prisma.SortOrderInput | Prisma.SortOrder
+  campaignId?: Prisma.SortOrderInput | Prisma.SortOrder
   provider?: Prisma.SortOrder
   kind?: Prisma.SortOrder
   status?: Prisma.SortOrder
   templateKey?: Prisma.SortOrder
   campaignKey?: Prisma.SortOrderInput | Prisma.SortOrder
+  recipientSegment?: Prisma.SortOrderInput | Prisma.SortOrder
   sequenceStep?: Prisma.SortOrderInput | Prisma.SortOrder
   dedupeKey?: Prisma.SortOrderInput | Prisma.SortOrder
   trackingToken?: Prisma.SortOrder
   subject?: Prisma.SortOrder
+  preheader?: Prisma.SortOrderInput | Prisma.SortOrder
   fromEmail?: Prisma.SortOrder
   fromName?: Prisma.SortOrderInput | Prisma.SortOrder
+  replyToEmail?: Prisma.SortOrderInput | Prisma.SortOrder
+  replyToName?: Prisma.SortOrderInput | Prisma.SortOrder
   toEmail?: Prisma.SortOrder
   toName?: Prisma.SortOrderInput | Prisma.SortOrder
   htmlBody?: Prisma.SortOrder
   textBody?: Prisma.SortOrderInput | Prisma.SortOrder
   scheduledAt?: Prisma.SortOrder
+  nextAttemptAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  attemptCount?: Prisma.SortOrder
+  maxAttempts?: Prisma.SortOrder
   sentAt?: Prisma.SortOrderInput | Prisma.SortOrder
   deliveredAt?: Prisma.SortOrderInput | Prisma.SortOrder
   openedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   clickedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   failedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  canceledAt?: Prisma.SortOrderInput | Prisma.SortOrder
   providerMessageId?: Prisma.SortOrderInput | Prisma.SortOrder
   lastError?: Prisma.SortOrderInput | Prisma.SortOrder
   metadata?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   course?: Prisma.CourseOrderByWithRelationInput
+  campaign?: Prisma.EmailCampaignOrderByWithRelationInput
   order?: Prisma.OrderOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
   events?: Prisma.EmailEventOrderByRelationAggregateInput
@@ -467,31 +558,41 @@ export type EmailMessageWhereUniqueInput = Prisma.AtLeast<{
   userId?: Prisma.StringNullableFilter<"EmailMessage"> | string | null
   courseId?: Prisma.StringNullableFilter<"EmailMessage"> | string | null
   orderId?: Prisma.StringNullableFilter<"EmailMessage"> | string | null
+  campaignId?: Prisma.StringNullableFilter<"EmailMessage"> | string | null
   provider?: Prisma.EnumEmailProviderTypeFilter<"EmailMessage"> | $Enums.EmailProviderType
   kind?: Prisma.EnumEmailKindFilter<"EmailMessage"> | $Enums.EmailKind
   status?: Prisma.EnumEmailStatusFilter<"EmailMessage"> | $Enums.EmailStatus
   templateKey?: Prisma.StringFilter<"EmailMessage"> | string
   campaignKey?: Prisma.StringNullableFilter<"EmailMessage"> | string | null
+  recipientSegment?: Prisma.EnumEmailCampaignSegmentNullableFilter<"EmailMessage"> | $Enums.EmailCampaignSegment | null
   sequenceStep?: Prisma.IntNullableFilter<"EmailMessage"> | number | null
   subject?: Prisma.StringFilter<"EmailMessage"> | string
+  preheader?: Prisma.StringNullableFilter<"EmailMessage"> | string | null
   fromEmail?: Prisma.StringFilter<"EmailMessage"> | string
   fromName?: Prisma.StringNullableFilter<"EmailMessage"> | string | null
+  replyToEmail?: Prisma.StringNullableFilter<"EmailMessage"> | string | null
+  replyToName?: Prisma.StringNullableFilter<"EmailMessage"> | string | null
   toEmail?: Prisma.StringFilter<"EmailMessage"> | string
   toName?: Prisma.StringNullableFilter<"EmailMessage"> | string | null
   htmlBody?: Prisma.StringFilter<"EmailMessage"> | string
   textBody?: Prisma.StringNullableFilter<"EmailMessage"> | string | null
   scheduledAt?: Prisma.DateTimeFilter<"EmailMessage"> | Date | string
+  nextAttemptAt?: Prisma.DateTimeNullableFilter<"EmailMessage"> | Date | string | null
+  attemptCount?: Prisma.IntFilter<"EmailMessage"> | number
+  maxAttempts?: Prisma.IntFilter<"EmailMessage"> | number
   sentAt?: Prisma.DateTimeNullableFilter<"EmailMessage"> | Date | string | null
   deliveredAt?: Prisma.DateTimeNullableFilter<"EmailMessage"> | Date | string | null
   openedAt?: Prisma.DateTimeNullableFilter<"EmailMessage"> | Date | string | null
   clickedAt?: Prisma.DateTimeNullableFilter<"EmailMessage"> | Date | string | null
   failedAt?: Prisma.DateTimeNullableFilter<"EmailMessage"> | Date | string | null
+  canceledAt?: Prisma.DateTimeNullableFilter<"EmailMessage"> | Date | string | null
   providerMessageId?: Prisma.StringNullableFilter<"EmailMessage"> | string | null
   lastError?: Prisma.StringNullableFilter<"EmailMessage"> | string | null
   metadata?: Prisma.JsonNullableFilter<"EmailMessage">
   createdAt?: Prisma.DateTimeFilter<"EmailMessage"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"EmailMessage"> | Date | string
   course?: Prisma.XOR<Prisma.CourseNullableScalarRelationFilter, Prisma.CourseWhereInput> | null
+  campaign?: Prisma.XOR<Prisma.EmailCampaignNullableScalarRelationFilter, Prisma.EmailCampaignWhereInput> | null
   order?: Prisma.XOR<Prisma.OrderNullableScalarRelationFilter, Prisma.OrderWhereInput> | null
   user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   events?: Prisma.EmailEventListRelationFilter
@@ -503,27 +604,36 @@ export type EmailMessageOrderByWithAggregationInput = {
   userId?: Prisma.SortOrderInput | Prisma.SortOrder
   courseId?: Prisma.SortOrderInput | Prisma.SortOrder
   orderId?: Prisma.SortOrderInput | Prisma.SortOrder
+  campaignId?: Prisma.SortOrderInput | Prisma.SortOrder
   provider?: Prisma.SortOrder
   kind?: Prisma.SortOrder
   status?: Prisma.SortOrder
   templateKey?: Prisma.SortOrder
   campaignKey?: Prisma.SortOrderInput | Prisma.SortOrder
+  recipientSegment?: Prisma.SortOrderInput | Prisma.SortOrder
   sequenceStep?: Prisma.SortOrderInput | Prisma.SortOrder
   dedupeKey?: Prisma.SortOrderInput | Prisma.SortOrder
   trackingToken?: Prisma.SortOrder
   subject?: Prisma.SortOrder
+  preheader?: Prisma.SortOrderInput | Prisma.SortOrder
   fromEmail?: Prisma.SortOrder
   fromName?: Prisma.SortOrderInput | Prisma.SortOrder
+  replyToEmail?: Prisma.SortOrderInput | Prisma.SortOrder
+  replyToName?: Prisma.SortOrderInput | Prisma.SortOrder
   toEmail?: Prisma.SortOrder
   toName?: Prisma.SortOrderInput | Prisma.SortOrder
   htmlBody?: Prisma.SortOrder
   textBody?: Prisma.SortOrderInput | Prisma.SortOrder
   scheduledAt?: Prisma.SortOrder
+  nextAttemptAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  attemptCount?: Prisma.SortOrder
+  maxAttempts?: Prisma.SortOrder
   sentAt?: Prisma.SortOrderInput | Prisma.SortOrder
   deliveredAt?: Prisma.SortOrderInput | Prisma.SortOrder
   openedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   clickedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   failedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  canceledAt?: Prisma.SortOrderInput | Prisma.SortOrder
   providerMessageId?: Prisma.SortOrderInput | Prisma.SortOrder
   lastError?: Prisma.SortOrderInput | Prisma.SortOrder
   metadata?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -544,27 +654,36 @@ export type EmailMessageScalarWhereWithAggregatesInput = {
   userId?: Prisma.StringNullableWithAggregatesFilter<"EmailMessage"> | string | null
   courseId?: Prisma.StringNullableWithAggregatesFilter<"EmailMessage"> | string | null
   orderId?: Prisma.StringNullableWithAggregatesFilter<"EmailMessage"> | string | null
+  campaignId?: Prisma.StringNullableWithAggregatesFilter<"EmailMessage"> | string | null
   provider?: Prisma.EnumEmailProviderTypeWithAggregatesFilter<"EmailMessage"> | $Enums.EmailProviderType
   kind?: Prisma.EnumEmailKindWithAggregatesFilter<"EmailMessage"> | $Enums.EmailKind
   status?: Prisma.EnumEmailStatusWithAggregatesFilter<"EmailMessage"> | $Enums.EmailStatus
   templateKey?: Prisma.StringWithAggregatesFilter<"EmailMessage"> | string
   campaignKey?: Prisma.StringNullableWithAggregatesFilter<"EmailMessage"> | string | null
+  recipientSegment?: Prisma.EnumEmailCampaignSegmentNullableWithAggregatesFilter<"EmailMessage"> | $Enums.EmailCampaignSegment | null
   sequenceStep?: Prisma.IntNullableWithAggregatesFilter<"EmailMessage"> | number | null
   dedupeKey?: Prisma.StringNullableWithAggregatesFilter<"EmailMessage"> | string | null
   trackingToken?: Prisma.StringWithAggregatesFilter<"EmailMessage"> | string
   subject?: Prisma.StringWithAggregatesFilter<"EmailMessage"> | string
+  preheader?: Prisma.StringNullableWithAggregatesFilter<"EmailMessage"> | string | null
   fromEmail?: Prisma.StringWithAggregatesFilter<"EmailMessage"> | string
   fromName?: Prisma.StringNullableWithAggregatesFilter<"EmailMessage"> | string | null
+  replyToEmail?: Prisma.StringNullableWithAggregatesFilter<"EmailMessage"> | string | null
+  replyToName?: Prisma.StringNullableWithAggregatesFilter<"EmailMessage"> | string | null
   toEmail?: Prisma.StringWithAggregatesFilter<"EmailMessage"> | string
   toName?: Prisma.StringNullableWithAggregatesFilter<"EmailMessage"> | string | null
   htmlBody?: Prisma.StringWithAggregatesFilter<"EmailMessage"> | string
   textBody?: Prisma.StringNullableWithAggregatesFilter<"EmailMessage"> | string | null
   scheduledAt?: Prisma.DateTimeWithAggregatesFilter<"EmailMessage"> | Date | string
+  nextAttemptAt?: Prisma.DateTimeNullableWithAggregatesFilter<"EmailMessage"> | Date | string | null
+  attemptCount?: Prisma.IntWithAggregatesFilter<"EmailMessage"> | number
+  maxAttempts?: Prisma.IntWithAggregatesFilter<"EmailMessage"> | number
   sentAt?: Prisma.DateTimeNullableWithAggregatesFilter<"EmailMessage"> | Date | string | null
   deliveredAt?: Prisma.DateTimeNullableWithAggregatesFilter<"EmailMessage"> | Date | string | null
   openedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"EmailMessage"> | Date | string | null
   clickedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"EmailMessage"> | Date | string | null
   failedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"EmailMessage"> | Date | string | null
+  canceledAt?: Prisma.DateTimeNullableWithAggregatesFilter<"EmailMessage"> | Date | string | null
   providerMessageId?: Prisma.StringNullableWithAggregatesFilter<"EmailMessage"> | string | null
   lastError?: Prisma.StringNullableWithAggregatesFilter<"EmailMessage"> | string | null
   metadata?: Prisma.JsonNullableWithAggregatesFilter<"EmailMessage">
@@ -579,28 +698,37 @@ export type EmailMessageCreateInput = {
   status?: $Enums.EmailStatus
   templateKey: string
   campaignKey?: string | null
+  recipientSegment?: $Enums.EmailCampaignSegment | null
   sequenceStep?: number | null
   dedupeKey?: string | null
   trackingToken: string
   subject: string
+  preheader?: string | null
   fromEmail: string
   fromName?: string | null
+  replyToEmail?: string | null
+  replyToName?: string | null
   toEmail: string
   toName?: string | null
   htmlBody: string
   textBody?: string | null
   scheduledAt?: Date | string
+  nextAttemptAt?: Date | string | null
+  attemptCount?: number
+  maxAttempts?: number
   sentAt?: Date | string | null
   deliveredAt?: Date | string | null
   openedAt?: Date | string | null
   clickedAt?: Date | string | null
   failedAt?: Date | string | null
+  canceledAt?: Date | string | null
   providerMessageId?: string | null
   lastError?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   course?: Prisma.CourseCreateNestedOneWithoutEmailsInput
+  campaign?: Prisma.EmailCampaignCreateNestedOneWithoutMessagesInput
   order?: Prisma.OrderCreateNestedOneWithoutEmailsInput
   user?: Prisma.UserCreateNestedOneWithoutEmailsInput
   events?: Prisma.EmailEventCreateNestedManyWithoutEmailMessageInput
@@ -612,27 +740,36 @@ export type EmailMessageUncheckedCreateInput = {
   userId?: string | null
   courseId?: string | null
   orderId?: string | null
+  campaignId?: string | null
   provider?: $Enums.EmailProviderType
   kind?: $Enums.EmailKind
   status?: $Enums.EmailStatus
   templateKey: string
   campaignKey?: string | null
+  recipientSegment?: $Enums.EmailCampaignSegment | null
   sequenceStep?: number | null
   dedupeKey?: string | null
   trackingToken: string
   subject: string
+  preheader?: string | null
   fromEmail: string
   fromName?: string | null
+  replyToEmail?: string | null
+  replyToName?: string | null
   toEmail: string
   toName?: string | null
   htmlBody: string
   textBody?: string | null
   scheduledAt?: Date | string
+  nextAttemptAt?: Date | string | null
+  attemptCount?: number
+  maxAttempts?: number
   sentAt?: Date | string | null
   deliveredAt?: Date | string | null
   openedAt?: Date | string | null
   clickedAt?: Date | string | null
   failedAt?: Date | string | null
+  canceledAt?: Date | string | null
   providerMessageId?: string | null
   lastError?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -649,28 +786,37 @@ export type EmailMessageUpdateInput = {
   status?: Prisma.EnumEmailStatusFieldUpdateOperationsInput | $Enums.EmailStatus
   templateKey?: Prisma.StringFieldUpdateOperationsInput | string
   campaignKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recipientSegment?: Prisma.NullableEnumEmailCampaignSegmentFieldUpdateOperationsInput | $Enums.EmailCampaignSegment | null
   sequenceStep?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dedupeKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trackingToken?: Prisma.StringFieldUpdateOperationsInput | string
   subject?: Prisma.StringFieldUpdateOperationsInput | string
+  preheader?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fromEmail?: Prisma.StringFieldUpdateOperationsInput | string
   fromName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyToEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyToName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   toEmail?: Prisma.StringFieldUpdateOperationsInput | string
   toName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   htmlBody?: Prisma.StringFieldUpdateOperationsInput | string
   textBody?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   scheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  nextAttemptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
+  maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   openedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clickedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   failedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  canceledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   providerMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   course?: Prisma.CourseUpdateOneWithoutEmailsNestedInput
+  campaign?: Prisma.EmailCampaignUpdateOneWithoutMessagesNestedInput
   order?: Prisma.OrderUpdateOneWithoutEmailsNestedInput
   user?: Prisma.UserUpdateOneWithoutEmailsNestedInput
   events?: Prisma.EmailEventUpdateManyWithoutEmailMessageNestedInput
@@ -682,27 +828,36 @@ export type EmailMessageUncheckedUpdateInput = {
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   courseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  campaignId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   provider?: Prisma.EnumEmailProviderTypeFieldUpdateOperationsInput | $Enums.EmailProviderType
   kind?: Prisma.EnumEmailKindFieldUpdateOperationsInput | $Enums.EmailKind
   status?: Prisma.EnumEmailStatusFieldUpdateOperationsInput | $Enums.EmailStatus
   templateKey?: Prisma.StringFieldUpdateOperationsInput | string
   campaignKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recipientSegment?: Prisma.NullableEnumEmailCampaignSegmentFieldUpdateOperationsInput | $Enums.EmailCampaignSegment | null
   sequenceStep?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dedupeKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trackingToken?: Prisma.StringFieldUpdateOperationsInput | string
   subject?: Prisma.StringFieldUpdateOperationsInput | string
+  preheader?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fromEmail?: Prisma.StringFieldUpdateOperationsInput | string
   fromName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyToEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyToName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   toEmail?: Prisma.StringFieldUpdateOperationsInput | string
   toName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   htmlBody?: Prisma.StringFieldUpdateOperationsInput | string
   textBody?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   scheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  nextAttemptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
+  maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   openedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clickedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   failedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  canceledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   providerMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -717,27 +872,36 @@ export type EmailMessageCreateManyInput = {
   userId?: string | null
   courseId?: string | null
   orderId?: string | null
+  campaignId?: string | null
   provider?: $Enums.EmailProviderType
   kind?: $Enums.EmailKind
   status?: $Enums.EmailStatus
   templateKey: string
   campaignKey?: string | null
+  recipientSegment?: $Enums.EmailCampaignSegment | null
   sequenceStep?: number | null
   dedupeKey?: string | null
   trackingToken: string
   subject: string
+  preheader?: string | null
   fromEmail: string
   fromName?: string | null
+  replyToEmail?: string | null
+  replyToName?: string | null
   toEmail: string
   toName?: string | null
   htmlBody: string
   textBody?: string | null
   scheduledAt?: Date | string
+  nextAttemptAt?: Date | string | null
+  attemptCount?: number
+  maxAttempts?: number
   sentAt?: Date | string | null
   deliveredAt?: Date | string | null
   openedAt?: Date | string | null
   clickedAt?: Date | string | null
   failedAt?: Date | string | null
+  canceledAt?: Date | string | null
   providerMessageId?: string | null
   lastError?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -752,22 +916,30 @@ export type EmailMessageUpdateManyMutationInput = {
   status?: Prisma.EnumEmailStatusFieldUpdateOperationsInput | $Enums.EmailStatus
   templateKey?: Prisma.StringFieldUpdateOperationsInput | string
   campaignKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recipientSegment?: Prisma.NullableEnumEmailCampaignSegmentFieldUpdateOperationsInput | $Enums.EmailCampaignSegment | null
   sequenceStep?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dedupeKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trackingToken?: Prisma.StringFieldUpdateOperationsInput | string
   subject?: Prisma.StringFieldUpdateOperationsInput | string
+  preheader?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fromEmail?: Prisma.StringFieldUpdateOperationsInput | string
   fromName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyToEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyToName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   toEmail?: Prisma.StringFieldUpdateOperationsInput | string
   toName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   htmlBody?: Prisma.StringFieldUpdateOperationsInput | string
   textBody?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   scheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  nextAttemptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
+  maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   openedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clickedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   failedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  canceledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   providerMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -780,27 +952,36 @@ export type EmailMessageUncheckedUpdateManyInput = {
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   courseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  campaignId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   provider?: Prisma.EnumEmailProviderTypeFieldUpdateOperationsInput | $Enums.EmailProviderType
   kind?: Prisma.EnumEmailKindFieldUpdateOperationsInput | $Enums.EmailKind
   status?: Prisma.EnumEmailStatusFieldUpdateOperationsInput | $Enums.EmailStatus
   templateKey?: Prisma.StringFieldUpdateOperationsInput | string
   campaignKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recipientSegment?: Prisma.NullableEnumEmailCampaignSegmentFieldUpdateOperationsInput | $Enums.EmailCampaignSegment | null
   sequenceStep?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dedupeKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trackingToken?: Prisma.StringFieldUpdateOperationsInput | string
   subject?: Prisma.StringFieldUpdateOperationsInput | string
+  preheader?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fromEmail?: Prisma.StringFieldUpdateOperationsInput | string
   fromName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyToEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyToName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   toEmail?: Prisma.StringFieldUpdateOperationsInput | string
   toName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   htmlBody?: Prisma.StringFieldUpdateOperationsInput | string
   textBody?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   scheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  nextAttemptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
+  maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   openedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clickedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   failedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  canceledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   providerMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -823,27 +1004,36 @@ export type EmailMessageCountOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   courseId?: Prisma.SortOrder
   orderId?: Prisma.SortOrder
+  campaignId?: Prisma.SortOrder
   provider?: Prisma.SortOrder
   kind?: Prisma.SortOrder
   status?: Prisma.SortOrder
   templateKey?: Prisma.SortOrder
   campaignKey?: Prisma.SortOrder
+  recipientSegment?: Prisma.SortOrder
   sequenceStep?: Prisma.SortOrder
   dedupeKey?: Prisma.SortOrder
   trackingToken?: Prisma.SortOrder
   subject?: Prisma.SortOrder
+  preheader?: Prisma.SortOrder
   fromEmail?: Prisma.SortOrder
   fromName?: Prisma.SortOrder
+  replyToEmail?: Prisma.SortOrder
+  replyToName?: Prisma.SortOrder
   toEmail?: Prisma.SortOrder
   toName?: Prisma.SortOrder
   htmlBody?: Prisma.SortOrder
   textBody?: Prisma.SortOrder
   scheduledAt?: Prisma.SortOrder
+  nextAttemptAt?: Prisma.SortOrder
+  attemptCount?: Prisma.SortOrder
+  maxAttempts?: Prisma.SortOrder
   sentAt?: Prisma.SortOrder
   deliveredAt?: Prisma.SortOrder
   openedAt?: Prisma.SortOrder
   clickedAt?: Prisma.SortOrder
   failedAt?: Prisma.SortOrder
+  canceledAt?: Prisma.SortOrder
   providerMessageId?: Prisma.SortOrder
   lastError?: Prisma.SortOrder
   metadata?: Prisma.SortOrder
@@ -853,6 +1043,8 @@ export type EmailMessageCountOrderByAggregateInput = {
 
 export type EmailMessageAvgOrderByAggregateInput = {
   sequenceStep?: Prisma.SortOrder
+  attemptCount?: Prisma.SortOrder
+  maxAttempts?: Prisma.SortOrder
 }
 
 export type EmailMessageMaxOrderByAggregateInput = {
@@ -860,27 +1052,36 @@ export type EmailMessageMaxOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   courseId?: Prisma.SortOrder
   orderId?: Prisma.SortOrder
+  campaignId?: Prisma.SortOrder
   provider?: Prisma.SortOrder
   kind?: Prisma.SortOrder
   status?: Prisma.SortOrder
   templateKey?: Prisma.SortOrder
   campaignKey?: Prisma.SortOrder
+  recipientSegment?: Prisma.SortOrder
   sequenceStep?: Prisma.SortOrder
   dedupeKey?: Prisma.SortOrder
   trackingToken?: Prisma.SortOrder
   subject?: Prisma.SortOrder
+  preheader?: Prisma.SortOrder
   fromEmail?: Prisma.SortOrder
   fromName?: Prisma.SortOrder
+  replyToEmail?: Prisma.SortOrder
+  replyToName?: Prisma.SortOrder
   toEmail?: Prisma.SortOrder
   toName?: Prisma.SortOrder
   htmlBody?: Prisma.SortOrder
   textBody?: Prisma.SortOrder
   scheduledAt?: Prisma.SortOrder
+  nextAttemptAt?: Prisma.SortOrder
+  attemptCount?: Prisma.SortOrder
+  maxAttempts?: Prisma.SortOrder
   sentAt?: Prisma.SortOrder
   deliveredAt?: Prisma.SortOrder
   openedAt?: Prisma.SortOrder
   clickedAt?: Prisma.SortOrder
   failedAt?: Prisma.SortOrder
+  canceledAt?: Prisma.SortOrder
   providerMessageId?: Prisma.SortOrder
   lastError?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -892,27 +1093,36 @@ export type EmailMessageMinOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   courseId?: Prisma.SortOrder
   orderId?: Prisma.SortOrder
+  campaignId?: Prisma.SortOrder
   provider?: Prisma.SortOrder
   kind?: Prisma.SortOrder
   status?: Prisma.SortOrder
   templateKey?: Prisma.SortOrder
   campaignKey?: Prisma.SortOrder
+  recipientSegment?: Prisma.SortOrder
   sequenceStep?: Prisma.SortOrder
   dedupeKey?: Prisma.SortOrder
   trackingToken?: Prisma.SortOrder
   subject?: Prisma.SortOrder
+  preheader?: Prisma.SortOrder
   fromEmail?: Prisma.SortOrder
   fromName?: Prisma.SortOrder
+  replyToEmail?: Prisma.SortOrder
+  replyToName?: Prisma.SortOrder
   toEmail?: Prisma.SortOrder
   toName?: Prisma.SortOrder
   htmlBody?: Prisma.SortOrder
   textBody?: Prisma.SortOrder
   scheduledAt?: Prisma.SortOrder
+  nextAttemptAt?: Prisma.SortOrder
+  attemptCount?: Prisma.SortOrder
+  maxAttempts?: Prisma.SortOrder
   sentAt?: Prisma.SortOrder
   deliveredAt?: Prisma.SortOrder
   openedAt?: Prisma.SortOrder
   clickedAt?: Prisma.SortOrder
   failedAt?: Prisma.SortOrder
+  canceledAt?: Prisma.SortOrder
   providerMessageId?: Prisma.SortOrder
   lastError?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -921,6 +1131,8 @@ export type EmailMessageMinOrderByAggregateInput = {
 
 export type EmailMessageSumOrderByAggregateInput = {
   sequenceStep?: Prisma.SortOrder
+  attemptCount?: Prisma.SortOrder
+  maxAttempts?: Prisma.SortOrder
 }
 
 export type EmailMessageScalarRelationFilter = {
@@ -1066,6 +1278,10 @@ export type EnumEmailStatusFieldUpdateOperationsInput = {
   set?: $Enums.EmailStatus
 }
 
+export type NullableEnumEmailCampaignSegmentFieldUpdateOperationsInput = {
+  set?: $Enums.EmailCampaignSegment | null
+}
+
 export type EmailMessageCreateNestedOneWithoutEventsInput = {
   create?: Prisma.XOR<Prisma.EmailMessageCreateWithoutEventsInput, Prisma.EmailMessageUncheckedCreateWithoutEventsInput>
   connectOrCreate?: Prisma.EmailMessageCreateOrConnectWithoutEventsInput
@@ -1078,6 +1294,48 @@ export type EmailMessageUpdateOneRequiredWithoutEventsNestedInput = {
   upsert?: Prisma.EmailMessageUpsertWithoutEventsInput
   connect?: Prisma.EmailMessageWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.EmailMessageUpdateToOneWithWhereWithoutEventsInput, Prisma.EmailMessageUpdateWithoutEventsInput>, Prisma.EmailMessageUncheckedUpdateWithoutEventsInput>
+}
+
+export type EmailMessageCreateNestedManyWithoutCampaignInput = {
+  create?: Prisma.XOR<Prisma.EmailMessageCreateWithoutCampaignInput, Prisma.EmailMessageUncheckedCreateWithoutCampaignInput> | Prisma.EmailMessageCreateWithoutCampaignInput[] | Prisma.EmailMessageUncheckedCreateWithoutCampaignInput[]
+  connectOrCreate?: Prisma.EmailMessageCreateOrConnectWithoutCampaignInput | Prisma.EmailMessageCreateOrConnectWithoutCampaignInput[]
+  createMany?: Prisma.EmailMessageCreateManyCampaignInputEnvelope
+  connect?: Prisma.EmailMessageWhereUniqueInput | Prisma.EmailMessageWhereUniqueInput[]
+}
+
+export type EmailMessageUncheckedCreateNestedManyWithoutCampaignInput = {
+  create?: Prisma.XOR<Prisma.EmailMessageCreateWithoutCampaignInput, Prisma.EmailMessageUncheckedCreateWithoutCampaignInput> | Prisma.EmailMessageCreateWithoutCampaignInput[] | Prisma.EmailMessageUncheckedCreateWithoutCampaignInput[]
+  connectOrCreate?: Prisma.EmailMessageCreateOrConnectWithoutCampaignInput | Prisma.EmailMessageCreateOrConnectWithoutCampaignInput[]
+  createMany?: Prisma.EmailMessageCreateManyCampaignInputEnvelope
+  connect?: Prisma.EmailMessageWhereUniqueInput | Prisma.EmailMessageWhereUniqueInput[]
+}
+
+export type EmailMessageUpdateManyWithoutCampaignNestedInput = {
+  create?: Prisma.XOR<Prisma.EmailMessageCreateWithoutCampaignInput, Prisma.EmailMessageUncheckedCreateWithoutCampaignInput> | Prisma.EmailMessageCreateWithoutCampaignInput[] | Prisma.EmailMessageUncheckedCreateWithoutCampaignInput[]
+  connectOrCreate?: Prisma.EmailMessageCreateOrConnectWithoutCampaignInput | Prisma.EmailMessageCreateOrConnectWithoutCampaignInput[]
+  upsert?: Prisma.EmailMessageUpsertWithWhereUniqueWithoutCampaignInput | Prisma.EmailMessageUpsertWithWhereUniqueWithoutCampaignInput[]
+  createMany?: Prisma.EmailMessageCreateManyCampaignInputEnvelope
+  set?: Prisma.EmailMessageWhereUniqueInput | Prisma.EmailMessageWhereUniqueInput[]
+  disconnect?: Prisma.EmailMessageWhereUniqueInput | Prisma.EmailMessageWhereUniqueInput[]
+  delete?: Prisma.EmailMessageWhereUniqueInput | Prisma.EmailMessageWhereUniqueInput[]
+  connect?: Prisma.EmailMessageWhereUniqueInput | Prisma.EmailMessageWhereUniqueInput[]
+  update?: Prisma.EmailMessageUpdateWithWhereUniqueWithoutCampaignInput | Prisma.EmailMessageUpdateWithWhereUniqueWithoutCampaignInput[]
+  updateMany?: Prisma.EmailMessageUpdateManyWithWhereWithoutCampaignInput | Prisma.EmailMessageUpdateManyWithWhereWithoutCampaignInput[]
+  deleteMany?: Prisma.EmailMessageScalarWhereInput | Prisma.EmailMessageScalarWhereInput[]
+}
+
+export type EmailMessageUncheckedUpdateManyWithoutCampaignNestedInput = {
+  create?: Prisma.XOR<Prisma.EmailMessageCreateWithoutCampaignInput, Prisma.EmailMessageUncheckedCreateWithoutCampaignInput> | Prisma.EmailMessageCreateWithoutCampaignInput[] | Prisma.EmailMessageUncheckedCreateWithoutCampaignInput[]
+  connectOrCreate?: Prisma.EmailMessageCreateOrConnectWithoutCampaignInput | Prisma.EmailMessageCreateOrConnectWithoutCampaignInput[]
+  upsert?: Prisma.EmailMessageUpsertWithWhereUniqueWithoutCampaignInput | Prisma.EmailMessageUpsertWithWhereUniqueWithoutCampaignInput[]
+  createMany?: Prisma.EmailMessageCreateManyCampaignInputEnvelope
+  set?: Prisma.EmailMessageWhereUniqueInput | Prisma.EmailMessageWhereUniqueInput[]
+  disconnect?: Prisma.EmailMessageWhereUniqueInput | Prisma.EmailMessageWhereUniqueInput[]
+  delete?: Prisma.EmailMessageWhereUniqueInput | Prisma.EmailMessageWhereUniqueInput[]
+  connect?: Prisma.EmailMessageWhereUniqueInput | Prisma.EmailMessageWhereUniqueInput[]
+  update?: Prisma.EmailMessageUpdateWithWhereUniqueWithoutCampaignInput | Prisma.EmailMessageUpdateWithWhereUniqueWithoutCampaignInput[]
+  updateMany?: Prisma.EmailMessageUpdateManyWithWhereWithoutCampaignInput | Prisma.EmailMessageUpdateManyWithWhereWithoutCampaignInput[]
+  deleteMany?: Prisma.EmailMessageScalarWhereInput | Prisma.EmailMessageScalarWhereInput[]
 }
 
 export type EmailMessageCreateNestedOneWithoutClicksInput = {
@@ -1101,28 +1359,37 @@ export type EmailMessageCreateWithoutUserInput = {
   status?: $Enums.EmailStatus
   templateKey: string
   campaignKey?: string | null
+  recipientSegment?: $Enums.EmailCampaignSegment | null
   sequenceStep?: number | null
   dedupeKey?: string | null
   trackingToken: string
   subject: string
+  preheader?: string | null
   fromEmail: string
   fromName?: string | null
+  replyToEmail?: string | null
+  replyToName?: string | null
   toEmail: string
   toName?: string | null
   htmlBody: string
   textBody?: string | null
   scheduledAt?: Date | string
+  nextAttemptAt?: Date | string | null
+  attemptCount?: number
+  maxAttempts?: number
   sentAt?: Date | string | null
   deliveredAt?: Date | string | null
   openedAt?: Date | string | null
   clickedAt?: Date | string | null
   failedAt?: Date | string | null
+  canceledAt?: Date | string | null
   providerMessageId?: string | null
   lastError?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   course?: Prisma.CourseCreateNestedOneWithoutEmailsInput
+  campaign?: Prisma.EmailCampaignCreateNestedOneWithoutMessagesInput
   order?: Prisma.OrderCreateNestedOneWithoutEmailsInput
   events?: Prisma.EmailEventCreateNestedManyWithoutEmailMessageInput
   clicks?: Prisma.EmailLinkClickCreateNestedManyWithoutEmailMessageInput
@@ -1132,27 +1399,36 @@ export type EmailMessageUncheckedCreateWithoutUserInput = {
   id?: string
   courseId?: string | null
   orderId?: string | null
+  campaignId?: string | null
   provider?: $Enums.EmailProviderType
   kind?: $Enums.EmailKind
   status?: $Enums.EmailStatus
   templateKey: string
   campaignKey?: string | null
+  recipientSegment?: $Enums.EmailCampaignSegment | null
   sequenceStep?: number | null
   dedupeKey?: string | null
   trackingToken: string
   subject: string
+  preheader?: string | null
   fromEmail: string
   fromName?: string | null
+  replyToEmail?: string | null
+  replyToName?: string | null
   toEmail: string
   toName?: string | null
   htmlBody: string
   textBody?: string | null
   scheduledAt?: Date | string
+  nextAttemptAt?: Date | string | null
+  attemptCount?: number
+  maxAttempts?: number
   sentAt?: Date | string | null
   deliveredAt?: Date | string | null
   openedAt?: Date | string | null
   clickedAt?: Date | string | null
   failedAt?: Date | string | null
+  canceledAt?: Date | string | null
   providerMessageId?: string | null
   lastError?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1196,27 +1472,36 @@ export type EmailMessageScalarWhereInput = {
   userId?: Prisma.StringNullableFilter<"EmailMessage"> | string | null
   courseId?: Prisma.StringNullableFilter<"EmailMessage"> | string | null
   orderId?: Prisma.StringNullableFilter<"EmailMessage"> | string | null
+  campaignId?: Prisma.StringNullableFilter<"EmailMessage"> | string | null
   provider?: Prisma.EnumEmailProviderTypeFilter<"EmailMessage"> | $Enums.EmailProviderType
   kind?: Prisma.EnumEmailKindFilter<"EmailMessage"> | $Enums.EmailKind
   status?: Prisma.EnumEmailStatusFilter<"EmailMessage"> | $Enums.EmailStatus
   templateKey?: Prisma.StringFilter<"EmailMessage"> | string
   campaignKey?: Prisma.StringNullableFilter<"EmailMessage"> | string | null
+  recipientSegment?: Prisma.EnumEmailCampaignSegmentNullableFilter<"EmailMessage"> | $Enums.EmailCampaignSegment | null
   sequenceStep?: Prisma.IntNullableFilter<"EmailMessage"> | number | null
   dedupeKey?: Prisma.StringNullableFilter<"EmailMessage"> | string | null
   trackingToken?: Prisma.StringFilter<"EmailMessage"> | string
   subject?: Prisma.StringFilter<"EmailMessage"> | string
+  preheader?: Prisma.StringNullableFilter<"EmailMessage"> | string | null
   fromEmail?: Prisma.StringFilter<"EmailMessage"> | string
   fromName?: Prisma.StringNullableFilter<"EmailMessage"> | string | null
+  replyToEmail?: Prisma.StringNullableFilter<"EmailMessage"> | string | null
+  replyToName?: Prisma.StringNullableFilter<"EmailMessage"> | string | null
   toEmail?: Prisma.StringFilter<"EmailMessage"> | string
   toName?: Prisma.StringNullableFilter<"EmailMessage"> | string | null
   htmlBody?: Prisma.StringFilter<"EmailMessage"> | string
   textBody?: Prisma.StringNullableFilter<"EmailMessage"> | string | null
   scheduledAt?: Prisma.DateTimeFilter<"EmailMessage"> | Date | string
+  nextAttemptAt?: Prisma.DateTimeNullableFilter<"EmailMessage"> | Date | string | null
+  attemptCount?: Prisma.IntFilter<"EmailMessage"> | number
+  maxAttempts?: Prisma.IntFilter<"EmailMessage"> | number
   sentAt?: Prisma.DateTimeNullableFilter<"EmailMessage"> | Date | string | null
   deliveredAt?: Prisma.DateTimeNullableFilter<"EmailMessage"> | Date | string | null
   openedAt?: Prisma.DateTimeNullableFilter<"EmailMessage"> | Date | string | null
   clickedAt?: Prisma.DateTimeNullableFilter<"EmailMessage"> | Date | string | null
   failedAt?: Prisma.DateTimeNullableFilter<"EmailMessage"> | Date | string | null
+  canceledAt?: Prisma.DateTimeNullableFilter<"EmailMessage"> | Date | string | null
   providerMessageId?: Prisma.StringNullableFilter<"EmailMessage"> | string | null
   lastError?: Prisma.StringNullableFilter<"EmailMessage"> | string | null
   metadata?: Prisma.JsonNullableFilter<"EmailMessage">
@@ -1231,27 +1516,36 @@ export type EmailMessageCreateWithoutCourseInput = {
   status?: $Enums.EmailStatus
   templateKey: string
   campaignKey?: string | null
+  recipientSegment?: $Enums.EmailCampaignSegment | null
   sequenceStep?: number | null
   dedupeKey?: string | null
   trackingToken: string
   subject: string
+  preheader?: string | null
   fromEmail: string
   fromName?: string | null
+  replyToEmail?: string | null
+  replyToName?: string | null
   toEmail: string
   toName?: string | null
   htmlBody: string
   textBody?: string | null
   scheduledAt?: Date | string
+  nextAttemptAt?: Date | string | null
+  attemptCount?: number
+  maxAttempts?: number
   sentAt?: Date | string | null
   deliveredAt?: Date | string | null
   openedAt?: Date | string | null
   clickedAt?: Date | string | null
   failedAt?: Date | string | null
+  canceledAt?: Date | string | null
   providerMessageId?: string | null
   lastError?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
+  campaign?: Prisma.EmailCampaignCreateNestedOneWithoutMessagesInput
   order?: Prisma.OrderCreateNestedOneWithoutEmailsInput
   user?: Prisma.UserCreateNestedOneWithoutEmailsInput
   events?: Prisma.EmailEventCreateNestedManyWithoutEmailMessageInput
@@ -1262,27 +1556,36 @@ export type EmailMessageUncheckedCreateWithoutCourseInput = {
   id?: string
   userId?: string | null
   orderId?: string | null
+  campaignId?: string | null
   provider?: $Enums.EmailProviderType
   kind?: $Enums.EmailKind
   status?: $Enums.EmailStatus
   templateKey: string
   campaignKey?: string | null
+  recipientSegment?: $Enums.EmailCampaignSegment | null
   sequenceStep?: number | null
   dedupeKey?: string | null
   trackingToken: string
   subject: string
+  preheader?: string | null
   fromEmail: string
   fromName?: string | null
+  replyToEmail?: string | null
+  replyToName?: string | null
   toEmail: string
   toName?: string | null
   htmlBody: string
   textBody?: string | null
   scheduledAt?: Date | string
+  nextAttemptAt?: Date | string | null
+  attemptCount?: number
+  maxAttempts?: number
   sentAt?: Date | string | null
   deliveredAt?: Date | string | null
   openedAt?: Date | string | null
   clickedAt?: Date | string | null
   failedAt?: Date | string | null
+  canceledAt?: Date | string | null
   providerMessageId?: string | null
   lastError?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1325,28 +1628,37 @@ export type EmailMessageCreateWithoutOrderInput = {
   status?: $Enums.EmailStatus
   templateKey: string
   campaignKey?: string | null
+  recipientSegment?: $Enums.EmailCampaignSegment | null
   sequenceStep?: number | null
   dedupeKey?: string | null
   trackingToken: string
   subject: string
+  preheader?: string | null
   fromEmail: string
   fromName?: string | null
+  replyToEmail?: string | null
+  replyToName?: string | null
   toEmail: string
   toName?: string | null
   htmlBody: string
   textBody?: string | null
   scheduledAt?: Date | string
+  nextAttemptAt?: Date | string | null
+  attemptCount?: number
+  maxAttempts?: number
   sentAt?: Date | string | null
   deliveredAt?: Date | string | null
   openedAt?: Date | string | null
   clickedAt?: Date | string | null
   failedAt?: Date | string | null
+  canceledAt?: Date | string | null
   providerMessageId?: string | null
   lastError?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   course?: Prisma.CourseCreateNestedOneWithoutEmailsInput
+  campaign?: Prisma.EmailCampaignCreateNestedOneWithoutMessagesInput
   user?: Prisma.UserCreateNestedOneWithoutEmailsInput
   events?: Prisma.EmailEventCreateNestedManyWithoutEmailMessageInput
   clicks?: Prisma.EmailLinkClickCreateNestedManyWithoutEmailMessageInput
@@ -1356,27 +1668,36 @@ export type EmailMessageUncheckedCreateWithoutOrderInput = {
   id?: string
   userId?: string | null
   courseId?: string | null
+  campaignId?: string | null
   provider?: $Enums.EmailProviderType
   kind?: $Enums.EmailKind
   status?: $Enums.EmailStatus
   templateKey: string
   campaignKey?: string | null
+  recipientSegment?: $Enums.EmailCampaignSegment | null
   sequenceStep?: number | null
   dedupeKey?: string | null
   trackingToken: string
   subject: string
+  preheader?: string | null
   fromEmail: string
   fromName?: string | null
+  replyToEmail?: string | null
+  replyToName?: string | null
   toEmail: string
   toName?: string | null
   htmlBody: string
   textBody?: string | null
   scheduledAt?: Date | string
+  nextAttemptAt?: Date | string | null
+  attemptCount?: number
+  maxAttempts?: number
   sentAt?: Date | string | null
   deliveredAt?: Date | string | null
   openedAt?: Date | string | null
   clickedAt?: Date | string | null
   failedAt?: Date | string | null
+  canceledAt?: Date | string | null
   providerMessageId?: string | null
   lastError?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1419,28 +1740,37 @@ export type EmailMessageCreateWithoutEventsInput = {
   status?: $Enums.EmailStatus
   templateKey: string
   campaignKey?: string | null
+  recipientSegment?: $Enums.EmailCampaignSegment | null
   sequenceStep?: number | null
   dedupeKey?: string | null
   trackingToken: string
   subject: string
+  preheader?: string | null
   fromEmail: string
   fromName?: string | null
+  replyToEmail?: string | null
+  replyToName?: string | null
   toEmail: string
   toName?: string | null
   htmlBody: string
   textBody?: string | null
   scheduledAt?: Date | string
+  nextAttemptAt?: Date | string | null
+  attemptCount?: number
+  maxAttempts?: number
   sentAt?: Date | string | null
   deliveredAt?: Date | string | null
   openedAt?: Date | string | null
   clickedAt?: Date | string | null
   failedAt?: Date | string | null
+  canceledAt?: Date | string | null
   providerMessageId?: string | null
   lastError?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   course?: Prisma.CourseCreateNestedOneWithoutEmailsInput
+  campaign?: Prisma.EmailCampaignCreateNestedOneWithoutMessagesInput
   order?: Prisma.OrderCreateNestedOneWithoutEmailsInput
   user?: Prisma.UserCreateNestedOneWithoutEmailsInput
   clicks?: Prisma.EmailLinkClickCreateNestedManyWithoutEmailMessageInput
@@ -1451,27 +1781,36 @@ export type EmailMessageUncheckedCreateWithoutEventsInput = {
   userId?: string | null
   courseId?: string | null
   orderId?: string | null
+  campaignId?: string | null
   provider?: $Enums.EmailProviderType
   kind?: $Enums.EmailKind
   status?: $Enums.EmailStatus
   templateKey: string
   campaignKey?: string | null
+  recipientSegment?: $Enums.EmailCampaignSegment | null
   sequenceStep?: number | null
   dedupeKey?: string | null
   trackingToken: string
   subject: string
+  preheader?: string | null
   fromEmail: string
   fromName?: string | null
+  replyToEmail?: string | null
+  replyToName?: string | null
   toEmail: string
   toName?: string | null
   htmlBody: string
   textBody?: string | null
   scheduledAt?: Date | string
+  nextAttemptAt?: Date | string | null
+  attemptCount?: number
+  maxAttempts?: number
   sentAt?: Date | string | null
   deliveredAt?: Date | string | null
   openedAt?: Date | string | null
   clickedAt?: Date | string | null
   failedAt?: Date | string | null
+  canceledAt?: Date | string | null
   providerMessageId?: string | null
   lastError?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1503,28 +1842,37 @@ export type EmailMessageUpdateWithoutEventsInput = {
   status?: Prisma.EnumEmailStatusFieldUpdateOperationsInput | $Enums.EmailStatus
   templateKey?: Prisma.StringFieldUpdateOperationsInput | string
   campaignKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recipientSegment?: Prisma.NullableEnumEmailCampaignSegmentFieldUpdateOperationsInput | $Enums.EmailCampaignSegment | null
   sequenceStep?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dedupeKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trackingToken?: Prisma.StringFieldUpdateOperationsInput | string
   subject?: Prisma.StringFieldUpdateOperationsInput | string
+  preheader?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fromEmail?: Prisma.StringFieldUpdateOperationsInput | string
   fromName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyToEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyToName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   toEmail?: Prisma.StringFieldUpdateOperationsInput | string
   toName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   htmlBody?: Prisma.StringFieldUpdateOperationsInput | string
   textBody?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   scheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  nextAttemptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
+  maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   openedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clickedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   failedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  canceledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   providerMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   course?: Prisma.CourseUpdateOneWithoutEmailsNestedInput
+  campaign?: Prisma.EmailCampaignUpdateOneWithoutMessagesNestedInput
   order?: Prisma.OrderUpdateOneWithoutEmailsNestedInput
   user?: Prisma.UserUpdateOneWithoutEmailsNestedInput
   clicks?: Prisma.EmailLinkClickUpdateManyWithoutEmailMessageNestedInput
@@ -1535,33 +1883,154 @@ export type EmailMessageUncheckedUpdateWithoutEventsInput = {
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   courseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  campaignId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   provider?: Prisma.EnumEmailProviderTypeFieldUpdateOperationsInput | $Enums.EmailProviderType
   kind?: Prisma.EnumEmailKindFieldUpdateOperationsInput | $Enums.EmailKind
   status?: Prisma.EnumEmailStatusFieldUpdateOperationsInput | $Enums.EmailStatus
   templateKey?: Prisma.StringFieldUpdateOperationsInput | string
   campaignKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recipientSegment?: Prisma.NullableEnumEmailCampaignSegmentFieldUpdateOperationsInput | $Enums.EmailCampaignSegment | null
   sequenceStep?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dedupeKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trackingToken?: Prisma.StringFieldUpdateOperationsInput | string
   subject?: Prisma.StringFieldUpdateOperationsInput | string
+  preheader?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fromEmail?: Prisma.StringFieldUpdateOperationsInput | string
   fromName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyToEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyToName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   toEmail?: Prisma.StringFieldUpdateOperationsInput | string
   toName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   htmlBody?: Prisma.StringFieldUpdateOperationsInput | string
   textBody?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   scheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  nextAttemptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
+  maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   openedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clickedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   failedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  canceledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   providerMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   clicks?: Prisma.EmailLinkClickUncheckedUpdateManyWithoutEmailMessageNestedInput
+}
+
+export type EmailMessageCreateWithoutCampaignInput = {
+  id?: string
+  provider?: $Enums.EmailProviderType
+  kind?: $Enums.EmailKind
+  status?: $Enums.EmailStatus
+  templateKey: string
+  campaignKey?: string | null
+  recipientSegment?: $Enums.EmailCampaignSegment | null
+  sequenceStep?: number | null
+  dedupeKey?: string | null
+  trackingToken: string
+  subject: string
+  preheader?: string | null
+  fromEmail: string
+  fromName?: string | null
+  replyToEmail?: string | null
+  replyToName?: string | null
+  toEmail: string
+  toName?: string | null
+  htmlBody: string
+  textBody?: string | null
+  scheduledAt?: Date | string
+  nextAttemptAt?: Date | string | null
+  attemptCount?: number
+  maxAttempts?: number
+  sentAt?: Date | string | null
+  deliveredAt?: Date | string | null
+  openedAt?: Date | string | null
+  clickedAt?: Date | string | null
+  failedAt?: Date | string | null
+  canceledAt?: Date | string | null
+  providerMessageId?: string | null
+  lastError?: string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  course?: Prisma.CourseCreateNestedOneWithoutEmailsInput
+  order?: Prisma.OrderCreateNestedOneWithoutEmailsInput
+  user?: Prisma.UserCreateNestedOneWithoutEmailsInput
+  events?: Prisma.EmailEventCreateNestedManyWithoutEmailMessageInput
+  clicks?: Prisma.EmailLinkClickCreateNestedManyWithoutEmailMessageInput
+}
+
+export type EmailMessageUncheckedCreateWithoutCampaignInput = {
+  id?: string
+  userId?: string | null
+  courseId?: string | null
+  orderId?: string | null
+  provider?: $Enums.EmailProviderType
+  kind?: $Enums.EmailKind
+  status?: $Enums.EmailStatus
+  templateKey: string
+  campaignKey?: string | null
+  recipientSegment?: $Enums.EmailCampaignSegment | null
+  sequenceStep?: number | null
+  dedupeKey?: string | null
+  trackingToken: string
+  subject: string
+  preheader?: string | null
+  fromEmail: string
+  fromName?: string | null
+  replyToEmail?: string | null
+  replyToName?: string | null
+  toEmail: string
+  toName?: string | null
+  htmlBody: string
+  textBody?: string | null
+  scheduledAt?: Date | string
+  nextAttemptAt?: Date | string | null
+  attemptCount?: number
+  maxAttempts?: number
+  sentAt?: Date | string | null
+  deliveredAt?: Date | string | null
+  openedAt?: Date | string | null
+  clickedAt?: Date | string | null
+  failedAt?: Date | string | null
+  canceledAt?: Date | string | null
+  providerMessageId?: string | null
+  lastError?: string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  events?: Prisma.EmailEventUncheckedCreateNestedManyWithoutEmailMessageInput
+  clicks?: Prisma.EmailLinkClickUncheckedCreateNestedManyWithoutEmailMessageInput
+}
+
+export type EmailMessageCreateOrConnectWithoutCampaignInput = {
+  where: Prisma.EmailMessageWhereUniqueInput
+  create: Prisma.XOR<Prisma.EmailMessageCreateWithoutCampaignInput, Prisma.EmailMessageUncheckedCreateWithoutCampaignInput>
+}
+
+export type EmailMessageCreateManyCampaignInputEnvelope = {
+  data: Prisma.EmailMessageCreateManyCampaignInput | Prisma.EmailMessageCreateManyCampaignInput[]
+  skipDuplicates?: boolean
+}
+
+export type EmailMessageUpsertWithWhereUniqueWithoutCampaignInput = {
+  where: Prisma.EmailMessageWhereUniqueInput
+  update: Prisma.XOR<Prisma.EmailMessageUpdateWithoutCampaignInput, Prisma.EmailMessageUncheckedUpdateWithoutCampaignInput>
+  create: Prisma.XOR<Prisma.EmailMessageCreateWithoutCampaignInput, Prisma.EmailMessageUncheckedCreateWithoutCampaignInput>
+}
+
+export type EmailMessageUpdateWithWhereUniqueWithoutCampaignInput = {
+  where: Prisma.EmailMessageWhereUniqueInput
+  data: Prisma.XOR<Prisma.EmailMessageUpdateWithoutCampaignInput, Prisma.EmailMessageUncheckedUpdateWithoutCampaignInput>
+}
+
+export type EmailMessageUpdateManyWithWhereWithoutCampaignInput = {
+  where: Prisma.EmailMessageScalarWhereInput
+  data: Prisma.XOR<Prisma.EmailMessageUpdateManyMutationInput, Prisma.EmailMessageUncheckedUpdateManyWithoutCampaignInput>
 }
 
 export type EmailMessageCreateWithoutClicksInput = {
@@ -1571,28 +2040,37 @@ export type EmailMessageCreateWithoutClicksInput = {
   status?: $Enums.EmailStatus
   templateKey: string
   campaignKey?: string | null
+  recipientSegment?: $Enums.EmailCampaignSegment | null
   sequenceStep?: number | null
   dedupeKey?: string | null
   trackingToken: string
   subject: string
+  preheader?: string | null
   fromEmail: string
   fromName?: string | null
+  replyToEmail?: string | null
+  replyToName?: string | null
   toEmail: string
   toName?: string | null
   htmlBody: string
   textBody?: string | null
   scheduledAt?: Date | string
+  nextAttemptAt?: Date | string | null
+  attemptCount?: number
+  maxAttempts?: number
   sentAt?: Date | string | null
   deliveredAt?: Date | string | null
   openedAt?: Date | string | null
   clickedAt?: Date | string | null
   failedAt?: Date | string | null
+  canceledAt?: Date | string | null
   providerMessageId?: string | null
   lastError?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   course?: Prisma.CourseCreateNestedOneWithoutEmailsInput
+  campaign?: Prisma.EmailCampaignCreateNestedOneWithoutMessagesInput
   order?: Prisma.OrderCreateNestedOneWithoutEmailsInput
   user?: Prisma.UserCreateNestedOneWithoutEmailsInput
   events?: Prisma.EmailEventCreateNestedManyWithoutEmailMessageInput
@@ -1603,27 +2081,36 @@ export type EmailMessageUncheckedCreateWithoutClicksInput = {
   userId?: string | null
   courseId?: string | null
   orderId?: string | null
+  campaignId?: string | null
   provider?: $Enums.EmailProviderType
   kind?: $Enums.EmailKind
   status?: $Enums.EmailStatus
   templateKey: string
   campaignKey?: string | null
+  recipientSegment?: $Enums.EmailCampaignSegment | null
   sequenceStep?: number | null
   dedupeKey?: string | null
   trackingToken: string
   subject: string
+  preheader?: string | null
   fromEmail: string
   fromName?: string | null
+  replyToEmail?: string | null
+  replyToName?: string | null
   toEmail: string
   toName?: string | null
   htmlBody: string
   textBody?: string | null
   scheduledAt?: Date | string
+  nextAttemptAt?: Date | string | null
+  attemptCount?: number
+  maxAttempts?: number
   sentAt?: Date | string | null
   deliveredAt?: Date | string | null
   openedAt?: Date | string | null
   clickedAt?: Date | string | null
   failedAt?: Date | string | null
+  canceledAt?: Date | string | null
   providerMessageId?: string | null
   lastError?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1655,28 +2142,37 @@ export type EmailMessageUpdateWithoutClicksInput = {
   status?: Prisma.EnumEmailStatusFieldUpdateOperationsInput | $Enums.EmailStatus
   templateKey?: Prisma.StringFieldUpdateOperationsInput | string
   campaignKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recipientSegment?: Prisma.NullableEnumEmailCampaignSegmentFieldUpdateOperationsInput | $Enums.EmailCampaignSegment | null
   sequenceStep?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dedupeKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trackingToken?: Prisma.StringFieldUpdateOperationsInput | string
   subject?: Prisma.StringFieldUpdateOperationsInput | string
+  preheader?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fromEmail?: Prisma.StringFieldUpdateOperationsInput | string
   fromName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyToEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyToName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   toEmail?: Prisma.StringFieldUpdateOperationsInput | string
   toName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   htmlBody?: Prisma.StringFieldUpdateOperationsInput | string
   textBody?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   scheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  nextAttemptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
+  maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   openedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clickedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   failedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  canceledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   providerMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   course?: Prisma.CourseUpdateOneWithoutEmailsNestedInput
+  campaign?: Prisma.EmailCampaignUpdateOneWithoutMessagesNestedInput
   order?: Prisma.OrderUpdateOneWithoutEmailsNestedInput
   user?: Prisma.UserUpdateOneWithoutEmailsNestedInput
   events?: Prisma.EmailEventUpdateManyWithoutEmailMessageNestedInput
@@ -1687,27 +2183,36 @@ export type EmailMessageUncheckedUpdateWithoutClicksInput = {
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   courseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  campaignId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   provider?: Prisma.EnumEmailProviderTypeFieldUpdateOperationsInput | $Enums.EmailProviderType
   kind?: Prisma.EnumEmailKindFieldUpdateOperationsInput | $Enums.EmailKind
   status?: Prisma.EnumEmailStatusFieldUpdateOperationsInput | $Enums.EmailStatus
   templateKey?: Prisma.StringFieldUpdateOperationsInput | string
   campaignKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recipientSegment?: Prisma.NullableEnumEmailCampaignSegmentFieldUpdateOperationsInput | $Enums.EmailCampaignSegment | null
   sequenceStep?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dedupeKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trackingToken?: Prisma.StringFieldUpdateOperationsInput | string
   subject?: Prisma.StringFieldUpdateOperationsInput | string
+  preheader?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fromEmail?: Prisma.StringFieldUpdateOperationsInput | string
   fromName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyToEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyToName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   toEmail?: Prisma.StringFieldUpdateOperationsInput | string
   toName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   htmlBody?: Prisma.StringFieldUpdateOperationsInput | string
   textBody?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   scheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  nextAttemptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
+  maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   openedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clickedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   failedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  canceledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   providerMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1720,27 +2225,36 @@ export type EmailMessageCreateManyUserInput = {
   id?: string
   courseId?: string | null
   orderId?: string | null
+  campaignId?: string | null
   provider?: $Enums.EmailProviderType
   kind?: $Enums.EmailKind
   status?: $Enums.EmailStatus
   templateKey: string
   campaignKey?: string | null
+  recipientSegment?: $Enums.EmailCampaignSegment | null
   sequenceStep?: number | null
   dedupeKey?: string | null
   trackingToken: string
   subject: string
+  preheader?: string | null
   fromEmail: string
   fromName?: string | null
+  replyToEmail?: string | null
+  replyToName?: string | null
   toEmail: string
   toName?: string | null
   htmlBody: string
   textBody?: string | null
   scheduledAt?: Date | string
+  nextAttemptAt?: Date | string | null
+  attemptCount?: number
+  maxAttempts?: number
   sentAt?: Date | string | null
   deliveredAt?: Date | string | null
   openedAt?: Date | string | null
   clickedAt?: Date | string | null
   failedAt?: Date | string | null
+  canceledAt?: Date | string | null
   providerMessageId?: string | null
   lastError?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1755,28 +2269,37 @@ export type EmailMessageUpdateWithoutUserInput = {
   status?: Prisma.EnumEmailStatusFieldUpdateOperationsInput | $Enums.EmailStatus
   templateKey?: Prisma.StringFieldUpdateOperationsInput | string
   campaignKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recipientSegment?: Prisma.NullableEnumEmailCampaignSegmentFieldUpdateOperationsInput | $Enums.EmailCampaignSegment | null
   sequenceStep?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dedupeKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trackingToken?: Prisma.StringFieldUpdateOperationsInput | string
   subject?: Prisma.StringFieldUpdateOperationsInput | string
+  preheader?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fromEmail?: Prisma.StringFieldUpdateOperationsInput | string
   fromName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyToEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyToName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   toEmail?: Prisma.StringFieldUpdateOperationsInput | string
   toName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   htmlBody?: Prisma.StringFieldUpdateOperationsInput | string
   textBody?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   scheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  nextAttemptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
+  maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   openedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clickedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   failedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  canceledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   providerMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   course?: Prisma.CourseUpdateOneWithoutEmailsNestedInput
+  campaign?: Prisma.EmailCampaignUpdateOneWithoutMessagesNestedInput
   order?: Prisma.OrderUpdateOneWithoutEmailsNestedInput
   events?: Prisma.EmailEventUpdateManyWithoutEmailMessageNestedInput
   clicks?: Prisma.EmailLinkClickUpdateManyWithoutEmailMessageNestedInput
@@ -1786,27 +2309,36 @@ export type EmailMessageUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   courseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  campaignId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   provider?: Prisma.EnumEmailProviderTypeFieldUpdateOperationsInput | $Enums.EmailProviderType
   kind?: Prisma.EnumEmailKindFieldUpdateOperationsInput | $Enums.EmailKind
   status?: Prisma.EnumEmailStatusFieldUpdateOperationsInput | $Enums.EmailStatus
   templateKey?: Prisma.StringFieldUpdateOperationsInput | string
   campaignKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recipientSegment?: Prisma.NullableEnumEmailCampaignSegmentFieldUpdateOperationsInput | $Enums.EmailCampaignSegment | null
   sequenceStep?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dedupeKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trackingToken?: Prisma.StringFieldUpdateOperationsInput | string
   subject?: Prisma.StringFieldUpdateOperationsInput | string
+  preheader?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fromEmail?: Prisma.StringFieldUpdateOperationsInput | string
   fromName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyToEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyToName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   toEmail?: Prisma.StringFieldUpdateOperationsInput | string
   toName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   htmlBody?: Prisma.StringFieldUpdateOperationsInput | string
   textBody?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   scheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  nextAttemptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
+  maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   openedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clickedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   failedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  canceledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   providerMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1820,27 +2352,36 @@ export type EmailMessageUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   courseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  campaignId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   provider?: Prisma.EnumEmailProviderTypeFieldUpdateOperationsInput | $Enums.EmailProviderType
   kind?: Prisma.EnumEmailKindFieldUpdateOperationsInput | $Enums.EmailKind
   status?: Prisma.EnumEmailStatusFieldUpdateOperationsInput | $Enums.EmailStatus
   templateKey?: Prisma.StringFieldUpdateOperationsInput | string
   campaignKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recipientSegment?: Prisma.NullableEnumEmailCampaignSegmentFieldUpdateOperationsInput | $Enums.EmailCampaignSegment | null
   sequenceStep?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dedupeKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trackingToken?: Prisma.StringFieldUpdateOperationsInput | string
   subject?: Prisma.StringFieldUpdateOperationsInput | string
+  preheader?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fromEmail?: Prisma.StringFieldUpdateOperationsInput | string
   fromName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyToEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyToName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   toEmail?: Prisma.StringFieldUpdateOperationsInput | string
   toName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   htmlBody?: Prisma.StringFieldUpdateOperationsInput | string
   textBody?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   scheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  nextAttemptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
+  maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   openedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clickedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   failedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  canceledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   providerMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1852,27 +2393,36 @@ export type EmailMessageCreateManyCourseInput = {
   id?: string
   userId?: string | null
   orderId?: string | null
+  campaignId?: string | null
   provider?: $Enums.EmailProviderType
   kind?: $Enums.EmailKind
   status?: $Enums.EmailStatus
   templateKey: string
   campaignKey?: string | null
+  recipientSegment?: $Enums.EmailCampaignSegment | null
   sequenceStep?: number | null
   dedupeKey?: string | null
   trackingToken: string
   subject: string
+  preheader?: string | null
   fromEmail: string
   fromName?: string | null
+  replyToEmail?: string | null
+  replyToName?: string | null
   toEmail: string
   toName?: string | null
   htmlBody: string
   textBody?: string | null
   scheduledAt?: Date | string
+  nextAttemptAt?: Date | string | null
+  attemptCount?: number
+  maxAttempts?: number
   sentAt?: Date | string | null
   deliveredAt?: Date | string | null
   openedAt?: Date | string | null
   clickedAt?: Date | string | null
   failedAt?: Date | string | null
+  canceledAt?: Date | string | null
   providerMessageId?: string | null
   lastError?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1887,27 +2437,36 @@ export type EmailMessageUpdateWithoutCourseInput = {
   status?: Prisma.EnumEmailStatusFieldUpdateOperationsInput | $Enums.EmailStatus
   templateKey?: Prisma.StringFieldUpdateOperationsInput | string
   campaignKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recipientSegment?: Prisma.NullableEnumEmailCampaignSegmentFieldUpdateOperationsInput | $Enums.EmailCampaignSegment | null
   sequenceStep?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dedupeKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trackingToken?: Prisma.StringFieldUpdateOperationsInput | string
   subject?: Prisma.StringFieldUpdateOperationsInput | string
+  preheader?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fromEmail?: Prisma.StringFieldUpdateOperationsInput | string
   fromName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyToEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyToName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   toEmail?: Prisma.StringFieldUpdateOperationsInput | string
   toName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   htmlBody?: Prisma.StringFieldUpdateOperationsInput | string
   textBody?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   scheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  nextAttemptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
+  maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   openedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clickedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   failedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  canceledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   providerMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  campaign?: Prisma.EmailCampaignUpdateOneWithoutMessagesNestedInput
   order?: Prisma.OrderUpdateOneWithoutEmailsNestedInput
   user?: Prisma.UserUpdateOneWithoutEmailsNestedInput
   events?: Prisma.EmailEventUpdateManyWithoutEmailMessageNestedInput
@@ -1918,27 +2477,36 @@ export type EmailMessageUncheckedUpdateWithoutCourseInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  campaignId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   provider?: Prisma.EnumEmailProviderTypeFieldUpdateOperationsInput | $Enums.EmailProviderType
   kind?: Prisma.EnumEmailKindFieldUpdateOperationsInput | $Enums.EmailKind
   status?: Prisma.EnumEmailStatusFieldUpdateOperationsInput | $Enums.EmailStatus
   templateKey?: Prisma.StringFieldUpdateOperationsInput | string
   campaignKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recipientSegment?: Prisma.NullableEnumEmailCampaignSegmentFieldUpdateOperationsInput | $Enums.EmailCampaignSegment | null
   sequenceStep?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dedupeKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trackingToken?: Prisma.StringFieldUpdateOperationsInput | string
   subject?: Prisma.StringFieldUpdateOperationsInput | string
+  preheader?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fromEmail?: Prisma.StringFieldUpdateOperationsInput | string
   fromName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyToEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyToName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   toEmail?: Prisma.StringFieldUpdateOperationsInput | string
   toName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   htmlBody?: Prisma.StringFieldUpdateOperationsInput | string
   textBody?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   scheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  nextAttemptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
+  maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   openedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clickedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   failedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  canceledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   providerMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1952,27 +2520,36 @@ export type EmailMessageUncheckedUpdateManyWithoutCourseInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   orderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  campaignId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   provider?: Prisma.EnumEmailProviderTypeFieldUpdateOperationsInput | $Enums.EmailProviderType
   kind?: Prisma.EnumEmailKindFieldUpdateOperationsInput | $Enums.EmailKind
   status?: Prisma.EnumEmailStatusFieldUpdateOperationsInput | $Enums.EmailStatus
   templateKey?: Prisma.StringFieldUpdateOperationsInput | string
   campaignKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recipientSegment?: Prisma.NullableEnumEmailCampaignSegmentFieldUpdateOperationsInput | $Enums.EmailCampaignSegment | null
   sequenceStep?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dedupeKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trackingToken?: Prisma.StringFieldUpdateOperationsInput | string
   subject?: Prisma.StringFieldUpdateOperationsInput | string
+  preheader?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fromEmail?: Prisma.StringFieldUpdateOperationsInput | string
   fromName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyToEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyToName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   toEmail?: Prisma.StringFieldUpdateOperationsInput | string
   toName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   htmlBody?: Prisma.StringFieldUpdateOperationsInput | string
   textBody?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   scheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  nextAttemptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
+  maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   openedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clickedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   failedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  canceledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   providerMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1984,27 +2561,36 @@ export type EmailMessageCreateManyOrderInput = {
   id?: string
   userId?: string | null
   courseId?: string | null
+  campaignId?: string | null
   provider?: $Enums.EmailProviderType
   kind?: $Enums.EmailKind
   status?: $Enums.EmailStatus
   templateKey: string
   campaignKey?: string | null
+  recipientSegment?: $Enums.EmailCampaignSegment | null
   sequenceStep?: number | null
   dedupeKey?: string | null
   trackingToken: string
   subject: string
+  preheader?: string | null
   fromEmail: string
   fromName?: string | null
+  replyToEmail?: string | null
+  replyToName?: string | null
   toEmail: string
   toName?: string | null
   htmlBody: string
   textBody?: string | null
   scheduledAt?: Date | string
+  nextAttemptAt?: Date | string | null
+  attemptCount?: number
+  maxAttempts?: number
   sentAt?: Date | string | null
   deliveredAt?: Date | string | null
   openedAt?: Date | string | null
   clickedAt?: Date | string | null
   failedAt?: Date | string | null
+  canceledAt?: Date | string | null
   providerMessageId?: string | null
   lastError?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -2019,28 +2605,37 @@ export type EmailMessageUpdateWithoutOrderInput = {
   status?: Prisma.EnumEmailStatusFieldUpdateOperationsInput | $Enums.EmailStatus
   templateKey?: Prisma.StringFieldUpdateOperationsInput | string
   campaignKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recipientSegment?: Prisma.NullableEnumEmailCampaignSegmentFieldUpdateOperationsInput | $Enums.EmailCampaignSegment | null
   sequenceStep?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dedupeKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trackingToken?: Prisma.StringFieldUpdateOperationsInput | string
   subject?: Prisma.StringFieldUpdateOperationsInput | string
+  preheader?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fromEmail?: Prisma.StringFieldUpdateOperationsInput | string
   fromName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyToEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyToName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   toEmail?: Prisma.StringFieldUpdateOperationsInput | string
   toName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   htmlBody?: Prisma.StringFieldUpdateOperationsInput | string
   textBody?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   scheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  nextAttemptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
+  maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   openedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clickedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   failedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  canceledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   providerMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   course?: Prisma.CourseUpdateOneWithoutEmailsNestedInput
+  campaign?: Prisma.EmailCampaignUpdateOneWithoutMessagesNestedInput
   user?: Prisma.UserUpdateOneWithoutEmailsNestedInput
   events?: Prisma.EmailEventUpdateManyWithoutEmailMessageNestedInput
   clicks?: Prisma.EmailLinkClickUpdateManyWithoutEmailMessageNestedInput
@@ -2050,27 +2645,36 @@ export type EmailMessageUncheckedUpdateWithoutOrderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   courseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  campaignId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   provider?: Prisma.EnumEmailProviderTypeFieldUpdateOperationsInput | $Enums.EmailProviderType
   kind?: Prisma.EnumEmailKindFieldUpdateOperationsInput | $Enums.EmailKind
   status?: Prisma.EnumEmailStatusFieldUpdateOperationsInput | $Enums.EmailStatus
   templateKey?: Prisma.StringFieldUpdateOperationsInput | string
   campaignKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recipientSegment?: Prisma.NullableEnumEmailCampaignSegmentFieldUpdateOperationsInput | $Enums.EmailCampaignSegment | null
   sequenceStep?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dedupeKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trackingToken?: Prisma.StringFieldUpdateOperationsInput | string
   subject?: Prisma.StringFieldUpdateOperationsInput | string
+  preheader?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fromEmail?: Prisma.StringFieldUpdateOperationsInput | string
   fromName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyToEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyToName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   toEmail?: Prisma.StringFieldUpdateOperationsInput | string
   toName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   htmlBody?: Prisma.StringFieldUpdateOperationsInput | string
   textBody?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   scheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  nextAttemptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
+  maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   openedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clickedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   failedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  canceledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   providerMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -2084,27 +2688,204 @@ export type EmailMessageUncheckedUpdateManyWithoutOrderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   courseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  campaignId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   provider?: Prisma.EnumEmailProviderTypeFieldUpdateOperationsInput | $Enums.EmailProviderType
   kind?: Prisma.EnumEmailKindFieldUpdateOperationsInput | $Enums.EmailKind
   status?: Prisma.EnumEmailStatusFieldUpdateOperationsInput | $Enums.EmailStatus
   templateKey?: Prisma.StringFieldUpdateOperationsInput | string
   campaignKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recipientSegment?: Prisma.NullableEnumEmailCampaignSegmentFieldUpdateOperationsInput | $Enums.EmailCampaignSegment | null
   sequenceStep?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dedupeKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trackingToken?: Prisma.StringFieldUpdateOperationsInput | string
   subject?: Prisma.StringFieldUpdateOperationsInput | string
+  preheader?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fromEmail?: Prisma.StringFieldUpdateOperationsInput | string
   fromName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyToEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyToName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   toEmail?: Prisma.StringFieldUpdateOperationsInput | string
   toName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   htmlBody?: Prisma.StringFieldUpdateOperationsInput | string
   textBody?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   scheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  nextAttemptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
+  maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   openedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   clickedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   failedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  canceledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  providerMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type EmailMessageCreateManyCampaignInput = {
+  id?: string
+  userId?: string | null
+  courseId?: string | null
+  orderId?: string | null
+  provider?: $Enums.EmailProviderType
+  kind?: $Enums.EmailKind
+  status?: $Enums.EmailStatus
+  templateKey: string
+  campaignKey?: string | null
+  recipientSegment?: $Enums.EmailCampaignSegment | null
+  sequenceStep?: number | null
+  dedupeKey?: string | null
+  trackingToken: string
+  subject: string
+  preheader?: string | null
+  fromEmail: string
+  fromName?: string | null
+  replyToEmail?: string | null
+  replyToName?: string | null
+  toEmail: string
+  toName?: string | null
+  htmlBody: string
+  textBody?: string | null
+  scheduledAt?: Date | string
+  nextAttemptAt?: Date | string | null
+  attemptCount?: number
+  maxAttempts?: number
+  sentAt?: Date | string | null
+  deliveredAt?: Date | string | null
+  openedAt?: Date | string | null
+  clickedAt?: Date | string | null
+  failedAt?: Date | string | null
+  canceledAt?: Date | string | null
+  providerMessageId?: string | null
+  lastError?: string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type EmailMessageUpdateWithoutCampaignInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.EnumEmailProviderTypeFieldUpdateOperationsInput | $Enums.EmailProviderType
+  kind?: Prisma.EnumEmailKindFieldUpdateOperationsInput | $Enums.EmailKind
+  status?: Prisma.EnumEmailStatusFieldUpdateOperationsInput | $Enums.EmailStatus
+  templateKey?: Prisma.StringFieldUpdateOperationsInput | string
+  campaignKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recipientSegment?: Prisma.NullableEnumEmailCampaignSegmentFieldUpdateOperationsInput | $Enums.EmailCampaignSegment | null
+  sequenceStep?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dedupeKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trackingToken?: Prisma.StringFieldUpdateOperationsInput | string
+  subject?: Prisma.StringFieldUpdateOperationsInput | string
+  preheader?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fromEmail?: Prisma.StringFieldUpdateOperationsInput | string
+  fromName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyToEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyToName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  toEmail?: Prisma.StringFieldUpdateOperationsInput | string
+  toName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  htmlBody?: Prisma.StringFieldUpdateOperationsInput | string
+  textBody?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  nextAttemptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
+  maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  openedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  clickedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  failedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  canceledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  providerMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  course?: Prisma.CourseUpdateOneWithoutEmailsNestedInput
+  order?: Prisma.OrderUpdateOneWithoutEmailsNestedInput
+  user?: Prisma.UserUpdateOneWithoutEmailsNestedInput
+  events?: Prisma.EmailEventUpdateManyWithoutEmailMessageNestedInput
+  clicks?: Prisma.EmailLinkClickUpdateManyWithoutEmailMessageNestedInput
+}
+
+export type EmailMessageUncheckedUpdateWithoutCampaignInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  courseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  orderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  provider?: Prisma.EnumEmailProviderTypeFieldUpdateOperationsInput | $Enums.EmailProviderType
+  kind?: Prisma.EnumEmailKindFieldUpdateOperationsInput | $Enums.EmailKind
+  status?: Prisma.EnumEmailStatusFieldUpdateOperationsInput | $Enums.EmailStatus
+  templateKey?: Prisma.StringFieldUpdateOperationsInput | string
+  campaignKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recipientSegment?: Prisma.NullableEnumEmailCampaignSegmentFieldUpdateOperationsInput | $Enums.EmailCampaignSegment | null
+  sequenceStep?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dedupeKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trackingToken?: Prisma.StringFieldUpdateOperationsInput | string
+  subject?: Prisma.StringFieldUpdateOperationsInput | string
+  preheader?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fromEmail?: Prisma.StringFieldUpdateOperationsInput | string
+  fromName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyToEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyToName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  toEmail?: Prisma.StringFieldUpdateOperationsInput | string
+  toName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  htmlBody?: Prisma.StringFieldUpdateOperationsInput | string
+  textBody?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  nextAttemptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
+  maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  openedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  clickedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  failedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  canceledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  providerMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  events?: Prisma.EmailEventUncheckedUpdateManyWithoutEmailMessageNestedInput
+  clicks?: Prisma.EmailLinkClickUncheckedUpdateManyWithoutEmailMessageNestedInput
+}
+
+export type EmailMessageUncheckedUpdateManyWithoutCampaignInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  courseId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  orderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  provider?: Prisma.EnumEmailProviderTypeFieldUpdateOperationsInput | $Enums.EmailProviderType
+  kind?: Prisma.EnumEmailKindFieldUpdateOperationsInput | $Enums.EmailKind
+  status?: Prisma.EnumEmailStatusFieldUpdateOperationsInput | $Enums.EmailStatus
+  templateKey?: Prisma.StringFieldUpdateOperationsInput | string
+  campaignKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recipientSegment?: Prisma.NullableEnumEmailCampaignSegmentFieldUpdateOperationsInput | $Enums.EmailCampaignSegment | null
+  sequenceStep?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dedupeKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trackingToken?: Prisma.StringFieldUpdateOperationsInput | string
+  subject?: Prisma.StringFieldUpdateOperationsInput | string
+  preheader?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fromEmail?: Prisma.StringFieldUpdateOperationsInput | string
+  fromName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyToEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  replyToName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  toEmail?: Prisma.StringFieldUpdateOperationsInput | string
+  toName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  htmlBody?: Prisma.StringFieldUpdateOperationsInput | string
+  textBody?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduledAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  nextAttemptAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  attemptCount?: Prisma.IntFieldUpdateOperationsInput | number
+  maxAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  openedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  clickedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  failedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  canceledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   providerMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -2157,33 +2938,43 @@ export type EmailMessageSelect<ExtArgs extends runtime.Types.Extensions.Internal
   userId?: boolean
   courseId?: boolean
   orderId?: boolean
+  campaignId?: boolean
   provider?: boolean
   kind?: boolean
   status?: boolean
   templateKey?: boolean
   campaignKey?: boolean
+  recipientSegment?: boolean
   sequenceStep?: boolean
   dedupeKey?: boolean
   trackingToken?: boolean
   subject?: boolean
+  preheader?: boolean
   fromEmail?: boolean
   fromName?: boolean
+  replyToEmail?: boolean
+  replyToName?: boolean
   toEmail?: boolean
   toName?: boolean
   htmlBody?: boolean
   textBody?: boolean
   scheduledAt?: boolean
+  nextAttemptAt?: boolean
+  attemptCount?: boolean
+  maxAttempts?: boolean
   sentAt?: boolean
   deliveredAt?: boolean
   openedAt?: boolean
   clickedAt?: boolean
   failedAt?: boolean
+  canceledAt?: boolean
   providerMessageId?: boolean
   lastError?: boolean
   metadata?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   course?: boolean | Prisma.EmailMessage$courseArgs<ExtArgs>
+  campaign?: boolean | Prisma.EmailMessage$campaignArgs<ExtArgs>
   order?: boolean | Prisma.EmailMessage$orderArgs<ExtArgs>
   user?: boolean | Prisma.EmailMessage$userArgs<ExtArgs>
   events?: boolean | Prisma.EmailMessage$eventsArgs<ExtArgs>
@@ -2196,33 +2987,43 @@ export type EmailMessageSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   userId?: boolean
   courseId?: boolean
   orderId?: boolean
+  campaignId?: boolean
   provider?: boolean
   kind?: boolean
   status?: boolean
   templateKey?: boolean
   campaignKey?: boolean
+  recipientSegment?: boolean
   sequenceStep?: boolean
   dedupeKey?: boolean
   trackingToken?: boolean
   subject?: boolean
+  preheader?: boolean
   fromEmail?: boolean
   fromName?: boolean
+  replyToEmail?: boolean
+  replyToName?: boolean
   toEmail?: boolean
   toName?: boolean
   htmlBody?: boolean
   textBody?: boolean
   scheduledAt?: boolean
+  nextAttemptAt?: boolean
+  attemptCount?: boolean
+  maxAttempts?: boolean
   sentAt?: boolean
   deliveredAt?: boolean
   openedAt?: boolean
   clickedAt?: boolean
   failedAt?: boolean
+  canceledAt?: boolean
   providerMessageId?: boolean
   lastError?: boolean
   metadata?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   course?: boolean | Prisma.EmailMessage$courseArgs<ExtArgs>
+  campaign?: boolean | Prisma.EmailMessage$campaignArgs<ExtArgs>
   order?: boolean | Prisma.EmailMessage$orderArgs<ExtArgs>
   user?: boolean | Prisma.EmailMessage$userArgs<ExtArgs>
 }, ExtArgs["result"]["emailMessage"]>
@@ -2232,33 +3033,43 @@ export type EmailMessageSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   userId?: boolean
   courseId?: boolean
   orderId?: boolean
+  campaignId?: boolean
   provider?: boolean
   kind?: boolean
   status?: boolean
   templateKey?: boolean
   campaignKey?: boolean
+  recipientSegment?: boolean
   sequenceStep?: boolean
   dedupeKey?: boolean
   trackingToken?: boolean
   subject?: boolean
+  preheader?: boolean
   fromEmail?: boolean
   fromName?: boolean
+  replyToEmail?: boolean
+  replyToName?: boolean
   toEmail?: boolean
   toName?: boolean
   htmlBody?: boolean
   textBody?: boolean
   scheduledAt?: boolean
+  nextAttemptAt?: boolean
+  attemptCount?: boolean
+  maxAttempts?: boolean
   sentAt?: boolean
   deliveredAt?: boolean
   openedAt?: boolean
   clickedAt?: boolean
   failedAt?: boolean
+  canceledAt?: boolean
   providerMessageId?: boolean
   lastError?: boolean
   metadata?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   course?: boolean | Prisma.EmailMessage$courseArgs<ExtArgs>
+  campaign?: boolean | Prisma.EmailMessage$campaignArgs<ExtArgs>
   order?: boolean | Prisma.EmailMessage$orderArgs<ExtArgs>
   user?: boolean | Prisma.EmailMessage$userArgs<ExtArgs>
 }, ExtArgs["result"]["emailMessage"]>
@@ -2268,27 +3079,36 @@ export type EmailMessageSelectScalar = {
   userId?: boolean
   courseId?: boolean
   orderId?: boolean
+  campaignId?: boolean
   provider?: boolean
   kind?: boolean
   status?: boolean
   templateKey?: boolean
   campaignKey?: boolean
+  recipientSegment?: boolean
   sequenceStep?: boolean
   dedupeKey?: boolean
   trackingToken?: boolean
   subject?: boolean
+  preheader?: boolean
   fromEmail?: boolean
   fromName?: boolean
+  replyToEmail?: boolean
+  replyToName?: boolean
   toEmail?: boolean
   toName?: boolean
   htmlBody?: boolean
   textBody?: boolean
   scheduledAt?: boolean
+  nextAttemptAt?: boolean
+  attemptCount?: boolean
+  maxAttempts?: boolean
   sentAt?: boolean
   deliveredAt?: boolean
   openedAt?: boolean
   clickedAt?: boolean
   failedAt?: boolean
+  canceledAt?: boolean
   providerMessageId?: boolean
   lastError?: boolean
   metadata?: boolean
@@ -2296,9 +3116,10 @@ export type EmailMessageSelectScalar = {
   updatedAt?: boolean
 }
 
-export type EmailMessageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "courseId" | "orderId" | "provider" | "kind" | "status" | "templateKey" | "campaignKey" | "sequenceStep" | "dedupeKey" | "trackingToken" | "subject" | "fromEmail" | "fromName" | "toEmail" | "toName" | "htmlBody" | "textBody" | "scheduledAt" | "sentAt" | "deliveredAt" | "openedAt" | "clickedAt" | "failedAt" | "providerMessageId" | "lastError" | "metadata" | "createdAt" | "updatedAt", ExtArgs["result"]["emailMessage"]>
+export type EmailMessageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "courseId" | "orderId" | "campaignId" | "provider" | "kind" | "status" | "templateKey" | "campaignKey" | "recipientSegment" | "sequenceStep" | "dedupeKey" | "trackingToken" | "subject" | "preheader" | "fromEmail" | "fromName" | "replyToEmail" | "replyToName" | "toEmail" | "toName" | "htmlBody" | "textBody" | "scheduledAt" | "nextAttemptAt" | "attemptCount" | "maxAttempts" | "sentAt" | "deliveredAt" | "openedAt" | "clickedAt" | "failedAt" | "canceledAt" | "providerMessageId" | "lastError" | "metadata" | "createdAt" | "updatedAt", ExtArgs["result"]["emailMessage"]>
 export type EmailMessageInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   course?: boolean | Prisma.EmailMessage$courseArgs<ExtArgs>
+  campaign?: boolean | Prisma.EmailMessage$campaignArgs<ExtArgs>
   order?: boolean | Prisma.EmailMessage$orderArgs<ExtArgs>
   user?: boolean | Prisma.EmailMessage$userArgs<ExtArgs>
   events?: boolean | Prisma.EmailMessage$eventsArgs<ExtArgs>
@@ -2307,11 +3128,13 @@ export type EmailMessageInclude<ExtArgs extends runtime.Types.Extensions.Interna
 }
 export type EmailMessageIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   course?: boolean | Prisma.EmailMessage$courseArgs<ExtArgs>
+  campaign?: boolean | Prisma.EmailMessage$campaignArgs<ExtArgs>
   order?: boolean | Prisma.EmailMessage$orderArgs<ExtArgs>
   user?: boolean | Prisma.EmailMessage$userArgs<ExtArgs>
 }
 export type EmailMessageIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   course?: boolean | Prisma.EmailMessage$courseArgs<ExtArgs>
+  campaign?: boolean | Prisma.EmailMessage$campaignArgs<ExtArgs>
   order?: boolean | Prisma.EmailMessage$orderArgs<ExtArgs>
   user?: boolean | Prisma.EmailMessage$userArgs<ExtArgs>
 }
@@ -2320,6 +3143,7 @@ export type $EmailMessagePayload<ExtArgs extends runtime.Types.Extensions.Intern
   name: "EmailMessage"
   objects: {
     course: Prisma.$CoursePayload<ExtArgs> | null
+    campaign: Prisma.$EmailCampaignPayload<ExtArgs> | null
     order: Prisma.$OrderPayload<ExtArgs> | null
     user: Prisma.$UserPayload<ExtArgs> | null
     events: Prisma.$EmailEventPayload<ExtArgs>[]
@@ -2330,27 +3154,36 @@ export type $EmailMessagePayload<ExtArgs extends runtime.Types.Extensions.Intern
     userId: string | null
     courseId: string | null
     orderId: string | null
+    campaignId: string | null
     provider: $Enums.EmailProviderType
     kind: $Enums.EmailKind
     status: $Enums.EmailStatus
     templateKey: string
     campaignKey: string | null
+    recipientSegment: $Enums.EmailCampaignSegment | null
     sequenceStep: number | null
     dedupeKey: string | null
     trackingToken: string
     subject: string
+    preheader: string | null
     fromEmail: string
     fromName: string | null
+    replyToEmail: string | null
+    replyToName: string | null
     toEmail: string
     toName: string | null
     htmlBody: string
     textBody: string | null
     scheduledAt: Date
+    nextAttemptAt: Date | null
+    attemptCount: number
+    maxAttempts: number
     sentAt: Date | null
     deliveredAt: Date | null
     openedAt: Date | null
     clickedAt: Date | null
     failedAt: Date | null
+    canceledAt: Date | null
     providerMessageId: string | null
     lastError: string | null
     metadata: runtime.JsonValue | null
@@ -2751,6 +3584,7 @@ readonly fields: EmailMessageFieldRefs;
 export interface Prisma__EmailMessageClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   course<T extends Prisma.EmailMessage$courseArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EmailMessage$courseArgs<ExtArgs>>): Prisma.Prisma__CourseClient<runtime.Types.Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  campaign<T extends Prisma.EmailMessage$campaignArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EmailMessage$campaignArgs<ExtArgs>>): Prisma.Prisma__EmailCampaignClient<runtime.Types.Result.GetResult<Prisma.$EmailCampaignPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   order<T extends Prisma.EmailMessage$orderArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EmailMessage$orderArgs<ExtArgs>>): Prisma.Prisma__OrderClient<runtime.Types.Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   user<T extends Prisma.EmailMessage$userArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EmailMessage$userArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   events<T extends Prisma.EmailMessage$eventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EmailMessage$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EmailEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2788,27 +3622,36 @@ export interface EmailMessageFieldRefs {
   readonly userId: Prisma.FieldRef<"EmailMessage", 'String'>
   readonly courseId: Prisma.FieldRef<"EmailMessage", 'String'>
   readonly orderId: Prisma.FieldRef<"EmailMessage", 'String'>
+  readonly campaignId: Prisma.FieldRef<"EmailMessage", 'String'>
   readonly provider: Prisma.FieldRef<"EmailMessage", 'EmailProviderType'>
   readonly kind: Prisma.FieldRef<"EmailMessage", 'EmailKind'>
   readonly status: Prisma.FieldRef<"EmailMessage", 'EmailStatus'>
   readonly templateKey: Prisma.FieldRef<"EmailMessage", 'String'>
   readonly campaignKey: Prisma.FieldRef<"EmailMessage", 'String'>
+  readonly recipientSegment: Prisma.FieldRef<"EmailMessage", 'EmailCampaignSegment'>
   readonly sequenceStep: Prisma.FieldRef<"EmailMessage", 'Int'>
   readonly dedupeKey: Prisma.FieldRef<"EmailMessage", 'String'>
   readonly trackingToken: Prisma.FieldRef<"EmailMessage", 'String'>
   readonly subject: Prisma.FieldRef<"EmailMessage", 'String'>
+  readonly preheader: Prisma.FieldRef<"EmailMessage", 'String'>
   readonly fromEmail: Prisma.FieldRef<"EmailMessage", 'String'>
   readonly fromName: Prisma.FieldRef<"EmailMessage", 'String'>
+  readonly replyToEmail: Prisma.FieldRef<"EmailMessage", 'String'>
+  readonly replyToName: Prisma.FieldRef<"EmailMessage", 'String'>
   readonly toEmail: Prisma.FieldRef<"EmailMessage", 'String'>
   readonly toName: Prisma.FieldRef<"EmailMessage", 'String'>
   readonly htmlBody: Prisma.FieldRef<"EmailMessage", 'String'>
   readonly textBody: Prisma.FieldRef<"EmailMessage", 'String'>
   readonly scheduledAt: Prisma.FieldRef<"EmailMessage", 'DateTime'>
+  readonly nextAttemptAt: Prisma.FieldRef<"EmailMessage", 'DateTime'>
+  readonly attemptCount: Prisma.FieldRef<"EmailMessage", 'Int'>
+  readonly maxAttempts: Prisma.FieldRef<"EmailMessage", 'Int'>
   readonly sentAt: Prisma.FieldRef<"EmailMessage", 'DateTime'>
   readonly deliveredAt: Prisma.FieldRef<"EmailMessage", 'DateTime'>
   readonly openedAt: Prisma.FieldRef<"EmailMessage", 'DateTime'>
   readonly clickedAt: Prisma.FieldRef<"EmailMessage", 'DateTime'>
   readonly failedAt: Prisma.FieldRef<"EmailMessage", 'DateTime'>
+  readonly canceledAt: Prisma.FieldRef<"EmailMessage", 'DateTime'>
   readonly providerMessageId: Prisma.FieldRef<"EmailMessage", 'String'>
   readonly lastError: Prisma.FieldRef<"EmailMessage", 'String'>
   readonly metadata: Prisma.FieldRef<"EmailMessage", 'Json'>
@@ -3231,6 +4074,25 @@ export type EmailMessage$courseArgs<ExtArgs extends runtime.Types.Extensions.Int
    */
   include?: Prisma.CourseInclude<ExtArgs> | null
   where?: Prisma.CourseWhereInput
+}
+
+/**
+ * EmailMessage.campaign
+ */
+export type EmailMessage$campaignArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the EmailCampaign
+   */
+  select?: Prisma.EmailCampaignSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the EmailCampaign
+   */
+  omit?: Prisma.EmailCampaignOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EmailCampaignInclude<ExtArgs> | null
+  where?: Prisma.EmailCampaignWhereInput
 }
 
 /**

@@ -44,6 +44,7 @@ export function SignUpForm({
         email,
         password,
         passwordConfirmation: String(formData.get("passwordConfirmation") ?? ""),
+        marketingEnabled: formData.get("marketingEnabled") === "on",
       }),
     });
 
@@ -134,6 +135,24 @@ export function SignUpForm({
         />
         {renderError("passwordConfirmation")}
       </div>
+
+      <label className="flex items-start gap-3 rounded-[20px] border border-[var(--border)] bg-[var(--surface)] px-4 py-4">
+        <input
+          type="checkbox"
+          name="marketingEnabled"
+          className="mt-1 h-4 w-4 rounded border-[var(--border-strong)] text-[var(--primary)] focus:ring-[var(--focus)]"
+        />
+        <div className="space-y-1">
+          <p className="text-sm font-medium text-[var(--foreground)]">
+            {formatPublicCopy("Хочу получать письма о новых курсах, наборах и полезных материалах")}
+          </p>
+          <p className="text-sm leading-6 text-[var(--muted)]">
+            {formatPublicCopy(
+              "Сервисные письма о входе, оплате и доступе к обучению придут в любом случае. Маркетинговые письма можно отключить позже в профиле или из письма.",
+            )}
+          </p>
+        </div>
+      </label>
 
       {formError ? (
         <p className="rounded-[var(--radius-sm)] border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">

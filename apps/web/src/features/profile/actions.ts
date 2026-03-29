@@ -1,9 +1,11 @@
 "use server";
 
-import { prisma } from "@academy/db";
+import { EmailAudienceType, prisma } from "@academy/db";
+import { USER_ROLES } from "@academy/shared";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
+import { updateEmailPreferenceForUser } from "@/features/email/service";
 import { requireStudentOrElevatedUser } from "@/lib/user";
 
 const profileSchema = z.object({
@@ -27,6 +29,8 @@ export async function updateUserProfile(formData: FormData) {
     city: get(formData, "city"),
   });
 
+  const marketingEnabled = formData.get("marketingEnabled") === "on";
+
   await prisma.user.update({
     where: { id: user.id },
     data: {
@@ -35,6 +39,16 @@ export async function updateUserProfile(formData: FormData) {
       telegram: parsed.telegram || null,
       city: parsed.city || null,
     },
+  });
+
+  await updateEmailPreferenceForUser({
+    userId: user.id,
+    enabled: marketingEnabled,
+    audienceType:
+      user.role === USER_ROLES.AUTHOR ? EmailAudienceType.EXPERT : EmailAudienceType.STUDENT,
+    source: "profile-settings",
+    consentText:
+      "Пользователь включил маркетинговые письма в настройках своего профиля.",
   });
 
   revalidatePath("/learning/profile");

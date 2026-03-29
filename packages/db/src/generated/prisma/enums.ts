@@ -149,6 +149,38 @@ export const EmailKind = {
 export type EmailKind = (typeof EmailKind)[keyof typeof EmailKind]
 
 
+export const EmailAudienceType = {
+  STUDENT: 'STUDENT',
+  EXPERT: 'EXPERT'
+} as const
+
+export type EmailAudienceType = (typeof EmailAudienceType)[keyof typeof EmailAudienceType]
+
+
+export const EmailCampaignStatus = {
+  DRAFT: 'DRAFT',
+  SCHEDULED: 'SCHEDULED',
+  ACTIVE: 'ACTIVE',
+  PAUSED: 'PAUSED',
+  COMPLETED: 'COMPLETED',
+  CANCELED: 'CANCELED'
+} as const
+
+export type EmailCampaignStatus = (typeof EmailCampaignStatus)[keyof typeof EmailCampaignStatus]
+
+
+export const EmailCampaignSegment = {
+  ALL_OPTED_IN_STUDENTS: 'ALL_OPTED_IN_STUDENTS',
+  STUDENTS_WITHOUT_PURCHASE: 'STUDENTS_WITHOUT_PURCHASE',
+  STUDENTS_WITH_PURCHASE: 'STUDENTS_WITH_PURCHASE',
+  STUDENTS_ENROLLED_IN_COURSE: 'STUDENTS_ENROLLED_IN_COURSE',
+  INACTIVE_STUDENTS: 'INACTIVE_STUDENTS',
+  ALL_OPTED_IN_EXPERTS: 'ALL_OPTED_IN_EXPERTS'
+} as const
+
+export type EmailCampaignSegment = (typeof EmailCampaignSegment)[keyof typeof EmailCampaignSegment]
+
+
 export const EmailStatus = {
   QUEUED: 'QUEUED',
   SENDING: 'SENDING',

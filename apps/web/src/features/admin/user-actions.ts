@@ -16,6 +16,7 @@ import { requireAdminUser } from "@/lib/admin";
 import {
   processDueEmailQueue,
   queueCourseAccessGrantedEmail,
+  queueExpertMarketingSequence,
   queuePaymentSuccessEmail,
   queueStudentAccountCreatedEmail,
   queueStudentMarketingSequence,
@@ -249,6 +250,9 @@ export async function createWorkspaceMember(formData: FormData) {
 
   const passwordHash = await hashPassword(parsed.password);
 
+  let userId = existingUser?.id ?? null;
+  let isNewUser = false;
+
   if (existingUser) {
     await prisma.user.update({
       where: {
@@ -260,7 +264,7 @@ export async function createWorkspaceMember(formData: FormData) {
       },
     });
   } else {
-    await prisma.user.create({
+    const user = await prisma.user.create({
       data: {
         email: parsed.email,
         name: parsed.name,
@@ -269,6 +273,39 @@ export async function createWorkspaceMember(formData: FormData) {
         role: parsed.role,
       },
     });
+
+    userId = user.id;
+    isNewUser = true;
+  }
+
+  if (userId) {
+    const workspaceUser = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        role: true,
+      },
+    });
+
+    if (workspaceUser) {
+      await queueStudentAccountCreatedEmail({
+        user: workspaceUser,
+        password: parsed.password,
+        isExistingAccount: !isNewUser,
+      });
+
+      if (workspaceUser.role === USER_ROLES.AUTHOR) {
+        await queueExpertMarketingSequence({
+          user: workspaceUser,
+        });
+      }
+
+      await processDueEmailQueue({ force: true, limit: 10 });
+    }
   }
 
   revalidatePath("/admin");
@@ -343,6 +380,7 @@ export async function createStudent(formData: FormData) {
             id: true,
             email: true,
             name: true,
+            role: true,
           },
         })
       : Promise.resolve(null),
@@ -360,11 +398,11 @@ export async function createStudent(formData: FormData) {
   ]);
 
   if (student) {
-    await queueStudentAccountCreatedEmail({
-      user: student,
-      password: parsed.password,
-      isExistingAccount: !isNewStudent,
-    });
+      await queueStudentAccountCreatedEmail({
+        user: student,
+        password: parsed.password,
+        isExistingAccount: !isNewStudent,
+      });
 
     if (isNewStudent) {
       await queueStudentMarketingSequence({

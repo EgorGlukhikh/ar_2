@@ -546,6 +546,13 @@ export type EnumEmailStatusFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumEmailStatusFilter<$PrismaModel> | $Enums.EmailStatus
 }
 
+export type EnumEmailCampaignSegmentNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.EmailCampaignSegment | Prisma.EnumEmailCampaignSegmentFieldRefInput<$PrismaModel> | null
+  in?: $Enums.EmailCampaignSegment[] | Prisma.ListEnumEmailCampaignSegmentFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.EmailCampaignSegment[] | Prisma.ListEnumEmailCampaignSegmentFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumEmailCampaignSegmentNullableFilter<$PrismaModel> | $Enums.EmailCampaignSegment | null
+}
+
 export type EnumEmailProviderTypeWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.EmailProviderType | Prisma.EnumEmailProviderTypeFieldRefInput<$PrismaModel>
   in?: $Enums.EmailProviderType[] | Prisma.ListEnumEmailProviderTypeFieldRefInput<$PrismaModel>
@@ -576,6 +583,16 @@ export type EnumEmailStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumEmailStatusFilter<$PrismaModel>
 }
 
+export type EnumEmailCampaignSegmentNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.EmailCampaignSegment | Prisma.EnumEmailCampaignSegmentFieldRefInput<$PrismaModel> | null
+  in?: $Enums.EmailCampaignSegment[] | Prisma.ListEnumEmailCampaignSegmentFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.EmailCampaignSegment[] | Prisma.ListEnumEmailCampaignSegmentFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumEmailCampaignSegmentNullableWithAggregatesFilter<$PrismaModel> | $Enums.EmailCampaignSegment | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumEmailCampaignSegmentNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumEmailCampaignSegmentNullableFilter<$PrismaModel>
+}
+
 export type EnumEmailStatusNullableFilter<$PrismaModel = never> = {
   equals?: $Enums.EmailStatus | Prisma.EnumEmailStatusFieldRefInput<$PrismaModel> | null
   in?: $Enums.EmailStatus[] | Prisma.ListEnumEmailStatusFieldRefInput<$PrismaModel> | null
@@ -591,6 +608,57 @@ export type EnumEmailStatusNullableWithAggregatesFilter<$PrismaModel = never> = 
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedEnumEmailStatusNullableFilter<$PrismaModel>
   _max?: Prisma.NestedEnumEmailStatusNullableFilter<$PrismaModel>
+}
+
+export type EnumEmailAudienceTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.EmailAudienceType | Prisma.EnumEmailAudienceTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.EmailAudienceType[] | Prisma.ListEnumEmailAudienceTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EmailAudienceType[] | Prisma.ListEnumEmailAudienceTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEmailAudienceTypeFilter<$PrismaModel> | $Enums.EmailAudienceType
+}
+
+export type EnumEmailAudienceTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.EmailAudienceType | Prisma.EnumEmailAudienceTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.EmailAudienceType[] | Prisma.ListEnumEmailAudienceTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EmailAudienceType[] | Prisma.ListEnumEmailAudienceTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEmailAudienceTypeWithAggregatesFilter<$PrismaModel> | $Enums.EmailAudienceType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumEmailAudienceTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumEmailAudienceTypeFilter<$PrismaModel>
+}
+
+export type EnumEmailCampaignSegmentFilter<$PrismaModel = never> = {
+  equals?: $Enums.EmailCampaignSegment | Prisma.EnumEmailCampaignSegmentFieldRefInput<$PrismaModel>
+  in?: $Enums.EmailCampaignSegment[] | Prisma.ListEnumEmailCampaignSegmentFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EmailCampaignSegment[] | Prisma.ListEnumEmailCampaignSegmentFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEmailCampaignSegmentFilter<$PrismaModel> | $Enums.EmailCampaignSegment
+}
+
+export type EnumEmailCampaignStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.EmailCampaignStatus | Prisma.EnumEmailCampaignStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.EmailCampaignStatus[] | Prisma.ListEnumEmailCampaignStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EmailCampaignStatus[] | Prisma.ListEnumEmailCampaignStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEmailCampaignStatusFilter<$PrismaModel> | $Enums.EmailCampaignStatus
+}
+
+export type EnumEmailCampaignSegmentWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.EmailCampaignSegment | Prisma.EnumEmailCampaignSegmentFieldRefInput<$PrismaModel>
+  in?: $Enums.EmailCampaignSegment[] | Prisma.ListEnumEmailCampaignSegmentFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EmailCampaignSegment[] | Prisma.ListEnumEmailCampaignSegmentFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEmailCampaignSegmentWithAggregatesFilter<$PrismaModel> | $Enums.EmailCampaignSegment
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumEmailCampaignSegmentFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumEmailCampaignSegmentFilter<$PrismaModel>
+}
+
+export type EnumEmailCampaignStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.EmailCampaignStatus | Prisma.EnumEmailCampaignStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.EmailCampaignStatus[] | Prisma.ListEnumEmailCampaignStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EmailCampaignStatus[] | Prisma.ListEnumEmailCampaignStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEmailCampaignStatusWithAggregatesFilter<$PrismaModel> | $Enums.EmailCampaignStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumEmailCampaignStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumEmailCampaignStatusFilter<$PrismaModel>
 }
 
 export type EnumUserRoleNullableFilter<$PrismaModel = never> = {
@@ -1128,6 +1196,13 @@ export type NestedEnumEmailStatusFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumEmailStatusFilter<$PrismaModel> | $Enums.EmailStatus
 }
 
+export type NestedEnumEmailCampaignSegmentNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.EmailCampaignSegment | Prisma.EnumEmailCampaignSegmentFieldRefInput<$PrismaModel> | null
+  in?: $Enums.EmailCampaignSegment[] | Prisma.ListEnumEmailCampaignSegmentFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.EmailCampaignSegment[] | Prisma.ListEnumEmailCampaignSegmentFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumEmailCampaignSegmentNullableFilter<$PrismaModel> | $Enums.EmailCampaignSegment | null
+}
+
 export type NestedEnumEmailProviderTypeWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.EmailProviderType | Prisma.EnumEmailProviderTypeFieldRefInput<$PrismaModel>
   in?: $Enums.EmailProviderType[] | Prisma.ListEnumEmailProviderTypeFieldRefInput<$PrismaModel>
@@ -1158,6 +1233,16 @@ export type NestedEnumEmailStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumEmailStatusFilter<$PrismaModel>
 }
 
+export type NestedEnumEmailCampaignSegmentNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.EmailCampaignSegment | Prisma.EnumEmailCampaignSegmentFieldRefInput<$PrismaModel> | null
+  in?: $Enums.EmailCampaignSegment[] | Prisma.ListEnumEmailCampaignSegmentFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.EmailCampaignSegment[] | Prisma.ListEnumEmailCampaignSegmentFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumEmailCampaignSegmentNullableWithAggregatesFilter<$PrismaModel> | $Enums.EmailCampaignSegment | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumEmailCampaignSegmentNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumEmailCampaignSegmentNullableFilter<$PrismaModel>
+}
+
 export type NestedEnumEmailStatusNullableFilter<$PrismaModel = never> = {
   equals?: $Enums.EmailStatus | Prisma.EnumEmailStatusFieldRefInput<$PrismaModel> | null
   in?: $Enums.EmailStatus[] | Prisma.ListEnumEmailStatusFieldRefInput<$PrismaModel> | null
@@ -1173,6 +1258,57 @@ export type NestedEnumEmailStatusNullableWithAggregatesFilter<$PrismaModel = nev
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedEnumEmailStatusNullableFilter<$PrismaModel>
   _max?: Prisma.NestedEnumEmailStatusNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumEmailAudienceTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.EmailAudienceType | Prisma.EnumEmailAudienceTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.EmailAudienceType[] | Prisma.ListEnumEmailAudienceTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EmailAudienceType[] | Prisma.ListEnumEmailAudienceTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEmailAudienceTypeFilter<$PrismaModel> | $Enums.EmailAudienceType
+}
+
+export type NestedEnumEmailAudienceTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.EmailAudienceType | Prisma.EnumEmailAudienceTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.EmailAudienceType[] | Prisma.ListEnumEmailAudienceTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EmailAudienceType[] | Prisma.ListEnumEmailAudienceTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEmailAudienceTypeWithAggregatesFilter<$PrismaModel> | $Enums.EmailAudienceType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumEmailAudienceTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumEmailAudienceTypeFilter<$PrismaModel>
+}
+
+export type NestedEnumEmailCampaignSegmentFilter<$PrismaModel = never> = {
+  equals?: $Enums.EmailCampaignSegment | Prisma.EnumEmailCampaignSegmentFieldRefInput<$PrismaModel>
+  in?: $Enums.EmailCampaignSegment[] | Prisma.ListEnumEmailCampaignSegmentFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EmailCampaignSegment[] | Prisma.ListEnumEmailCampaignSegmentFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEmailCampaignSegmentFilter<$PrismaModel> | $Enums.EmailCampaignSegment
+}
+
+export type NestedEnumEmailCampaignStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.EmailCampaignStatus | Prisma.EnumEmailCampaignStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.EmailCampaignStatus[] | Prisma.ListEnumEmailCampaignStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EmailCampaignStatus[] | Prisma.ListEnumEmailCampaignStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEmailCampaignStatusFilter<$PrismaModel> | $Enums.EmailCampaignStatus
+}
+
+export type NestedEnumEmailCampaignSegmentWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.EmailCampaignSegment | Prisma.EnumEmailCampaignSegmentFieldRefInput<$PrismaModel>
+  in?: $Enums.EmailCampaignSegment[] | Prisma.ListEnumEmailCampaignSegmentFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EmailCampaignSegment[] | Prisma.ListEnumEmailCampaignSegmentFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEmailCampaignSegmentWithAggregatesFilter<$PrismaModel> | $Enums.EmailCampaignSegment
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumEmailCampaignSegmentFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumEmailCampaignSegmentFilter<$PrismaModel>
+}
+
+export type NestedEnumEmailCampaignStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.EmailCampaignStatus | Prisma.EnumEmailCampaignStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.EmailCampaignStatus[] | Prisma.ListEnumEmailCampaignStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EmailCampaignStatus[] | Prisma.ListEnumEmailCampaignStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEmailCampaignStatusWithAggregatesFilter<$PrismaModel> | $Enums.EmailCampaignStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumEmailCampaignStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumEmailCampaignStatusFilter<$PrismaModel>
 }
 
 export type NestedEnumUserRoleNullableFilter<$PrismaModel = never> = {

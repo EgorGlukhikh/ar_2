@@ -6,6 +6,7 @@ export type EmailSendPayload = {
   subject: string;
   html: string;
   text?: string;
+  replyTo?: string;
 };
 
 export type EmailSendResult = {
@@ -38,6 +39,7 @@ class MockEmailProvider implements EmailProvider {
         mode: "mock",
         to: payload.to,
         subject: payload.subject,
+        replyTo: payload.replyTo ?? null,
       },
     };
   }
@@ -58,10 +60,11 @@ class ResendEmailProvider implements EmailProvider {
       subject: payload.subject,
       html: payload.html,
       text: payload.text,
+      replyTo: payload.replyTo,
     });
 
     if (error || !data?.id) {
-      throw new Error(error?.message || "Не удалось отправить email через Resend.");
+      throw new Error(error?.message || "Не удалось отправить письмо через Resend.");
     }
 
     return {

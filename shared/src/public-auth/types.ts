@@ -5,6 +5,7 @@ export type RegisterRequest = {
   email: string;
   password: string;
   passwordConfirmation: string;
+  marketingEnabled?: boolean;
 };
 
 export type RegisterFieldErrors = Partial<

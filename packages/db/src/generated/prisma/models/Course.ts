@@ -248,6 +248,7 @@ export type CourseWhereInput = {
   enrollments?: Prisma.EnrollmentListRelationFilter
   products?: Prisma.ProductListRelationFilter
   emails?: Prisma.EmailMessageListRelationFilter
+  emailCampaigns?: Prisma.EmailCampaignListRelationFilter
   lessonSessions?: Prisma.LessonSessionListRelationFilter
 }
 
@@ -271,6 +272,7 @@ export type CourseOrderByWithRelationInput = {
   enrollments?: Prisma.EnrollmentOrderByRelationAggregateInput
   products?: Prisma.ProductOrderByRelationAggregateInput
   emails?: Prisma.EmailMessageOrderByRelationAggregateInput
+  emailCampaigns?: Prisma.EmailCampaignOrderByRelationAggregateInput
   lessonSessions?: Prisma.LessonSessionOrderByRelationAggregateInput
 }
 
@@ -297,6 +299,7 @@ export type CourseWhereUniqueInput = Prisma.AtLeast<{
   enrollments?: Prisma.EnrollmentListRelationFilter
   products?: Prisma.ProductListRelationFilter
   emails?: Prisma.EmailMessageListRelationFilter
+  emailCampaigns?: Prisma.EmailCampaignListRelationFilter
   lessonSessions?: Prisma.LessonSessionListRelationFilter
 }, "id" | "slug">
 
@@ -357,6 +360,7 @@ export type CourseCreateInput = {
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutCourseInput
   products?: Prisma.ProductCreateNestedManyWithoutCourseInput
   emails?: Prisma.EmailMessageCreateNestedManyWithoutCourseInput
+  emailCampaigns?: Prisma.EmailCampaignCreateNestedManyWithoutCourseInput
   lessonSessions?: Prisma.LessonSessionCreateNestedManyWithoutCourseInput
 }
 
@@ -379,6 +383,7 @@ export type CourseUncheckedCreateInput = {
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutCourseInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutCourseInput
   emails?: Prisma.EmailMessageUncheckedCreateNestedManyWithoutCourseInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedCreateNestedManyWithoutCourseInput
   lessonSessions?: Prisma.LessonSessionUncheckedCreateNestedManyWithoutCourseInput
 }
 
@@ -401,6 +406,7 @@ export type CourseUpdateInput = {
   enrollments?: Prisma.EnrollmentUpdateManyWithoutCourseNestedInput
   products?: Prisma.ProductUpdateManyWithoutCourseNestedInput
   emails?: Prisma.EmailMessageUpdateManyWithoutCourseNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUpdateManyWithoutCourseNestedInput
   lessonSessions?: Prisma.LessonSessionUpdateManyWithoutCourseNestedInput
 }
 
@@ -423,6 +429,7 @@ export type CourseUncheckedUpdateInput = {
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutCourseNestedInput
   emails?: Prisma.EmailMessageUncheckedUpdateManyWithoutCourseNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedUpdateManyWithoutCourseNestedInput
   lessonSessions?: Prisma.LessonSessionUncheckedUpdateManyWithoutCourseNestedInput
 }
 
@@ -680,6 +687,22 @@ export type CourseUpdateOneWithoutEmailsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CourseUpdateToOneWithWhereWithoutEmailsInput, Prisma.CourseUpdateWithoutEmailsInput>, Prisma.CourseUncheckedUpdateWithoutEmailsInput>
 }
 
+export type CourseCreateNestedOneWithoutEmailCampaignsInput = {
+  create?: Prisma.XOR<Prisma.CourseCreateWithoutEmailCampaignsInput, Prisma.CourseUncheckedCreateWithoutEmailCampaignsInput>
+  connectOrCreate?: Prisma.CourseCreateOrConnectWithoutEmailCampaignsInput
+  connect?: Prisma.CourseWhereUniqueInput
+}
+
+export type CourseUpdateOneWithoutEmailCampaignsNestedInput = {
+  create?: Prisma.XOR<Prisma.CourseCreateWithoutEmailCampaignsInput, Prisma.CourseUncheckedCreateWithoutEmailCampaignsInput>
+  connectOrCreate?: Prisma.CourseCreateOrConnectWithoutEmailCampaignsInput
+  upsert?: Prisma.CourseUpsertWithoutEmailCampaignsInput
+  disconnect?: Prisma.CourseWhereInput | boolean
+  delete?: Prisma.CourseWhereInput | boolean
+  connect?: Prisma.CourseWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CourseUpdateToOneWithWhereWithoutEmailCampaignsInput, Prisma.CourseUpdateWithoutEmailCampaignsInput>, Prisma.CourseUncheckedUpdateWithoutEmailCampaignsInput>
+}
+
 export type CourseCreateNestedOneWithoutLessonSessionsInput = {
   create?: Prisma.XOR<Prisma.CourseCreateWithoutLessonSessionsInput, Prisma.CourseUncheckedCreateWithoutLessonSessionsInput>
   connectOrCreate?: Prisma.CourseCreateOrConnectWithoutLessonSessionsInput
@@ -712,6 +735,7 @@ export type CourseCreateWithoutAuthorInput = {
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutCourseInput
   products?: Prisma.ProductCreateNestedManyWithoutCourseInput
   emails?: Prisma.EmailMessageCreateNestedManyWithoutCourseInput
+  emailCampaigns?: Prisma.EmailCampaignCreateNestedManyWithoutCourseInput
   lessonSessions?: Prisma.LessonSessionCreateNestedManyWithoutCourseInput
 }
 
@@ -733,6 +757,7 @@ export type CourseUncheckedCreateWithoutAuthorInput = {
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutCourseInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutCourseInput
   emails?: Prisma.EmailMessageUncheckedCreateNestedManyWithoutCourseInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedCreateNestedManyWithoutCourseInput
   lessonSessions?: Prisma.LessonSessionUncheckedCreateNestedManyWithoutCourseInput
 }
 
@@ -799,6 +824,7 @@ export type CourseCreateWithoutModulesInput = {
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutCourseInput
   products?: Prisma.ProductCreateNestedManyWithoutCourseInput
   emails?: Prisma.EmailMessageCreateNestedManyWithoutCourseInput
+  emailCampaigns?: Prisma.EmailCampaignCreateNestedManyWithoutCourseInput
   lessonSessions?: Prisma.LessonSessionCreateNestedManyWithoutCourseInput
 }
 
@@ -820,6 +846,7 @@ export type CourseUncheckedCreateWithoutModulesInput = {
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutCourseInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutCourseInput
   emails?: Prisma.EmailMessageUncheckedCreateNestedManyWithoutCourseInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedCreateNestedManyWithoutCourseInput
   lessonSessions?: Prisma.LessonSessionUncheckedCreateNestedManyWithoutCourseInput
 }
 
@@ -857,6 +884,7 @@ export type CourseUpdateWithoutModulesInput = {
   enrollments?: Prisma.EnrollmentUpdateManyWithoutCourseNestedInput
   products?: Prisma.ProductUpdateManyWithoutCourseNestedInput
   emails?: Prisma.EmailMessageUpdateManyWithoutCourseNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUpdateManyWithoutCourseNestedInput
   lessonSessions?: Prisma.LessonSessionUpdateManyWithoutCourseNestedInput
 }
 
@@ -878,6 +906,7 @@ export type CourseUncheckedUpdateWithoutModulesInput = {
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutCourseNestedInput
   emails?: Prisma.EmailMessageUncheckedUpdateManyWithoutCourseNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedUpdateManyWithoutCourseNestedInput
   lessonSessions?: Prisma.LessonSessionUncheckedUpdateManyWithoutCourseNestedInput
 }
 
@@ -899,6 +928,7 @@ export type CourseCreateWithoutCoverFileInput = {
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutCourseInput
   products?: Prisma.ProductCreateNestedManyWithoutCourseInput
   emails?: Prisma.EmailMessageCreateNestedManyWithoutCourseInput
+  emailCampaigns?: Prisma.EmailCampaignCreateNestedManyWithoutCourseInput
   lessonSessions?: Prisma.LessonSessionCreateNestedManyWithoutCourseInput
 }
 
@@ -920,6 +950,7 @@ export type CourseUncheckedCreateWithoutCoverFileInput = {
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutCourseInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutCourseInput
   emails?: Prisma.EmailMessageUncheckedCreateNestedManyWithoutCourseInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedCreateNestedManyWithoutCourseInput
   lessonSessions?: Prisma.LessonSessionUncheckedCreateNestedManyWithoutCourseInput
 }
 
@@ -957,6 +988,7 @@ export type CourseUpdateWithoutCoverFileInput = {
   enrollments?: Prisma.EnrollmentUpdateManyWithoutCourseNestedInput
   products?: Prisma.ProductUpdateManyWithoutCourseNestedInput
   emails?: Prisma.EmailMessageUpdateManyWithoutCourseNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUpdateManyWithoutCourseNestedInput
   lessonSessions?: Prisma.LessonSessionUpdateManyWithoutCourseNestedInput
 }
 
@@ -978,6 +1010,7 @@ export type CourseUncheckedUpdateWithoutCoverFileInput = {
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutCourseNestedInput
   emails?: Prisma.EmailMessageUncheckedUpdateManyWithoutCourseNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedUpdateManyWithoutCourseNestedInput
   lessonSessions?: Prisma.LessonSessionUncheckedUpdateManyWithoutCourseNestedInput
 }
 
@@ -999,6 +1032,7 @@ export type CourseCreateWithoutEnrollmentsInput = {
   modules?: Prisma.ModuleCreateNestedManyWithoutCourseInput
   products?: Prisma.ProductCreateNestedManyWithoutCourseInput
   emails?: Prisma.EmailMessageCreateNestedManyWithoutCourseInput
+  emailCampaigns?: Prisma.EmailCampaignCreateNestedManyWithoutCourseInput
   lessonSessions?: Prisma.LessonSessionCreateNestedManyWithoutCourseInput
 }
 
@@ -1020,6 +1054,7 @@ export type CourseUncheckedCreateWithoutEnrollmentsInput = {
   modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutCourseInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutCourseInput
   emails?: Prisma.EmailMessageUncheckedCreateNestedManyWithoutCourseInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedCreateNestedManyWithoutCourseInput
   lessonSessions?: Prisma.LessonSessionUncheckedCreateNestedManyWithoutCourseInput
 }
 
@@ -1057,6 +1092,7 @@ export type CourseUpdateWithoutEnrollmentsInput = {
   modules?: Prisma.ModuleUpdateManyWithoutCourseNestedInput
   products?: Prisma.ProductUpdateManyWithoutCourseNestedInput
   emails?: Prisma.EmailMessageUpdateManyWithoutCourseNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUpdateManyWithoutCourseNestedInput
   lessonSessions?: Prisma.LessonSessionUpdateManyWithoutCourseNestedInput
 }
 
@@ -1078,6 +1114,7 @@ export type CourseUncheckedUpdateWithoutEnrollmentsInput = {
   modules?: Prisma.ModuleUncheckedUpdateManyWithoutCourseNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutCourseNestedInput
   emails?: Prisma.EmailMessageUncheckedUpdateManyWithoutCourseNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedUpdateManyWithoutCourseNestedInput
   lessonSessions?: Prisma.LessonSessionUncheckedUpdateManyWithoutCourseNestedInput
 }
 
@@ -1099,6 +1136,7 @@ export type CourseCreateWithoutProductsInput = {
   modules?: Prisma.ModuleCreateNestedManyWithoutCourseInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutCourseInput
   emails?: Prisma.EmailMessageCreateNestedManyWithoutCourseInput
+  emailCampaigns?: Prisma.EmailCampaignCreateNestedManyWithoutCourseInput
   lessonSessions?: Prisma.LessonSessionCreateNestedManyWithoutCourseInput
 }
 
@@ -1120,6 +1158,7 @@ export type CourseUncheckedCreateWithoutProductsInput = {
   modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutCourseInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutCourseInput
   emails?: Prisma.EmailMessageUncheckedCreateNestedManyWithoutCourseInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedCreateNestedManyWithoutCourseInput
   lessonSessions?: Prisma.LessonSessionUncheckedCreateNestedManyWithoutCourseInput
 }
 
@@ -1157,6 +1196,7 @@ export type CourseUpdateWithoutProductsInput = {
   modules?: Prisma.ModuleUpdateManyWithoutCourseNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutCourseNestedInput
   emails?: Prisma.EmailMessageUpdateManyWithoutCourseNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUpdateManyWithoutCourseNestedInput
   lessonSessions?: Prisma.LessonSessionUpdateManyWithoutCourseNestedInput
 }
 
@@ -1178,6 +1218,7 @@ export type CourseUncheckedUpdateWithoutProductsInput = {
   modules?: Prisma.ModuleUncheckedUpdateManyWithoutCourseNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
   emails?: Prisma.EmailMessageUncheckedUpdateManyWithoutCourseNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedUpdateManyWithoutCourseNestedInput
   lessonSessions?: Prisma.LessonSessionUncheckedUpdateManyWithoutCourseNestedInput
 }
 
@@ -1199,6 +1240,7 @@ export type CourseCreateWithoutEmailsInput = {
   modules?: Prisma.ModuleCreateNestedManyWithoutCourseInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutCourseInput
   products?: Prisma.ProductCreateNestedManyWithoutCourseInput
+  emailCampaigns?: Prisma.EmailCampaignCreateNestedManyWithoutCourseInput
   lessonSessions?: Prisma.LessonSessionCreateNestedManyWithoutCourseInput
 }
 
@@ -1220,6 +1262,7 @@ export type CourseUncheckedCreateWithoutEmailsInput = {
   modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutCourseInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutCourseInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutCourseInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedCreateNestedManyWithoutCourseInput
   lessonSessions?: Prisma.LessonSessionUncheckedCreateNestedManyWithoutCourseInput
 }
 
@@ -1257,6 +1300,7 @@ export type CourseUpdateWithoutEmailsInput = {
   modules?: Prisma.ModuleUpdateManyWithoutCourseNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutCourseNestedInput
   products?: Prisma.ProductUpdateManyWithoutCourseNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUpdateManyWithoutCourseNestedInput
   lessonSessions?: Prisma.LessonSessionUpdateManyWithoutCourseNestedInput
 }
 
@@ -1278,6 +1322,111 @@ export type CourseUncheckedUpdateWithoutEmailsInput = {
   modules?: Prisma.ModuleUncheckedUpdateManyWithoutCourseNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutCourseNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedUpdateManyWithoutCourseNestedInput
+  lessonSessions?: Prisma.LessonSessionUncheckedUpdateManyWithoutCourseNestedInput
+}
+
+export type CourseCreateWithoutEmailCampaignsInput = {
+  id?: string
+  slug: string
+  title: string
+  description?: string | null
+  topic?: string | null
+  tags?: Prisma.CourseCreatetagsInput | string[]
+  status?: $Enums.CourseStatus
+  deliveryFormat?: $Enums.CourseDeliveryFormat
+  scheduleTimezone?: string
+  coverUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  author?: Prisma.UserCreateNestedOneWithoutAuthoredInput
+  coverFile?: Prisma.CourseCoverFileCreateNestedOneWithoutCourseInput
+  modules?: Prisma.ModuleCreateNestedManyWithoutCourseInput
+  enrollments?: Prisma.EnrollmentCreateNestedManyWithoutCourseInput
+  products?: Prisma.ProductCreateNestedManyWithoutCourseInput
+  emails?: Prisma.EmailMessageCreateNestedManyWithoutCourseInput
+  lessonSessions?: Prisma.LessonSessionCreateNestedManyWithoutCourseInput
+}
+
+export type CourseUncheckedCreateWithoutEmailCampaignsInput = {
+  id?: string
+  slug: string
+  title: string
+  description?: string | null
+  topic?: string | null
+  tags?: Prisma.CourseCreatetagsInput | string[]
+  status?: $Enums.CourseStatus
+  deliveryFormat?: $Enums.CourseDeliveryFormat
+  scheduleTimezone?: string
+  coverUrl?: string | null
+  authorId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  coverFile?: Prisma.CourseCoverFileUncheckedCreateNestedOneWithoutCourseInput
+  modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutCourseInput
+  enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutCourseInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutCourseInput
+  emails?: Prisma.EmailMessageUncheckedCreateNestedManyWithoutCourseInput
+  lessonSessions?: Prisma.LessonSessionUncheckedCreateNestedManyWithoutCourseInput
+}
+
+export type CourseCreateOrConnectWithoutEmailCampaignsInput = {
+  where: Prisma.CourseWhereUniqueInput
+  create: Prisma.XOR<Prisma.CourseCreateWithoutEmailCampaignsInput, Prisma.CourseUncheckedCreateWithoutEmailCampaignsInput>
+}
+
+export type CourseUpsertWithoutEmailCampaignsInput = {
+  update: Prisma.XOR<Prisma.CourseUpdateWithoutEmailCampaignsInput, Prisma.CourseUncheckedUpdateWithoutEmailCampaignsInput>
+  create: Prisma.XOR<Prisma.CourseCreateWithoutEmailCampaignsInput, Prisma.CourseUncheckedCreateWithoutEmailCampaignsInput>
+  where?: Prisma.CourseWhereInput
+}
+
+export type CourseUpdateToOneWithWhereWithoutEmailCampaignsInput = {
+  where?: Prisma.CourseWhereInput
+  data: Prisma.XOR<Prisma.CourseUpdateWithoutEmailCampaignsInput, Prisma.CourseUncheckedUpdateWithoutEmailCampaignsInput>
+}
+
+export type CourseUpdateWithoutEmailCampaignsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.CourseUpdatetagsInput | string[]
+  status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+  deliveryFormat?: Prisma.EnumCourseDeliveryFormatFieldUpdateOperationsInput | $Enums.CourseDeliveryFormat
+  scheduleTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  author?: Prisma.UserUpdateOneWithoutAuthoredNestedInput
+  coverFile?: Prisma.CourseCoverFileUpdateOneWithoutCourseNestedInput
+  modules?: Prisma.ModuleUpdateManyWithoutCourseNestedInput
+  enrollments?: Prisma.EnrollmentUpdateManyWithoutCourseNestedInput
+  products?: Prisma.ProductUpdateManyWithoutCourseNestedInput
+  emails?: Prisma.EmailMessageUpdateManyWithoutCourseNestedInput
+  lessonSessions?: Prisma.LessonSessionUpdateManyWithoutCourseNestedInput
+}
+
+export type CourseUncheckedUpdateWithoutEmailCampaignsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.CourseUpdatetagsInput | string[]
+  status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+  deliveryFormat?: Prisma.EnumCourseDeliveryFormatFieldUpdateOperationsInput | $Enums.CourseDeliveryFormat
+  scheduleTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  coverFile?: Prisma.CourseCoverFileUncheckedUpdateOneWithoutCourseNestedInput
+  modules?: Prisma.ModuleUncheckedUpdateManyWithoutCourseNestedInput
+  enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutCourseNestedInput
+  emails?: Prisma.EmailMessageUncheckedUpdateManyWithoutCourseNestedInput
   lessonSessions?: Prisma.LessonSessionUncheckedUpdateManyWithoutCourseNestedInput
 }
 
@@ -1300,6 +1449,7 @@ export type CourseCreateWithoutLessonSessionsInput = {
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutCourseInput
   products?: Prisma.ProductCreateNestedManyWithoutCourseInput
   emails?: Prisma.EmailMessageCreateNestedManyWithoutCourseInput
+  emailCampaigns?: Prisma.EmailCampaignCreateNestedManyWithoutCourseInput
 }
 
 export type CourseUncheckedCreateWithoutLessonSessionsInput = {
@@ -1321,6 +1471,7 @@ export type CourseUncheckedCreateWithoutLessonSessionsInput = {
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutCourseInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutCourseInput
   emails?: Prisma.EmailMessageUncheckedCreateNestedManyWithoutCourseInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedCreateNestedManyWithoutCourseInput
 }
 
 export type CourseCreateOrConnectWithoutLessonSessionsInput = {
@@ -1358,6 +1509,7 @@ export type CourseUpdateWithoutLessonSessionsInput = {
   enrollments?: Prisma.EnrollmentUpdateManyWithoutCourseNestedInput
   products?: Prisma.ProductUpdateManyWithoutCourseNestedInput
   emails?: Prisma.EmailMessageUpdateManyWithoutCourseNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseUncheckedUpdateWithoutLessonSessionsInput = {
@@ -1379,6 +1531,7 @@ export type CourseUncheckedUpdateWithoutLessonSessionsInput = {
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutCourseNestedInput
   emails?: Prisma.EmailMessageUncheckedUpdateManyWithoutCourseNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedUpdateManyWithoutCourseNestedInput
 }
 
 export type CourseCreateManyAuthorInput = {
@@ -1414,6 +1567,7 @@ export type CourseUpdateWithoutAuthorInput = {
   enrollments?: Prisma.EnrollmentUpdateManyWithoutCourseNestedInput
   products?: Prisma.ProductUpdateManyWithoutCourseNestedInput
   emails?: Prisma.EmailMessageUpdateManyWithoutCourseNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUpdateManyWithoutCourseNestedInput
   lessonSessions?: Prisma.LessonSessionUpdateManyWithoutCourseNestedInput
 }
 
@@ -1435,6 +1589,7 @@ export type CourseUncheckedUpdateWithoutAuthorInput = {
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutCourseNestedInput
   emails?: Prisma.EmailMessageUncheckedUpdateManyWithoutCourseNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedUpdateManyWithoutCourseNestedInput
   lessonSessions?: Prisma.LessonSessionUncheckedUpdateManyWithoutCourseNestedInput
 }
 
@@ -1463,6 +1618,7 @@ export type CourseCountOutputType = {
   enrollments: number
   products: number
   emails: number
+  emailCampaigns: number
   lessonSessions: number
 }
 
@@ -1471,6 +1627,7 @@ export type CourseCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   enrollments?: boolean | CourseCountOutputTypeCountEnrollmentsArgs
   products?: boolean | CourseCountOutputTypeCountProductsArgs
   emails?: boolean | CourseCountOutputTypeCountEmailsArgs
+  emailCampaigns?: boolean | CourseCountOutputTypeCountEmailCampaignsArgs
   lessonSessions?: boolean | CourseCountOutputTypeCountLessonSessionsArgs
 }
 
@@ -1515,6 +1672,13 @@ export type CourseCountOutputTypeCountEmailsArgs<ExtArgs extends runtime.Types.E
 /**
  * CourseCountOutputType without action
  */
+export type CourseCountOutputTypeCountEmailCampaignsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EmailCampaignWhereInput
+}
+
+/**
+ * CourseCountOutputType without action
+ */
 export type CourseCountOutputTypeCountLessonSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.LessonSessionWhereInput
 }
@@ -1540,6 +1704,7 @@ export type CourseSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   enrollments?: boolean | Prisma.Course$enrollmentsArgs<ExtArgs>
   products?: boolean | Prisma.Course$productsArgs<ExtArgs>
   emails?: boolean | Prisma.Course$emailsArgs<ExtArgs>
+  emailCampaigns?: boolean | Prisma.Course$emailCampaignsArgs<ExtArgs>
   lessonSessions?: boolean | Prisma.Course$lessonSessionsArgs<ExtArgs>
   _count?: boolean | Prisma.CourseCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["course"]>
@@ -1602,6 +1767,7 @@ export type CourseInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   enrollments?: boolean | Prisma.Course$enrollmentsArgs<ExtArgs>
   products?: boolean | Prisma.Course$productsArgs<ExtArgs>
   emails?: boolean | Prisma.Course$emailsArgs<ExtArgs>
+  emailCampaigns?: boolean | Prisma.Course$emailCampaignsArgs<ExtArgs>
   lessonSessions?: boolean | Prisma.Course$lessonSessionsArgs<ExtArgs>
   _count?: boolean | Prisma.CourseCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -1621,6 +1787,7 @@ export type $CoursePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     enrollments: Prisma.$EnrollmentPayload<ExtArgs>[]
     products: Prisma.$ProductPayload<ExtArgs>[]
     emails: Prisma.$EmailMessagePayload<ExtArgs>[]
+    emailCampaigns: Prisma.$EmailCampaignPayload<ExtArgs>[]
     lessonSessions: Prisma.$LessonSessionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -2037,6 +2204,7 @@ export interface Prisma__CourseClient<T, Null = never, ExtArgs extends runtime.T
   enrollments<T extends Prisma.Course$enrollmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   products<T extends Prisma.Course$productsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$productsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   emails<T extends Prisma.Course$emailsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$emailsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EmailMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  emailCampaigns<T extends Prisma.Course$emailCampaignsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$emailCampaignsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EmailCampaignPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   lessonSessions<T extends Prisma.Course$lessonSessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$lessonSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LessonSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -2612,6 +2780,30 @@ export type Course$emailsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.EmailMessageScalarFieldEnum | Prisma.EmailMessageScalarFieldEnum[]
+}
+
+/**
+ * Course.emailCampaigns
+ */
+export type Course$emailCampaignsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the EmailCampaign
+   */
+  select?: Prisma.EmailCampaignSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the EmailCampaign
+   */
+  omit?: Prisma.EmailCampaignOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EmailCampaignInclude<ExtArgs> | null
+  where?: Prisma.EmailCampaignWhereInput
+  orderBy?: Prisma.EmailCampaignOrderByWithRelationInput | Prisma.EmailCampaignOrderByWithRelationInput[]
+  cursor?: Prisma.EmailCampaignWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EmailCampaignScalarFieldEnum | Prisma.EmailCampaignScalarFieldEnum[]
 }
 
 /**

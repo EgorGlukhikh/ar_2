@@ -105,6 +105,29 @@ enum EmailKind {
   MARKETING
 }
 
+enum EmailAudienceType {
+  STUDENT
+  EXPERT
+}
+
+enum EmailCampaignStatus {
+  DRAFT
+  SCHEDULED
+  ACTIVE
+  PAUSED
+  COMPLETED
+  CANCELED
+}
+
+enum EmailCampaignSegment {
+  ALL_OPTED_IN_STUDENTS
+  STUDENTS_WITHOUT_PURCHASE
+  STUDENTS_WITH_PURCHASE
+  STUDENTS_ENROLLED_IN_COURSE
+  INACTIVE_STUDENTS
+  ALL_OPTED_IN_EXPERTS
+}
+
 enum EmailStatus {
   QUEUED
   SENDING
@@ -148,6 +171,8 @@ model User {
   reviewedHomeworkSubmissions HomeworkSubmission[] @relation("HomeworkSubmissionReviewer")
   orders        Order[]
   emails        EmailMessage[]
+  emailPreference EmailPreference?
+  emailCampaignsCreated EmailCampaign[] @relation("EmailCampaignAuthor")
   lessonSessions LessonSession[]
   workspaceInvitesSent WorkspaceInvite[] @relation("WorkspaceInviteSender")
   workspaceInvitesAccepted WorkspaceInvite[] @relation("WorkspaceInviteAccepter")
@@ -211,6 +236,7 @@ model Course {
   enrollments    Enrollment[]
   products       Product[]
   emails         EmailMessage[]
+  emailCampaigns EmailCampaign[]
   lessonSessions LessonSession[]
 }
 
@@ -488,46 +514,58 @@ model Payment {
 }
 
 model EmailMessage {
-  id                String            @id @default(cuid())
-  userId            String?
-  courseId          String?
-  orderId           String?
-  provider          EmailProviderType @default(MOCK)
-  kind              EmailKind         @default(TRANSACTIONAL)
-  status            EmailStatus       @default(QUEUED)
-  templateKey       String
-  campaignKey       String?
-  sequenceStep      Int?
-  dedupeKey         String?           @unique
-  trackingToken     String            @unique
-  subject           String
-  fromEmail         String
-  fromName          String?
-  toEmail           String
-  toName            String?
-  htmlBody          String
-  textBody          String?
-  scheduledAt       DateTime          @default(now())
-  sentAt            DateTime?
-  deliveredAt       DateTime?
-  openedAt          DateTime?
-  clickedAt         DateTime?
-  failedAt          DateTime?
-  providerMessageId String?
-  lastError         String?
-  metadata          Json?
-  createdAt         DateTime          @default(now())
-  updatedAt         DateTime          @updatedAt
-  course            Course?           @relation(fields: [courseId], references: [id], onDelete: SetNull)
-  order             Order?            @relation(fields: [orderId], references: [id], onDelete: SetNull)
-  user              User?             @relation(fields: [userId], references: [id], onDelete: SetNull)
-  events            EmailEvent[]
-  clicks            EmailLinkClick[]
-
-  @@index([status, scheduledAt])
-  @@index([userId, createdAt])
-  @@index([courseId, createdAt])
-}
+    id                String            @id @default(cuid())
+    userId            String?
+    courseId          String?
+    orderId           String?
+    campaignId        String?
+    provider          EmailProviderType @default(MOCK)
+    kind              EmailKind         @default(TRANSACTIONAL)
+    status            EmailStatus       @default(QUEUED)
+    templateKey       String
+    campaignKey       String?
+    recipientSegment  EmailCampaignSegment?
+    sequenceStep      Int?
+    dedupeKey         String?           @unique
+    trackingToken     String            @unique
+    subject           String
+    preheader         String?
+    fromEmail         String
+    fromName          String?
+    replyToEmail      String?
+    replyToName       String?
+    toEmail           String
+    toName            String?
+    htmlBody          String
+    textBody          String?
+    scheduledAt       DateTime          @default(now())
+    nextAttemptAt     DateTime?
+    attemptCount      Int               @default(0)
+    maxAttempts       Int               @default(3)
+    sentAt            DateTime?
+    deliveredAt       DateTime?
+    openedAt          DateTime?
+    clickedAt         DateTime?
+    failedAt          DateTime?
+    canceledAt        DateTime?
+    providerMessageId String?
+    lastError         String?
+    metadata          Json?
+    createdAt         DateTime          @default(now())
+    updatedAt         DateTime          @updatedAt
+    course            Course?           @relation(fields: [courseId], references: [id], onDelete: SetNull)
+    campaign          EmailCampaign?    @relation(fields: [campaignId], references: [id], onDelete: SetNull)
+    order             Order?            @relation(fields: [orderId], references: [id], onDelete: SetNull)
+    user              User?             @relation(fields: [userId], references: [id], onDelete: SetNull)
+    events            EmailEvent[]
+    clicks            EmailLinkClick[]
+  
+    @@index([status, scheduledAt])
+    @@index([status, nextAttemptAt])
+    @@index([userId, createdAt])
+    @@index([courseId, createdAt])
+    @@index([campaignId, createdAt])
+  }
 
 model EmailEvent {
   id             String      @id @default(cuid())
@@ -539,12 +577,57 @@ model EmailEvent {
   createdAt      DateTime    @default(now())
   emailMessage   EmailMessage @relation(fields: [emailMessageId], references: [id], onDelete: Cascade)
 
-  @@index([emailMessageId, createdAt])
-}
+    @@index([emailMessageId, createdAt])
+  }
+
+model EmailPreference {
+    id                 String           @id @default(cuid())
+    userId             String           @unique
+    audienceType       EmailAudienceType @default(STUDENT)
+    isMarketingEnabled Boolean          @default(false)
+    marketingSource    String?
+    consentText        String?
+    subscribedAt       DateTime?
+    unsubscribedAt     DateTime?
+    preferenceToken    String           @unique
+    createdAt          DateTime         @default(now())
+    updatedAt          DateTime         @updatedAt
+    user               User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@index([audienceType, isMarketingEnabled])
+  }
+
+model EmailCampaign {
+    id               String              @id @default(cuid())
+    name             String
+    templateKey      String
+    segment          EmailCampaignSegment
+    status           EmailCampaignStatus @default(DRAFT)
+    createdById      String
+    courseId         String?
+    scheduledAt      DateTime?
+    launchedAt       DateTime?
+    pausedAt         DateTime?
+    canceledAt       DateTime?
+    completedAt      DateTime?
+    subjectSnapshot  String?
+    preheaderSnapshot String?
+    recipientCount   Int                 @default(0)
+    lastError        String?
+    metadata         Json?
+    createdAt        DateTime            @default(now())
+    updatedAt        DateTime            @updatedAt
+    createdBy        User                @relation("EmailCampaignAuthor", fields: [createdById], references: [id], onDelete: Cascade)
+    course           Course?             @relation(fields: [courseId], references: [id], onDelete: SetNull)
+    messages         EmailMessage[]
+
+    @@index([status, scheduledAt])
+    @@index([createdById, createdAt])
+  }
 
 model EmailLinkClick {
-  id             String       @id @default(cuid())
-  emailMessageId String
+    id             String       @id @default(cuid())
+    emailMessageId String
   url            String
   createdAt      DateTime     @default(now())
   emailMessage   EmailMessage  @relation(fields: [emailMessageId], references: [id], onDelete: Cascade)

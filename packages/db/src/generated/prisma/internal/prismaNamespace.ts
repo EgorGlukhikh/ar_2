@@ -408,6 +408,8 @@ export const ModelName = {
   Payment: 'Payment',
   EmailMessage: 'EmailMessage',
   EmailEvent: 'EmailEvent',
+  EmailPreference: 'EmailPreference',
+  EmailCampaign: 'EmailCampaign',
   EmailLinkClick: 'EmailLinkClick',
   WorkspaceInvite: 'WorkspaceInvite',
   LessonSession: 'LessonSession',
@@ -427,7 +429,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "account" | "session" | "verificationToken" | "course" | "module" | "lesson" | "lessonBlock" | "lessonAudioFile" | "courseCoverFile" | "videoAsset" | "enrollment" | "lessonProgress" | "homeworkAssignment" | "homeworkReview" | "homeworkSubmission" | "homeworkSubmissionFile" | "product" | "price" | "order" | "orderItem" | "payment" | "emailMessage" | "emailEvent" | "emailLinkClick" | "workspaceInvite" | "lessonSession" | "lessonSessionEvent"
+    modelProps: "user" | "account" | "session" | "verificationToken" | "course" | "module" | "lesson" | "lessonBlock" | "lessonAudioFile" | "courseCoverFile" | "videoAsset" | "enrollment" | "lessonProgress" | "homeworkAssignment" | "homeworkReview" | "homeworkSubmission" | "homeworkSubmissionFile" | "product" | "price" | "order" | "orderItem" | "payment" | "emailMessage" | "emailEvent" | "emailPreference" | "emailCampaign" | "emailLinkClick" | "workspaceInvite" | "lessonSession" | "lessonSessionEvent"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2207,6 +2209,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    EmailPreference: {
+      payload: Prisma.$EmailPreferencePayload<ExtArgs>
+      fields: Prisma.EmailPreferenceFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.EmailPreferenceFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailPreferencePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.EmailPreferenceFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailPreferencePayload>
+        }
+        findFirst: {
+          args: Prisma.EmailPreferenceFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailPreferencePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.EmailPreferenceFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailPreferencePayload>
+        }
+        findMany: {
+          args: Prisma.EmailPreferenceFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailPreferencePayload>[]
+        }
+        create: {
+          args: Prisma.EmailPreferenceCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailPreferencePayload>
+        }
+        createMany: {
+          args: Prisma.EmailPreferenceCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.EmailPreferenceCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailPreferencePayload>[]
+        }
+        delete: {
+          args: Prisma.EmailPreferenceDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailPreferencePayload>
+        }
+        update: {
+          args: Prisma.EmailPreferenceUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailPreferencePayload>
+        }
+        deleteMany: {
+          args: Prisma.EmailPreferenceDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.EmailPreferenceUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.EmailPreferenceUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailPreferencePayload>[]
+        }
+        upsert: {
+          args: Prisma.EmailPreferenceUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailPreferencePayload>
+        }
+        aggregate: {
+          args: Prisma.EmailPreferenceAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateEmailPreference>
+        }
+        groupBy: {
+          args: Prisma.EmailPreferenceGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EmailPreferenceGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.EmailPreferenceCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EmailPreferenceCountAggregateOutputType> | number
+        }
+      }
+    }
+    EmailCampaign: {
+      payload: Prisma.$EmailCampaignPayload<ExtArgs>
+      fields: Prisma.EmailCampaignFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.EmailCampaignFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailCampaignPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.EmailCampaignFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailCampaignPayload>
+        }
+        findFirst: {
+          args: Prisma.EmailCampaignFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailCampaignPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.EmailCampaignFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailCampaignPayload>
+        }
+        findMany: {
+          args: Prisma.EmailCampaignFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailCampaignPayload>[]
+        }
+        create: {
+          args: Prisma.EmailCampaignCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailCampaignPayload>
+        }
+        createMany: {
+          args: Prisma.EmailCampaignCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.EmailCampaignCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailCampaignPayload>[]
+        }
+        delete: {
+          args: Prisma.EmailCampaignDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailCampaignPayload>
+        }
+        update: {
+          args: Prisma.EmailCampaignUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailCampaignPayload>
+        }
+        deleteMany: {
+          args: Prisma.EmailCampaignDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.EmailCampaignUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.EmailCampaignUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailCampaignPayload>[]
+        }
+        upsert: {
+          args: Prisma.EmailCampaignUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailCampaignPayload>
+        }
+        aggregate: {
+          args: Prisma.EmailCampaignAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateEmailCampaign>
+        }
+        groupBy: {
+          args: Prisma.EmailCampaignGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EmailCampaignGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.EmailCampaignCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EmailCampaignCountAggregateOutputType> | number
+        }
+      }
+    }
     EmailLinkClick: {
       payload: Prisma.$EmailLinkClickPayload<ExtArgs>
       fields: Prisma.EmailLinkClickFieldRefs
@@ -2886,27 +3036,36 @@ export const EmailMessageScalarFieldEnum = {
   userId: 'userId',
   courseId: 'courseId',
   orderId: 'orderId',
+  campaignId: 'campaignId',
   provider: 'provider',
   kind: 'kind',
   status: 'status',
   templateKey: 'templateKey',
   campaignKey: 'campaignKey',
+  recipientSegment: 'recipientSegment',
   sequenceStep: 'sequenceStep',
   dedupeKey: 'dedupeKey',
   trackingToken: 'trackingToken',
   subject: 'subject',
+  preheader: 'preheader',
   fromEmail: 'fromEmail',
   fromName: 'fromName',
+  replyToEmail: 'replyToEmail',
+  replyToName: 'replyToName',
   toEmail: 'toEmail',
   toName: 'toName',
   htmlBody: 'htmlBody',
   textBody: 'textBody',
   scheduledAt: 'scheduledAt',
+  nextAttemptAt: 'nextAttemptAt',
+  attemptCount: 'attemptCount',
+  maxAttempts: 'maxAttempts',
   sentAt: 'sentAt',
   deliveredAt: 'deliveredAt',
   openedAt: 'openedAt',
   clickedAt: 'clickedAt',
   failedAt: 'failedAt',
+  canceledAt: 'canceledAt',
   providerMessageId: 'providerMessageId',
   lastError: 'lastError',
   metadata: 'metadata',
@@ -2928,6 +3087,48 @@ export const EmailEventScalarFieldEnum = {
 } as const
 
 export type EmailEventScalarFieldEnum = (typeof EmailEventScalarFieldEnum)[keyof typeof EmailEventScalarFieldEnum]
+
+
+export const EmailPreferenceScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  audienceType: 'audienceType',
+  isMarketingEnabled: 'isMarketingEnabled',
+  marketingSource: 'marketingSource',
+  consentText: 'consentText',
+  subscribedAt: 'subscribedAt',
+  unsubscribedAt: 'unsubscribedAt',
+  preferenceToken: 'preferenceToken',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EmailPreferenceScalarFieldEnum = (typeof EmailPreferenceScalarFieldEnum)[keyof typeof EmailPreferenceScalarFieldEnum]
+
+
+export const EmailCampaignScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  templateKey: 'templateKey',
+  segment: 'segment',
+  status: 'status',
+  createdById: 'createdById',
+  courseId: 'courseId',
+  scheduledAt: 'scheduledAt',
+  launchedAt: 'launchedAt',
+  pausedAt: 'pausedAt',
+  canceledAt: 'canceledAt',
+  completedAt: 'completedAt',
+  subjectSnapshot: 'subjectSnapshot',
+  preheaderSnapshot: 'preheaderSnapshot',
+  recipientCount: 'recipientCount',
+  lastError: 'lastError',
+  metadata: 'metadata',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EmailCampaignScalarFieldEnum = (typeof EmailCampaignScalarFieldEnum)[keyof typeof EmailCampaignScalarFieldEnum]
 
 
 export const EmailLinkClickScalarFieldEnum = {
@@ -3349,6 +3550,48 @@ export type ListEnumEmailStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$
 
 
 /**
+ * Reference to a field of type 'EmailCampaignSegment'
+ */
+export type EnumEmailCampaignSegmentFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EmailCampaignSegment'>
+    
+
+
+/**
+ * Reference to a field of type 'EmailCampaignSegment[]'
+ */
+export type ListEnumEmailCampaignSegmentFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EmailCampaignSegment[]'>
+    
+
+
+/**
+ * Reference to a field of type 'EmailAudienceType'
+ */
+export type EnumEmailAudienceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EmailAudienceType'>
+    
+
+
+/**
+ * Reference to a field of type 'EmailAudienceType[]'
+ */
+export type ListEnumEmailAudienceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EmailAudienceType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'EmailCampaignStatus'
+ */
+export type EnumEmailCampaignStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EmailCampaignStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'EmailCampaignStatus[]'
+ */
+export type ListEnumEmailCampaignStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EmailCampaignStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -3480,6 +3723,8 @@ export type GlobalOmitConfig = {
   payment?: Prisma.PaymentOmit
   emailMessage?: Prisma.EmailMessageOmit
   emailEvent?: Prisma.EmailEventOmit
+  emailPreference?: Prisma.EmailPreferenceOmit
+  emailCampaign?: Prisma.EmailCampaignOmit
   emailLinkClick?: Prisma.EmailLinkClickOmit
   workspaceInvite?: Prisma.WorkspaceInviteOmit
   lessonSession?: Prisma.LessonSessionOmit

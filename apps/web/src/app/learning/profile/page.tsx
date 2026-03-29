@@ -1,6 +1,6 @@
 import { prisma } from "@academy/db";
 
-import { ProfilePageContent } from "@frontend/learning/components/profile-page-content";
+import { ProfilePageContent } from "@/components/learning/profile-page-content";
 
 import { requireStudentOrElevatedUser } from "@/lib/user";
 
@@ -15,8 +15,24 @@ export default async function ProfilePage() {
       phone: true,
       telegram: true,
       city: true,
+      emailPreference: {
+        select: {
+          isMarketingEnabled: true,
+        },
+      },
     },
   });
 
-  return <ProfilePageContent profile={profile} />;
+  return (
+    <ProfilePageContent
+      profile={{
+        name: profile.name,
+        email: profile.email,
+        phone: profile.phone,
+        telegram: profile.telegram,
+        city: profile.city,
+        marketingEnabled: profile.emailPreference?.isMarketingEnabled ?? false,
+      }}
+    />
+  );
 }
