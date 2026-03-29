@@ -60,6 +60,7 @@ export const ModelName = {
   Lesson: 'Lesson',
   LessonBlock: 'LessonBlock',
   LessonAudioFile: 'LessonAudioFile',
+  CourseCoverFile: 'CourseCoverFile',
   VideoAsset: 'VideoAsset',
   Enrollment: 'Enrollment',
   LessonProgress: 'LessonProgress',
@@ -238,6 +239,20 @@ export const LessonAudioFileScalarFieldEnum = {
 } as const
 
 export type LessonAudioFileScalarFieldEnum = (typeof LessonAudioFileScalarFieldEnum)[keyof typeof LessonAudioFileScalarFieldEnum]
+
+
+export const CourseCoverFileScalarFieldEnum = {
+  id: 'id',
+  courseId: 'courseId',
+  filename: 'filename',
+  mimeType: 'mimeType',
+  sizeInBytes: 'sizeInBytes',
+  data: 'data',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CourseCoverFileScalarFieldEnum = (typeof CourseCoverFileScalarFieldEnum)[keyof typeof CourseCoverFileScalarFieldEnum]
 
 
 export const VideoAssetScalarFieldEnum = {

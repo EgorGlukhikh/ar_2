@@ -11,6 +11,7 @@ import { notFound } from "next/navigation";
 import { CourseDeliveryFormat, CourseStatus, prisma } from "@academy/db";
 import { USER_ROLES } from "@academy/shared";
 
+import { CourseCoverUploadField } from "@/components/admin/course-cover-upload-field";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -54,6 +55,11 @@ export default async function CourseSettingsPage({
       deliveryFormat: true,
       scheduleTimezone: true,
       coverUrl: true,
+      coverFile: {
+        select: {
+          filename: true,
+        },
+      },
       authorId: true,
     },
   });
@@ -191,19 +197,11 @@ export default async function CourseSettingsPage({
             </div>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="coverUrl">Обложка курса (URL изображения)</Label>
-            <Input
-              id="coverUrl"
-              name="coverUrl"
-              defaultValue={course.coverUrl ?? ""}
-              placeholder="https://images.unsplash.com/photo-..."
-            />
-            <p className="text-sm leading-6 text-[var(--muted)]">
-              Вставь ссылку на изображение. Рекомендуемое соотношение 16:9. Отображается
-              в шапке курса и каталоге.
-            </p>
-          </div>
+          <CourseCoverUploadField
+            courseId={course.id}
+            initialCoverUrl={course.coverUrl ?? ""}
+            initialFilename={course.coverFile?.filename ?? null}
+          />
 
           <div className="grid gap-5 md:grid-cols-2">
             <div className="space-y-2">

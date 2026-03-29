@@ -19,8 +19,16 @@ const VIDEO_MIME_TYPES = new Set([
   "video/x-m4v",
 ]);
 
+const IMAGE_MIME_TYPES = new Set([
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/avif",
+]);
+
 const AUDIO_EXTENSIONS = [".mp3", ".m4a", ".aac", ".wav", ".ogg", ".webm"];
 const VIDEO_EXTENSIONS = [".mp4", ".m4v", ".mov", ".webm", ".ogg"];
+const IMAGE_EXTENSIONS = [".jpg", ".jpeg", ".png", ".webp", ".avif"];
 
 function hasAllowedExtension(filename: string, extensions: string[]) {
   const lowerName = filename.trim().toLowerCase();
@@ -38,5 +46,12 @@ export function isAllowedVideoFile(file: File) {
   return (
     VIDEO_MIME_TYPES.has(file.type.toLowerCase()) ||
     hasAllowedExtension(file.name, VIDEO_EXTENSIONS)
+  );
+}
+
+export function isAllowedImageFile(file: File) {
+  return (
+    IMAGE_MIME_TYPES.has(file.type.toLowerCase()) ||
+    hasAllowedExtension(file.name, IMAGE_EXTENSIONS)
   );
 }

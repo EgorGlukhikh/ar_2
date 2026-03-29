@@ -104,6 +104,30 @@ function programWord(count: number) {
   return "программ";
 }
 
+const heroAmbientMarkClasses = [
+  "hero-mark-1",
+  "hero-mark-2",
+  "hero-mark-3",
+  "hero-mark-4",
+  "hero-mark-5",
+  "hero-mark-6",
+  "hero-mark-7",
+  "hero-mark-8",
+  "hero-mark-9",
+  "hero-mark-10",
+] as const;
+
+const valueAmbientMarkClasses = [
+  "value-mark-1",
+  "value-mark-2",
+  "value-mark-3",
+  "value-mark-4",
+  "value-mark-5",
+  "value-mark-6",
+  "value-mark-7",
+  "value-mark-8",
+] as const;
+
 export function LandingExperience({
   publishedCourses,
   courses,
@@ -228,12 +252,12 @@ export function LandingExperience({
         <div className="hero-ambient hero-ambient-gradient" aria-hidden />
         <div className="hero-ambient hero-ambient-spotlight" aria-hidden />
         <div className="hero-ambient hero-ambient-grid" aria-hidden />
-        <div className="hero-squares" aria-hidden>
-          <span className="hero-square hero-square-1" />
-          <span className="hero-square hero-square-2" />
-          <span className="hero-square hero-square-3" />
-          <span className="hero-square hero-square-4" />
-          <span className="hero-square hero-square-5" />
+        <div className="hero-floating-marks" aria-hidden>
+          {heroAmbientMarkClasses.map((className) => (
+            <span key={className} className={cn("hero-mark-shell", className)}>
+              <AcademyMark className="w-full" />
+            </span>
+          ))}
         </div>
         <PageContainer className="relative z-10">
           <MotionReveal variant="soft" immediate>
@@ -360,11 +384,12 @@ export function LandingExperience({
 
       {/* ─── VALUE BENTO ─────────────────────────────────────────────── */}
       <section className="value-stage relative overflow-hidden bg-white pt-16 pb-20" id="value">
-        <div className="value-squares" aria-hidden>
-          <span className="value-square value-square-1" />
-          <span className="value-square value-square-2" />
-          <span className="value-square value-square-3" />
-          <span className="value-square value-square-4" />
+        <div className="value-floating-marks" aria-hidden>
+          {valueAmbientMarkClasses.map((className) => (
+            <span key={className} className={cn("value-mark-shell", className)}>
+              <AcademyMark className="w-full" />
+            </span>
+          ))}
         </div>
         <PageContainer className="relative z-10">
           <div className="space-y-10">

@@ -63,6 +63,11 @@ export type LessonBlock = Prisma.LessonBlockModel
  */
 export type LessonAudioFile = Prisma.LessonAudioFileModel
 /**
+ * Model CourseCoverFile
+ * 
+ */
+export type CourseCoverFile = Prisma.CourseCoverFileModel
+/**
  * Model VideoAsset
  * 
  */

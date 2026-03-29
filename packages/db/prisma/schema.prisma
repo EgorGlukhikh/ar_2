@@ -206,6 +206,7 @@ model Course {
   createdAt      DateTime             @default(now())
   updatedAt      DateTime             @updatedAt
   author         User?                @relation("CourseAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+  coverFile      CourseCoverFile?
   modules        Module[]
   enrollments    Enrollment[]
   products       Product[]
@@ -287,6 +288,20 @@ model LessonAudioFile {
 
   @@unique([lessonId, blockKey])
   @@index([lessonId, createdAt])
+}
+
+model CourseCoverFile {
+  id          String   @id @default(cuid())
+  courseId    String   @unique
+  filename    String
+  mimeType    String?
+  sizeInBytes Int
+  data        Bytes
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@index([createdAt])
 }
 
 model VideoAsset {

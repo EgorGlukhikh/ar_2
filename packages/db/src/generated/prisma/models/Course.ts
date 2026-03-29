@@ -243,6 +243,7 @@ export type CourseWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Course"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Course"> | Date | string
   author?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  coverFile?: Prisma.XOR<Prisma.CourseCoverFileNullableScalarRelationFilter, Prisma.CourseCoverFileWhereInput> | null
   modules?: Prisma.ModuleListRelationFilter
   enrollments?: Prisma.EnrollmentListRelationFilter
   products?: Prisma.ProductListRelationFilter
@@ -265,6 +266,7 @@ export type CourseOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   author?: Prisma.UserOrderByWithRelationInput
+  coverFile?: Prisma.CourseCoverFileOrderByWithRelationInput
   modules?: Prisma.ModuleOrderByRelationAggregateInput
   enrollments?: Prisma.EnrollmentOrderByRelationAggregateInput
   products?: Prisma.ProductOrderByRelationAggregateInput
@@ -290,6 +292,7 @@ export type CourseWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Course"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Course"> | Date | string
   author?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  coverFile?: Prisma.XOR<Prisma.CourseCoverFileNullableScalarRelationFilter, Prisma.CourseCoverFileWhereInput> | null
   modules?: Prisma.ModuleListRelationFilter
   enrollments?: Prisma.EnrollmentListRelationFilter
   products?: Prisma.ProductListRelationFilter
@@ -349,6 +352,7 @@ export type CourseCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   author?: Prisma.UserCreateNestedOneWithoutAuthoredInput
+  coverFile?: Prisma.CourseCoverFileCreateNestedOneWithoutCourseInput
   modules?: Prisma.ModuleCreateNestedManyWithoutCourseInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutCourseInput
   products?: Prisma.ProductCreateNestedManyWithoutCourseInput
@@ -370,6 +374,7 @@ export type CourseUncheckedCreateInput = {
   authorId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  coverFile?: Prisma.CourseCoverFileUncheckedCreateNestedOneWithoutCourseInput
   modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutCourseInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutCourseInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutCourseInput
@@ -391,6 +396,7 @@ export type CourseUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   author?: Prisma.UserUpdateOneWithoutAuthoredNestedInput
+  coverFile?: Prisma.CourseCoverFileUpdateOneWithoutCourseNestedInput
   modules?: Prisma.ModuleUpdateManyWithoutCourseNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutCourseNestedInput
   products?: Prisma.ProductUpdateManyWithoutCourseNestedInput
@@ -412,6 +418,7 @@ export type CourseUncheckedUpdateInput = {
   authorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  coverFile?: Prisma.CourseCoverFileUncheckedUpdateOneWithoutCourseNestedInput
   modules?: Prisma.ModuleUncheckedUpdateManyWithoutCourseNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutCourseNestedInput
@@ -613,6 +620,20 @@ export type CourseUpdateOneRequiredWithoutModulesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CourseUpdateToOneWithWhereWithoutModulesInput, Prisma.CourseUpdateWithoutModulesInput>, Prisma.CourseUncheckedUpdateWithoutModulesInput>
 }
 
+export type CourseCreateNestedOneWithoutCoverFileInput = {
+  create?: Prisma.XOR<Prisma.CourseCreateWithoutCoverFileInput, Prisma.CourseUncheckedCreateWithoutCoverFileInput>
+  connectOrCreate?: Prisma.CourseCreateOrConnectWithoutCoverFileInput
+  connect?: Prisma.CourseWhereUniqueInput
+}
+
+export type CourseUpdateOneRequiredWithoutCoverFileNestedInput = {
+  create?: Prisma.XOR<Prisma.CourseCreateWithoutCoverFileInput, Prisma.CourseUncheckedCreateWithoutCoverFileInput>
+  connectOrCreate?: Prisma.CourseCreateOrConnectWithoutCoverFileInput
+  upsert?: Prisma.CourseUpsertWithoutCoverFileInput
+  connect?: Prisma.CourseWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CourseUpdateToOneWithWhereWithoutCoverFileInput, Prisma.CourseUpdateWithoutCoverFileInput>, Prisma.CourseUncheckedUpdateWithoutCoverFileInput>
+}
+
 export type CourseCreateNestedOneWithoutEnrollmentsInput = {
   create?: Prisma.XOR<Prisma.CourseCreateWithoutEnrollmentsInput, Prisma.CourseUncheckedCreateWithoutEnrollmentsInput>
   connectOrCreate?: Prisma.CourseCreateOrConnectWithoutEnrollmentsInput
@@ -686,6 +707,7 @@ export type CourseCreateWithoutAuthorInput = {
   coverUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  coverFile?: Prisma.CourseCoverFileCreateNestedOneWithoutCourseInput
   modules?: Prisma.ModuleCreateNestedManyWithoutCourseInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutCourseInput
   products?: Prisma.ProductCreateNestedManyWithoutCourseInput
@@ -706,6 +728,7 @@ export type CourseUncheckedCreateWithoutAuthorInput = {
   coverUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  coverFile?: Prisma.CourseCoverFileUncheckedCreateNestedOneWithoutCourseInput
   modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutCourseInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutCourseInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutCourseInput
@@ -772,6 +795,7 @@ export type CourseCreateWithoutModulesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   author?: Prisma.UserCreateNestedOneWithoutAuthoredInput
+  coverFile?: Prisma.CourseCoverFileCreateNestedOneWithoutCourseInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutCourseInput
   products?: Prisma.ProductCreateNestedManyWithoutCourseInput
   emails?: Prisma.EmailMessageCreateNestedManyWithoutCourseInput
@@ -792,6 +816,7 @@ export type CourseUncheckedCreateWithoutModulesInput = {
   authorId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  coverFile?: Prisma.CourseCoverFileUncheckedCreateNestedOneWithoutCourseInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutCourseInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutCourseInput
   emails?: Prisma.EmailMessageUncheckedCreateNestedManyWithoutCourseInput
@@ -828,6 +853,7 @@ export type CourseUpdateWithoutModulesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   author?: Prisma.UserUpdateOneWithoutAuthoredNestedInput
+  coverFile?: Prisma.CourseCoverFileUpdateOneWithoutCourseNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutCourseNestedInput
   products?: Prisma.ProductUpdateManyWithoutCourseNestedInput
   emails?: Prisma.EmailMessageUpdateManyWithoutCourseNestedInput
@@ -848,6 +874,107 @@ export type CourseUncheckedUpdateWithoutModulesInput = {
   authorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  coverFile?: Prisma.CourseCoverFileUncheckedUpdateOneWithoutCourseNestedInput
+  enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
+  products?: Prisma.ProductUncheckedUpdateManyWithoutCourseNestedInput
+  emails?: Prisma.EmailMessageUncheckedUpdateManyWithoutCourseNestedInput
+  lessonSessions?: Prisma.LessonSessionUncheckedUpdateManyWithoutCourseNestedInput
+}
+
+export type CourseCreateWithoutCoverFileInput = {
+  id?: string
+  slug: string
+  title: string
+  description?: string | null
+  topic?: string | null
+  tags?: Prisma.CourseCreatetagsInput | string[]
+  status?: $Enums.CourseStatus
+  deliveryFormat?: $Enums.CourseDeliveryFormat
+  scheduleTimezone?: string
+  coverUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  author?: Prisma.UserCreateNestedOneWithoutAuthoredInput
+  modules?: Prisma.ModuleCreateNestedManyWithoutCourseInput
+  enrollments?: Prisma.EnrollmentCreateNestedManyWithoutCourseInput
+  products?: Prisma.ProductCreateNestedManyWithoutCourseInput
+  emails?: Prisma.EmailMessageCreateNestedManyWithoutCourseInput
+  lessonSessions?: Prisma.LessonSessionCreateNestedManyWithoutCourseInput
+}
+
+export type CourseUncheckedCreateWithoutCoverFileInput = {
+  id?: string
+  slug: string
+  title: string
+  description?: string | null
+  topic?: string | null
+  tags?: Prisma.CourseCreatetagsInput | string[]
+  status?: $Enums.CourseStatus
+  deliveryFormat?: $Enums.CourseDeliveryFormat
+  scheduleTimezone?: string
+  coverUrl?: string | null
+  authorId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutCourseInput
+  enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutCourseInput
+  products?: Prisma.ProductUncheckedCreateNestedManyWithoutCourseInput
+  emails?: Prisma.EmailMessageUncheckedCreateNestedManyWithoutCourseInput
+  lessonSessions?: Prisma.LessonSessionUncheckedCreateNestedManyWithoutCourseInput
+}
+
+export type CourseCreateOrConnectWithoutCoverFileInput = {
+  where: Prisma.CourseWhereUniqueInput
+  create: Prisma.XOR<Prisma.CourseCreateWithoutCoverFileInput, Prisma.CourseUncheckedCreateWithoutCoverFileInput>
+}
+
+export type CourseUpsertWithoutCoverFileInput = {
+  update: Prisma.XOR<Prisma.CourseUpdateWithoutCoverFileInput, Prisma.CourseUncheckedUpdateWithoutCoverFileInput>
+  create: Prisma.XOR<Prisma.CourseCreateWithoutCoverFileInput, Prisma.CourseUncheckedCreateWithoutCoverFileInput>
+  where?: Prisma.CourseWhereInput
+}
+
+export type CourseUpdateToOneWithWhereWithoutCoverFileInput = {
+  where?: Prisma.CourseWhereInput
+  data: Prisma.XOR<Prisma.CourseUpdateWithoutCoverFileInput, Prisma.CourseUncheckedUpdateWithoutCoverFileInput>
+}
+
+export type CourseUpdateWithoutCoverFileInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.CourseUpdatetagsInput | string[]
+  status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+  deliveryFormat?: Prisma.EnumCourseDeliveryFormatFieldUpdateOperationsInput | $Enums.CourseDeliveryFormat
+  scheduleTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  author?: Prisma.UserUpdateOneWithoutAuthoredNestedInput
+  modules?: Prisma.ModuleUpdateManyWithoutCourseNestedInput
+  enrollments?: Prisma.EnrollmentUpdateManyWithoutCourseNestedInput
+  products?: Prisma.ProductUpdateManyWithoutCourseNestedInput
+  emails?: Prisma.EmailMessageUpdateManyWithoutCourseNestedInput
+  lessonSessions?: Prisma.LessonSessionUpdateManyWithoutCourseNestedInput
+}
+
+export type CourseUncheckedUpdateWithoutCoverFileInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  topic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.CourseUpdatetagsInput | string[]
+  status?: Prisma.EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+  deliveryFormat?: Prisma.EnumCourseDeliveryFormatFieldUpdateOperationsInput | $Enums.CourseDeliveryFormat
+  scheduleTimezone?: Prisma.StringFieldUpdateOperationsInput | string
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  modules?: Prisma.ModuleUncheckedUpdateManyWithoutCourseNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutCourseNestedInput
   emails?: Prisma.EmailMessageUncheckedUpdateManyWithoutCourseNestedInput
@@ -868,6 +995,7 @@ export type CourseCreateWithoutEnrollmentsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   author?: Prisma.UserCreateNestedOneWithoutAuthoredInput
+  coverFile?: Prisma.CourseCoverFileCreateNestedOneWithoutCourseInput
   modules?: Prisma.ModuleCreateNestedManyWithoutCourseInput
   products?: Prisma.ProductCreateNestedManyWithoutCourseInput
   emails?: Prisma.EmailMessageCreateNestedManyWithoutCourseInput
@@ -888,6 +1016,7 @@ export type CourseUncheckedCreateWithoutEnrollmentsInput = {
   authorId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  coverFile?: Prisma.CourseCoverFileUncheckedCreateNestedOneWithoutCourseInput
   modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutCourseInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutCourseInput
   emails?: Prisma.EmailMessageUncheckedCreateNestedManyWithoutCourseInput
@@ -924,6 +1053,7 @@ export type CourseUpdateWithoutEnrollmentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   author?: Prisma.UserUpdateOneWithoutAuthoredNestedInput
+  coverFile?: Prisma.CourseCoverFileUpdateOneWithoutCourseNestedInput
   modules?: Prisma.ModuleUpdateManyWithoutCourseNestedInput
   products?: Prisma.ProductUpdateManyWithoutCourseNestedInput
   emails?: Prisma.EmailMessageUpdateManyWithoutCourseNestedInput
@@ -944,6 +1074,7 @@ export type CourseUncheckedUpdateWithoutEnrollmentsInput = {
   authorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  coverFile?: Prisma.CourseCoverFileUncheckedUpdateOneWithoutCourseNestedInput
   modules?: Prisma.ModuleUncheckedUpdateManyWithoutCourseNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutCourseNestedInput
   emails?: Prisma.EmailMessageUncheckedUpdateManyWithoutCourseNestedInput
@@ -964,6 +1095,7 @@ export type CourseCreateWithoutProductsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   author?: Prisma.UserCreateNestedOneWithoutAuthoredInput
+  coverFile?: Prisma.CourseCoverFileCreateNestedOneWithoutCourseInput
   modules?: Prisma.ModuleCreateNestedManyWithoutCourseInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutCourseInput
   emails?: Prisma.EmailMessageCreateNestedManyWithoutCourseInput
@@ -984,6 +1116,7 @@ export type CourseUncheckedCreateWithoutProductsInput = {
   authorId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  coverFile?: Prisma.CourseCoverFileUncheckedCreateNestedOneWithoutCourseInput
   modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutCourseInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutCourseInput
   emails?: Prisma.EmailMessageUncheckedCreateNestedManyWithoutCourseInput
@@ -1020,6 +1153,7 @@ export type CourseUpdateWithoutProductsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   author?: Prisma.UserUpdateOneWithoutAuthoredNestedInput
+  coverFile?: Prisma.CourseCoverFileUpdateOneWithoutCourseNestedInput
   modules?: Prisma.ModuleUpdateManyWithoutCourseNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutCourseNestedInput
   emails?: Prisma.EmailMessageUpdateManyWithoutCourseNestedInput
@@ -1040,6 +1174,7 @@ export type CourseUncheckedUpdateWithoutProductsInput = {
   authorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  coverFile?: Prisma.CourseCoverFileUncheckedUpdateOneWithoutCourseNestedInput
   modules?: Prisma.ModuleUncheckedUpdateManyWithoutCourseNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
   emails?: Prisma.EmailMessageUncheckedUpdateManyWithoutCourseNestedInput
@@ -1060,6 +1195,7 @@ export type CourseCreateWithoutEmailsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   author?: Prisma.UserCreateNestedOneWithoutAuthoredInput
+  coverFile?: Prisma.CourseCoverFileCreateNestedOneWithoutCourseInput
   modules?: Prisma.ModuleCreateNestedManyWithoutCourseInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutCourseInput
   products?: Prisma.ProductCreateNestedManyWithoutCourseInput
@@ -1080,6 +1216,7 @@ export type CourseUncheckedCreateWithoutEmailsInput = {
   authorId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  coverFile?: Prisma.CourseCoverFileUncheckedCreateNestedOneWithoutCourseInput
   modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutCourseInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutCourseInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutCourseInput
@@ -1116,6 +1253,7 @@ export type CourseUpdateWithoutEmailsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   author?: Prisma.UserUpdateOneWithoutAuthoredNestedInput
+  coverFile?: Prisma.CourseCoverFileUpdateOneWithoutCourseNestedInput
   modules?: Prisma.ModuleUpdateManyWithoutCourseNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutCourseNestedInput
   products?: Prisma.ProductUpdateManyWithoutCourseNestedInput
@@ -1136,6 +1274,7 @@ export type CourseUncheckedUpdateWithoutEmailsInput = {
   authorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  coverFile?: Prisma.CourseCoverFileUncheckedUpdateOneWithoutCourseNestedInput
   modules?: Prisma.ModuleUncheckedUpdateManyWithoutCourseNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutCourseNestedInput
@@ -1156,6 +1295,7 @@ export type CourseCreateWithoutLessonSessionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   author?: Prisma.UserCreateNestedOneWithoutAuthoredInput
+  coverFile?: Prisma.CourseCoverFileCreateNestedOneWithoutCourseInput
   modules?: Prisma.ModuleCreateNestedManyWithoutCourseInput
   enrollments?: Prisma.EnrollmentCreateNestedManyWithoutCourseInput
   products?: Prisma.ProductCreateNestedManyWithoutCourseInput
@@ -1176,6 +1316,7 @@ export type CourseUncheckedCreateWithoutLessonSessionsInput = {
   authorId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  coverFile?: Prisma.CourseCoverFileUncheckedCreateNestedOneWithoutCourseInput
   modules?: Prisma.ModuleUncheckedCreateNestedManyWithoutCourseInput
   enrollments?: Prisma.EnrollmentUncheckedCreateNestedManyWithoutCourseInput
   products?: Prisma.ProductUncheckedCreateNestedManyWithoutCourseInput
@@ -1212,6 +1353,7 @@ export type CourseUpdateWithoutLessonSessionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   author?: Prisma.UserUpdateOneWithoutAuthoredNestedInput
+  coverFile?: Prisma.CourseCoverFileUpdateOneWithoutCourseNestedInput
   modules?: Prisma.ModuleUpdateManyWithoutCourseNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutCourseNestedInput
   products?: Prisma.ProductUpdateManyWithoutCourseNestedInput
@@ -1232,6 +1374,7 @@ export type CourseUncheckedUpdateWithoutLessonSessionsInput = {
   authorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  coverFile?: Prisma.CourseCoverFileUncheckedUpdateOneWithoutCourseNestedInput
   modules?: Prisma.ModuleUncheckedUpdateManyWithoutCourseNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutCourseNestedInput
@@ -1266,6 +1409,7 @@ export type CourseUpdateWithoutAuthorInput = {
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  coverFile?: Prisma.CourseCoverFileUpdateOneWithoutCourseNestedInput
   modules?: Prisma.ModuleUpdateManyWithoutCourseNestedInput
   enrollments?: Prisma.EnrollmentUpdateManyWithoutCourseNestedInput
   products?: Prisma.ProductUpdateManyWithoutCourseNestedInput
@@ -1286,6 +1430,7 @@ export type CourseUncheckedUpdateWithoutAuthorInput = {
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  coverFile?: Prisma.CourseCoverFileUncheckedUpdateOneWithoutCourseNestedInput
   modules?: Prisma.ModuleUncheckedUpdateManyWithoutCourseNestedInput
   enrollments?: Prisma.EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
   products?: Prisma.ProductUncheckedUpdateManyWithoutCourseNestedInput
@@ -1390,6 +1535,7 @@ export type CourseSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   createdAt?: boolean
   updatedAt?: boolean
   author?: boolean | Prisma.Course$authorArgs<ExtArgs>
+  coverFile?: boolean | Prisma.Course$coverFileArgs<ExtArgs>
   modules?: boolean | Prisma.Course$modulesArgs<ExtArgs>
   enrollments?: boolean | Prisma.Course$enrollmentsArgs<ExtArgs>
   products?: boolean | Prisma.Course$productsArgs<ExtArgs>
@@ -1451,6 +1597,7 @@ export type CourseSelectScalar = {
 export type CourseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "title" | "description" | "topic" | "tags" | "status" | "deliveryFormat" | "scheduleTimezone" | "coverUrl" | "authorId" | "createdAt" | "updatedAt", ExtArgs["result"]["course"]>
 export type CourseInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   author?: boolean | Prisma.Course$authorArgs<ExtArgs>
+  coverFile?: boolean | Prisma.Course$coverFileArgs<ExtArgs>
   modules?: boolean | Prisma.Course$modulesArgs<ExtArgs>
   enrollments?: boolean | Prisma.Course$enrollmentsArgs<ExtArgs>
   products?: boolean | Prisma.Course$productsArgs<ExtArgs>
@@ -1469,6 +1616,7 @@ export type $CoursePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   name: "Course"
   objects: {
     author: Prisma.$UserPayload<ExtArgs> | null
+    coverFile: Prisma.$CourseCoverFilePayload<ExtArgs> | null
     modules: Prisma.$ModulePayload<ExtArgs>[]
     enrollments: Prisma.$EnrollmentPayload<ExtArgs>[]
     products: Prisma.$ProductPayload<ExtArgs>[]
@@ -1884,6 +2032,7 @@ readonly fields: CourseFieldRefs;
 export interface Prisma__CourseClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   author<T extends Prisma.Course$authorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$authorArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  coverFile<T extends Prisma.Course$coverFileArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$coverFileArgs<ExtArgs>>): Prisma.Prisma__CourseCoverFileClient<runtime.Types.Result.GetResult<Prisma.$CourseCoverFilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   modules<T extends Prisma.Course$modulesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$modulesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ModulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   enrollments<T extends Prisma.Course$enrollmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EnrollmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   products<T extends Prisma.Course$productsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Course$productsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2348,6 +2497,25 @@ export type Course$authorArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    */
   include?: Prisma.UserInclude<ExtArgs> | null
   where?: Prisma.UserWhereInput
+}
+
+/**
+ * Course.coverFile
+ */
+export type Course$coverFileArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CourseCoverFile
+   */
+  select?: Prisma.CourseCoverFileSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CourseCoverFile
+   */
+  omit?: Prisma.CourseCoverFileOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CourseCoverFileInclude<ExtArgs> | null
+  where?: Prisma.CourseCoverFileWhereInput
 }
 
 /**

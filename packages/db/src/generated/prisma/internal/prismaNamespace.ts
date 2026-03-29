@@ -393,6 +393,7 @@ export const ModelName = {
   Lesson: 'Lesson',
   LessonBlock: 'LessonBlock',
   LessonAudioFile: 'LessonAudioFile',
+  CourseCoverFile: 'CourseCoverFile',
   VideoAsset: 'VideoAsset',
   Enrollment: 'Enrollment',
   LessonProgress: 'LessonProgress',
@@ -426,7 +427,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "account" | "session" | "verificationToken" | "course" | "module" | "lesson" | "lessonBlock" | "lessonAudioFile" | "videoAsset" | "enrollment" | "lessonProgress" | "homeworkAssignment" | "homeworkReview" | "homeworkSubmission" | "homeworkSubmissionFile" | "product" | "price" | "order" | "orderItem" | "payment" | "emailMessage" | "emailEvent" | "emailLinkClick" | "workspaceInvite" | "lessonSession" | "lessonSessionEvent"
+    modelProps: "user" | "account" | "session" | "verificationToken" | "course" | "module" | "lesson" | "lessonBlock" | "lessonAudioFile" | "courseCoverFile" | "videoAsset" | "enrollment" | "lessonProgress" | "homeworkAssignment" | "homeworkReview" | "homeworkSubmission" | "homeworkSubmissionFile" | "product" | "price" | "order" | "orderItem" | "payment" | "emailMessage" | "emailEvent" | "emailLinkClick" | "workspaceInvite" | "lessonSession" | "lessonSessionEvent"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1093,6 +1094,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.LessonAudioFileCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.LessonAudioFileCountAggregateOutputType> | number
+        }
+      }
+    }
+    CourseCoverFile: {
+      payload: Prisma.$CourseCoverFilePayload<ExtArgs>
+      fields: Prisma.CourseCoverFileFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CourseCoverFileFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseCoverFilePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CourseCoverFileFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseCoverFilePayload>
+        }
+        findFirst: {
+          args: Prisma.CourseCoverFileFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseCoverFilePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CourseCoverFileFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseCoverFilePayload>
+        }
+        findMany: {
+          args: Prisma.CourseCoverFileFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseCoverFilePayload>[]
+        }
+        create: {
+          args: Prisma.CourseCoverFileCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseCoverFilePayload>
+        }
+        createMany: {
+          args: Prisma.CourseCoverFileCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CourseCoverFileCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseCoverFilePayload>[]
+        }
+        delete: {
+          args: Prisma.CourseCoverFileDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseCoverFilePayload>
+        }
+        update: {
+          args: Prisma.CourseCoverFileUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseCoverFilePayload>
+        }
+        deleteMany: {
+          args: Prisma.CourseCoverFileDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CourseCoverFileUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CourseCoverFileUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseCoverFilePayload>[]
+        }
+        upsert: {
+          args: Prisma.CourseCoverFileUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CourseCoverFilePayload>
+        }
+        aggregate: {
+          args: Prisma.CourseCoverFileAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCourseCoverFile>
+        }
+        groupBy: {
+          args: Prisma.CourseCoverFileGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CourseCoverFileGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CourseCoverFileCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CourseCoverFileCountAggregateOutputType> | number
         }
       }
     }
@@ -2611,6 +2686,20 @@ export const LessonAudioFileScalarFieldEnum = {
 export type LessonAudioFileScalarFieldEnum = (typeof LessonAudioFileScalarFieldEnum)[keyof typeof LessonAudioFileScalarFieldEnum]
 
 
+export const CourseCoverFileScalarFieldEnum = {
+  id: 'id',
+  courseId: 'courseId',
+  filename: 'filename',
+  mimeType: 'mimeType',
+  sizeInBytes: 'sizeInBytes',
+  data: 'data',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CourseCoverFileScalarFieldEnum = (typeof CourseCoverFileScalarFieldEnum)[keyof typeof CourseCoverFileScalarFieldEnum]
+
+
 export const VideoAssetScalarFieldEnum = {
   id: 'id',
   lessonId: 'lessonId',
@@ -3376,6 +3465,7 @@ export type GlobalOmitConfig = {
   lesson?: Prisma.LessonOmit
   lessonBlock?: Prisma.LessonBlockOmit
   lessonAudioFile?: Prisma.LessonAudioFileOmit
+  courseCoverFile?: Prisma.CourseCoverFileOmit
   videoAsset?: Prisma.VideoAssetOmit
   enrollment?: Prisma.EnrollmentOmit
   lessonProgress?: Prisma.LessonProgressOmit

@@ -366,6 +366,8 @@ async function ensureUniqueCourseSlug(baseValue: string, courseId?: string) {
 }
 
 function refreshAdminRoutes(courseId?: string) {
+  revalidatePath("/");
+  revalidatePath("/catalog");
   revalidatePath("/admin");
   revalidatePath("/admin/courses");
   revalidatePath("/admin/team");
@@ -374,6 +376,7 @@ function refreshAdminRoutes(courseId?: string) {
     revalidatePath(`/admin/courses/${courseId}`);
     revalidatePath(`/admin/courses/${courseId}/content`);
     revalidatePath(`/admin/courses/${courseId}/access`);
+    revalidatePath(`/learning/courses/${courseId}`);
   }
 }
 
