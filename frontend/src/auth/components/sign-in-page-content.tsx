@@ -15,8 +15,6 @@ import type { AuthTab, PublicAuthScreenPayload } from "@shared/public-auth/types
 
 /**
  * Purpose: standalone auth experience with explicit login and registration states.
- * Props:
- * - payload: auth screen state prepared in the backend layer
  */
 export function SignInPageContent({
   payload,
@@ -34,82 +32,58 @@ export function SignInPageContent({
   }
 
   return (
-    <AuthShell
-      title="Вход в обучающую платформу"
-      text="Открой учебный кабинет или рабочий контур с одного экрана. Можно войти по почте и паролю или через Яндекс ID."
-    >
-      <AuthCard className="overflow-hidden border-[rgba(148,163,184,0.18)] bg-white/92 p-0 shadow-[0_18px_60px_rgba(15,23,42,0.08)]">
-        <div className="border-b border-[var(--border)] px-5 py-4">
-          <div className="inline-flex rounded-[18px] border border-[var(--border)] bg-[var(--surface-strong)] p-1 shadow-[var(--shadow-sm)]">
-            {([
-              { id: "sign-in", label: "Вход" },
-              { id: "register", label: "Регистрация" },
-            ] as const).map((tab) => (
-              <button
-                key={tab.id}
-                type="button"
-                onClick={() => setActiveTab(tab.id)}
-                className={cn(
-                  "min-h-[42px] rounded-[14px] px-5 text-sm font-semibold transition duration-200",
-                  activeTab === tab.id
-                    ? "bg-[var(--primary)] !text-white shadow-[var(--shadow-brand)]"
-                    : "text-[var(--foreground)] hover:bg-[var(--surface)]",
-                )}
-              >
-                {formatPublicCopy(tab.label)}
-              </button>
-            ))}
-          </div>
-        </div>
+    <AuthShell>
+      <div className="space-y-8">
+        <h1 className="max-w-[12ch] text-[clamp(2.2rem,4vw,4rem)] font-semibold leading-[0.96] tracking-[-0.05em] text-[var(--foreground)]">
+          {formatPublicCopy("Вход в обучающую платформу")}
+        </h1>
 
-        <div className="space-y-6 px-5 py-6 sm:px-6 sm:py-7">
-          <div className="space-y-2">
-            <h2 className="text-[30px] font-semibold leading-[1.02] tracking-[-0.03em] text-[var(--foreground)]">
-              {formatPublicCopy(
-                activeTab === "sign-in"
-                  ? "Войти"
-                  : "Создать новый аккаунт",
-              )}
-            </h2>
-            <p className="max-w-[560px] text-[15px] leading-6 text-[var(--muted)]">
-              {formatPublicCopy(
-                activeTab === "sign-in"
-                  ? "Войди по почте и паролю. Если удобнее, можно продолжить через Яндекс ID."
-                  : "Регистрация открывает учебный профиль. Роль автора, куратора или администратора назначается отдельно внутри платформы.",
-              )}
-            </p>
+        <AuthCard className="overflow-hidden border-[rgba(148,163,184,0.14)] bg-white p-0 shadow-none">
+          <div className="px-5 py-4">
+            <div className="inline-flex rounded-[18px] border border-[var(--border)] bg-[var(--surface-strong)] p-1">
+              {([
+                { id: "sign-in", label: "Вход" },
+                { id: "register", label: "Регистрация" },
+              ] as const).map((tab) => (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setActiveTab(tab.id)}
+                  className={cn(
+                    "min-h-[42px] rounded-[14px] px-5 text-sm font-semibold transition duration-200",
+                    activeTab === tab.id
+                      ? "bg-[var(--primary)] !text-white shadow-[var(--shadow-brand)]"
+                      : "text-[var(--foreground)] hover:bg-[var(--surface)]",
+                  )}
+                >
+                  {formatPublicCopy(tab.label)}
+                </button>
+              ))}
+            </div>
           </div>
 
-          {payload.errorMessage ? (
-            <div className="rounded-[var(--radius-md)] border border-red-200 bg-red-50 px-4 py-3 text-sm leading-6 text-red-700">
-              {formatPublicCopy(payload.errorMessage)}
-            </div>
-          ) : null}
-
-          {payload.showInviteSuccess ? (
-            <div className="rounded-[var(--radius-md)] border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm leading-6 text-emerald-700">
-              {formatPublicCopy(
-                "Приглашение активировано. Можно войти в существующий аккаунт или быстро завершить регистрацию на эту почту.",
-              )}
-            </div>
-          ) : null}
-
-          {activeTab === "sign-in" ? (
-            <SignInForm defaultEmail={payload.defaultEmail} />
-          ) : (
-            <SignUpForm defaultEmail={payload.defaultEmail} />
-          )}
-
-          {payload.isYandexEnabled ? (
-            <>
-              <div className="flex items-center gap-4 pt-1">
-                <div className="h-px flex-1 bg-[var(--border)]" />
-                <span className="text-sm uppercase tracking-[0.12em] text-[var(--muted)]">
-                  {formatPublicCopy("или")}
-                </span>
-                <div className="h-px flex-1 bg-[var(--border)]" />
+          <div className="space-y-5 px-5 pb-5 sm:px-6 sm:pb-6">
+            {payload.errorMessage ? (
+              <div className="rounded-[var(--radius-md)] border border-red-200 bg-red-50 px-4 py-3 text-sm leading-6 text-red-700">
+                {formatPublicCopy(payload.errorMessage)}
               </div>
+            ) : null}
 
+            {payload.showInviteSuccess ? (
+              <div className="rounded-[var(--radius-md)] border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm leading-6 text-emerald-700">
+                {formatPublicCopy(
+                  "Приглашение активировано. Можно войти в существующий аккаунт или быстро завершить регистрацию на эту почту.",
+                )}
+              </div>
+            ) : null}
+
+            {activeTab === "sign-in" ? (
+              <SignInForm defaultEmail={payload.defaultEmail} />
+            ) : (
+              <SignUpForm defaultEmail={payload.defaultEmail} />
+            )}
+
+            {payload.isYandexEnabled ? (
               <AuthMethodButton
                 label="Войти с Яндекс ID"
                 icon="Я"
@@ -117,10 +91,10 @@ export function SignInPageContent({
                 pending={yandexPending}
                 tone="yandex"
               />
-            </>
-          ) : null}
-        </div>
-      </AuthCard>
+            ) : null}
+          </div>
+        </AuthCard>
+      </div>
     </AuthShell>
   );
 }

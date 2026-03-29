@@ -46,26 +46,30 @@ export function SignInForm({
   return (
     <form action={handleSubmit} className="space-y-5">
       <div className="space-y-2">
-        <Label htmlFor="sign-in-email">{formatPublicCopy("Почта")}</Label>
+        <Label htmlFor="sign-in-email" className="sr-only">
+          {formatPublicCopy("Почта")}
+        </Label>
         <Input
           id="sign-in-email"
           name="email"
           type="email"
           autoComplete="email"
           defaultValue={defaultEmail || ""}
-          placeholder="name@example.com"
+          placeholder={formatPublicCopy("Почта")}
           required
         />
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="sign-in-password">{formatPublicCopy("Пароль")}</Label>
+        <Label htmlFor="sign-in-password" className="sr-only">
+          {formatPublicCopy("Пароль")}
+        </Label>
         <Input
           id="sign-in-password"
           name="password"
           type="password"
           autoComplete="current-password"
-          placeholder={formatPublicCopy("Введите пароль")}
+          placeholder={formatPublicCopy("Пароль")}
           required
         />
       </div>

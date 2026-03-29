@@ -1,17 +1,10 @@
-﻿import { auth } from "@academy/auth";
+import { auth } from "@academy/auth";
 import { redirect } from "next/navigation";
 
 import { getPublicAuthScreenPayload } from "@backend/public-auth/get-public-auth-screen-payload";
 import { SignInPageContent } from "@frontend/auth/components/sign-in-page-content";
 
-import {
-  marketingBody,
-  marketingContainerClassName,
-  marketingDisplay,
-  marketingFrameClassName,
-  marketingInnerFrameClassName,
-  marketingShellClassName,
-} from "@/lib/marketing-theme";
+import { marketingBody, marketingDisplay } from "@/lib/marketing-theme";
 
 type SignInPageProps = {
   searchParams?: Promise<{
@@ -33,15 +26,9 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
 
   return (
     <main
-      className={`${marketingDisplay.variable} ${marketingBody.variable} ${marketingShellClassName}`}
+      className={`${marketingDisplay.variable} ${marketingBody.variable} min-h-screen overflow-hidden bg-[var(--background)] font-[family:var(--font-landing-body)] text-[var(--foreground)]`}
     >
-      <div className={marketingContainerClassName}>
-        <section className={marketingFrameClassName}>
-          <div className={marketingInnerFrameClassName}>
-            <SignInPageContent payload={payload} />
-          </div>
-        </section>
-      </div>
+      <SignInPageContent payload={payload} />
     </main>
   );
 }
