@@ -295,9 +295,9 @@ export function LandingExperience({
                 variant="right"
                 immediate
                 delay={120}
-                className="mx-auto w-full max-w-[560px] self-center xl:mx-0 xl:justify-self-end"
+                className="mx-auto w-full min-w-0 max-w-[360px] self-center sm:max-w-[560px] xl:mx-0 xl:justify-self-end"
               >
-                <div className={cn(publicGradientCardClassName, "mx-auto w-full")}>
+                <div className={cn(publicGradientCardClassName, "mx-auto w-full min-w-0 px-5 sm:px-7")}>
                   <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/60">
                     <Copy value={roleCopy.learn.heroCardEyebrow} />
                   </p>
@@ -465,7 +465,7 @@ export function LandingExperience({
             />
 
             {/* Right: 2 image cards */}
-            <div className="space-y-4">
+            <div className="min-w-0 space-y-4">
               <div className="flex items-center justify-between md:hidden">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
                   <Copy value="Смахни вбок" />
@@ -475,9 +475,10 @@ export function LandingExperience({
                   <ArrowRight className="h-4 w-4" />
                 </span>
               </div>
-              <div className="-mx-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:mx-0 md:grid md:grid-cols-2 md:overflow-visible md:px-0 md:pb-0">
-              <MotionReveal variant="up" delay={80}>
-                <article className="group flex h-full min-w-[78vw] max-w-[78vw] snap-center flex-col overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-sm)] transition-transform duration-300 hover:scale-[1.03] sm:min-w-[420px] sm:max-w-[420px] md:min-w-0 md:max-w-none">
+              <div className="w-full overflow-hidden">
+              <div className="flex w-full snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:grid md:grid-cols-2 md:overflow-visible md:pb-0">
+              <MotionReveal variant="up" delay={80} className="shrink-0 snap-center md:min-w-0">
+                <article className="group flex h-full w-[84%] min-w-[84%] max-w-[340px] flex-col overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-sm)] transition-transform duration-300 hover:scale-[1.03] sm:max-w-[420px] md:w-auto md:min-w-0 md:max-w-none">
                   <div className="relative h-44 overflow-hidden">
                     <Image
                       src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80"
@@ -497,8 +498,8 @@ export function LandingExperience({
                   </div>
                 </article>
               </MotionReveal>
-              <MotionReveal variant="up" delay={140}>
-                <article className="group flex h-full min-w-[78vw] max-w-[78vw] snap-center flex-col overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-sm)] transition-transform duration-300 hover:scale-[1.03] sm:min-w-[420px] sm:max-w-[420px] md:min-w-0 md:max-w-none">
+              <MotionReveal variant="up" delay={140} className="shrink-0 snap-center md:min-w-0">
+                <article className="group flex h-full w-[84%] min-w-[84%] max-w-[340px] flex-col overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-sm)] transition-transform duration-300 hover:scale-[1.03] sm:max-w-[420px] md:w-auto md:min-w-0 md:max-w-none">
                   <div className="relative h-44 overflow-hidden">
                     <Image
                       src="https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?auto=format&fit=crop&w=800&q=80"
@@ -518,6 +519,7 @@ export function LandingExperience({
                   </div>
                 </article>
               </MotionReveal>
+            </div>
             </div>
             </div>
           </div>
