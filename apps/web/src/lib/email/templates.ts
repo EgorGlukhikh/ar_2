@@ -608,6 +608,36 @@ export function renderTemplateByKey(
     );
   }
 
+  if (key === "student-account-created" || key === "student-account-updated") {
+    return renderStudentAccountCreatedTemplate({
+      studentName: input.recipientName,
+      email: "student@example.com",
+      password: "TempPass123",
+      signInUrl: input.links.signInUrl,
+      isExistingAccount: key === "student-account-updated",
+      replyEmail: input.replyEmail,
+    });
+  }
+
+  if (key === "course-access-granted") {
+    return renderCourseAccessGrantedTemplate({
+      studentName: input.recipientName,
+      courseTitle: input.courseTitle ?? "Новый курс",
+      courseUrl: input.links.courseUrl ?? input.links.learningUrl,
+      replyEmail: input.replyEmail,
+    });
+  }
+
+  if (key === "payment-success") {
+    return renderPaymentSuccessTemplate({
+      studentName: input.recipientName,
+      courseTitle: input.courseTitle ?? "Новый курс",
+      amountLabel: input.amountLabel ?? "3 490,00 ₽",
+      learningUrl: input.links.courseUrl ?? input.links.learningUrl,
+      replyEmail: input.replyEmail,
+    });
+  }
+
   if (key.startsWith("expert-welcome")) {
     return renderExpertAutomationTemplate(
       key as Extract<
