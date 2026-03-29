@@ -82,12 +82,12 @@ export function EditableHomeworkRulesCard({
         />
       ))}
 
-      <div className="flex flex-wrap items-start justify-between gap-4 px-5 py-5">
+      <div className="flex flex-wrap items-start justify-between gap-3 px-4 py-4">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
             Домашняя работа
           </p>
-          <h3 className="mt-2 text-[28px] font-semibold tracking-[-0.02em] text-[var(--foreground)]">
+          <h3 className="mt-1.5 text-xl font-semibold tracking-[-0.02em] text-[var(--foreground)]">
             Правила сдачи
           </h3>
         </div>
@@ -95,16 +95,16 @@ export function EditableHomeworkRulesCard({
         <div className="flex flex-wrap gap-2">
           {isEditing ? (
             <>
-              <Button type="submit" form={formId}>
+              <Button type="submit" form={formId} size="sm">
                 Сохранить урок
               </Button>
-              <Button type="button" variant="outline" onClick={resetState}>
+              <Button type="button" variant="outline" size="sm" onClick={resetState}>
                 <X className="mr-2 h-4 w-4" />
                 Отмена
               </Button>
             </>
           ) : (
-            <Button type="button" variant="outline" onClick={() => setIsEditing(true)}>
+            <Button type="button" variant="outline" size="sm" onClick={() => setIsEditing(true)}>
               <PencilLine className="mr-2 h-4 w-4" />
               Редактировать
             </Button>
@@ -112,12 +112,12 @@ export function EditableHomeworkRulesCard({
         </div>
       </div>
 
-      <div className="border-t border-[var(--border)] px-5 py-5">
-        <div className="grid gap-3">
+      <div className="border-t border-[var(--border)] px-4 py-4">
+        <div className="grid gap-2.5">
           {homeworkRuleItems.map((item) => (
             <label
               key={item.key}
-              className="rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-4"
+              className="rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface-strong)] px-3.5 py-3"
             >
               <div className="flex items-start gap-3">
                 {isEditing ? (
@@ -146,7 +146,7 @@ export function EditableHomeworkRulesCard({
                   <span className="block text-sm font-medium text-[var(--foreground)]">
                     {item.title}
                   </span>
-                  <span className="mt-1 block text-sm leading-6 text-[var(--muted)]">
+                  <span className="mt-1 block text-sm leading-5 text-[var(--muted)]">
                     {item.description}
                   </span>
                 </span>
@@ -158,4 +158,3 @@ export function EditableHomeworkRulesCard({
     </article>
   );
 }
-

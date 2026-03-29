@@ -1,6 +1,6 @@
-import { CourseDeliveryFormat, LessonType, prisma } from "@academy/db";
+﻿import { CourseDeliveryFormat, LessonType, prisma } from "@academy/db";
 import { getTimezoneLabel } from "@/lib/timezones";
-import { Plus, Save, Trash2 } from "lucide-react";
+import { Save, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
@@ -11,9 +11,7 @@ import { EditableLessonSettingsCard } from "@/components/admin/editable-lesson-s
 import { EditableModulePanel } from "@/components/admin/editable-module-panel";
 import { LessonBlockStudio } from "@/components/admin/lesson-block-studio";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
-  createLesson,
   quickCreateLesson,
   createModule,
   deleteLesson,
@@ -327,7 +325,6 @@ export default async function CourseContentPage({
               defaultLessonType={defaultLessonType}
               courseFormatLabel={courseFormatLabel}
               updateModuleAction={updateModule}
-              createLessonAction={createLesson}
             />
 
             {course.deliveryFormat === CourseDeliveryFormat.LIVE_COHORT ? (
@@ -378,33 +375,15 @@ export default async function CourseContentPage({
               <EmptyStudio
                 title={
                   defaultLessonType === LessonType.LIVE
-                    ? "Добавь первый вебинар в модуль"
-                    : "Добавь первый урок в модуль"
+                    ? "Выбери или добавь вебинар слева"
+                    : "Выбери или добавь урок слева"
                 }
                 description={
                   defaultLessonType === LessonType.LIVE
-                    ? "Новый шаг сразу создастся как вебинарное занятие. После эфира в урок можно будет добавить запись и материалы."
-                    : "Урок откроется здесь же. Внутри можно собрать текст, видео, материалы и задание."
+                    ? "Структура онлайн-курса теперь управляется только в левом дереве. Добавь новый вебинар там, а справа откроется контент и настройки выбранного занятия."
+                    : "Структура курса теперь управляется только в левом дереве. Добавь новый урок там, а справа откроется контент и настройки выбранного шага."
                 }
-              >
-                <form action={createLesson} className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_auto]">
-                  <input type="hidden" name="moduleId" value={selectedModule.id} />
-                  <input type="hidden" name="type" value={defaultLessonType} />
-                  <Input
-                    name="title"
-                    placeholder={
-                      defaultLessonType === LessonType.LIVE
-                        ? "Например, Эфир 1: старт потока"
-                        : "Например, Вводное занятие"
-                    }
-                    required
-                  />
-                  <Button type="submit">
-                    <Plus className="mr-2 h-4 w-4" />
-                    {defaultLessonType === LessonType.LIVE ? "Добавить вебинар" : "Добавить урок"}
-                  </Button>
-                </form>
-              </EmptyStudio>
+              />
             ) : (
               <>
                 <form
@@ -462,3 +441,4 @@ export default async function CourseContentPage({
     </section>
   );
 }
+

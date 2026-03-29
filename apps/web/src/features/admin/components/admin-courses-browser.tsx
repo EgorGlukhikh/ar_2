@@ -185,7 +185,7 @@ export function AdminCoursesBrowser({
           </div>
         </div>
       ) : (
-        <div className="grid gap-5 xl:grid-cols-2">
+        <div className="grid gap-5 lg:grid-cols-2 xl:grid-cols-3">
           {visibleCourses.map((course) => (
             <article
               key={course.id}
@@ -196,7 +196,7 @@ export function AdminCoursesBrowser({
                 subtitle={`/${course.slug}`}
                 compact
                 imageUrl={course.coverUrl ?? undefined}
-                className="min-h-[220px]"
+                className="aspect-[4/3] min-h-0"
               />
 
               <div className="mt-5 flex flex-1 flex-col gap-5">
@@ -209,7 +209,7 @@ export function AdminCoursesBrowser({
                   </div>
 
                   <div className="space-y-3">
-                    <h2 className="text-[28px] font-semibold leading-[1.08] tracking-[-0.03em] text-[var(--foreground)]">
+                    <h2 className="line-clamp-3 text-[24px] font-semibold leading-[1.08] tracking-[-0.03em] text-[var(--foreground)]">
                       {course.title}
                     </h2>
                     <p className="text-sm leading-7 text-[var(--muted)]">

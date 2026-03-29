@@ -1,5 +1,4 @@
 ﻿import { BookOpenText, CalendarClock, Eye, PlayCircle, Sparkles, Tv } from "lucide-react";
-import { CourseDeliveryFormat, CourseStatus } from "@academy/db";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,9 +6,13 @@ import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { createCourse } from "@/features/admin/course-actions";
+import { CourseCreationOnboarding } from "@/features/admin/components/course-creation-onboarding";
 import { requireCourseCreator } from "@/lib/admin";
-import { courseStatusLabelMap } from "@/lib/labels";
 import { TIMEZONE_OPTIONS } from "@/lib/timezones";
+
+const COURSE_STATUS_DRAFT = "DRAFT";
+const COURSE_DELIVERY_FORMAT_CLASSIC = "CLASSIC";
+const COURSE_DELIVERY_FORMAT_LIVE_COHORT = "LIVE_COHORT";
 
 export default async function NewCoursePage() {
   await requireCourseCreator();
@@ -95,7 +98,7 @@ export default async function NewCoursePage() {
               <div>
                 <p className="text-sm font-semibold text-[var(--foreground)]">Публикация</p>
                 <p className="text-sm text-[var(--muted)]">
-                  Ссылка на курс сформируется автоматически по названию в латинице.
+                  Новый курс сохранится как черновик, а опубликовать его можно позже в настройках.
                 </p>
               </div>
             </div>
@@ -103,12 +106,29 @@ export default async function NewCoursePage() {
         </div>
       </header>
 
+      <CourseCreationOnboarding />
+
       <form
         action={createCourse}
         className="rounded-[28px] border border-[var(--border)] bg-white p-6 shadow-sm xl:p-8"
       >
+        <input type="hidden" name="status" value={COURSE_STATUS_DRAFT} />
+
+        <div
+          id="course-draft-note"
+          className="mb-6 rounded-[24px] border border-[color:color-mix(in_srgb,var(--primary)_16%,white)] bg-[linear-gradient(135deg,_rgba(79,70,229,0.08),_rgba(255,255,255,0.96))] px-5 py-4"
+        >
+          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[var(--primary)]">
+            Стартовый режим
+          </p>
+          <p className="mt-2 text-sm leading-7 text-[var(--foreground)]">
+            Новый курс создается как черновик. Когда программа будет готова, статус можно поменять
+            уже в настройках курса.
+          </p>
+        </div>
+
         <div className="grid gap-6 lg:grid-cols-2">
-          <div className="space-y-2">
+          <div id="course-title-field" className="space-y-2">
             <Label htmlFor="title">Название курса</Label>
             <Input
               id="title"
@@ -121,21 +141,7 @@ export default async function NewCoursePage() {
             </p>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="status">Статус</Label>
-            <Select id="status" name="status" defaultValue={CourseStatus.DRAFT}>
-              {Object.values(CourseStatus).map((status) => (
-                <option key={status} value={status}>
-                  {courseStatusLabelMap[status]}
-                </option>
-              ))}
-            </Select>
-            <p className="text-sm leading-6 text-[var(--muted)]">
-              Начни с черновика, чтобы собрать программу и материалы без спешки.
-            </p>
-          </div>
-
-          <div className="space-y-2 lg:col-span-2">
+          <div id="course-description-field" className="space-y-2 lg:col-span-2">
             <Label htmlFor="description">Описание</Label>
             <Textarea
               id="description"
@@ -145,17 +151,17 @@ export default async function NewCoursePage() {
             />
           </div>
 
-          <div className="space-y-2">
+          <div id="course-delivery-format-field" className="space-y-2">
             <Label htmlFor="deliveryFormat">Формат курса</Label>
             <Select
               id="deliveryFormat"
               name="deliveryFormat"
-              defaultValue={CourseDeliveryFormat.CLASSIC}
+              defaultValue={COURSE_DELIVERY_FORMAT_CLASSIC}
             >
-              <option value={CourseDeliveryFormat.CLASSIC}>
+              <option value={COURSE_DELIVERY_FORMAT_CLASSIC}>
                 Курс в записи и материалах
               </option>
-              <option value={CourseDeliveryFormat.LIVE_COHORT}>
+              <option value={COURSE_DELIVERY_FORMAT_LIVE_COHORT}>
                 Онлайн-курс с вебинарами
               </option>
             </Select>
@@ -188,7 +194,7 @@ export default async function NewCoursePage() {
             </p>
           </div>
 
-          <div className="space-y-2">
+          <div id="course-timezone-field" className="space-y-2">
             <Label htmlFor="scheduleTimezone">Часовой пояс расписания</Label>
             <Select id="scheduleTimezone" name="scheduleTimezone" defaultValue="Europe/Moscow">
               {TIMEZONE_OPTIONS.map((tz) => (
@@ -200,12 +206,16 @@ export default async function NewCoursePage() {
             </p>
           </div>
 
-          <div className="space-y-2">
+          <div id="course-structure-mode-field" className="space-y-2">
             <Label htmlFor="structureMode">Структура курса</Label>
             <Select id="structureMode" name="structureMode" defaultValue="modules">
               <option value="modules">Курс делится на модули</option>
               <option value="single_module">Курс идет одним потоком</option>
             </Select>
+            <p className="text-sm leading-6 text-[var(--muted)]">
+              Для линейного сценария подойдет один поток. Если внутри курса есть подтемы и уровни,
+              лучше сразу раскладывать программу по модулям.
+            </p>
           </div>
 
           <div className="space-y-2">

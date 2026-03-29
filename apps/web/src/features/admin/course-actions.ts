@@ -30,7 +30,7 @@ const createCourseSchema = z.object({
   description: z.string().trim().optional(),
   topic: z.string().trim().max(80).optional(),
   tags: z.array(z.string().trim().min(1).max(32)).max(12).default([]),
-  status: z.nativeEnum(CourseStatus),
+  status: z.nativeEnum(CourseStatus).default(CourseStatus.DRAFT),
   deliveryFormat: z.nativeEnum(CourseDeliveryFormat).default(CourseDeliveryFormat.CLASSIC),
   scheduleTimezone: z.string().trim().min(1).default("Europe/Moscow"),
   structureMode: z.enum(["modules", "single_module"]).default("modules"),
@@ -594,7 +594,7 @@ export async function createCourse(formData: FormData) {
     description: getOptionalValue(formData, "description"),
     topic: getOptionalValue(formData, "topic"),
     tags: getTagListValue(formData, "tags"),
-    status: getTrimmedValue(formData, "status"),
+    status: getTrimmedValue(formData, "status") || CourseStatus.DRAFT,
     deliveryFormat:
       getTrimmedValue(formData, "deliveryFormat") || CourseDeliveryFormat.CLASSIC,
     scheduleTimezone: getTrimmedValue(formData, "scheduleTimezone") || "Europe/Moscow",

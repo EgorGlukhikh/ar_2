@@ -212,9 +212,9 @@ export function LandingExperience({ publishedCourses, courses }: PublicHomePaylo
                 variant="right"
                 immediate
                 delay={120}
-                className="mx-auto h-full w-full max-w-[640px] xl:mx-0"
+                className="mx-auto w-full max-w-[560px] self-center xl:mx-0 xl:justify-self-end"
               >
-                <div className={cn(publicGradientCardClassName, "h-full")}>
+                <div className={cn(publicGradientCardClassName, "mx-auto w-full")}>
                   <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/60">
                     Что получает студент
                   </p>
@@ -270,9 +270,9 @@ export function LandingExperience({ publishedCourses, courses }: PublicHomePaylo
           { Icon: LayoutList,     text: trustPoints[3] },
         ] as const;
         return (
-          <section className="border-b border-[var(--border)] bg-[var(--surface-strong)] py-10 md:py-14">
-            <PageContainer className="flex justify-center">
-              <div className="grid w-full max-w-5xl grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <section className="border-b border-[var(--border)] bg-[var(--surface-strong)] py-12 md:py-16">
+            <PageContainer className="grid place-items-center">
+              <div className="grid w-full max-w-[1080px] grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 {trustCards.map(({ Icon, text }, index) => (
                   <MotionReveal key={text} variant="up" delay={index * 60} className="h-full">
                     <div className="flex min-h-[188px] h-full cursor-default flex-col items-center justify-start gap-4 rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-5 text-center shadow-[var(--shadow-sm)] transition duration-200 hover:-translate-y-1 hover:shadow-[var(--shadow-md)]">

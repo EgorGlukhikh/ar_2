@@ -49,19 +49,24 @@ export function EditableLessonSettingsCard({
   }
 
   return (
-    <article className={cn("rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-sm)]", className)}>
+    <article
+      className={cn(
+        "rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-sm)]",
+        className,
+      )}
+    >
       <input type="hidden" name="title" value={draftTitle} form={formId} />
       <input type="hidden" name="excerpt" value={draftExcerpt} form={formId} />
       <input type="hidden" name="accessAfterDays" value={draftAccessAfterDays} form={formId} />
       <input type="hidden" name="isPreview" value={draftIsPreview ? "true" : "false"} form={formId} />
       <input type="hidden" name="lessonImageUrl" value={draftLessonImageUrl} form={formId} />
 
-      <div className="flex flex-wrap items-start justify-between gap-4 px-5 py-5">
+      <div className="flex flex-wrap items-start justify-between gap-3 px-4 py-4">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
             Урок
           </p>
-          <h3 className="mt-2 text-[28px] font-semibold tracking-[-0.02em] text-[var(--foreground)]">
+          <h3 className="mt-1.5 text-xl font-semibold tracking-[-0.02em] text-[var(--foreground)]">
             Основные настройки
           </h3>
         </div>
@@ -69,16 +74,16 @@ export function EditableLessonSettingsCard({
         <div className="flex flex-wrap gap-2">
           {isEditing ? (
             <>
-              <Button type="submit" form={formId}>
+              <Button type="submit" form={formId} size="sm">
                 Сохранить урок
               </Button>
-              <Button type="button" variant="outline" onClick={resetDraft}>
+              <Button type="button" variant="outline" size="sm" onClick={resetDraft}>
                 <X className="mr-2 h-4 w-4" />
                 Отмена
               </Button>
             </>
           ) : (
-            <Button type="button" variant="outline" onClick={() => setIsEditing(true)}>
+            <Button type="button" variant="outline" size="sm" onClick={() => setIsEditing(true)}>
               <PencilLine className="mr-2 h-4 w-4" />
               Редактировать
             </Button>
@@ -86,9 +91,9 @@ export function EditableLessonSettingsCard({
         </div>
       </div>
 
-      <div className="border-t border-[var(--border)] px-5 py-5">
+      <div className="border-t border-[var(--border)] px-4 py-4">
         {isEditing ? (
-          <div className="grid gap-5">
+          <div className="grid gap-4">
             <div className="space-y-2">
               <Label htmlFor="lesson-title-editor">Название урока</Label>
               <Input
@@ -105,7 +110,7 @@ export function EditableLessonSettingsCard({
                 id="lesson-excerpt-editor"
                 value={draftExcerpt}
                 onChange={(event) => setDraftExcerpt(event.target.value)}
-                className="min-h-[140px]"
+                className="min-h-[112px]"
                 placeholder="Коротко объясни, что студент получит в этом уроке."
               />
             </div>
@@ -120,7 +125,7 @@ export function EditableLessonSettingsCard({
               />
             </div>
 
-            <div className="grid gap-4">
+            <div className="grid gap-3">
               <div className="space-y-2">
                 <Label htmlFor="lesson-access-after-editor">Открыть через дней</Label>
                 <Input
@@ -133,7 +138,7 @@ export function EditableLessonSettingsCard({
                 />
               </div>
 
-              <label className="flex items-start gap-3 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-4">
+              <label className="flex items-start gap-3 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface-strong)] px-3.5 py-3">
                 <input
                   type="checkbox"
                   checked={draftIsPreview}
@@ -144,7 +149,7 @@ export function EditableLessonSettingsCard({
                   <span className="block text-sm font-medium text-[var(--foreground)]">
                     Открытый урок
                   </span>
-                  <span className="block text-sm leading-6 text-[var(--muted)]">
+                  <span className="block text-sm leading-5 text-[var(--muted)]">
                     Можно показывать без записи как превью.
                   </span>
                 </span>
@@ -152,25 +157,41 @@ export function EditableLessonSettingsCard({
             </div>
           </div>
         ) : (
-          <div className="grid gap-3">
-            <SystemInfoItem label="Название урока" value={draftTitle} />
+          <div className="grid gap-2.5">
+            <SystemInfoItem
+              label="Название урока"
+              value={draftTitle}
+              className="p-3.5 [&>div]:mt-2 [&>div]:text-sm [&>p]:text-[10px]"
+            />
             {draftLessonImageUrl ? (
-              <SystemInfoItem label="Обложка" value={
-                <Image src={draftLessonImageUrl} alt="Обложка урока" width={300} height={96} className="mt-1 max-h-24 rounded-lg object-cover" />
-              } />
+              <SystemInfoItem
+                label="Обложка"
+                className="p-3.5 [&>div]:mt-2 [&>div]:text-sm [&>p]:text-[10px]"
+                value={
+                  <Image
+                    src={draftLessonImageUrl}
+                    alt="Обложка урока"
+                    width={300}
+                    height={96}
+                    className="mt-0.5 max-h-20 rounded-lg object-cover"
+                  />
+                }
+              />
             ) : null}
             <SystemInfoItem
               label="Доступ"
               value={draftAccessAfterDays ? `Через ${draftAccessAfterDays} дн.` : "Сразу"}
               hint={draftIsPreview ? "Открытый урок" : "Только для студентов курса"}
+              className="p-3.5 [&>div]:mt-2 [&>div]:text-sm [&>div:last-child]:leading-5 [&>p]:text-[10px]"
             />
             <SystemInfoItem
               label="Краткое описание"
               value={
-                <p className="whitespace-pre-wrap text-sm leading-7 text-[var(--muted)]">
+                <p className="whitespace-pre-wrap text-sm leading-6 text-[var(--muted)]">
                   {draftExcerpt || "Описание пока не заполнено."}
                 </p>
               }
+              className="p-3.5 [&>div]:mt-2 [&>div]:text-sm [&>p]:text-[10px]"
             />
           </div>
         )}
@@ -178,4 +199,3 @@ export function EditableLessonSettingsCard({
     </article>
   );
 }
-

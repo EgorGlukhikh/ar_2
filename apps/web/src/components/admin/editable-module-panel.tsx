@@ -1,6 +1,6 @@
 "use client";
 
-import { PencilLine, Plus, X } from "lucide-react";
+import { PencilLine, X } from "lucide-react";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -15,7 +15,6 @@ type EditableModulePanelProps = {
   defaultLessonType: "TEXT" | "LIVE";
   courseFormatLabel: string;
   updateModuleAction: (formData: FormData) => void | Promise<void>;
-  createLessonAction: (formData: FormData) => void | Promise<void>;
 };
 
 export function EditableModulePanel({
@@ -26,12 +25,9 @@ export function EditableModulePanel({
   defaultLessonType,
   courseFormatLabel,
   updateModuleAction,
-  createLessonAction,
 }: EditableModulePanelProps) {
   const [isEditingModule, setIsEditingModule] = useState(false);
-  const [isAddingLesson, setIsAddingLesson] = useState(false);
   const [moduleTitle, setModuleTitle] = useState(title);
-  const [lessonTitle, setLessonTitle] = useState("");
 
   function resetModuleTitle() {
     setModuleTitle(title);
@@ -59,15 +55,6 @@ export function EditableModulePanel({
           >
             <PencilLine className="mr-2 h-4 w-4" />
             {isEditingModule ? "Скрыть редактирование" : "Редактировать модуль"}
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            className="border-[var(--primary)] text-[var(--primary)] hover:bg-[var(--primary-soft)]"
-            onClick={() => setIsAddingLesson((current) => !current)}
-          >
-            <Plus className="mr-2 h-4 w-4" />
-            {isAddingLesson ? "Скрыть форму урока" : "Добавить урок"}
           </Button>
         </div>
       </div>
@@ -104,44 +91,20 @@ export function EditableModulePanel({
           </div>
         )}
 
-        {isAddingLesson ? (
-          <form action={createLessonAction} className="space-y-3 rounded-[22px] bg-[var(--surface)] p-4">
-            <input type="hidden" name="moduleId" value={moduleId} />
-            <input type="hidden" name="type" value={defaultLessonType} />
-            <Label htmlFor="new-lesson-title-header">
-              {defaultLessonType === "LIVE" ? "Новый вебинар" : "Новый урок"}
-            </Label>
-            <div className="flex flex-col gap-3 sm:flex-row">
-              <Input
-                id="new-lesson-title-header"
-                name="title"
-                value={lessonTitle}
-                onChange={(event) => setLessonTitle(event.target.value)}
-                placeholder={
-                  defaultLessonType === "LIVE"
-                    ? "Например, Эфир 1: разбор первого кейса"
-                    : "Например, Разбор первого кейса"
-                }
-                required
-              />
-              <Button type="submit" className="sm:min-w-[180px]">
-                <Plus className="mr-2 h-4 w-4" />
-                {defaultLessonType === "LIVE" ? "Добавить вебинар" : "Добавить урок"}
-              </Button>
-            </div>
-          </form>
-        ) : (
-          <div className="rounded-[22px] border border-[var(--border)] bg-[var(--surface)] p-4">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#7a6548]">
-              Новый шаг программы
-            </p>
-            <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
-              {defaultLessonType === "LIVE"
-                ? `Этот курс идет в формате «${courseFormatLabel}». Новый шаг по умолчанию создается как вебинар, а после эфира в нем можно оставить запись и материалы.`
-                : "Добавляй урок только когда действительно нужен новый шаг программы, а не лишняя карточка ради структуры."}
-            </p>
-          </div>
-        )}
+        <div className="rounded-[22px] border border-[var(--border)] bg-[var(--surface)] p-4">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#7a6548]">
+            Управление структурой
+          </p>
+          <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
+            Новые уроки и порядок шагов теперь управляются только в дереве слева. Правая часть
+            экрана отвечает за содержание выбранного модуля и урока.
+          </p>
+          <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
+            {defaultLessonType === "LIVE"
+              ? `Для курса в формате «${courseFormatLabel}» новые шаги будут создаваться как вебинары.`
+              : "Добавляй новые уроки через левую структуру, когда в программе действительно нужен новый шаг."}
+          </p>
+        </div>
       </div>
     </article>
   );

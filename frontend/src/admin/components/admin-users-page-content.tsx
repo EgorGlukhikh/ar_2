@@ -1,6 +1,5 @@
-﻿import { Search } from "lucide-react";
+import { Search } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
@@ -12,11 +11,24 @@ import {
 } from "@/components/workspace/workspace-primitives";
 import type { AdminUsersPayload } from "@shared/admin-users/types";
 
+function getRegistryTitle(payload: AdminUsersPayload) {
+  if (payload.filters.role === "all") {
+    return "Все пользователи";
+  }
+
+  return (
+    payload.roleOptions.find((item) => item.value === payload.filters.role)?.label ??
+    "Пользователи"
+  );
+}
+
 export function AdminUsersPageContent({
   payload,
 }: {
   payload: AdminUsersPayload;
 }) {
+  const registryTitle = getRegistryTitle(payload);
+
   return (
     <section className="space-y-6">
       <WorkspacePageHeader
@@ -101,9 +113,9 @@ export function AdminUsersPageContent({
       </WorkspacePanel>
 
       <WorkspacePanel
-        eyebrow="Список"
-        title="Кого админ реально видит в системе"
-        description="Карточки показывают роль, способ входа, последние курсы и общую активность."
+        eyebrow="Реестр"
+        title={registryTitle}
+        description={`${payload.filteredUsers} пользователей в текущей выборке.`}
       >
         {payload.users.length === 0 ? (
           <WorkspaceEmptyState
@@ -113,65 +125,84 @@ export function AdminUsersPageContent({
             className="border-[var(--border)] bg-[var(--surface)] shadow-none"
           />
         ) : (
-          <div className="grid gap-4 xl:grid-cols-2">
-            {payload.users.map((user) => (
-              <article
-                key={user.id}
-                className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-5"
-              >
-                <div className="space-y-4">
-                  <div className="flex flex-wrap items-start justify-between gap-3">
-                    <div>
-                      <h2 className="text-lg font-semibold text-[var(--foreground)]">{user.name}</h2>
-                      <p className="mt-1 text-sm text-[var(--muted)]">{user.email}</p>
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      <Badge variant="neutral">{user.role}</Badge>
-                      <Badge variant="neutral">{user.authSourceLabel}</Badge>
-                    </div>
-                  </div>
-
-                  <div className="grid gap-3 sm:grid-cols-3">
-                    <div className="rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-3">
-                      <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">Курсы</p>
-                      <p className="mt-2 font-semibold text-[var(--foreground)]">{user.enrollmentCount}</p>
-                    </div>
-                    <div className="rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-3">
-                      <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">Активность</p>
-                      <p className="mt-2 font-semibold text-[var(--foreground)]">{user.progressCount}</p>
-                    </div>
-                    <div className="rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-3">
-                      <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">Создан</p>
-                      <p className="mt-2 text-sm font-semibold text-[var(--foreground)]">{user.createdAtLabel}</p>
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <p className="text-xs uppercase tracking-[0.18em] text-[var(--muted)]">Последние курсы</p>
-                    {user.latestCourses.length === 0 ? (
-                      <div className="rounded-[var(--radius-md)] border border-dashed border-[var(--border)] bg-[var(--surface-strong)] px-4 py-3 text-sm text-[var(--muted)]">
-                        Пока нет доступов к курсам.
-                      </div>
-                    ) : (
-                      <div className="flex flex-wrap gap-2">
-                        {user.latestCourses.map((course) => (
-                          <span
-                            key={`${user.id}-${course}`}
-                            className="rounded-[var(--control-radius)] border border-[var(--border)] bg-[var(--surface-strong)] px-3 py-2 text-sm text-[var(--foreground)]"
-                          >
-                            {course}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                  </div>
+          <div className="overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)]">
+            <div className="overflow-x-auto">
+              <div className="min-w-[1120px]">
+                <div className="grid grid-cols-[minmax(220px,1.2fr)_160px_240px_170px_100px_160px_120px] gap-4 border-b border-[var(--border)] bg-[var(--surface-strong)] px-5 py-4 text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
+                  <span>ФИО</span>
+                  <span>Роль</span>
+                  <span>Почта</span>
+                  <span>Вход</span>
+                  <span>Яндекс ID</span>
+                  <span>Регистрация</span>
+                  <span>Курсы</span>
                 </div>
-              </article>
-            ))}
+
+                <div className="divide-y divide-[var(--border)]">
+                  {payload.users.map((user) => {
+                    const hasYandexAccount = user.authSourceLabel === "Яндекс";
+
+                    return (
+                      <article
+                        key={user.id}
+                        className="grid grid-cols-[minmax(220px,1.2fr)_160px_240px_170px_100px_160px_120px] gap-4 px-5 py-4 transition-colors hover:bg-[var(--surface-strong)]"
+                      >
+                        <div className="min-w-0">
+                          <p className="truncate text-base font-semibold text-[var(--foreground)]">
+                            {user.name}
+                          </p>
+                          <p className="mt-1 text-sm text-[var(--muted)]">
+                            Прогресс: {user.progressCount}
+                          </p>
+                          {user.latestCourses.length > 0 ? (
+                            <p className="mt-2 truncate text-sm text-[var(--muted)]">
+                              Последние курсы: {user.latestCourses.join(", ")}
+                            </p>
+                          ) : (
+                            <p className="mt-2 text-sm text-[var(--muted)]">
+                              Пока нет доступов к курсам.
+                            </p>
+                          )}
+                        </div>
+
+                        <div className="flex items-start">
+                          <span className="inline-flex rounded-full border border-[var(--border)] bg-[var(--surface-strong)] px-3 py-1.5 text-sm font-medium text-[var(--foreground)]">
+                            {user.role}
+                          </span>
+                        </div>
+
+                        <div className="min-w-0 pt-1">
+                          <p className="truncate text-sm text-[var(--foreground)]">{user.email}</p>
+                        </div>
+
+                        <div className="pt-1">
+                          <p className="text-sm text-[var(--foreground)]">{user.authSourceLabel}</p>
+                        </div>
+
+                        <div className="pt-1">
+                          <span className="inline-flex rounded-full border border-[var(--border)] bg-[var(--surface-strong)] px-3 py-1.5 text-sm font-medium text-[var(--foreground)]">
+                            {hasYandexAccount ? "Да" : "Нет"}
+                          </span>
+                        </div>
+
+                        <div className="pt-1">
+                          <p className="text-sm text-[var(--foreground)]">{user.createdAtLabel}</p>
+                        </div>
+
+                        <div className="pt-1">
+                          <p className="text-sm font-semibold text-[var(--foreground)]">
+                            {user.enrollmentCount}
+                          </p>
+                        </div>
+                      </article>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
           </div>
         )}
       </WorkspacePanel>
     </section>
   );
 }
-
