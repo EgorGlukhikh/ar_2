@@ -211,6 +211,15 @@ export function LandingExperience({
       let pointerX = -9999;
       let pointerY = -9999;
       let active = false;
+      const markStates = new Map(
+        marks.map((mark) => [
+          mark,
+          {
+            currentX: 0,
+            currentY: 0,
+          },
+        ]),
+      );
 
       const updateMarks = () => {
         marks.forEach((mark) => {
@@ -220,21 +229,36 @@ export function LandingExperience({
           const dx = centerX - pointerX;
           const dy = centerY - pointerY;
           const distance = Math.hypot(dx, dy);
-          const radius = Math.max(140, rect.width * 1.25);
+          const radius = Math.max(170, rect.width * 1.6);
+          const state = markStates.get(mark);
 
-          if (!active || distance >= radius || distance === 0) {
-            mark.style.setProperty("--mark-repel-x", "0px");
-            mark.style.setProperty("--mark-repel-y", "0px");
+          if (!state) {
             return;
           }
 
-          const strength = (1 - distance / radius) ** 1.35;
-          const maxOffset = Math.min(26, rect.width * 0.22);
-          const offsetX = (dx / distance) * maxOffset * strength;
-          const offsetY = (dy / distance) * maxOffset * strength;
+          let targetOffsetX = 0;
+          let targetOffsetY = 0;
 
-          mark.style.setProperty("--mark-repel-x", `${offsetX.toFixed(2)}px`);
-          mark.style.setProperty("--mark-repel-y", `${offsetY.toFixed(2)}px`);
+          if (active && distance < radius && distance !== 0) {
+            const strength = (1 - distance / radius) ** 1.15;
+            const maxOffset = Math.min(42, rect.width * 0.34);
+            targetOffsetX = (dx / distance) * maxOffset * strength;
+            targetOffsetY = (dy / distance) * maxOffset * strength;
+          }
+
+          state.currentX += (targetOffsetX - state.currentX) * 0.05;
+          state.currentY += (targetOffsetY - state.currentY) * 0.05;
+
+          if (Math.abs(state.currentX) < 0.05) {
+            state.currentX = 0;
+          }
+
+          if (Math.abs(state.currentY) < 0.05) {
+            state.currentY = 0;
+          }
+
+          mark.style.setProperty("--mark-repel-x", `${state.currentX.toFixed(2)}px`);
+          mark.style.setProperty("--mark-repel-y", `${state.currentY.toFixed(2)}px`);
         });
 
         frame = window.requestAnimationFrame(updateMarks);

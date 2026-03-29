@@ -268,7 +268,7 @@ label {
 .ambient-mark-glyph {
   display: block;
   transform: translate3d(var(--mark-repel-x), var(--mark-repel-y), 0);
-  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 680ms cubic-bezier(0.16, 0.84, 0.2, 1);
   will-change: transform;
 }
 
