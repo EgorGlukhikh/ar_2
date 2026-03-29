@@ -136,6 +136,7 @@ export function LandingExperience({
   viewerName?: string | null;
 }) {
   const heroRef = useRef<HTMLElement>(null);
+  const valueRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const hero = heroRef.current;
@@ -182,6 +183,92 @@ export function LandingExperience({
       hero.removeEventListener("pointermove", handlePointerMove);
       hero.removeEventListener("pointerleave", handlePointerLeave);
       window.cancelAnimationFrame(frame);
+    };
+  }, []);
+
+  useEffect(() => {
+    const sections = [heroRef.current, valueRef.current].filter(Boolean) as HTMLElement[];
+    const supportsInteractivePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+    if (
+      sections.length === 0 ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+      !supportsInteractivePointer
+    ) {
+      return;
+    }
+
+    const cleanups = sections.map((section) => {
+      const marks = Array.from(
+        section.querySelectorAll<HTMLElement>("[data-floating-mark]"),
+      );
+
+      if (marks.length === 0) {
+        return () => undefined;
+      }
+
+      let frame = 0;
+      let pointerX = -9999;
+      let pointerY = -9999;
+      let active = false;
+
+      const updateMarks = () => {
+        marks.forEach((mark) => {
+          const rect = mark.getBoundingClientRect();
+          const centerX = rect.left + rect.width / 2;
+          const centerY = rect.top + rect.height / 2;
+          const dx = centerX - pointerX;
+          const dy = centerY - pointerY;
+          const distance = Math.hypot(dx, dy);
+          const radius = Math.max(140, rect.width * 1.25);
+
+          if (!active || distance >= radius || distance === 0) {
+            mark.style.setProperty("--mark-repel-x", "0px");
+            mark.style.setProperty("--mark-repel-y", "0px");
+            return;
+          }
+
+          const strength = (1 - distance / radius) ** 1.35;
+          const maxOffset = Math.min(26, rect.width * 0.22);
+          const offsetX = (dx / distance) * maxOffset * strength;
+          const offsetY = (dy / distance) * maxOffset * strength;
+
+          mark.style.setProperty("--mark-repel-x", `${offsetX.toFixed(2)}px`);
+          mark.style.setProperty("--mark-repel-y", `${offsetY.toFixed(2)}px`);
+        });
+
+        frame = window.requestAnimationFrame(updateMarks);
+      };
+
+      const handlePointerMove = (event: PointerEvent) => {
+        pointerX = event.clientX;
+        pointerY = event.clientY;
+        active = true;
+      };
+
+      const handlePointerLeave = () => {
+        active = false;
+        pointerX = -9999;
+        pointerY = -9999;
+      };
+
+      section.addEventListener("pointermove", handlePointerMove);
+      section.addEventListener("pointerleave", handlePointerLeave);
+      frame = window.requestAnimationFrame(updateMarks);
+
+      return () => {
+        section.removeEventListener("pointermove", handlePointerMove);
+        section.removeEventListener("pointerleave", handlePointerLeave);
+        window.cancelAnimationFrame(frame);
+        marks.forEach((mark) => {
+          mark.style.removeProperty("--mark-repel-x");
+          mark.style.removeProperty("--mark-repel-y");
+        });
+      };
+    });
+
+    return () => {
+      cleanups.forEach((cleanup) => cleanup());
     };
   }, []);
 
@@ -254,8 +341,8 @@ export function LandingExperience({
         <div className="hero-ambient hero-ambient-grid" aria-hidden />
         <div className="hero-floating-marks" aria-hidden>
           {heroAmbientMarkClasses.map((className) => (
-            <span key={className} className={cn("hero-mark-shell", className)}>
-              <AcademyMark className="w-full" />
+            <span key={className} className={cn("hero-mark-shell", className)} data-floating-mark>
+              <AcademyMark className="ambient-mark-glyph w-full" />
             </span>
           ))}
         </div>
@@ -383,11 +470,15 @@ export function LandingExperience({
       })()}
 
       {/* ─── VALUE BENTO ─────────────────────────────────────────────── */}
-      <section className="value-stage relative overflow-hidden bg-white pt-16 pb-20" id="value">
+      <section
+        ref={valueRef}
+        className="value-stage relative overflow-hidden bg-white pt-16 pb-20"
+        id="value"
+      >
         <div className="value-floating-marks" aria-hidden>
           {valueAmbientMarkClasses.map((className) => (
-            <span key={className} className={cn("value-mark-shell", className)}>
-              <AcademyMark className="w-full" />
+            <span key={className} className={cn("value-mark-shell", className)} data-floating-mark>
+              <AcademyMark className="ambient-mark-glyph w-full" />
             </span>
           ))}
         </div>
