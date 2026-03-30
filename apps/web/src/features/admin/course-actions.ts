@@ -723,6 +723,7 @@ export async function updateCourse(formData: FormData) {
   });
 
   refreshAdminRoutes(parsed.courseId);
+  redirect(`/admin/courses/${parsed.courseId}`);
 }
 
 export async function deleteCourse(formData: FormData) {
