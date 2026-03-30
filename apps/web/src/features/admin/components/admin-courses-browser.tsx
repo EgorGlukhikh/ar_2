@@ -237,7 +237,7 @@ export function AdminCoursesBrowser({
                 subtitle={`/${course.slug}`}
                 compact
                 imageUrl={course.coverUrl ?? undefined}
-                className="aspect-[4/3] min-h-0"
+                className="aspect-video min-h-0"
               />
 
               <div className="mt-5 flex flex-1 flex-col gap-5">
