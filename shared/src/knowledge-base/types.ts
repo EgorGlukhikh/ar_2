@@ -1,13 +1,24 @@
 export type KnowledgeBaseAudience = "student" | "teacher";
 
-export type KnowledgeBaseArticle = {
+export type KnowledgeBaseArticleSection = {
   title: string;
-  body: string;
+  paragraphs: string[];
+  checklist?: string[];
 };
 
-export type KnowledgeBaseSection = {
+export type KnowledgeBaseArticle = {
+  id: string;
   title: string;
-  items: string[];
+  summary: string;
+  outcome: string;
+  sections: KnowledgeBaseArticleSection[];
+};
+
+export type KnowledgeBaseModule = {
+  id: string;
+  title: string;
+  description: string;
+  articles: KnowledgeBaseArticle[];
 };
 
 export type KnowledgeBasePayload = {
@@ -15,6 +26,6 @@ export type KnowledgeBasePayload = {
   title: string;
   description: string;
   primaryLabel: string;
-  sections: KnowledgeBaseSection[];
-  articles: KnowledgeBaseArticle[];
+  visibilityNote: string;
+  modules: KnowledgeBaseModule[];
 };
