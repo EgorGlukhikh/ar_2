@@ -4,12 +4,10 @@ import {
   Clock3,
   Eye,
   MailCheck,
-  MailOpen,
   MailWarning,
   PauseCircle,
   PlayCircle,
   Send,
-  Settings2,
 } from "lucide-react";
 
 import {
@@ -52,6 +50,7 @@ import {
   manualCampaignTemplates,
 } from "@/lib/email/catalog";
 import { requireRoleAccess } from "@/lib/admin";
+import { cn } from "@/lib/utils";
 
 const dateTimeFormatter = new Intl.DateTimeFormat("ru-RU", {
   dateStyle: "medium",
@@ -98,37 +97,27 @@ const requeueableStatuses = [
 const workspaceEmailModes = [
   {
     id: "email-test-section",
-    eyebrow: "Режим 1",
+    label: "Тест себе",
     title: "Тест себе",
-    description:
-      "Проверка шаблона, темы, вёрстки и ссылок перед реальной отправкой.",
-    metricLabel: "шаблонов",
-    icon: MailOpen,
+    description: "Проверка шаблонов и preview перед живой отправкой.",
   },
   {
     id: "email-campaigns-section",
-    eyebrow: "Режим 2",
+    label: "Ручные рассылки",
     title: "Ручные рассылки",
-    description:
-      "Запуск кампаний по шаблону, курсу и сегменту без ручной вёрстки.",
-    metricLabel: "кампаний",
-    icon: Send,
+    description: "Кампании по шаблону, курсу и сегменту.",
   },
   {
     id: "email-log-section",
-    eyebrow: "Режим 3",
+    label: "Последние письма",
     title: "Последние письма",
-    description: "Журнал статусов, ошибок, попыток и повторной отправки.",
-    metricLabel: "писем",
-    icon: Eye,
+    description: "Журнал статусов, ошибок и повторной отправки.",
   },
   {
     id: "email-settings-section",
-    eyebrow: "Режим 4",
+    label: "Настройки",
     title: "Настройки",
-    description: "Проверка боевых параметров, reply-to и канала отправки.",
-    metricLabel: "параметров",
-    icon: Settings2,
+    description: "Провайдер, reply-to и параметры контура.",
   },
 ] as const;
 
@@ -276,7 +265,7 @@ export default async function AdminEmailsPage({
       <WorkspacePageHeader
         eyebrow="Почтовый центр"
         title="Сервисные письма и кампании платформы"
-        description="Экран разделён на понятные рабочие зоны: отдельно тест себе, отдельно ручные рассылки, отдельно журнал последних писем и настройки контура."
+        description="Раздел собран как внутренний рабочий контур: слева навигация по разделам, справа сами инструменты, журнал и параметры отправки."
         actions={
           <>
             <form action={processEmailQueueNow} className="contents">
@@ -289,116 +278,109 @@ export default async function AdminEmailsPage({
         }
       />
 
-      <div className="grid gap-4 xl:grid-cols-4">
-        {workspaceEmailModes.map((mode) => {
-          const Icon = mode.icon;
+      <div className="grid gap-6 xl:grid-cols-[240px_minmax(0,1fr)]">
+        <WorkspacePanel
+          eyebrow="Навигация"
+          title="Разделы центра"
+          description="Слева переход между рабочими зонами, как в остальных внутренних разделах платформы."
+          className="self-start"
+        >
+          <div className="space-y-2">
+            {workspaceEmailModes.map((mode) => (
+              <a
+                key={mode.id}
+                href={`#${mode.id}`}
+                className={cn(
+                  "flex items-center justify-between rounded-[var(--radius-md)] border px-4 py-3 text-sm font-medium transition",
+                  "border-[var(--border)] bg-[var(--surface)] text-[var(--foreground)] hover:bg-[var(--surface-strong)]",
+                )}
+              >
+                <span>{mode.label}</span>
+                <span className="text-xs text-[var(--muted)]">{modeMetrics[mode.id]}</span>
+              </a>
+            ))}
+          </div>
+        </WorkspacePanel>
 
-          return (
-            <a
-              key={mode.id}
-              href={`#${mode.id}`}
-              className="group rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] px-5 py-5 shadow-[var(--shadow-sm)] transition hover:-translate-y-[1px] hover:border-[var(--primary)] hover:shadow-[var(--shadow-md)]"
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div className="space-y-2">
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
-                    {mode.eyebrow}
-                  </p>
-                  <h2 className="text-xl font-semibold tracking-[-0.02em] text-[var(--foreground)]">
-                    {mode.title}
-                  </h2>
-                </div>
-                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[var(--primary-soft)] text-[var(--primary)] transition group-hover:scale-[1.03]">
-                  <Icon className="h-5 w-5" />
-                </div>
+        <div className="space-y-6">
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <WorkspaceStatCard
+              label="В очереди"
+              value={queuedCount}
+              hint="Письма и кампании, которые уже созданы и ждут отправки."
+              icon={Clock3}
+            />
+            <WorkspaceStatCard
+              label="Отправлено"
+              value={sentCount}
+              hint="Письма, которые уже ушли в провайдер или были доставлены."
+              icon={Send}
+            />
+            <WorkspaceStatCard
+              label="Открыто"
+              value={openedCount}
+              hint="Открытия и клики по письмам, включая маркетинговые кампании."
+              icon={Eye}
+            />
+            <WorkspaceStatCard
+              label="Ошибки"
+              value={failedCount}
+              hint="Финальные ошибки доставки, возвраты и жалобы."
+              icon={MailWarning}
+            />
+          </div>
+
+          <WorkspacePanel
+            eyebrow="Контур"
+            title="Здоровье контура"
+            description="Короткая сводка по подпискам, провайдеру отправки и базовым параметрам контура."
+          >
+            <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-4">
+              <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] px-5 py-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
+                  Студенты с согласием
+                </p>
+                <p className="mt-3 text-3xl font-semibold tracking-[-0.03em] text-[var(--foreground)]">
+                  {preferenceMap.get("STUDENT:true") ?? 0}
+                </p>
               </div>
-              <p className="mt-3 text-sm leading-6 text-[var(--muted)]">{mode.description}</p>
-              <p className="mt-4 text-sm font-semibold text-[var(--foreground)]">
-                {modeMetrics[mode.id]} {mode.metricLabel}
-              </p>
-            </a>
-          );
-        })}
-      </div>
+              <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] px-5 py-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
+                  Эксперты с согласием
+                </p>
+                <p className="mt-3 text-3xl font-semibold tracking-[-0.03em] text-[var(--foreground)]">
+                  {preferenceMap.get("EXPERT:true") ?? 0}
+                </p>
+              </div>
+              <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] px-5 py-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
+                  Провайдер
+                </p>
+                <p className="mt-3 text-lg font-semibold text-[var(--foreground)]">
+                  {config.provider === "resend"
+                    ? "Resend"
+                    : config.provider === "smtp"
+                      ? "SMTP"
+                      : "Mock"}
+                </p>
+                <p className="mt-2 text-sm text-[var(--muted)]">{config.sender.fromEmail}</p>
+              </div>
+              <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] px-5 py-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
+                  Reply-to
+                </p>
+                <p className="mt-3 text-lg font-semibold text-[var(--foreground)]">
+                  {config.replyTo.replyToEmail}
+                </p>
+                <p className="mt-2 text-sm text-[var(--muted)]">{config.replyTo.replyToName}</p>
+              </div>
+            </div>
+          </WorkspacePanel>
 
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <WorkspaceStatCard
-          label="В очереди"
-          value={queuedCount}
-          hint="Письма и кампании, которые уже созданы и ждут отправки."
-          icon={Clock3}
-        />
-        <WorkspaceStatCard
-          label="Отправлено"
-          value={sentCount}
-          hint="Письма, которые уже ушли в провайдер или были доставлены."
-          icon={Send}
-        />
-        <WorkspaceStatCard
-          label="Открыто"
-          value={openedCount}
-          hint="Открытия и клики по письмам, включая маркетинговые кампании."
-          icon={Eye}
-        />
-        <WorkspaceStatCard
-          label="Ошибки"
-          value={failedCount}
-          hint="Финальные ошибки доставки, возвраты и жалобы."
-          icon={MailWarning}
-        />
-      </div>
-
-      <WorkspacePanel
-        eyebrow="Dashboard"
-        title="Здоровье контура"
-        description="Короткая сводка по подпискам, провайдеру отправки и базовым параметрам контура."
-      >
-        <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-4">
-          <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] px-5 py-4">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
-              Студенты с согласием
-            </p>
-            <p className="mt-3 text-3xl font-semibold tracking-[-0.03em] text-[var(--foreground)]">
-              {preferenceMap.get("STUDENT:true") ?? 0}
-            </p>
-          </div>
-          <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] px-5 py-4">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
-              Эксперты с согласием
-            </p>
-            <p className="mt-3 text-3xl font-semibold tracking-[-0.03em] text-[var(--foreground)]">
-              {preferenceMap.get("EXPERT:true") ?? 0}
-            </p>
-          </div>
-          <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] px-5 py-4">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
-              Провайдер
-            </p>
-            <p className="mt-3 text-lg font-semibold text-[var(--foreground)]">
-              {config.provider === "resend"
-                ? "Resend"
-                : config.provider === "smtp"
-                  ? "SMTP"
-                  : "Mock"}
-            </p>
-            <p className="mt-2 text-sm text-[var(--muted)]">{config.sender.fromEmail}</p>
-          </div>
-          <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] px-5 py-4">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
-              Reply-to
-            </p>
-            <p className="mt-3 text-lg font-semibold text-[var(--foreground)]">
-              {config.replyTo.replyToEmail}
-            </p>
-            <p className="mt-2 text-sm text-[var(--muted)]">{config.replyTo.replyToName}</p>
-          </div>
-        </div>
-      </WorkspacePanel>
-
-      <div id="email-test-section" className="scroll-mt-24">
+          <div id="email-test-section" className="scroll-mt-24">
         <WorkspacePanel
           eyebrow="Шаблоны"
-          title="1. Тест себе и preview"
+          title="Тест себе и preview"
           description={`Здесь ты просто проверяешь письмо на свою почту ${user.email ?? "текущего пользователя"}: как выглядит тема, HTML, ссылки и общий тон. Это отдельный режим тестирования, без запуска реальной кампании.`}
         >
           <div className="grid gap-6 xl:grid-cols-[minmax(0,340px)_minmax(0,1fr)]">
@@ -483,7 +465,7 @@ export default async function AdminEmailsPage({
       <div id="email-campaigns-section" className="scroll-mt-24">
         <WorkspacePanel
           eyebrow="Кампании"
-          title="2. Ручные рассылки"
+          title="Ручные рассылки"
           description="Здесь запускаются именно кампании: берём шаблон, выбираем курс, сегмент и время. Это отдельная операционная зона для маркетинговых рассылок."
         >
           <div className="grid gap-6 xl:grid-cols-[minmax(0,360px)_minmax(0,1fr)]">
@@ -672,7 +654,7 @@ export default async function AdminEmailsPage({
       <div id="email-log-section" className="scroll-mt-24">
         <WorkspacePanel
           eyebrow="Журнал"
-          title="3. Последние письма"
+          title="Последние письма"
           description="Здесь видны сервисные письма, тестовые отправки, кампании, ошибки и история повторной отправки."
         >
           <div className="mb-5 flex flex-col gap-4 rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-4 lg:flex-row lg:items-end lg:justify-between">
@@ -884,7 +866,7 @@ export default async function AdminEmailsPage({
       <div id="email-settings-section" className="scroll-mt-24">
         <WorkspacePanel
           eyebrow="Настройки"
-          title="4. Боевые параметры контура"
+          title="Боевые параметры контура"
           description="То, что должно быть настроено на Railway и в канале отправки, чтобы сервис работал как production email-слой."
         >
           <div className="grid gap-4 lg:grid-cols-2">
@@ -985,6 +967,8 @@ export default async function AdminEmailsPage({
           </div>
         </WorkspacePanel>
       </div>
+    </div>
+  </div>
     </section>
   );
 }
