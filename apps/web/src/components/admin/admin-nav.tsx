@@ -3,6 +3,7 @@
 import Link from "next/link";
 import {
   BarChart3,
+  BookMarked,
   BookOpen,
   ClipboardCheck,
   LayoutDashboard,
@@ -38,6 +39,12 @@ const navItems = [
     href: "/admin/courses",
     label: "Курсы",
     icon: BookOpen,
+    isVisible: canViewCourseWorkspace,
+  },
+  {
+    href: "/admin/knowledge-base",
+    label: "База знаний",
+    icon: BookMarked,
     isVisible: canViewCourseWorkspace,
   },
   {
@@ -95,13 +102,17 @@ export function AdminNav({ effectiveRole }: AdminNavProps) {
     <nav className="flex max-w-full items-center gap-2 self-start overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
       {visibleItems.map((item) => {
         const Icon = item.icon;
-        const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
+        const isActive =
+          pathname === item.href || pathname.startsWith(`${item.href}/`);
 
         return (
           <Link
             key={item.href}
             href={item.href}
-            className={cn(systemNavItemClassName(isActive), "px-5 font-semibold leading-none")}
+            className={cn(
+              systemNavItemClassName(isActive),
+              "px-5 font-semibold leading-none",
+            )}
           >
             <Icon className="h-4 w-4 shrink-0" />
             {item.label}

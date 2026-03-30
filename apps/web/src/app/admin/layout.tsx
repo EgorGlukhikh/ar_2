@@ -31,12 +31,7 @@ export default async function AdminLayout({
     role: viewer.effectiveRole,
   });
 
-  const knowledgeBaseHref =
-    viewer.effectiveRole === USER_ROLES.ADMIN
-      ? null
-      : viewer.effectiveRole === USER_ROLES.AUTHOR || viewer.effectiveRole === USER_ROLES.CURATOR
-        ? "/knowledge-base?role=teacher"
-        : "/knowledge-base?role=student";
+  const knowledgeBaseHref = "/admin/knowledge-base";
 
   return (
     <main className="min-h-screen bg-[var(--background)]">
