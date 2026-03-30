@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Fragment } from "react";
 import {
   Clock3,
   Eye,
@@ -137,6 +138,40 @@ function formatDateTime(value?: Date | null) {
   }
 
   return dateTimeFormatter.format(value);
+}
+
+function getAudienceLabel(audience: "student" | "expert" | "mixed") {
+  switch (audience) {
+    case "student":
+      return "Студенты";
+    case "expert":
+      return "Эксперты";
+    default:
+      return "Смешанная аудитория";
+  }
+}
+
+function getRecipientCategoryLabel(email: {
+  kind: EmailKind;
+  recipientSegment: EmailCampaignSegment | null;
+  templateKey: string;
+}) {
+  if (email.kind === EmailKind.TRANSACTIONAL) {
+    return "Сервисные";
+  }
+
+  if (email.recipientSegment) {
+    return segmentLabelMap[email.recipientSegment];
+  }
+
+  const template =
+    emailTemplateCatalogMap[email.templateKey as keyof typeof emailTemplateCatalogMap];
+
+  if (!template) {
+    return "Маркетинг";
+  }
+
+  return getAudienceLabel(template.audience);
 }
 
 export default async function AdminEmailsPage() {
@@ -628,96 +663,154 @@ export default async function AdminEmailsPage() {
               className="border-[var(--border)] bg-[var(--surface)] shadow-none"
             />
           ) : (
-            <div className="space-y-4">
-              {emails.map((email) => {
-                const canRequeue = requeueableStatuses.includes(
-                  email.status as (typeof requeueableStatuses)[number],
-                );
+            <div className="overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)]">
+              <div className="overflow-x-auto">
+                <table className="min-w-[1080px] w-full border-collapse text-sm">
+                  <thead>
+                    <tr className="border-b border-[var(--border)] bg-[var(--surface-strong)] text-left">
+                      <th className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
+                        Дата и время
+                      </th>
+                      <th className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
+                        Тема
+                      </th>
+                      <th className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
+                        Получатель
+                      </th>
+                      <th className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
+                        Категория
+                      </th>
+                      <th className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
+                        Статус
+                      </th>
+                      <th className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
+                        Канал
+                      </th>
+                      <th className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
+                        Попытки
+                      </th>
+                      <th className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
+                        Действие
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {emails.map((email) => {
+                      const canRequeue = requeueableStatuses.includes(
+                        email.status as (typeof requeueableStatuses)[number],
+                      );
+                      const template =
+                        emailTemplateCatalogMap[
+                          email.templateKey as keyof typeof emailTemplateCatalogMap
+                        ];
 
-                return (
-                  <article
-                    key={email.id}
-                    className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-5"
-                  >
-                    <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-                      <div className="space-y-2">
-                        <div className="flex flex-wrap items-center gap-2">
-                          <Badge variant={emailStatusVariantMap[email.status]}>
-                            {emailStatusLabelMap[email.status]}
-                          </Badge>
-                          <Badge variant="neutral">
-                            {email.kind === EmailKind.MARKETING
-                              ? "Маркетинг"
-                              : "Уведомление"}
-                          </Badge>
-                          <Badge variant="neutral">
-                            {emailProviderLabelMap[email.provider]}
-                          </Badge>
-                        </div>
-
-                        <h2 className="text-xl font-semibold tracking-tight text-[var(--foreground)]">
-                          {email.subject}
-                        </h2>
-                        <p className="text-sm text-[var(--muted)]">
-                          Кому: {email.toName ? `${email.toName} · ` : ""}
-                          {email.toEmail}
-                        </p>
-                        <p className="text-sm leading-7 text-[var(--muted)]">
-                          Шаблон: {email.templateKey}
-                          {email.sequenceStep ? ` · шаг ${email.sequenceStep}` : ""}
-                          {email.course ? ` · курс «${email.course.title}»` : ""}
-                          {email.campaign ? ` · кампания «${email.campaign.name}»` : ""}
-                        </p>
-                      </div>
-
-                      <div className="space-y-3 lg:min-w-[320px]">
-                        <div className="grid gap-2 text-sm text-[var(--muted)] sm:grid-cols-2">
-                          <div className="rounded-2xl border border-[var(--border)] bg-white px-4 py-3">
-                            <p>Создано</p>
-                            <p className="mt-1 font-medium text-[var(--foreground)]">
-                              {formatDateTime(email.createdAt)}
-                            </p>
-                          </div>
-                          <div className="rounded-2xl border border-[var(--border)] bg-white px-4 py-3">
-                            <p>Отправка</p>
-                            <p className="mt-1 font-medium text-[var(--foreground)]">
-                              {formatDateTime(email.scheduledAt)}
-                            </p>
-                          </div>
-                          <div className="rounded-2xl border border-[var(--border)] bg-white px-4 py-3">
-                            <p>Доставлено</p>
-                            <p className="mt-1 font-medium text-[var(--foreground)]">
-                              {formatDateTime(email.deliveredAt)}
-                            </p>
-                          </div>
-                          <div className="rounded-2xl border border-[var(--border)] bg-white px-4 py-3">
-                            <p>Попытки</p>
-                            <p className="mt-1 font-medium text-[var(--foreground)]">
-                              {email.attemptCount}/{email.maxAttempts}
-                            </p>
-                          </div>
-                        </div>
-
-                        {canRequeue ? (
-                          <form action={requeueEmailMessageAction}>
-                            <input type="hidden" name="messageId" value={email.id} />
-                            <Button type="submit" variant="outline" size="sm">
-                              <MailCheck className="mr-2 h-4 w-4" />
-                              Поставить в очередь снова
-                            </Button>
-                          </form>
-                        ) : null}
-                      </div>
-                    </div>
-
-                    {email.lastError ? (
-                      <div className="mt-4 rounded-2xl border border-red-200 bg-red-50 px-4 py-4 text-sm leading-6 text-red-700">
-                        {email.lastError}
-                      </div>
-                    ) : null}
-                  </article>
-                );
-              })}
+                      return (
+                        <Fragment key={email.id}>
+                          <tr
+                            className="border-b border-[var(--border)] align-top last:border-b-0"
+                          >
+                            <td className="px-4 py-4 text-sm text-[var(--foreground)]">
+                              <div className="min-w-[180px]">
+                                <p className="font-medium">{formatDateTime(email.createdAt)}</p>
+                                <p className="mt-1 text-xs text-[var(--muted)]">
+                                  Отправка: {formatDateTime(email.scheduledAt)}
+                                </p>
+                              </div>
+                            </td>
+                            <td className="px-4 py-4">
+                              <div className="min-w-[300px] max-w-[420px] space-y-2">
+                                <p className="font-semibold leading-6 text-[var(--foreground)]">
+                                  {email.subject}
+                                </p>
+                                <p className="text-xs leading-5 text-[var(--muted)]">
+                                  {template?.label ?? email.templateKey}
+                                  {email.sequenceStep ? ` · шаг ${email.sequenceStep}` : ""}
+                                  {email.course ? ` · курс «${email.course.title}»` : ""}
+                                  {email.campaign ? ` · кампания «${email.campaign.name}»` : ""}
+                                </p>
+                              </div>
+                            </td>
+                            <td className="px-4 py-4">
+                              <div className="min-w-[220px] space-y-1">
+                                <p className="font-medium text-[var(--foreground)]">
+                                  {email.toName || "Без имени"}
+                                </p>
+                                <p className="text-xs text-[var(--muted)]">{email.toEmail}</p>
+                              </div>
+                            </td>
+                            <td className="px-4 py-4">
+                              <div className="min-w-[220px] space-y-2">
+                                <Badge variant="neutral">
+                                  {getRecipientCategoryLabel(email)}
+                                </Badge>
+                                {email.kind === EmailKind.MARKETING ? (
+                                  <p className="text-xs text-[var(--muted)]">
+                                    {template?.category === "campaign"
+                                      ? "Ручная рассылка"
+                                      : "Автоматическая цепочка"}
+                                  </p>
+                                ) : (
+                                  <p className="text-xs text-[var(--muted)]">
+                                    Сервисное письмо платформы
+                                  </p>
+                                )}
+                              </div>
+                            </td>
+                            <td className="px-4 py-4">
+                              <div className="min-w-[150px] space-y-2">
+                                <Badge variant={emailStatusVariantMap[email.status]}>
+                                  {emailStatusLabelMap[email.status]}
+                                </Badge>
+                                <p className="text-xs text-[var(--muted)]">
+                                  Доставлено: {formatDateTime(email.deliveredAt)}
+                                </p>
+                              </div>
+                            </td>
+                            <td className="px-4 py-4">
+                              <div className="min-w-[110px] space-y-2">
+                                <Badge variant="neutral">
+                                  {emailProviderLabelMap[email.provider]}
+                                </Badge>
+                              </div>
+                            </td>
+                            <td className="px-4 py-4 text-sm text-[var(--foreground)]">
+                              <div className="min-w-[90px]">
+                                {email.attemptCount}/{email.maxAttempts}
+                              </div>
+                            </td>
+                            <td className="px-4 py-4">
+                              <div className="min-w-[190px]">
+                                {canRequeue ? (
+                                  <form action={requeueEmailMessageAction}>
+                                    <input type="hidden" name="messageId" value={email.id} />
+                                    <Button type="submit" variant="outline" size="sm">
+                                      <MailCheck className="mr-2 h-4 w-4" />
+                                      Повторить
+                                    </Button>
+                                  </form>
+                                ) : (
+                                  <span className="text-xs text-[var(--muted)]">
+                                    Повтор не нужен
+                                  </span>
+                                )}
+                              </div>
+                            </td>
+                          </tr>
+                          {email.lastError ? (
+                            <tr className="border-b border-[var(--border)] last:border-b-0">
+                              <td colSpan={8} className="px-4 pb-4">
+                                <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-4 text-sm leading-6 text-red-700">
+                                  {email.lastError}
+                                </div>
+                              </td>
+                            </tr>
+                          ) : null}
+                        </Fragment>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
         </WorkspacePanel>
