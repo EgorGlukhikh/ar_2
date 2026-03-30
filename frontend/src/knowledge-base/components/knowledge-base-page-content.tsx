@@ -73,14 +73,15 @@ export function KnowledgeBasePageContent({
         }
       />
 
-      <div className="grid gap-6 xl:grid-cols-[300px_1fr]">
-        <div className="space-y-6 xl:sticky xl:top-6 xl:self-start">
+      <div className="grid gap-6 xl:grid-cols-[256px_minmax(0,1fr)]">
+        <div className="space-y-4 xl:sticky xl:top-6 xl:self-start">
           <WorkspacePanel
             eyebrow={accent.badge}
             title={accent.title}
             description={accent.description}
+            className="p-5"
           >
-            <div className="rounded-[22px] border border-[var(--border)] bg-[var(--primary-soft)]/60 px-4 py-4 text-sm leading-7 text-[var(--foreground)]">
+            <div className="rounded-[20px] border border-[var(--border)] bg-[var(--primary-soft)]/60 px-4 py-4 text-sm leading-7 text-[var(--foreground)]">
               <div className="flex items-start gap-3">
                 <div className="mt-1 rounded-2xl bg-white p-2 text-[var(--primary)] shadow-sm">
                   <ShieldCheck className="h-4 w-4" />
@@ -100,14 +101,14 @@ export function KnowledgeBasePageContent({
                 <a
                   key={module.id}
                   href={`#${module.id}`}
-                  className="group block rounded-[22px] border border-[var(--border)] bg-[var(--surface)] px-4 py-4 transition hover:border-[var(--primary)] hover:bg-white"
+                  className="group block rounded-[20px] border border-[var(--border)] bg-[var(--surface)] px-4 py-4 transition hover:border-[var(--primary)] hover:bg-white"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div>
                       <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
                         Раздел {index + 1}
                       </p>
-                      <p className="mt-2 text-base font-semibold text-[var(--foreground)]">
+                      <p className="mt-2 text-[17px] font-semibold leading-7 text-[var(--foreground)]">
                         {module.title}
                       </p>
                       <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
