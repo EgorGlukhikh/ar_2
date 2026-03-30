@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Fragment } from "react";
 import {
   Clock3,
+  ChevronDown,
   Eye,
   MailCheck,
   MailWarning,
@@ -869,7 +870,21 @@ export default async function AdminEmailsPage({
           title="Боевые параметры контура"
           description="То, что должно быть настроено на Railway и в канале отправки, чтобы сервис работал как production email-слой."
         >
-          <div className="grid gap-4 lg:grid-cols-2">
+          <details className="group rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)]">
+            <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 marker:content-none">
+              <div>
+                <p className="text-sm font-semibold text-[var(--foreground)]">
+                  Показать параметры интеграции
+                </p>
+                <p className="mt-1 text-sm leading-6 text-[var(--muted)]">
+                  Railway-переменные и состояние канала отправки для production.
+                </p>
+              </div>
+              <ChevronDown className="h-5 w-5 text-[var(--muted)] transition-transform duration-200 group-open:rotate-180" />
+            </summary>
+
+            <div className="border-t border-[var(--border)] px-5 py-5">
+              <div className="grid gap-4 lg:grid-cols-2">
             {[
               {
                 label: "EMAIL_PROVIDER",
@@ -949,7 +964,7 @@ export default async function AdminEmailsPage({
             ].map((item) => (
               <div
                 key={item.label}
-                className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] px-5 py-4"
+                className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--background)] px-5 py-4"
               >
                 <div className="flex items-center justify-between gap-3">
                   <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
@@ -964,7 +979,9 @@ export default async function AdminEmailsPage({
                 </p>
               </div>
             ))}
-          </div>
+              </div>
+            </div>
+          </details>
         </WorkspacePanel>
       </div>
     </div>
