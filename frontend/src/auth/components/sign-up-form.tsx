@@ -13,6 +13,14 @@ import type {
   RegisterResponse,
 } from "@shared/public-auth/types";
 
+function getAuthCallbackUrl() {
+  if (typeof window === "undefined") {
+    return "/after-sign-in";
+  }
+
+  return new URL("/after-sign-in", window.location.origin).toString();
+}
+
 /**
  * Purpose: credentials registration via API, then immediate login through NextAuth.
  */
@@ -62,7 +70,7 @@ export function SignUpForm({
       email,
       password,
       redirect: false,
-      callbackUrl: "/after-sign-in",
+      callbackUrl: getAuthCallbackUrl(),
     });
 
     setPending(false);

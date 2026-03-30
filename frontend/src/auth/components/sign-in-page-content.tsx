@@ -13,6 +13,14 @@ import { formatPublicCopy } from "@/lib/public-copy";
 import { cn } from "@/lib/utils";
 import type { AuthTab, PublicAuthScreenPayload } from "@shared/public-auth/types";
 
+function getAuthCallbackUrl() {
+  if (typeof window === "undefined") {
+    return "/after-sign-in";
+  }
+
+  return new URL("/after-sign-in", window.location.origin).toString();
+}
+
 /**
  * Purpose: standalone auth experience with explicit login and registration states.
  */
@@ -27,7 +35,7 @@ export function SignInPageContent({
   async function handleYandexSignIn() {
     setYandexPending(true);
     await signIn("yandex", {
-      callbackUrl: "/after-sign-in",
+      callbackUrl: getAuthCallbackUrl(),
     });
   }
 

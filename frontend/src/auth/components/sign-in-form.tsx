@@ -9,6 +9,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { formatPublicCopy } from "@/lib/public-copy";
 
+function getAuthCallbackUrl() {
+  if (typeof window === "undefined") {
+    return "/after-sign-in";
+  }
+
+  return new URL("/after-sign-in", window.location.origin).toString();
+}
+
 /**
  * Purpose: credentials sign-in through NextAuth API without server actions in the page layer.
  */
@@ -29,7 +37,7 @@ export function SignInForm({
       email: String(formData.get("email") ?? ""),
       password: String(formData.get("password") ?? ""),
       redirect: false,
-      callbackUrl: "/after-sign-in",
+      callbackUrl: getAuthCallbackUrl(),
     });
 
     setPending(false);
