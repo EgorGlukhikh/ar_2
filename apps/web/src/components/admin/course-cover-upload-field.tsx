@@ -153,7 +153,7 @@ export function CourseCoverUploadField({
           {error ? <p className="mt-2 text-sm text-[var(--danger)]">{error}</p> : null}
 
           <div className="mt-4 overflow-hidden rounded-[20px] border border-[var(--border)] bg-white">
-            <div className="aspect-video w-full bg-[linear-gradient(135deg,rgba(92,98,255,0.08),rgba(255,179,214,0.1))]">
+            <div className="h-32 w-full bg-[linear-gradient(135deg,rgba(92,98,255,0.08),rgba(255,179,214,0.1))] sm:h-36">
               {coverUrl ? (
                 <div
                   aria-label="Превью обложки курса"
