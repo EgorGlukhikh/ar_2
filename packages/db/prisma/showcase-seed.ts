@@ -57,6 +57,11 @@ type ShowcaseCourse = {
   lessons: ShowcaseLesson[];
 };
 
+type ShowcaseCourseCatalogMeta = {
+  topic: string;
+  tags: string[];
+};
+
 function normalizeLessonBlocks(blocks: LessonBlock[]) {
   return blocks
     .map((block, index) => {
@@ -147,6 +152,34 @@ const SOURCE_URLS = {
   fairHousing: "https://www.hud.gov/helping-americans/fair-housing-act-overview",
   closeTheDeal: "https://www.consumerfinance.gov/owning-a-home/close/close-the-deal/",
 } as const;
+
+const SHOWCASE_COURSE_CATALOG_META: Record<string, ShowcaseCourseCatalogMeta> = {
+  "rieltor-client-intake": {
+    topic: "Старт и первый клиент",
+    tags: ["старт", "бриф", "первая сделка", "коммуникация"],
+  },
+  "seller-listing-system": {
+    topic: "Листинг и подготовка объекта",
+    tags: ["листинг", "подготовка объекта", "показы", "продавец"],
+  },
+  "buyer-deal-finance-closing": {
+    topic: "Покупатель и закрытие сделки",
+    tags: ["покупатель", "бюджет", "переговоры", "закрытие сделки"],
+  },
+  "ethics-safety-real-estate": {
+    topic: "Этика и безопасность",
+    tags: ["этика", "безопасность", "конфиденциальность", "равный доступ"],
+  },
+};
+
+function getShowcaseCourseCatalogMeta(slug: string): ShowcaseCourseCatalogMeta {
+  return (
+    SHOWCASE_COURSE_CATALOG_META[slug] ?? {
+      topic: "Обучение риэлтора",
+      tags: [],
+    }
+  );
+}
 
 const showcaseCourses: ShowcaseCourse[] = [
   {
@@ -731,6 +764,8 @@ export async function seedShowcaseAcademy(preferredAuthorEmail?: string | null) 
   }
 
   for (const courseDefinition of showcaseCourses) {
+    const catalogMeta = getShowcaseCourseCatalogMeta(courseDefinition.slug);
+
     const course = await prisma.course.upsert({
       where: {
         slug: courseDefinition.slug,
@@ -739,12 +774,16 @@ export async function seedShowcaseAcademy(preferredAuthorEmail?: string | null) 
         slug: courseDefinition.slug,
         title: courseDefinition.title,
         description: courseDefinition.description,
+        topic: catalogMeta.topic,
+        tags: catalogMeta.tags,
         status: CourseStatus.PUBLISHED,
         authorId: author.id,
       },
       update: {
         title: courseDefinition.title,
         description: courseDefinition.description,
+        topic: catalogMeta.topic,
+        tags: catalogMeta.tags,
         status: CourseStatus.PUBLISHED,
         authorId: author.id,
       },

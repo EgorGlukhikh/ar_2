@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import {
   BookOpen,
+  ChevronDown,
   Filter,
   LayoutTemplate,
   Tags,
@@ -61,6 +62,7 @@ export function AdminCoursesBrowser({
 }) {
   const [activeTopic, setActiveTopic] = useState<TopicFilterValue>("all");
   const [activeTag, setActiveTag] = useState<TagFilterValue>("all");
+  const [isFiltersOpen, setIsFiltersOpen] = useState(true);
 
   const topics = useMemo(() => {
     const uniqueTopics = Array.from(
@@ -72,7 +74,11 @@ export function AdminCoursesBrowser({
 
   const tags = useMemo(() => {
     const uniqueTags = Array.from(
-      new Set(payload.courses.flatMap((course) => course.tags.map((tag) => tag.trim())).filter(Boolean)),
+      new Set(
+        payload.courses
+          .flatMap((course) => course.tags.map((tag) => tag.trim()))
+          .filter(Boolean),
+      ),
     ).sort((left, right) => left.localeCompare(right, "ru"));
 
     return ["all", ...uniqueTags];
@@ -84,87 +90,112 @@ export function AdminCoursesBrowser({
         activeTopic === "all" || getTopicLabel(course.topic) === activeTopic;
       const matchesTag =
         activeTag === "all" ||
-        course.tags.some((tag) => normalizeToken(tag) === normalizeToken(activeTag));
+        course.tags.some(
+          (tag) => normalizeToken(tag) === normalizeToken(activeTag),
+        );
 
       return matchesTopic && matchesTag;
     });
   }, [activeTag, activeTopic, payload.courses]);
 
+  const activeFiltersCount = Number(activeTopic !== "all") + Number(activeTag !== "all");
+
   return (
     <div className="space-y-5">
       <section className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[linear-gradient(180deg,_rgba(245,247,255,0.96)_0%,_rgba(255,255,255,0.98)_100%)] p-5 shadow-[var(--shadow-sm)]">
         <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
-          <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-white/90 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
+          <div className="space-y-3">
+            <button
+              type="button"
+              onClick={() => setIsFiltersOpen((value) => !value)}
+              className="group inline-flex items-center gap-3 rounded-full border border-[var(--border)] bg-white/90 px-3 py-2 text-left text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--muted)] transition hover:border-[#dce4ff] hover:text-[var(--foreground)]"
+              aria-expanded={isFiltersOpen}
+            >
               <Filter className="h-3.5 w-3.5" />
-              Фильтры каталога
-            </div>
+              <span>Фильтры каталога</span>
+              {activeFiltersCount > 0 ? (
+                <span className="rounded-full bg-[var(--primary-soft)] px-2 py-0.5 text-[10px] text-[var(--primary)]">
+                  {activeFiltersCount}
+                </span>
+              ) : null}
+              <ChevronDown
+                className={cn(
+                  "h-4 w-4 transition duration-200",
+                  isFiltersOpen ? "rotate-180 text-[var(--primary)]" : "text-[var(--muted)]",
+                )}
+              />
+            </button>
+
             <p className="max-w-2xl text-sm leading-7 text-[var(--muted)]">
-              Темы и теги помогают быстро собирать курсы в понятные группы. Это не
-              кнопки-действия, а рабочие фильтры списка.
+              Темы и теги помогают быстро собирать курсы в понятные группы.
+              Это рабочие фильтры списка, их можно свернуть, когда они не нужны.
             </p>
           </div>
 
           <div className="rounded-[18px] border border-[var(--border)] bg-white px-4 py-3 text-sm text-[var(--muted)]">
             Показано курсов:{" "}
-            <span className="font-semibold text-[var(--foreground)]">{visibleCourses.length}</span>
-            {" "}из {payload.totalCourses}
+            <span className="font-semibold text-[var(--foreground)]">
+              {visibleCourses.length}
+            </span>{" "}
+            из {payload.totalCourses}
           </div>
         </div>
 
-        <div className="mt-5 grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
-          <div className="space-y-3">
-            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
-              <LayoutTemplate className="h-3.5 w-3.5" />
-              Темы
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {topics.map((topic) => {
-                const isActive = activeTopic === topic;
-                const label = topic === "all" ? "Все темы" : topic;
-
-                return (
-                  <FilterChip
-                    key={topic}
-                    active={isActive}
-                    onClick={() => setActiveTopic(topic)}
-                  >
-                    {label}
-                  </FilterChip>
-                );
-              })}
-            </div>
-          </div>
-
-          <div className="space-y-3">
-            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
-              <Tags className="h-3.5 w-3.5" />
-              Теги
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {tags.length > 1 ? (
-                tags.map((tag) => {
-                  const isActive = activeTag === tag;
-                  const label = tag === "all" ? "Все теги" : tag;
+        {isFiltersOpen ? (
+          <div className="mt-5 grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+            <div className="space-y-3">
+              <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
+                <LayoutTemplate className="h-3.5 w-3.5" />
+                Темы
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {topics.map((topic) => {
+                  const isActive = activeTopic === topic;
+                  const label = topic === "all" ? "Все темы" : topic;
 
                   return (
                     <FilterChip
-                      key={tag}
+                      key={topic}
                       active={isActive}
-                      onClick={() => setActiveTag(tag)}
+                      onClick={() => setActiveTopic(topic)}
                     >
                       {label}
                     </FilterChip>
                   );
-                })
-              ) : (
-                <div className="rounded-full border border-dashed border-[var(--border)] px-4 py-2 text-sm text-[var(--muted)]">
-                  Пока нет тегов. Их можно задать в карточке курса.
-                </div>
-              )}
+                })}
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
+                <Tags className="h-3.5 w-3.5" />
+                Теги
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {tags.length > 1 ? (
+                  tags.map((tag) => {
+                    const isActive = activeTag === tag;
+                    const label = tag === "all" ? "Все теги" : tag;
+
+                    return (
+                      <FilterChip
+                        key={tag}
+                        active={isActive}
+                        onClick={() => setActiveTag(tag)}
+                      >
+                        {label}
+                      </FilterChip>
+                    );
+                  })
+                ) : (
+                  <div className="rounded-full border border-dashed border-[var(--border)] px-4 py-2 text-sm text-[var(--muted)]">
+                    Пока нет тегов. Их можно задать в карточке курса.
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-        </div>
+        ) : null}
       </section>
 
       {visibleCourses.length === 0 ? (
@@ -176,10 +207,20 @@ export function AdminCoursesBrowser({
             Сбрось тему или тег, чтобы увидеть другие программы.
           </p>
           <div className="mt-5 flex justify-center gap-3">
-            <Button type="button" variant="outline" size="sm" onClick={() => setActiveTopic("all")}>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => setActiveTopic("all")}
+            >
               Сбросить тему
             </Button>
-            <Button type="button" variant="outline" size="sm" onClick={() => setActiveTag("all")}>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => setActiveTag("all")}
+            >
               Сбросить тег
             </Button>
           </div>
@@ -238,7 +279,9 @@ export function AdminCoursesBrowser({
                     <div className="rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-4">
                       <div className="flex items-center gap-2">
                         <BookOpen className="h-4 w-4 shrink-0 text-[var(--primary)]" />
-                        <p className="text-sm font-medium text-[var(--foreground)]">Программа</p>
+                        <p className="text-sm font-medium text-[var(--foreground)]">
+                          Программа
+                        </p>
                       </div>
                       <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
                         {course.moduleCount} модулей и {course.lessonCount} уроков внутри курса.
@@ -272,7 +315,9 @@ export function AdminCoursesBrowser({
 
                 <div className="mt-auto flex flex-wrap gap-3">
                   <Button asChild size="sm">
-                    <Link href={`/admin/courses/${course.id}/content`}>Открыть программу</Link>
+                    <Link href={`/admin/courses/${course.id}/content`}>
+                      Открыть программу
+                    </Link>
                   </Button>
                   <Button asChild variant="outline" size="sm">
                     <Link href={`/admin/courses/${course.id}`}>
@@ -281,7 +326,9 @@ export function AdminCoursesBrowser({
                   </Button>
                   {payload.isAdminMode ? (
                     <Button asChild variant="outline" size="sm">
-                      <Link href={`/admin/courses/${course.id}/access`}>Доступ и продажи</Link>
+                      <Link href={`/admin/courses/${course.id}/access`}>
+                        Доступ и продажи
+                      </Link>
                     </Button>
                   ) : null}
                 </div>
