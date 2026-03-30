@@ -174,8 +174,22 @@ function getRecipientCategoryLabel(email: {
   return getAudienceLabel(template.audience);
 }
 
-export default async function AdminEmailsPage() {
+type AdminEmailsPageProps = {
+  searchParams?: Promise<{
+    q?: string;
+    status?: string;
+    kind?: string;
+  }>;
+};
+
+export default async function AdminEmailsPage({
+  searchParams,
+}: AdminEmailsPageProps) {
   const user = await requireRoleAccess([USER_ROLES.ADMIN, USER_ROLES.SALES_MANAGER]);
+  const resolvedSearchParams = searchParams ? await searchParams : undefined;
+  const logQuery = resolvedSearchParams?.q?.trim() ?? "";
+  const statusFilter = resolvedSearchParams?.status?.trim() ?? "all";
+  const kindFilter = resolvedSearchParams?.kind?.trim() ?? "all";
 
   const [emailStats, emails, campaigns, courses, preferenceStats] = await Promise.all([
     prisma.emailMessage.groupBy({
@@ -184,7 +198,7 @@ export default async function AdminEmailsPage() {
     }),
     prisma.emailMessage.findMany({
       orderBy: { createdAt: "desc" },
-      take: 30,
+      take: 80,
       include: {
         user: { select: { id: true, email: true, name: true } },
         course: { select: { id: true, title: true } },
@@ -218,6 +232,28 @@ export default async function AdminEmailsPage() {
   );
 
   const config = getEmailSystemConfig();
+  const filteredEmails = emails.filter((email) => {
+    const matchesQuery =
+      !logQuery ||
+      [
+        email.subject,
+        email.toName,
+        email.toEmail,
+        email.templateKey,
+        email.course?.title,
+        email.campaign?.name,
+      ]
+        .filter(Boolean)
+        .some((value) => value!.toLowerCase().includes(logQuery.toLowerCase()));
+
+    const matchesStatus = statusFilter === "all" || email.status === statusFilter;
+    const matchesKind =
+      kindFilter === "all" ||
+      (kindFilter === "marketing" && email.kind === EmailKind.MARKETING) ||
+      (kindFilter === "transactional" && email.kind === EmailKind.TRANSACTIONAL);
+
+    return matchesQuery && matchesStatus && matchesKind;
+  });
   const queuedCount = statsMap.get(EmailStatus.QUEUED) ?? 0;
   const sentCount =
     (statsMap.get(EmailStatus.SENT) ?? 0) + (statsMap.get(EmailStatus.DELIVERED) ?? 0);
@@ -231,7 +267,7 @@ export default async function AdminEmailsPage() {
   const modeMetrics = {
     "email-test-section": emailTemplateCatalog.length,
     "email-campaigns-section": campaigns.length,
-    "email-log-section": emails.length,
+    "email-log-section": filteredEmails.length,
     "email-settings-section": 9,
   } as const;
 
@@ -656,10 +692,56 @@ export default async function AdminEmailsPage() {
           title="3. Последние письма"
           description="Здесь видны сервисные письма, тестовые отправки, кампании, ошибки и история повторной отправки."
         >
-          {emails.length === 0 ? (
+          <div className="mb-5 flex flex-col gap-4 rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-4 lg:flex-row lg:items-end lg:justify-between">
+            <form action="/admin/emails" className="grid flex-1 gap-3 md:grid-cols-3">
+              <div className="space-y-2 md:col-span-1">
+                <Label htmlFor="email-log-query">Поиск по теме, получателю или курсу</Label>
+                <Input
+                  id="email-log-query"
+                  name="q"
+                  defaultValue={logQuery}
+                  placeholder="Например, Егор, welcome, курс или оплата"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="email-log-status">Статус</Label>
+                <Select id="email-log-status" name="status" defaultValue={statusFilter}>
+                  <option value="all">Все статусы</option>
+                  {Object.entries(emailStatusLabelMap).map(([value, label]) => (
+                    <option key={value} value={value}>
+                      {label}
+                    </option>
+                  ))}
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="email-log-kind">Тип письма</Label>
+                <Select id="email-log-kind" name="kind" defaultValue={kindFilter}>
+                  <option value="all">Все типы</option>
+                  <option value="transactional">Сервисные</option>
+                  <option value="marketing">Маркетинговые</option>
+                </Select>
+              </div>
+              <div className="flex flex-wrap gap-3 md:col-span-3">
+                <Button type="submit">Применить фильтры</Button>
+                <Button asChild variant="outline">
+                  <Link href="/admin/emails#email-log-section">Сбросить</Link>
+                </Button>
+              </div>
+            </form>
+
+            <div className="rounded-2xl border border-[var(--border)] bg-white px-4 py-3 text-sm text-[var(--muted)]">
+              <p>Показано записей</p>
+              <p className="mt-1 text-2xl font-semibold tracking-[-0.03em] text-[var(--foreground)]">
+                {filteredEmails.length}
+              </p>
+            </div>
+          </div>
+
+          {filteredEmails.length === 0 ? (
             <WorkspaceEmptyState
-              title="Пока нет писем"
-              description="После первых тестовых отправок, кампаний и сервисных событий здесь начнёт собираться полная история сообщений."
+              title="Ничего не найдено"
+              description="Попробуйте изменить поиск или снять часть фильтров. История писем остаётся в журнале, даже если текущая выборка пустая."
               className="border-[var(--border)] bg-[var(--surface)] shadow-none"
             />
           ) : (
@@ -668,34 +750,34 @@ export default async function AdminEmailsPage() {
                 <table className="min-w-[1080px] w-full border-collapse text-sm">
                   <thead>
                     <tr className="border-b border-[var(--border)] bg-[var(--surface-strong)] text-left">
-                      <th className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
+                      <th className="sticky top-0 z-10 bg-[var(--surface-strong)] px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
                         Дата и время
                       </th>
-                      <th className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
+                      <th className="sticky top-0 z-10 bg-[var(--surface-strong)] px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
                         Тема
                       </th>
-                      <th className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
+                      <th className="sticky top-0 z-10 bg-[var(--surface-strong)] px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
                         Получатель
                       </th>
-                      <th className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
+                      <th className="sticky top-0 z-10 bg-[var(--surface-strong)] px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
                         Категория
                       </th>
-                      <th className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
+                      <th className="sticky top-0 z-10 bg-[var(--surface-strong)] px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
                         Статус
                       </th>
-                      <th className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
+                      <th className="sticky top-0 z-10 bg-[var(--surface-strong)] px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
                         Канал
                       </th>
-                      <th className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
+                      <th className="sticky top-0 z-10 bg-[var(--surface-strong)] px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
                         Попытки
                       </th>
-                      <th className="px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
+                      <th className="sticky top-0 z-10 bg-[var(--surface-strong)] px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
                         Действие
                       </th>
                     </tr>
                   </thead>
                   <tbody>
-                    {emails.map((email) => {
+                    {filteredEmails.map((email) => {
                       const canRequeue = requeueableStatuses.includes(
                         email.status as (typeof requeueableStatuses)[number],
                       );
