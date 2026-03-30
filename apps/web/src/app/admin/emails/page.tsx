@@ -3,10 +3,12 @@ import {
   Clock3,
   Eye,
   MailCheck,
+  MailOpen,
   MailWarning,
   PauseCircle,
   PlayCircle,
   Send,
+  Settings2,
 } from "lucide-react";
 
 import {
@@ -80,7 +82,7 @@ const segmentLabelMap: Record<EmailCampaignSegment, string> = {
   ALL_OPTED_IN_STUDENTS: "Все студенты с согласием",
   STUDENTS_WITHOUT_PURCHASE: "Студенты без покупки",
   STUDENTS_WITH_PURCHASE: "Студенты с покупкой",
-  STUDENTS_ENROLLED_IN_COURSE: "Студенты конкретного курса",
+  STUDENTS_ENROLLED_IN_COURSE: "Студенты выбранного курса",
   INACTIVE_STUDENTS: "Неактивные студенты",
   ALL_OPTED_IN_EXPERTS: "Все эксперты с согласием",
 };
@@ -90,6 +92,43 @@ const requeueableStatuses = [
   EmailStatus.BOUNCED,
   EmailStatus.COMPLAINED,
   EmailStatus.CANCELED,
+] as const;
+
+const workspaceEmailModes = [
+  {
+    id: "email-test-section",
+    eyebrow: "Режим 1",
+    title: "Тест себе",
+    description:
+      "Проверка шаблона, темы, вёрстки и ссылок перед реальной отправкой.",
+    metricLabel: "шаблонов",
+    icon: MailOpen,
+  },
+  {
+    id: "email-campaigns-section",
+    eyebrow: "Режим 2",
+    title: "Ручные рассылки",
+    description:
+      "Запуск кампаний по шаблону, курсу и сегменту без ручной вёрстки.",
+    metricLabel: "кампаний",
+    icon: Send,
+  },
+  {
+    id: "email-log-section",
+    eyebrow: "Режим 3",
+    title: "Последние письма",
+    description: "Журнал статусов, ошибок, попыток и повторной отправки.",
+    metricLabel: "писем",
+    icon: Eye,
+  },
+  {
+    id: "email-settings-section",
+    eyebrow: "Режим 4",
+    title: "Настройки",
+    description: "Проверка боевых параметров, reply-to и канала отправки.",
+    metricLabel: "параметров",
+    icon: Settings2,
+  },
 ] as const;
 
 function formatDateTime(value?: Date | null) {
@@ -106,73 +145,32 @@ export default async function AdminEmailsPage() {
   const [emailStats, emails, campaigns, courses, preferenceStats] = await Promise.all([
     prisma.emailMessage.groupBy({
       by: ["status"],
-      _count: {
-        _all: true,
-      },
+      _count: { _all: true },
     }),
     prisma.emailMessage.findMany({
-      orderBy: {
-        createdAt: "desc",
-      },
+      orderBy: { createdAt: "desc" },
       take: 30,
       include: {
-        user: {
-          select: {
-            id: true,
-            email: true,
-            name: true,
-          },
-        },
-        course: {
-          select: {
-            id: true,
-            title: true,
-          },
-        },
-        campaign: {
-          select: {
-            id: true,
-            name: true,
-            status: true,
-          },
-        },
+        user: { select: { id: true, email: true, name: true } },
+        course: { select: { id: true, title: true } },
+        campaign: { select: { id: true, name: true, status: true } },
       },
     }),
     prisma.emailCampaign.findMany({
-      orderBy: {
-        createdAt: "desc",
-      },
+      orderBy: { createdAt: "desc" },
       take: 12,
       include: {
-        course: {
-          select: {
-            id: true,
-            title: true,
-          },
-        },
-        createdBy: {
-          select: {
-            name: true,
-            email: true,
-          },
-        },
+        course: { select: { id: true, title: true } },
+        createdBy: { select: { name: true, email: true } },
       },
     }),
     prisma.course.findMany({
-      orderBy: {
-        title: "asc",
-      },
-      select: {
-        id: true,
-        title: true,
-        slug: true,
-      },
+      orderBy: { title: "asc" },
+      select: { id: true, title: true, slug: true },
     }),
     prisma.emailPreference.groupBy({
       by: ["audienceType", "isMarketingEnabled"],
-      _count: {
-        _all: true,
-      },
+      _count: { _all: true },
     }),
   ]);
 
@@ -185,13 +183,29 @@ export default async function AdminEmailsPage() {
   );
 
   const config = getEmailSystemConfig();
+  const queuedCount = statsMap.get(EmailStatus.QUEUED) ?? 0;
+  const sentCount =
+    (statsMap.get(EmailStatus.SENT) ?? 0) + (statsMap.get(EmailStatus.DELIVERED) ?? 0);
+  const openedCount =
+    (statsMap.get(EmailStatus.OPENED) ?? 0) + (statsMap.get(EmailStatus.CLICKED) ?? 0);
+  const failedCount =
+    (statsMap.get(EmailStatus.FAILED) ?? 0) +
+    (statsMap.get(EmailStatus.BOUNCED) ?? 0) +
+    (statsMap.get(EmailStatus.COMPLAINED) ?? 0);
+
+  const modeMetrics = {
+    "email-test-section": emailTemplateCatalog.length,
+    "email-campaigns-section": campaigns.length,
+    "email-log-section": emails.length,
+    "email-settings-section": 9,
+  } as const;
 
   return (
     <section className="space-y-6">
       <WorkspacePageHeader
         eyebrow="Почтовый центр"
         title="Сервисные письма и кампании платформы"
-        description="Здесь собраны здоровье отправки, шаблоны, ручные кампании, тестовые письма и журнал событий. Сервисные письма и маркетинговые рассылки живут в одном контуре, но управляются отдельно."
+        description="Экран разделён на понятные рабочие зоны: отдельно тест себе, отдельно ручные рассылки, отдельно журнал последних писем и настройки контура."
         actions={
           <>
             <form action={processEmailQueueNow} className="contents">
@@ -204,38 +218,77 @@ export default async function AdminEmailsPage() {
         }
       />
 
+      <div className="grid gap-4 xl:grid-cols-4">
+        {workspaceEmailModes.map((mode) => {
+          const Icon = mode.icon;
+
+          return (
+            <a
+              key={mode.id}
+              href={`#${mode.id}`}
+              className="group rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] px-5 py-5 shadow-[var(--shadow-sm)] transition hover:-translate-y-[1px] hover:border-[var(--primary)] hover:shadow-[var(--shadow-md)]"
+            >
+              <div className="flex items-start justify-between gap-4">
+                <div className="space-y-2">
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
+                    {mode.eyebrow}
+                  </p>
+                  <h2 className="text-xl font-semibold tracking-[-0.02em] text-[var(--foreground)]">
+                    {mode.title}
+                  </h2>
+                </div>
+                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[var(--primary-soft)] text-[var(--primary)] transition group-hover:scale-[1.03]">
+                  <Icon className="h-5 w-5" />
+                </div>
+              </div>
+              <p className="mt-3 text-sm leading-6 text-[var(--muted)]">{mode.description}</p>
+              <p className="mt-4 text-sm font-semibold text-[var(--foreground)]">
+                {modeMetrics[mode.id]} {mode.metricLabel}
+              </p>
+            </a>
+          );
+        })}
+      </div>
+
+      <div className="overflow-x-auto">
+        <div className="flex min-w-max gap-3 rounded-full border border-[var(--border)] bg-[var(--surface)] p-2 shadow-[var(--shadow-sm)]">
+          <Button asChild size="sm" variant="outline" className="rounded-full">
+            <a href="#email-test-section">Тест себе</a>
+          </Button>
+          <Button asChild size="sm" variant="outline" className="rounded-full">
+            <a href="#email-campaigns-section">Ручные рассылки</a>
+          </Button>
+          <Button asChild size="sm" variant="outline" className="rounded-full">
+            <a href="#email-log-section">Последние письма</a>
+          </Button>
+          <Button asChild size="sm" variant="outline" className="rounded-full">
+            <a href="#email-settings-section">Настройки</a>
+          </Button>
+        </div>
+      </div>
+
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <WorkspaceStatCard
           label="В очереди"
-          value={statsMap.get(EmailStatus.QUEUED) ?? 0}
+          value={queuedCount}
           hint="Письма и кампании, которые уже созданы и ждут отправки."
           icon={Clock3}
         />
         <WorkspaceStatCard
-          label="Доставлено"
-          value={
-            (statsMap.get(EmailStatus.SENT) ?? 0) +
-            (statsMap.get(EmailStatus.DELIVERED) ?? 0)
-          }
+          label="Отправлено"
+          value={sentCount}
           hint="Письма, которые уже ушли в провайдер или были доставлены."
           icon={Send}
         />
         <WorkspaceStatCard
           label="Открыто"
-          value={
-            (statsMap.get(EmailStatus.OPENED) ?? 0) +
-            (statsMap.get(EmailStatus.CLICKED) ?? 0)
-          }
+          value={openedCount}
           hint="Открытия и клики по письмам, включая маркетинговые кампании."
           icon={Eye}
         />
         <WorkspaceStatCard
           label="Ошибки"
-          value={
-            (statsMap.get(EmailStatus.FAILED) ?? 0) +
-            (statsMap.get(EmailStatus.BOUNCED) ?? 0) +
-            (statsMap.get(EmailStatus.COMPLAINED) ?? 0)
-          }
+          value={failedCount}
           hint="Финальные ошибки доставки, возвраты и жалобы."
           icon={MailWarning}
         />
@@ -244,7 +297,7 @@ export default async function AdminEmailsPage() {
       <WorkspacePanel
         eyebrow="Dashboard"
         title="Здоровье контура"
-        description="Сводка по подпискам, конфигурации отправки и боевым точкам контура."
+        description="Короткая сводка по подпискам, провайдеру отправки и базовым параметрам контура."
       >
         <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-4">
           <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] px-5 py-4">
@@ -288,448 +341,492 @@ export default async function AdminEmailsPage() {
         </div>
       </WorkspacePanel>
 
-      <WorkspacePanel
-        eyebrow="Шаблоны"
-        title="Тестовая отправка и preview"
-        description={`Тестовые письма отправляются на ${user.email ?? "email текущего пользователя"}. Шаблоны фиксированные, безопасные и привязаны к стилю платформы.`}
-      >
-        <div className="grid gap-6 xl:grid-cols-[minmax(0,340px)_minmax(0,1fr)]">
-          <form action={sendTestEmailAction} className="space-y-4 rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-5">
-            <div>
-              <p className="text-sm font-semibold text-[var(--foreground)]">Отправить тест себе</p>
-              <p className="mt-1 text-sm leading-6 text-[var(--muted)]">
-                Быстрая проверка HTML, темы и ссылок перед запуском кампании.
-              </p>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="test-template">Шаблон письма</Label>
-              <Select id="test-template" name="templateKey" defaultValue="campaign-course-launch">
-                {emailTemplateCatalog.map((template) => (
-                  <option key={template.key} value={template.key}>
-                    {template.label}
-                  </option>
-                ))}
-              </Select>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="test-course">Курс для подстановки</Label>
-              <Select id="test-course" name="courseId" defaultValue="">
-                <option value="">Без курса</option>
-                {courses.map((course) => (
-                  <option key={course.id} value={course.id}>
-                    {course.title}
-                  </option>
-                ))}
-              </Select>
-            </div>
-
-            <Button type="submit" className="w-full justify-center">
-              Отправить тестовое письмо
-            </Button>
-          </form>
-
-          <div className="grid gap-4 md:grid-cols-2">
-            {emailTemplateCatalog.map((template) => (
-              <article
-                key={template.key}
-                className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-5"
-              >
-                <div className="flex flex-wrap items-center gap-2">
-                  <Badge variant="neutral">{template.category}</Badge>
-                  <Badge variant="neutral">{template.audience}</Badge>
-                  {template.requiresCourse ? <Badge variant="warning">Нужен курс</Badge> : null}
-                </div>
-                <h3 className="mt-4 text-lg font-semibold text-[var(--foreground)]">
-                  {template.label}
-                </h3>
-                <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
-                  {template.description}
+      <div id="email-test-section" className="scroll-mt-24">
+        <WorkspacePanel
+          eyebrow="Шаблоны"
+          title="1. Тест себе и preview"
+          description={`Здесь ты просто проверяешь письмо на свою почту ${user.email ?? "текущего пользователя"}: как выглядит тема, HTML, ссылки и общий тон. Это отдельный режим тестирования, без запуска реальной кампании.`}
+        >
+          <div className="grid gap-6 xl:grid-cols-[minmax(0,340px)_minmax(0,1fr)]">
+            <form
+              action={sendTestEmailAction}
+              className="space-y-4 rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-5"
+            >
+              <div>
+                <p className="text-sm font-semibold text-[var(--foreground)]">
+                  Отправить тест себе
                 </p>
-                <div className="mt-4">
-                  <Button asChild variant="outline" size="sm">
-                    <Link href={`/admin/emails/preview?template=${template.key}`}>Preview</Link>
-                  </Button>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-      </WorkspacePanel>
+                <p className="mt-1 text-sm leading-6 text-[var(--muted)]">
+                  Быстрая проверка HTML, темы и ссылок перед запуском кампании.
+                </p>
+              </div>
 
-      <WorkspacePanel
-        eyebrow="Кампании"
-        title="Ручные рассылки по шаблону, курсу и сегменту"
-        description="Для v1 кампании создаются безопасно: шаблон, курс, сегмент и время отправки. Свободного редактора пока нет — это снижает риск ошибок в верстке и логике."
-      >
-        <div className="grid gap-6 xl:grid-cols-[minmax(0,360px)_minmax(0,1fr)]">
-          <form action={createEmailCampaignAction} className="space-y-4 rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-5">
-            <div className="space-y-2">
-              <Label htmlFor="campaign-name">Название кампании</Label>
-              <Input
-                id="campaign-name"
-                name="name"
-                placeholder="Например: Анонс нового курса по сделкам"
-              />
-            </div>
+              <div className="space-y-2">
+                <Label htmlFor="test-template">Шаблон письма</Label>
+                <Select
+                  id="test-template"
+                  name="templateKey"
+                  defaultValue="campaign-course-launch"
+                >
+                  {emailTemplateCatalog.map((template) => (
+                    <option key={template.key} value={template.key}>
+                      {template.label}
+                    </option>
+                  ))}
+                </Select>
+              </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="campaign-template">Шаблон</Label>
-              <Select id="campaign-template" name="templateKey" defaultValue={manualCampaignTemplates[0]?.key}>
-                {manualCampaignTemplates.map((template) => (
-                  <option key={template.key} value={template.key}>
-                    {template.label}
-                  </option>
-                ))}
-              </Select>
-            </div>
+              <div className="space-y-2">
+                <Label htmlFor="test-course">Курс для подстановки</Label>
+                <Select id="test-course" name="courseId" defaultValue="">
+                  <option value="">Без курса</option>
+                  {courses.map((course) => (
+                    <option key={course.id} value={course.id}>
+                      {course.title}
+                    </option>
+                  ))}
+                </Select>
+              </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="campaign-course">Курс</Label>
-              <Select id="campaign-course" name="courseId" defaultValue="">
-                <option value="">Не подставлять курс</option>
-                {courses.map((course) => (
-                  <option key={course.id} value={course.id}>
-                    {course.title}
-                  </option>
-                ))}
-              </Select>
-            </div>
+              <Button type="submit" className="w-full justify-center">
+                Отправить тестовое письмо
+              </Button>
+            </form>
 
-            <div className="space-y-2">
-              <Label htmlFor="campaign-segment">Сегмент</Label>
-              <Select
-                id="campaign-segment"
-                name="segment"
-                defaultValue={EmailCampaignSegment.ALL_OPTED_IN_STUDENTS}
-              >
-                {Object.entries(segmentLabelMap).map(([value, label]) => (
-                  <option key={value} value={value}>
-                    {label}
-                  </option>
-                ))}
-              </Select>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="campaign-scheduled-at">Отложить отправку</Label>
-              <Input id="campaign-scheduled-at" name="scheduledAt" type="datetime-local" />
-            </div>
-
-            <Button type="submit" className="w-full justify-center">
-              Создать кампанию
-            </Button>
-          </form>
-
-          <div className="space-y-4">
-            {campaigns.length === 0 ? (
-              <WorkspaceEmptyState
-                title="Кампаний пока нет"
-                description="Создайте первую ручную кампанию, чтобы протестировать сегменты, шаблоны и планирование отправки."
-                className="border-[var(--border)] bg-[var(--surface)] shadow-none"
-              />
-            ) : (
-              campaigns.map((campaign) => (
+            <div className="grid gap-4 md:grid-cols-2">
+              {emailTemplateCatalog.map((template) => (
                 <article
-                  key={campaign.id}
+                  key={template.key}
                   className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-5"
                 >
-                  <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-                    <div className="space-y-2">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <Badge variant={campaignStatusVariantMap[campaign.status]}>
-                          {campaignStatusLabelMap[campaign.status]}
-                        </Badge>
-                        <Badge variant="neutral">
-                          {segmentLabelMap[campaign.segment]}
-                        </Badge>
-                      </div>
-                      <h3 className="text-lg font-semibold text-[var(--foreground)]">
-                        {campaign.name}
-                      </h3>
-                      <p className="text-sm leading-6 text-[var(--muted)]">
-                        Шаблон: {emailTemplateCatalogMap[campaign.templateKey as keyof typeof emailTemplateCatalogMap]?.label ?? campaign.templateKey}
-                        {campaign.course ? ` · курс «${campaign.course.title}»` : ""}
-                      </p>
-                      <p className="text-sm leading-6 text-[var(--muted)]">
-                        Получателей: {campaign.recipientCount} · Создал: {campaign.createdBy.name || campaign.createdBy.email}
-                      </p>
-                    </div>
-
-                    <div className="flex flex-wrap gap-3">
-                      {campaign.status === EmailCampaignStatus.ACTIVE ||
-                      campaign.status === EmailCampaignStatus.SCHEDULED ? (
-                        <form action={pauseEmailCampaignAction}>
-                          <input type="hidden" name="campaignId" value={campaign.id} />
-                          <Button type="submit" variant="outline" size="sm">
-                            <PauseCircle className="mr-2 h-4 w-4" />
-                            Пауза
-                          </Button>
-                        </form>
-                      ) : null}
-                      {campaign.status === EmailCampaignStatus.PAUSED ? (
-                        <form action={createEmailCampaignAction}>
-                          <input type="hidden" name="name" value={campaign.name} />
-                          <input type="hidden" name="templateKey" value={campaign.templateKey} />
-                          <input type="hidden" name="segment" value={campaign.segment} />
-                          <input type="hidden" name="courseId" value={campaign.courseId ?? ""} />
-                          <input type="hidden" name="scheduledAt" value="" />
-                          <Button type="submit" size="sm">
-                            <PlayCircle className="mr-2 h-4 w-4" />
-                            Дублировать и запустить
-                          </Button>
-                        </form>
-                      ) : null}
-                      {campaign.status !== EmailCampaignStatus.CANCELED &&
-                      campaign.status !== EmailCampaignStatus.COMPLETED ? (
-                        <form action={cancelEmailCampaignAction}>
-                          <input type="hidden" name="campaignId" value={campaign.id} />
-                          <Button type="submit" variant="outline" size="sm">
-                            Отменить
-                          </Button>
-                        </form>
-                      ) : null}
-                    </div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Badge variant="neutral">{template.category}</Badge>
+                    <Badge variant="neutral">{template.audience}</Badge>
+                    {template.requiresCourse ? (
+                      <Badge variant="warning">Нужен курс</Badge>
+                    ) : null}
                   </div>
-
-                  <div className="mt-4 grid gap-3 sm:grid-cols-3">
-                    <div className="rounded-2xl border border-[var(--border)] bg-white px-4 py-3">
-                      <p className="text-sm text-[var(--muted)]">Создана</p>
-                      <p className="mt-1 font-medium text-[var(--foreground)]">
-                        {formatDateTime(campaign.createdAt)}
-                      </p>
-                    </div>
-                    <div className="rounded-2xl border border-[var(--border)] bg-white px-4 py-3">
-                      <p className="text-sm text-[var(--muted)]">Запланирована</p>
-                      <p className="mt-1 font-medium text-[var(--foreground)]">
-                        {formatDateTime(campaign.scheduledAt)}
-                      </p>
-                    </div>
-                    <div className="rounded-2xl border border-[var(--border)] bg-white px-4 py-3">
-                      <p className="text-sm text-[var(--muted)]">Завершена</p>
-                      <p className="mt-1 font-medium text-[var(--foreground)]">
-                        {formatDateTime(campaign.completedAt)}
-                      </p>
-                    </div>
+                  <h3 className="mt-4 text-lg font-semibold text-[var(--foreground)]">
+                    {template.label}
+                  </h3>
+                  <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
+                    {template.description}
+                  </p>
+                  <div className="mt-4">
+                    <Button asChild variant="outline" size="sm">
+                      <Link href={`/admin/emails/preview?template=${template.key}`}>
+                        Preview
+                      </Link>
+                    </Button>
                   </div>
-
-                  {campaign.lastError ? (
-                    <div className="mt-4 rounded-2xl border border-red-200 bg-red-50 px-4 py-4 text-sm leading-6 text-red-700">
-                      {campaign.lastError}
-                    </div>
-                  ) : null}
                 </article>
-              ))
-            )}
-          </div>
-        </div>
-      </WorkspacePanel>
-
-      <WorkspacePanel
-        eyebrow="Журнал"
-        title="Последние письма"
-        description="Здесь видны и транзакционные письма, и рассылки из кампаний, и автоматические цепочки."
-      >
-        {emails.length === 0 ? (
-          <WorkspaceEmptyState
-            title="Пока нет писем"
-            description="После первых тестовых отправок, кампаний и сервисных событий здесь начнет собираться полная история сообщений."
-            className="border-[var(--border)] bg-[var(--surface)] shadow-none"
-          />
-        ) : (
-          <div className="space-y-4">
-            {emails.map((email) => {
-              const canRequeue = requeueableStatuses.includes(
-                email.status as (typeof requeueableStatuses)[number],
-              );
-
-              return (
-                <article
-                  key={email.id}
-                  className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-5"
-                >
-                  <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-                    <div className="space-y-2">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <Badge variant={emailStatusVariantMap[email.status]}>
-                          {emailStatusLabelMap[email.status]}
-                        </Badge>
-                        <Badge variant="neutral">
-                          {email.kind === EmailKind.MARKETING ? "Маркетинг" : "Уведомление"}
-                        </Badge>
-                        <Badge variant="neutral">
-                          {emailProviderLabelMap[email.provider]}
-                        </Badge>
-                      </div>
-
-                      <h2 className="text-xl font-semibold tracking-tight text-[var(--foreground)]">
-                        {email.subject}
-                      </h2>
-                      <p className="text-sm text-[var(--muted)]">
-                        Кому: {email.toName ? `${email.toName} · ` : ""}
-                        {email.toEmail}
-                      </p>
-                      <p className="text-sm leading-7 text-[var(--muted)]">
-                        Шаблон: {email.templateKey}
-                        {email.sequenceStep ? ` · шаг ${email.sequenceStep}` : ""}
-                        {email.course ? ` · курс «${email.course.title}»` : ""}
-                        {email.campaign ? ` · кампания «${email.campaign.name}»` : ""}
-                      </p>
-                    </div>
-
-                    <div className="space-y-3 lg:min-w-[320px]">
-                      <div className="grid gap-2 text-sm text-[var(--muted)] sm:grid-cols-2">
-                        <div className="rounded-2xl border border-[var(--border)] bg-white px-4 py-3">
-                          <p>Создано</p>
-                          <p className="mt-1 font-medium text-[var(--foreground)]">
-                            {formatDateTime(email.createdAt)}
-                          </p>
-                        </div>
-                        <div className="rounded-2xl border border-[var(--border)] bg-white px-4 py-3">
-                          <p>Отправка</p>
-                          <p className="mt-1 font-medium text-[var(--foreground)]">
-                            {formatDateTime(email.scheduledAt)}
-                          </p>
-                        </div>
-                        <div className="rounded-2xl border border-[var(--border)] bg-white px-4 py-3">
-                          <p>Доставлено</p>
-                          <p className="mt-1 font-medium text-[var(--foreground)]">
-                            {formatDateTime(email.deliveredAt)}
-                          </p>
-                        </div>
-                        <div className="rounded-2xl border border-[var(--border)] bg-white px-4 py-3">
-                          <p>Попытки</p>
-                          <p className="mt-1 font-medium text-[var(--foreground)]">
-                            {email.attemptCount}/{email.maxAttempts}
-                          </p>
-                        </div>
-                      </div>
-
-                      {canRequeue ? (
-                        <form action={requeueEmailMessageAction}>
-                          <input type="hidden" name="messageId" value={email.id} />
-                          <Button type="submit" variant="outline" size="sm">
-                            <MailCheck className="mr-2 h-4 w-4" />
-                            Поставить в очередь снова
-                          </Button>
-                        </form>
-                      ) : null}
-                    </div>
-                  </div>
-
-                  {email.lastError ? (
-                    <div className="mt-4 rounded-2xl border border-red-200 bg-red-50 px-4 py-4 text-sm leading-6 text-red-700">
-                      {email.lastError}
-                    </div>
-                  ) : null}
-                </article>
-              );
-            })}
-          </div>
-        )}
-      </WorkspacePanel>
-
-      <WorkspacePanel
-        eyebrow="Настройки"
-        title="Боевые параметры контура"
-        description="То, что должно быть настроено на Railway и в домене отправки, чтобы сервис работал как production email-слой."
-      >
-        <div className="grid gap-4 lg:grid-cols-2">
-          {[
-            {
-              label: "EMAIL_PROVIDER",
-              value: config.provider,
-              ok: config.provider === "resend" || config.provider === "smtp",
-            },
-            {
-              label: "RESEND_API_KEY",
-              value:
-                config.provider === "resend"
-                  ? config.hasResendApiKey
-                    ? "подключен"
-                    : "не задан"
-                  : "не нужен для текущего провайдера",
-              ok: config.provider === "resend" ? config.hasResendApiKey : true,
-            },
-            {
-              label: "RESEND_FROM_EMAIL",
-              value:
-                config.provider === "resend"
-                  ? config.hasResendFromEmail
-                    ? "подключен"
-                    : "не задан"
-                  : "не нужен для текущего провайдера",
-              ok: config.provider === "resend" ? config.hasResendFromEmail : true,
-            },
-            {
-              label: "RESEND_WEBHOOK_SECRET",
-              value:
-                config.provider === "resend"
-                  ? config.hasResendWebhookSecret
-                    ? "подключен"
-                    : "не задан"
-                  : "не нужен для текущего провайдера",
-              ok: config.provider === "resend" ? config.hasResendWebhookSecret : true,
-            },
-            {
-              label: "SMTP_HOST",
-              value:
-                config.provider === "smtp"
-                  ? config.hasSmtpHost
-                    ? "подключен"
-                    : "не задан"
-                  : "не нужен для текущего провайдера",
-              ok: config.provider === "smtp" ? config.hasSmtpHost : true,
-            },
-            {
-              label: "SMTP_USER",
-              value:
-                config.provider === "smtp"
-                  ? config.hasSmtpUser
-                    ? "подключен"
-                    : "не задан"
-                  : "не нужен для текущего провайдера",
-              ok: config.provider === "smtp" ? config.hasSmtpUser : true,
-            },
-            {
-              label: "SMTP_PASSWORD",
-              value:
-                config.provider === "smtp"
-                  ? config.hasSmtpPassword
-                    ? "подключен"
-                    : "не задан"
-                  : "не нужен для текущего провайдера",
-              ok: config.provider === "smtp" ? config.hasSmtpPassword : true,
-            },
-            {
-              label: "CRON_SECRET",
-              value: config.hasCronSecret ? "подключен" : "не задан",
-              ok: config.hasCronSecret,
-            },
-            {
-              label: "APP_BASE_URL",
-              value: config.appBaseUrl,
-              ok: true,
-            },
-          ].map((item) => (
-            <div
-              key={item.label}
-              className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] px-5 py-4"
-            >
-              <div className="flex items-center justify-between gap-3">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
-                  {item.label}
-                </p>
-                <Badge variant={item.ok ? "success" : "warning"}>
-                  {item.ok ? "ok" : "нужно"}
-                </Badge>
-              </div>
-              <p className="mt-3 text-sm leading-7 text-[var(--foreground)]">{item.value}</p>
+              ))}
             </div>
-          ))}
-        </div>
-      </WorkspacePanel>
+          </div>
+        </WorkspacePanel>
+      </div>
+
+      <div id="email-campaigns-section" className="scroll-mt-24">
+        <WorkspacePanel
+          eyebrow="Кампании"
+          title="2. Ручные рассылки"
+          description="Здесь запускаются именно кампании: берём шаблон, выбираем курс, сегмент и время. Это отдельная операционная зона для маркетинговых рассылок."
+        >
+          <div className="grid gap-6 xl:grid-cols-[minmax(0,360px)_minmax(0,1fr)]">
+            <form
+              action={createEmailCampaignAction}
+              className="space-y-4 rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-5"
+            >
+              <div className="space-y-2">
+                <Label htmlFor="campaign-name">Название кампании</Label>
+                <Input
+                  id="campaign-name"
+                  name="name"
+                  placeholder="Например: анонс нового курса по сделкам"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="campaign-template">Шаблон</Label>
+                <Select
+                  id="campaign-template"
+                  name="templateKey"
+                  defaultValue={manualCampaignTemplates[0]?.key}
+                >
+                  {manualCampaignTemplates.map((template) => (
+                    <option key={template.key} value={template.key}>
+                      {template.label}
+                    </option>
+                  ))}
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="campaign-course">Курс</Label>
+                <Select id="campaign-course" name="courseId" defaultValue="">
+                  <option value="">Не подставлять курс</option>
+                  {courses.map((course) => (
+                    <option key={course.id} value={course.id}>
+                      {course.title}
+                    </option>
+                  ))}
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="campaign-segment">Сегмент</Label>
+                <Select
+                  id="campaign-segment"
+                  name="segment"
+                  defaultValue={EmailCampaignSegment.ALL_OPTED_IN_STUDENTS}
+                >
+                  {Object.entries(segmentLabelMap).map(([value, label]) => (
+                    <option key={value} value={value}>
+                      {label}
+                    </option>
+                  ))}
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="campaign-scheduled-at">Отложить отправку</Label>
+                <Input id="campaign-scheduled-at" name="scheduledAt" type="datetime-local" />
+              </div>
+
+              <Button type="submit" className="w-full justify-center">
+                Создать кампанию
+              </Button>
+            </form>
+
+            <div className="space-y-4">
+              {campaigns.length === 0 ? (
+                <WorkspaceEmptyState
+                  title="Кампаний пока нет"
+                  description="Создай первую ручную кампанию, чтобы протестировать сегменты, шаблоны и планирование отправки."
+                  className="border-[var(--border)] bg-[var(--surface)] shadow-none"
+                />
+              ) : (
+                campaigns.map((campaign) => (
+                  <article
+                    key={campaign.id}
+                    className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-5"
+                  >
+                    <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                      <div className="space-y-2">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <Badge variant={campaignStatusVariantMap[campaign.status]}>
+                            {campaignStatusLabelMap[campaign.status]}
+                          </Badge>
+                          <Badge variant="neutral">
+                            {segmentLabelMap[campaign.segment]}
+                          </Badge>
+                        </div>
+                        <h3 className="text-lg font-semibold text-[var(--foreground)]">
+                          {campaign.name}
+                        </h3>
+                        <p className="text-sm leading-6 text-[var(--muted)]">
+                          Шаблон:{" "}
+                          {emailTemplateCatalogMap[
+                            campaign.templateKey as keyof typeof emailTemplateCatalogMap
+                          ]?.label ?? campaign.templateKey}
+                          {campaign.course ? ` · курс «${campaign.course.title}»` : ""}
+                        </p>
+                        <p className="text-sm leading-6 text-[var(--muted)]">
+                          Получателей: {campaign.recipientCount} · Создал:{" "}
+                          {campaign.createdBy.name || campaign.createdBy.email}
+                        </p>
+                      </div>
+
+                      <div className="flex flex-wrap gap-3">
+                        {campaign.status === EmailCampaignStatus.ACTIVE ||
+                        campaign.status === EmailCampaignStatus.SCHEDULED ? (
+                          <form action={pauseEmailCampaignAction}>
+                            <input type="hidden" name="campaignId" value={campaign.id} />
+                            <Button type="submit" variant="outline" size="sm">
+                              <PauseCircle className="mr-2 h-4 w-4" />
+                              Пауза
+                            </Button>
+                          </form>
+                        ) : null}
+                        {campaign.status === EmailCampaignStatus.PAUSED ? (
+                          <form action={createEmailCampaignAction}>
+                            <input type="hidden" name="name" value={campaign.name} />
+                            <input
+                              type="hidden"
+                              name="templateKey"
+                              value={campaign.templateKey}
+                            />
+                            <input type="hidden" name="segment" value={campaign.segment} />
+                            <input
+                              type="hidden"
+                              name="courseId"
+                              value={campaign.courseId ?? ""}
+                            />
+                            <input type="hidden" name="scheduledAt" value="" />
+                            <Button type="submit" size="sm">
+                              <PlayCircle className="mr-2 h-4 w-4" />
+                              Дублировать и запустить
+                            </Button>
+                          </form>
+                        ) : null}
+                        {campaign.status !== EmailCampaignStatus.CANCELED &&
+                        campaign.status !== EmailCampaignStatus.COMPLETED ? (
+                          <form action={cancelEmailCampaignAction}>
+                            <input type="hidden" name="campaignId" value={campaign.id} />
+                            <Button type="submit" variant="outline" size="sm">
+                              Отменить
+                            </Button>
+                          </form>
+                        ) : null}
+                      </div>
+                    </div>
+
+                    <div className="mt-4 grid gap-3 sm:grid-cols-3">
+                      <div className="rounded-2xl border border-[var(--border)] bg-white px-4 py-3">
+                        <p className="text-sm text-[var(--muted)]">Создана</p>
+                        <p className="mt-1 font-medium text-[var(--foreground)]">
+                          {formatDateTime(campaign.createdAt)}
+                        </p>
+                      </div>
+                      <div className="rounded-2xl border border-[var(--border)] bg-white px-4 py-3">
+                        <p className="text-sm text-[var(--muted)]">Запланирована</p>
+                        <p className="mt-1 font-medium text-[var(--foreground)]">
+                          {formatDateTime(campaign.scheduledAt)}
+                        </p>
+                      </div>
+                      <div className="rounded-2xl border border-[var(--border)] bg-white px-4 py-3">
+                        <p className="text-sm text-[var(--muted)]">Завершена</p>
+                        <p className="mt-1 font-medium text-[var(--foreground)]">
+                          {formatDateTime(campaign.completedAt)}
+                        </p>
+                      </div>
+                    </div>
+
+                    {campaign.lastError ? (
+                      <div className="mt-4 rounded-2xl border border-red-200 bg-red-50 px-4 py-4 text-sm leading-6 text-red-700">
+                        {campaign.lastError}
+                      </div>
+                    ) : null}
+                  </article>
+                ))
+              )}
+            </div>
+          </div>
+        </WorkspacePanel>
+      </div>
+
+      <div id="email-log-section" className="scroll-mt-24">
+        <WorkspacePanel
+          eyebrow="Журнал"
+          title="3. Последние письма"
+          description="Здесь видны сервисные письма, тестовые отправки, кампании, ошибки и история повторной отправки."
+        >
+          {emails.length === 0 ? (
+            <WorkspaceEmptyState
+              title="Пока нет писем"
+              description="После первых тестовых отправок, кампаний и сервисных событий здесь начнёт собираться полная история сообщений."
+              className="border-[var(--border)] bg-[var(--surface)] shadow-none"
+            />
+          ) : (
+            <div className="space-y-4">
+              {emails.map((email) => {
+                const canRequeue = requeueableStatuses.includes(
+                  email.status as (typeof requeueableStatuses)[number],
+                );
+
+                return (
+                  <article
+                    key={email.id}
+                    className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-5"
+                  >
+                    <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                      <div className="space-y-2">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <Badge variant={emailStatusVariantMap[email.status]}>
+                            {emailStatusLabelMap[email.status]}
+                          </Badge>
+                          <Badge variant="neutral">
+                            {email.kind === EmailKind.MARKETING
+                              ? "Маркетинг"
+                              : "Уведомление"}
+                          </Badge>
+                          <Badge variant="neutral">
+                            {emailProviderLabelMap[email.provider]}
+                          </Badge>
+                        </div>
+
+                        <h2 className="text-xl font-semibold tracking-tight text-[var(--foreground)]">
+                          {email.subject}
+                        </h2>
+                        <p className="text-sm text-[var(--muted)]">
+                          Кому: {email.toName ? `${email.toName} · ` : ""}
+                          {email.toEmail}
+                        </p>
+                        <p className="text-sm leading-7 text-[var(--muted)]">
+                          Шаблон: {email.templateKey}
+                          {email.sequenceStep ? ` · шаг ${email.sequenceStep}` : ""}
+                          {email.course ? ` · курс «${email.course.title}»` : ""}
+                          {email.campaign ? ` · кампания «${email.campaign.name}»` : ""}
+                        </p>
+                      </div>
+
+                      <div className="space-y-3 lg:min-w-[320px]">
+                        <div className="grid gap-2 text-sm text-[var(--muted)] sm:grid-cols-2">
+                          <div className="rounded-2xl border border-[var(--border)] bg-white px-4 py-3">
+                            <p>Создано</p>
+                            <p className="mt-1 font-medium text-[var(--foreground)]">
+                              {formatDateTime(email.createdAt)}
+                            </p>
+                          </div>
+                          <div className="rounded-2xl border border-[var(--border)] bg-white px-4 py-3">
+                            <p>Отправка</p>
+                            <p className="mt-1 font-medium text-[var(--foreground)]">
+                              {formatDateTime(email.scheduledAt)}
+                            </p>
+                          </div>
+                          <div className="rounded-2xl border border-[var(--border)] bg-white px-4 py-3">
+                            <p>Доставлено</p>
+                            <p className="mt-1 font-medium text-[var(--foreground)]">
+                              {formatDateTime(email.deliveredAt)}
+                            </p>
+                          </div>
+                          <div className="rounded-2xl border border-[var(--border)] bg-white px-4 py-3">
+                            <p>Попытки</p>
+                            <p className="mt-1 font-medium text-[var(--foreground)]">
+                              {email.attemptCount}/{email.maxAttempts}
+                            </p>
+                          </div>
+                        </div>
+
+                        {canRequeue ? (
+                          <form action={requeueEmailMessageAction}>
+                            <input type="hidden" name="messageId" value={email.id} />
+                            <Button type="submit" variant="outline" size="sm">
+                              <MailCheck className="mr-2 h-4 w-4" />
+                              Поставить в очередь снова
+                            </Button>
+                          </form>
+                        ) : null}
+                      </div>
+                    </div>
+
+                    {email.lastError ? (
+                      <div className="mt-4 rounded-2xl border border-red-200 bg-red-50 px-4 py-4 text-sm leading-6 text-red-700">
+                        {email.lastError}
+                      </div>
+                    ) : null}
+                  </article>
+                );
+              })}
+            </div>
+          )}
+        </WorkspacePanel>
+      </div>
+
+      <div id="email-settings-section" className="scroll-mt-24">
+        <WorkspacePanel
+          eyebrow="Настройки"
+          title="4. Боевые параметры контура"
+          description="То, что должно быть настроено на Railway и в канале отправки, чтобы сервис работал как production email-слой."
+        >
+          <div className="grid gap-4 lg:grid-cols-2">
+            {[
+              {
+                label: "EMAIL_PROVIDER",
+                value: config.provider,
+                ok: config.provider === "resend" || config.provider === "smtp",
+              },
+              {
+                label: "RESEND_API_KEY",
+                value:
+                  config.provider === "resend"
+                    ? config.hasResendApiKey
+                      ? "подключен"
+                      : "не задан"
+                    : "не нужен для текущего провайдера",
+                ok: config.provider === "resend" ? config.hasResendApiKey : true,
+              },
+              {
+                label: "RESEND_FROM_EMAIL",
+                value:
+                  config.provider === "resend"
+                    ? config.hasResendFromEmail
+                      ? "подключен"
+                      : "не задан"
+                    : "не нужен для текущего провайдера",
+                ok: config.provider === "resend" ? config.hasResendFromEmail : true,
+              },
+              {
+                label: "RESEND_WEBHOOK_SECRET",
+                value:
+                  config.provider === "resend"
+                    ? config.hasResendWebhookSecret
+                      ? "подключен"
+                      : "не задан"
+                    : "не нужен для текущего провайдера",
+                ok: config.provider === "resend" ? config.hasResendWebhookSecret : true,
+              },
+              {
+                label: "SMTP_HOST",
+                value:
+                  config.provider === "smtp"
+                    ? config.hasSmtpHost
+                      ? "подключен"
+                      : "не задан"
+                    : "не нужен для текущего провайдера",
+                ok: config.provider === "smtp" ? config.hasSmtpHost : true,
+              },
+              {
+                label: "SMTP_USER",
+                value:
+                  config.provider === "smtp"
+                    ? config.hasSmtpUser
+                      ? "подключен"
+                      : "не задан"
+                    : "не нужен для текущего провайдера",
+                ok: config.provider === "smtp" ? config.hasSmtpUser : true,
+              },
+              {
+                label: "SMTP_PASSWORD",
+                value:
+                  config.provider === "smtp"
+                    ? config.hasSmtpPassword
+                      ? "подключен"
+                      : "не задан"
+                    : "не нужен для текущего провайдера",
+                ok: config.provider === "smtp" ? config.hasSmtpPassword : true,
+              },
+              {
+                label: "CRON_SECRET",
+                value: config.hasCronSecret ? "подключен" : "не задан",
+                ok: config.hasCronSecret,
+              },
+              {
+                label: "APP_BASE_URL",
+                value: config.appBaseUrl,
+                ok: true,
+              },
+            ].map((item) => (
+              <div
+                key={item.label}
+                className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] px-5 py-4"
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
+                    {item.label}
+                  </p>
+                  <Badge variant={item.ok ? "success" : "warning"}>
+                    {item.ok ? "ok" : "нужно"}
+                  </Badge>
+                </div>
+                <p className="mt-3 text-sm leading-7 text-[var(--foreground)]">
+                  {item.value}
+                </p>
+              </div>
+            ))}
+          </div>
+        </WorkspacePanel>
+      </div>
     </section>
   );
 }
