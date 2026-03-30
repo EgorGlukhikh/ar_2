@@ -30,6 +30,9 @@ export function PublicFooter() {
             <Link href="/sign-in" className="text-white/44 transition-colors hover:text-white">
               Вход
             </Link>
+            <Link href="/support" className="text-white/44 transition-colors hover:text-white">
+              РџРѕРґРґРµСЂР¶РєР°
+            </Link>
           </nav>
         </div>
 

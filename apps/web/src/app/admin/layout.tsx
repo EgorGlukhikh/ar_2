@@ -73,6 +73,9 @@ export default async function AdminLayout({
                   <Link href="/learning">Учебный кабинет</Link>
                 </Button>
               ) : null}
+              <Button asChild size="sm" variant="outline">
+                <Link href="/support">РџРѕРґРґРµСЂР¶РєР°</Link>
+              </Button>
               <LogoutButton />
             </div>
           </div>

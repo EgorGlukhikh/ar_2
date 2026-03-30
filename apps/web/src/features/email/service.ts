@@ -24,6 +24,7 @@ import { emailTemplateCatalogMap, type EmailTemplateKey } from "@/lib/email/cata
 import { getEmailProvider } from "@/lib/email/provider";
 import {
   renderCourseAccessGrantedTemplate,
+  renderEmailLayout,
   renderPaymentSuccessTemplate,
   renderStudentAccountCreatedTemplate,
   renderTemplateByKey,
@@ -426,6 +427,32 @@ function getAudienceTypeForRole(role?: string | null) {
   return role === USER_ROLES.AUTHOR ? EmailAudienceType.EXPERT : EmailAudienceType.STUDENT;
 }
 
+function getSupportInbox() {
+  const replyTo = getEmailReplyTo();
+
+  return {
+    email: process.env.SUPPORT_EMAIL?.trim() || replyTo.replyToEmail,
+    name: process.env.EMAIL_REPLY_TO_NAME?.trim() || replyTo.replyToName || "Техподдержка",
+  };
+}
+
+function getSupportRoleLabel(role?: string | null) {
+  switch (role) {
+    case USER_ROLES.ADMIN:
+      return "Администратор";
+    case USER_ROLES.AUTHOR:
+      return "Преподаватель";
+    case USER_ROLES.CURATOR:
+      return "Куратор";
+    case USER_ROLES.SALES_MANAGER:
+      return "Менеджер";
+    case USER_ROLES.STUDENT:
+      return "Студент";
+    default:
+      return "Гость";
+  }
+}
+
 function resolveRecipientName(input: {
   firstName?: string | null;
   lastName?: string | null;
@@ -760,6 +787,81 @@ export async function queuePaymentSuccessEmail(input: {
       scenario: "payment-success",
       amount: input.order.totalAmount,
       currency: input.order.currency,
+    },
+  });
+}
+
+export async function queueSupportRequestEmail(input: {
+  userId?: string;
+  senderName: string;
+  senderEmail: string;
+  senderPhone?: string | null;
+  senderRole?: string | null;
+  isAuthenticated: boolean;
+  comment: string;
+  sourcePath?: string | null;
+}) {
+  const supportInbox = getSupportInbox();
+  const roleLabel = getSupportRoleLabel(input.senderRole);
+  const replySubject = encodeURIComponent(
+    `Re: заявка в поддержку — ${input.senderName}`,
+  );
+
+  const rendered = renderEmailLayout({
+    kind: "transactional",
+    subject: `Новая заявка в поддержку — ${input.senderName}`,
+    preheader: "Пользователь отправил сообщение через форму поддержки платформы.",
+    eyebrow: "Техподдержка",
+    title: "Новая заявка в поддержку",
+    intro:
+      "Пользователь отправил новое сообщение через форму поддержки портала. Ниже — его контакты и описание проблемы.",
+    sections: [
+      {
+        title: "Контакт",
+        text: [
+          `Имя: ${input.senderName}`,
+          `Email: ${input.senderEmail}`,
+          `Телефон: ${input.senderPhone?.trim() || "не указан"}`,
+          `Статус: ${input.isAuthenticated ? "авторизован" : "гость"}`,
+          `Роль: ${roleLabel}`,
+        ].join(" • "),
+      },
+      {
+        title: "Контекст",
+        text: input.sourcePath?.trim()
+          ? `Страница: ${input.sourcePath}`
+          : "Страница не была передана.",
+      },
+      {
+        title: "Комментарий",
+        text: input.comment,
+      },
+    ],
+    ctaLabel: "Ответить пользователю",
+    ctaUrl: `mailto:${encodeURIComponent(input.senderEmail)}?subject=${replySubject}`,
+    replyEmail: input.senderEmail,
+    footer: "Заявка отправлена с формы поддержки портала Академии риэлторов.",
+  });
+
+  return queueEmailMessage({
+    userId: input.userId,
+    kind: EmailKind.TRANSACTIONAL,
+    templateKey: "support-request",
+    subject: rendered.subject,
+    preheader: rendered.preheader,
+    toEmail: supportInbox.email,
+    toName: supportInbox.name,
+    htmlBody: rendered.html,
+    textBody: rendered.text,
+    replyToEmail: input.senderEmail,
+    replyToName: input.senderName,
+    metadata: {
+      scenario: "support-request",
+      senderEmail: input.senderEmail,
+      senderPhone: input.senderPhone?.trim() || null,
+      senderRole: input.senderRole ?? null,
+      isAuthenticated: input.isAuthenticated,
+      sourcePath: input.sourcePath?.trim() || null,
     },
   });
 }

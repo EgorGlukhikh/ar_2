@@ -54,6 +54,9 @@ export default async function LearningLayout({
               <Button asChild size="sm" variant="outline">
                 <Link href={knowledgeBaseHref}>База знаний</Link>
               </Button>
+              <Button asChild size="sm" variant="outline">
+                <Link href="/support">РџРѕРґРґРµСЂР¶РєР°</Link>
+              </Button>
               <LogoutButton />
             </div>
           </div>
