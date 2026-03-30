@@ -1648,6 +1648,22 @@ export async function sendTestEmailTemplate(input: {
     throw new Error("Для выбранного шаблона нужно выбрать курс.");
   }
 
+  const sender = await prisma.user.findUniqueOrThrow({
+    where: {
+      id: input.senderUserId,
+    },
+    select: {
+      role: true,
+    },
+  });
+
+  await ensureEmailPreference({
+    userId: input.senderUserId,
+    audienceType: getAudienceTypeForRole(sender.role),
+    enableMarketing: undefined,
+    source: "test-send",
+  });
+
   const course = input.courseId
     ? await prisma.course.findUnique({
         where: {

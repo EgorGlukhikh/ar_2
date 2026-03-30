@@ -6,6 +6,7 @@ type EmailSection = {
 };
 
 type EmailLayoutInput = {
+  kind: "transactional" | "marketing";
   subject: string;
   preheader: string;
   eyebrow: string;
@@ -25,6 +26,7 @@ type AccountTemplateInput = {
   password: string;
   signInUrl: string;
   isExistingAccount?: boolean;
+  preferencesUrl?: string;
   replyEmail?: string;
 };
 
@@ -32,6 +34,7 @@ type CourseAccessTemplateInput = {
   studentName: string;
   courseTitle: string;
   courseUrl: string;
+  preferencesUrl?: string;
   replyEmail?: string;
 };
 
@@ -40,6 +43,7 @@ type PaymentSuccessTemplateInput = {
   courseTitle: string;
   amountLabel: string;
   learningUrl: string;
+  preferencesUrl?: string;
   replyEmail?: string;
 };
 
@@ -64,6 +68,15 @@ export type RenderedEmailTemplate = {
   html: string;
   text: string;
 };
+
+function getEmailAssetBaseUrl() {
+  return (
+    process.env.APP_BASE_URL?.trim() ||
+    process.env.AUTH_URL?.trim() ||
+    process.env.NEXTAUTH_URL?.trim() ||
+    ""
+  ).replace(/\/+$/, "");
+}
 
 const templateEmojiMap: Record<EmailTemplateKey, string> = {
   "student-account-created": "👋",
@@ -131,7 +144,9 @@ function buildFooterHtml(input: EmailLayoutInput) {
       ? `Если удобнее, просто ответьте на это письмо: ${escapeHtml(input.replyEmail)}.`
       : null,
     input.preferencesUrl
-      ? `Настройки маркетинговых писем: <a href="${input.preferencesUrl}" style="color:#3552dd;text-decoration:underline;">управлять подпиской</a>.`
+      ? input.kind === "transactional"
+        ? `Настроить получение новостей, анонсов курсов и приглашений можно здесь: <a href="${input.preferencesUrl}" style="color:#3552dd;text-decoration:underline;">Настроить получение писем</a>. Сервисные письма о доступе, оплате и безопасности аккаунта продолжат приходить.`
+        : `Если такие письма больше не нужны, вы в любой момент можете <a href="${input.preferencesUrl}" style="color:#3552dd;text-decoration:underline;">настроить получение писем</a>.`
       : null,
     escapeHtml(
       input.footer ||
@@ -151,7 +166,9 @@ function buildFooterText(input: EmailLayoutInput) {
   const items = [
     input.replyEmail ? `Ответить можно на адрес: ${input.replyEmail}` : null,
     input.preferencesUrl
-      ? `Настройки маркетинговых писем: ${input.preferencesUrl}`
+      ? input.kind === "transactional"
+        ? `Настроить новости, анонсы курсов и приглашения: ${input.preferencesUrl}. Сервисные письма о доступе, оплате и безопасности аккаунта продолжат приходить.`
+        : `Настроить получение писем: ${input.preferencesUrl}`
       : null,
     input.footer ||
       "Академия риэлторов. Письмо отправлено автоматически из платформы, но за ним стоит живая команда.",
@@ -161,6 +178,10 @@ function buildFooterText(input: EmailLayoutInput) {
 }
 
 export function renderEmailLayout(input: EmailLayoutInput): RenderedEmailTemplate {
+  const assetBaseUrl = getEmailAssetBaseUrl();
+  const brandMarkUrl = assetBaseUrl
+    ? `${assetBaseUrl}/brand/academy-mark-white.svg`
+    : "/brand/academy-mark-white.svg";
   const html = `
     <div style="margin:0;padding:28px 0;background:#eef3ff;font-family:Arial,sans-serif;">
       <div style="display:none;max-height:0;overflow:hidden;opacity:0;">${escapeHtml(input.preheader)}</div>
@@ -169,7 +190,9 @@ export function renderEmailLayout(input: EmailLayoutInput): RenderedEmailTemplat
           <tr>
             <td style="padding:28px 28px 24px;background:linear-gradient(135deg,#182036 0%,#2d47b3 54%,#e58a7f 100%);color:#ffffff;">
               <div style="display:inline-flex;align-items:center;gap:10px;">
-                <div style="height:30px;width:30px;border-radius:10px;background:rgba(255,255,255,0.14);display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;letter-spacing:0.08em;">AR</div>
+                <div style="height:30px;width:30px;display:inline-flex;align-items:center;justify-content:center;">
+                  <img src="${brandMarkUrl}" alt="Академия риэлторов" width="30" height="19" style="display:block;border:0;outline:none;text-decoration:none;" />
+                </div>
                 <div style="font-size:12px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.86);">
                   ${escapeHtml(input.eyebrow)}
                 </div>
@@ -224,6 +247,7 @@ export function renderStudentAccountCreatedTemplate(
   input: AccountTemplateInput,
 ): RenderedEmailTemplate {
   return renderEmailLayout({
+    kind: "transactional",
     subject: input.isExistingAccount
       ? `Данные доступа обновлены, ${input.studentName}!`
       : `Добро пожаловать в Академию риэлторов, ${input.studentName}!`,
@@ -255,6 +279,7 @@ export function renderStudentAccountCreatedTemplate(
     ],
     ctaLabel: "Войти в личный кабинет",
     ctaUrl: input.signInUrl,
+    preferencesUrl: input.preferencesUrl,
     replyEmail: input.replyEmail,
   });
 }
@@ -263,6 +288,7 @@ export function renderCourseAccessGrantedTemplate(
   input: CourseAccessTemplateInput,
 ): RenderedEmailTemplate {
   return renderEmailLayout({
+    kind: "transactional",
     subject: `Ваш курс «${input.courseTitle}» уже ждет вас, ${input.studentName}!`,
     preheader: "Начните обучение прямо сейчас и освойте новые навыки.",
     eyebrow: "Доступ к курсу",
@@ -276,6 +302,7 @@ export function renderCourseAccessGrantedTemplate(
     ],
     ctaLabel: "Перейти к курсу",
     ctaUrl: input.courseUrl,
+    preferencesUrl: input.preferencesUrl,
     replyEmail: input.replyEmail,
   });
 }
@@ -284,6 +311,7 @@ export function renderPaymentSuccessTemplate(
   input: PaymentSuccessTemplateInput,
 ): RenderedEmailTemplate {
   return renderEmailLayout({
+    kind: "transactional",
     subject: `Ваш платеж за курс «${input.courseTitle}» успешно прошел!`,
     preheader: "Благодарим за покупку! Доступ к курсу уже открыт.",
     eyebrow: "Оплата",
@@ -301,6 +329,7 @@ export function renderPaymentSuccessTemplate(
     ],
     ctaLabel: "Начать обучение",
     ctaUrl: input.learningUrl,
+    preferencesUrl: input.preferencesUrl,
     replyEmail: input.replyEmail,
   });
 }
@@ -342,6 +371,7 @@ function renderStudentAutomationTemplate(
   switch (key) {
     case "student-welcome-1":
       return renderEmailLayout({
+        kind: "marketing",
         subject: `Добро пожаловать в Академию риэлторов, ${input.recipientName}! Ваш путь к успеху начинается здесь.`,
         preheader: "Откройте мир профессионального роста в недвижимости.",
         eyebrow: "Письмо 1 из 5",
@@ -360,6 +390,7 @@ function renderStudentAutomationTemplate(
       });
     case "student-welcome-2":
       return renderEmailLayout({
+        kind: "marketing",
         subject: "Откройте для себя Базовый курс 2.0: фундамент для каждого риэлтора!",
         preheader: "Узнайте, как быстро освоить основы профессии.",
         eyebrow: "Письмо 2 из 5",
@@ -378,6 +409,7 @@ function renderStudentAutomationTemplate(
       });
     case "student-welcome-3":
       return renderEmailLayout({
+        kind: "marketing",
         subject: `Какие курсы подходят именно вам, ${input.recipientName}? Разбираемся вместе!`,
         preheader: "Выберите свой идеальный формат обучения и начните развиваться.",
         eyebrow: "Письмо 3 из 5",
@@ -396,6 +428,7 @@ function renderStudentAutomationTemplate(
       });
     case "student-welcome-4":
       return renderEmailLayout({
+        kind: "marketing",
         subject: `${input.recipientName}, а что, если вы сами можете стать экспертом?`,
         preheader: "Поделитесь своими знаниями и зарабатывайте на платформе.",
         eyebrow: "Письмо 4 из 5",
@@ -414,6 +447,7 @@ function renderStudentAutomationTemplate(
       });
     case "student-welcome-5":
       return renderEmailLayout({
+        kind: "marketing",
         subject: `${input.recipientName}, готовы к реальным результатам в недвижимости?`,
         preheader: "Ваши новые знания уже ждут применения на практике.",
         eyebrow: "Письмо 5 из 5",
@@ -432,6 +466,7 @@ function renderStudentAutomationTemplate(
       });
     case "student-reengage-no-start":
       return renderEmailLayout({
+        kind: "marketing",
         subject: `Доступ к курсу «${input.courseTitle ?? "выбранному курсу"}» уже открыт`,
         preheader: "Курс уже доступен — осталось сделать первый шаг и открыть стартовый урок.",
         eyebrow: "Напоминание",
@@ -454,6 +489,7 @@ function renderStudentAutomationTemplate(
       });
     case "student-reengage-stalled":
       return renderEmailLayout({
+        kind: "marketing",
         subject: `Пора вернуться к курсу «${input.courseTitle ?? "вашему курсу"}»`,
         preheader: "Прогресс остановился — мягко возвращаем вас в понятный маршрут обучения.",
         eyebrow: "Напоминание",
@@ -484,6 +520,7 @@ function renderExpertAutomationTemplate(
   switch (key) {
     case "expert-welcome-1":
       return renderEmailLayout({
+        kind: "marketing",
         subject: `Поздравляем, ${input.recipientName}! Вы — эксперт Академии риэлторов!`,
         preheader: "Ваш статус эксперта подтвержден. Начните делиться знаниями!",
         eyebrow: "Письмо эксперту 1 из 3",
@@ -502,6 +539,7 @@ function renderExpertAutomationTemplate(
       });
     case "expert-welcome-2":
       return renderEmailLayout({
+        kind: "marketing",
         subject: `${input.recipientName}, создайте свой первый курс в Академии риэлторов!`,
         preheader: "Пошаговая инструкция по запуску вашего образовательного продукта.",
         eyebrow: "Письмо эксперту 2 из 3",
@@ -520,6 +558,7 @@ function renderExpertAutomationTemplate(
       });
     case "expert-welcome-3":
       return renderEmailLayout({
+        kind: "marketing",
         subject: `${input.recipientName}, как эффективно продвигать ваш курс и привлекать студентов?`,
         preheader: "Увеличьте охват и продажи вашего образовательного продукта.",
         eyebrow: "Письмо эксперту 3 из 3",
@@ -549,6 +588,7 @@ function renderCampaignTemplate(
   switch (key) {
     case "campaign-course-launch":
       return renderEmailLayout({
+        kind: "marketing",
         subject: `Отличные новости! В Академии риэлторов появился новый курс «${input.courseTitle ?? "Новая программа"}»`,
         preheader: "Расширьте свои знания с нашей новой программой!",
         eyebrow: "Новая программа",
@@ -567,6 +607,7 @@ function renderCampaignTemplate(
       });
     case "campaign-live-intake":
       return renderEmailLayout({
+        kind: "marketing",
         subject: `Не пропустите! ${input.courseTitle ?? "Новый поток"} уже скоро стартует`,
         preheader: "Присоединяйтесь к живому обучению и получите ответы на свои вопросы.",
         eyebrow: "Набор открыт",
@@ -585,6 +626,7 @@ function renderCampaignTemplate(
       });
     case "campaign-catalog-return":
       return renderEmailLayout({
+        kind: "marketing",
         subject: "В каталоге появились программы, с которых удобно начать",
         preheader: "Если давно не заходили, сейчас хороший момент вернуться и выбрать следующий курс.",
         eyebrow: "Вернуться в каталог",
@@ -607,6 +649,7 @@ function renderCampaignTemplate(
       });
     case "campaign-expert-invite":
       return renderEmailLayout({
+        kind: "marketing",
         subject: `${input.recipientName}, станьте экспертом Академии риэлторов!`,
         preheader: "Поделитесь своим опытом и создайте свой курс на нашей платформе.",
         eyebrow: "Приглашение эксперта",
@@ -662,6 +705,7 @@ export function renderTemplateByKey(
         password: "TempPass123",
         signInUrl: input.links.signInUrl,
         isExistingAccount: key === "student-account-updated",
+        preferencesUrl: input.links.preferencesUrl,
         replyEmail: input.replyEmail,
       }),
     );
@@ -674,6 +718,7 @@ export function renderTemplateByKey(
         studentName: input.recipientName,
         courseTitle: input.courseTitle ?? "Новый курс",
         courseUrl: input.links.courseUrl ?? input.links.learningUrl,
+        preferencesUrl: input.links.preferencesUrl,
         replyEmail: input.replyEmail,
       }),
     );
@@ -687,6 +732,7 @@ export function renderTemplateByKey(
         courseTitle: input.courseTitle ?? "Новый курс",
         amountLabel: input.amountLabel ?? "3 490,00 ₽",
         learningUrl: input.links.courseUrl ?? input.links.learningUrl,
+        preferencesUrl: input.links.preferencesUrl,
         replyEmail: input.replyEmail,
       }),
     );
