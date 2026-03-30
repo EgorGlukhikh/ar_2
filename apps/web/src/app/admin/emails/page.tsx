@@ -321,23 +321,6 @@ export default async function AdminEmailsPage({
         })}
       </div>
 
-      <div className="overflow-x-auto">
-        <div className="flex min-w-max gap-3 rounded-full border border-[var(--border)] bg-[var(--surface)] p-2 shadow-[var(--shadow-sm)]">
-          <Button asChild size="sm" variant="outline" className="rounded-full">
-            <a href="#email-test-section">Тест себе</a>
-          </Button>
-          <Button asChild size="sm" variant="outline" className="rounded-full">
-            <a href="#email-campaigns-section">Ручные рассылки</a>
-          </Button>
-          <Button asChild size="sm" variant="outline" className="rounded-full">
-            <a href="#email-log-section">Последние письма</a>
-          </Button>
-          <Button asChild size="sm" variant="outline" className="rounded-full">
-            <a href="#email-settings-section">Настройки</a>
-          </Button>
-        </div>
-      </div>
-
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <WorkspaceStatCard
           label="В очереди"
