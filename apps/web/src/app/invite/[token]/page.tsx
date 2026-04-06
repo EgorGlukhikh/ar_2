@@ -39,7 +39,7 @@ function InviteStateCard({
   description: string;
 }) {
   return (
-    <div className="rounded-[28px] border border-black/5 bg-white p-6 shadow-sm">
+    <div className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-6 shadow-[var(--shadow-sm)]">
       <h2 className="text-2xl font-semibold tracking-tight text-[#1c2442]">{title}</h2>
       <p className="mt-3 text-sm leading-7 text-[#596177]">{description}</p>
       <div className="mt-6 flex flex-wrap gap-3">
@@ -71,7 +71,7 @@ export default async function InvitePage({ params }: InvitePageProps) {
       <div className={marketingContainerClassName}>
         <section className={marketingFrameClassName}>
           <div className={marketingInnerFrameClassName}>
-            <header className="flex flex-col gap-4 border-b border-black/5 pb-6 md:flex-row md:items-center md:justify-between">
+            <header className="flex flex-col gap-4 border-b border-[var(--border)] pb-6 md:flex-row md:items-center md:justify-between">
               <div className="flex items-center gap-4">
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#1c2442] text-white">
                   <AcademyMark className="w-7" title="Академия риэлторов" />
@@ -127,7 +127,7 @@ export default async function InvitePage({ params }: InvitePageProps) {
                 </div>
               </div>
 
-              <aside className="rounded-[32px] border border-black/5 bg-white p-5 shadow-[0_24px_80px_rgba(28,36,66,0.1)] md:p-6">
+              <aside className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow-sm)] md:p-6">
                 {isMissing ? (
                   <InviteStateCard
                     title="Приглашение не найдено"
@@ -149,7 +149,7 @@ export default async function InvitePage({ params }: InvitePageProps) {
                     description="Срок действия ссылки-приглашения истек. Попроси администратора выпустить новое приглашение."
                   />
                 ) : (
-                  <div className="rounded-[28px] border border-black/5 bg-[linear-gradient(180deg,_#f6f8ff_0%,_#fffaf7_100%)] p-6">
+                  <div className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[linear-gradient(180deg,_#f6f8ff_0%,_#fffaf7_100%)] p-6">
                     <div className="space-y-3">
                       <p className="text-xs font-semibold uppercase tracking-[0.34em] text-[#7b8296]">
                         Активация доступа
@@ -164,7 +164,7 @@ export default async function InvitePage({ params }: InvitePageProps) {
                     </div>
 
                     <div className="mt-6 grid gap-4 md:grid-cols-2">
-                      <div className="rounded-[var(--radius-xl)] border border-[#dfe5f7] bg-white p-5 shadow-sm">
+                      <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow-sm)]">
                         <div className="inline-flex rounded-2xl bg-[#eef2ff] p-3">
                           <Mail className="h-5 w-5 text-[#2840db]" />
                         </div>
@@ -172,7 +172,7 @@ export default async function InvitePage({ params }: InvitePageProps) {
                         <p className="mt-2 text-lg font-semibold text-[#1c2442]">{invite.email}</p>
                       </div>
 
-                      <div className="rounded-[var(--radius-xl)] border border-[#dfe5f7] bg-white p-5 shadow-sm">
+                      <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow-sm)]">
                         <div className="inline-flex rounded-2xl bg-[#eef2ff] p-3">
                           <ShieldCheck className="h-5 w-5 text-[#2840db]" />
                         </div>
@@ -208,7 +208,7 @@ export default async function InvitePage({ params }: InvitePageProps) {
                       </div>
 
                       {invite.note ? (
-                        <div className="rounded-[22px] border border-[#dfe5f7] bg-white p-4 text-sm leading-7 text-[#596177]">
+                        <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-4 text-sm leading-7 text-[#596177]">
                           <p className="font-medium text-[#1c2442]">Комментарий к приглашению</p>
                           <p className="mt-2 whitespace-pre-wrap">{invite.note}</p>
                         </div>
@@ -220,7 +220,7 @@ export default async function InvitePage({ params }: InvitePageProps) {
                       </Button>
                     </form>
 
-                    <div className="mt-6 rounded-[22px] border border-[#dfe5f7] bg-white p-4 text-sm leading-7 text-[#596177]">
+                    <div className="mt-6 rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-4 text-sm leading-7 text-[#596177]">
                       <div className="flex items-start gap-3">
                         <UserPlus2 className="mt-1 h-4 w-4 text-[#2840db]" />
                         <p>

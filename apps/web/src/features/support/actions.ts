@@ -21,9 +21,17 @@ export const initialSupportFormState: SupportFormState = {
 };
 
 const supportSchema = z.object({
-  name: z.string().trim().min(2, "Укажи имя, чтобы мы понимали, как к тебе обратиться.").max(120),
+  name: z
+    .string()
+    .trim()
+    .min(2, "Укажи имя, чтобы мы понимали, как к тебе обратиться.")
+    .max(120),
   email: z.email("Укажи корректный email для ответа."),
-  phone: z.string().trim().max(40, "Телефон получился слишком длинным.").optional(),
+  phone: z
+    .string()
+    .trim()
+    .max(40, "Телефон получился слишком длинным.")
+    .optional(),
   comment: z
     .string()
     .trim()
@@ -89,7 +97,8 @@ export async function submitSupportRequestAction(
     if (!message) {
       return {
         status: "error",
-        message: "Не удалось проверить статус письма. Попробуй ещё раз через минуту.",
+        message:
+          "Не удалось проверить статус письма. Попробуй ещё раз через минуту.",
       };
     }
 

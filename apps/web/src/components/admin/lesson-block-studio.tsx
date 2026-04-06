@@ -24,6 +24,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
+  systemCardClassName,
+  systemIconTileClassName,
+} from "@/components/system/system-ui";
+import { cn } from "@/lib/utils";
+import {
   createQuestionTemplate,
   encodeHomeworkPayload,
   type HomeworkChoiceOption,
@@ -584,18 +589,18 @@ export function LessonBlockStudio({
         </Fragment>
       ))}
 
-      <div className="overflow-hidden rounded-[32px] border border-[rgba(135,148,176,0.18)] bg-[linear-gradient(135deg,rgba(251,252,255,0.98)_0%,rgba(242,246,255,0.96)_52%,rgba(255,248,241,0.96)_100%)] p-6 shadow-[0_28px_70px_rgba(33,41,74,0.08)]">
+      <div className={`${systemCardClassName} p-5`}>
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div className="space-y-2">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[var(--muted)]">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
               Холст урока
             </p>
-            <h3 className="text-[clamp(1.8rem,2.2vw,2.4rem)] font-semibold tracking-[-0.03em] text-[var(--foreground)]">
+            <h3 className="text-[24px] font-semibold tracking-[-0.02em] text-[var(--foreground)]">
               Структура урока по блокам
             </h3>
-            <p className="max-w-2xl text-sm leading-7 text-[var(--muted)]">
-              Урок собирается как последовательность независимых блоков. Здесь можно менять
-              порядок, комбинировать форматы и держать весь контент в одном сценарии.
+            <p className="max-w-2xl text-sm leading-6 text-[var(--muted)]">
+              Один рабочий холст: меняй порядок блоков, комбинируй форматы и собирай урок как
+              единый сценарий.
             </p>
           </div>
 
@@ -622,24 +627,15 @@ export function LessonBlockStudio({
         </div>
       </div>
 
-      {blocks.length > 0 ? (
-        <div className="rounded-[24px] border border-[rgba(135,148,176,0.16)] bg-[rgba(255,255,255,0.82)] px-5 py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.7)]">
-          <p className="text-sm leading-7 text-[var(--foreground)]">
-            Блоки ниже по умолчанию открываются в режиме просмотра. Если нужно изменить
-            содержимое конкретного блока, нажми «Редактировать» в его шапке.
-          </p>
-        </div>
-      ) : null}
-
       {blocks.length === 0 ? (
-        <div className="rounded-[32px] border border-dashed border-[rgba(135,148,176,0.24)] bg-[linear-gradient(180deg,rgba(255,255,255,0.95)_0%,rgba(247,249,255,0.95)_100%)] p-8 shadow-[0_22px_55px_rgba(33,41,74,0.05)]">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[var(--muted)]">
+        <div className="rounded-[var(--radius-lg)] border border-dashed border-[var(--border)] bg-[var(--surface)] p-8 shadow-[var(--shadow-sm)]">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
             Пустой урок
           </p>
-          <h3 className="mt-2 text-[clamp(1.8rem,2vw,2.3rem)] font-semibold tracking-[-0.03em] text-[var(--foreground)]">
+          <h3 className="mt-2 text-[24px] font-semibold tracking-[-0.02em] text-[var(--foreground)]">
             Добавь первый блок
           </h3>
-          <p className="mt-2 max-w-2xl text-sm leading-7 text-[var(--muted)]">
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--muted)]">
             Начни с текста, видео, файла или задания. После этого урок уже можно будет собрать
             как полноценный сценарий.
           </p>
@@ -665,7 +661,7 @@ export function LessonBlockStudio({
               onDragStart={() => setDraggedId(block.id)}
               onDragOver={(event) => event.preventDefault()}
               onDrop={() => handleDrop(block.id)}
-            className="overflow-hidden rounded-[30px] border border-[rgba(135,148,176,0.16)] bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(252,253,255,0.98)_100%)] shadow-[0_20px_52px_rgba(33,41,74,0.07)]"
+            className={`${systemCardClassName} overflow-hidden`}
           >
             <header className="relative flex flex-wrap items-start justify-between gap-4 border-b border-[rgba(135,148,176,0.14)] px-5 py-5">
               <button
@@ -674,7 +670,11 @@ export function LessonBlockStudio({
                 className="flex min-w-0 flex-1 items-start gap-3 text-left"
               >
                 <div
-                  className={`mt-0.5 flex h-12 w-12 shrink-0 items-center justify-center rounded-[18px] shadow-[0_14px_28px_rgba(33,41,74,0.08)] ${meta.accentClassName}`}
+                  className={cn(
+                    systemIconTileClassName,
+                    "mt-0.5 h-12 w-12 shrink-0 shadow-[var(--shadow-sm)]",
+                    meta.accentClassName,
+                  )}
                 >
                   <Icon className="h-5 w-5" />
                 </div>
@@ -1140,7 +1140,7 @@ export function LessonBlockStudio({
       })}
 
       {blocks.length > 0 ? (
-        <div className="rounded-[30px] border border-dashed border-[rgba(135,148,176,0.24)] bg-[linear-gradient(180deg,rgba(255,255,255,0.94)_0%,rgba(247,249,255,0.94)_100%)] p-4 shadow-[0_18px_46px_rgba(33,41,74,0.05)]">
+        <div className="rounded-[var(--radius-lg)] border border-dashed border-[var(--border)] bg-[var(--surface-strong)] p-4 shadow-[var(--shadow-sm)]">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="text-sm font-semibold text-[var(--foreground)]">
@@ -1161,16 +1161,16 @@ export function LessonBlockStudio({
 
       {isPickerOpen ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#18203b]/30 p-4 backdrop-blur-sm">
-          <div className="w-full max-w-3xl rounded-[32px] border border-[rgba(135,148,176,0.2)] bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(248,250,255,0.98)_100%)] p-6 shadow-[0_40px_120px_rgba(28,36,66,0.2)]">
+          <div className="w-full max-w-3xl rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-6 shadow-[var(--shadow-lg)]">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[var(--muted)]">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
                   Добавить блок {blocks.length + 1}
                 </p>
-                <h3 className="mt-2 text-[clamp(1.8rem,2vw,2.3rem)] font-semibold tracking-[-0.03em] text-[var(--foreground)]">
+                <h3 className="mt-2 text-[24px] font-semibold tracking-[-0.02em] text-[var(--foreground)]">
                   Выбери тип блока
                 </h3>
-                <p className="mt-2 text-sm leading-7 text-[var(--muted)]">
+                <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
                   У каждого блока своя задача в уроке. Видео и домашнее задание в текущей
                   версии держим по одному экземпляру на урок.
                 </p>

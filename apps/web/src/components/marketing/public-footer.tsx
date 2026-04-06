@@ -16,7 +16,8 @@ export function PublicFooter() {
               <p className="text-sm font-semibold text-white">Академия риэлторов</p>
             </div>
             <p className="max-w-[320px] text-sm leading-7 text-white/44">
-              Платформа обучения по недвижимости для студентов, преподавателей и команды академии.
+              Платформа обучения по недвижимости для студентов, преподавателей и
+              команды академии.
             </p>
           </div>
 
@@ -31,7 +32,7 @@ export function PublicFooter() {
               Вход
             </Link>
             <Link href="/support" className="text-white/44 transition-colors hover:text-white">
-              РџРѕРґРґРµСЂР¶РєР°
+              Поддержка
             </Link>
           </nav>
         </div>

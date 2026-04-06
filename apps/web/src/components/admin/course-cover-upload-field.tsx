@@ -154,7 +154,7 @@ export function CourseCoverUploadField({
           }}
         />
 
-        <div className="rounded-[22px] border border-[var(--border)] bg-[var(--surface)] p-4">
+        <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-4 shadow-[var(--shadow-sm)]">
           <div className="flex flex-wrap items-center gap-3">
             <Button
               type="button"
@@ -184,7 +184,7 @@ export function CourseCoverUploadField({
             ) : null}
           </div>
 
-          <div className="mt-3 rounded-[18px] border border-dashed border-[var(--border)] bg-white/80 px-4 py-3 text-sm leading-6 text-[var(--muted)]">
+          <div className="mt-3 rounded-[var(--radius-md)] border border-dashed border-[var(--border)] bg-[var(--surface-strong)] px-4 py-3 text-sm leading-6 text-[var(--muted)]">
             Загружай только горизонтальную обложку в формате 16:9.
             Подойдут, например, 1280×720, 1600×900 или 1920×1080.
             Обложка этого формата используется в карточках курса и каталоге без обрезки логики композиции.
@@ -202,7 +202,7 @@ export function CourseCoverUploadField({
             <p className="mt-2 text-sm text-[var(--danger)]">{error}</p>
           ) : null}
 
-          <div className="mt-4 overflow-hidden rounded-[20px] border border-[var(--border)] bg-white">
+          <div className="mt-4 overflow-hidden rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)]">
             <div className="h-32 w-full bg-[linear-gradient(135deg,rgba(92,98,255,0.08),rgba(255,179,214,0.1))] sm:h-36">
               {coverUrl ? (
                 <div

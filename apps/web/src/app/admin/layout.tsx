@@ -4,8 +4,8 @@ import { redirect } from "next/navigation";
 
 import { USER_ROLES } from "@academy/shared";
 
-import { LogoutButton } from "@/components/auth/logout-button";
 import { AdminNav } from "@/components/admin/admin-nav";
+import { LogoutButton } from "@/components/auth/logout-button";
 import { AcademyMark } from "@/components/brand/academy-mark";
 import { Button } from "@/components/ui/button";
 import { RolePreviewSwitcher } from "@/components/workspace/role-preview-switcher";
@@ -35,21 +35,19 @@ export default async function AdminLayout({
 
   return (
     <main className="min-h-screen bg-[var(--background)]">
-      {/* ─── Sticky top bar ─── */}
       <header className="sticky top-0 z-40 border-b border-[var(--border)] bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80">
         <div className="px-4 md:px-6">
-          {/* Row 1: brand + action buttons */}
           <div className="flex items-center justify-between gap-4 py-3">
             <div className="flex items-center gap-3">
               <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--foreground)] text-white shadow-sm">
                 <AcademyMark className="w-[18px]" title="Академия риэлторов" />
               </div>
               <div className="min-w-0">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--muted)] leading-none">
+                <p className="text-[10px] leading-none font-semibold tracking-[0.22em] text-[var(--muted)] uppercase">
                   Академия риэлторов
                 </p>
                 <p
-                  className="mt-0.5 text-sm font-semibold text-[var(--foreground)] leading-tight truncate"
+                  className="mt-0.5 truncate text-sm leading-tight font-semibold text-[var(--foreground)]"
                   title={getWorkspaceDescription(viewer.effectiveRole, viewer.user.email)}
                 >
                   {getWorkspaceTitle(viewer.effectiveRole)}
@@ -74,13 +72,12 @@ export default async function AdminLayout({
                 </Button>
               ) : null}
               <Button asChild size="sm" variant="outline">
-                <Link href="/support">РџРѕРґРґРµСЂР¶РєР°</Link>
+                <Link href="/support">Поддержка</Link>
               </Button>
               <LogoutButton />
             </div>
           </div>
 
-          {/* Row 2: navigation tabs + role switcher */}
           <div className="flex flex-wrap items-center justify-between gap-3 pb-3">
             <AdminNav effectiveRole={viewer.effectiveRole} />
             <RolePreviewSwitcher
@@ -92,10 +89,7 @@ export default async function AdminLayout({
         </div>
       </header>
 
-      {/* ─── Full-width content ─── */}
-      <section className="min-w-0 px-4 py-5 md:px-6 md:py-6">
-        {children}
-      </section>
+      <section className="min-w-0 px-4 py-5 md:px-6 md:py-6">{children}</section>
     </main>
   );
 }

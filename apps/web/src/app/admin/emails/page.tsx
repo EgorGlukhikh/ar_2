@@ -122,6 +122,16 @@ const workspaceEmailModes = [
   },
 ] as const;
 
+type WorkspaceEmailModeId = (typeof workspaceEmailModes)[number]["id"];
+
+const defaultWorkspaceEmailMode: WorkspaceEmailModeId = "email-test-section";
+
+function getActiveEmailMode(section?: string): WorkspaceEmailModeId {
+  return workspaceEmailModes.some((mode) => mode.id === section)
+    ? (section as WorkspaceEmailModeId)
+    : defaultWorkspaceEmailMode;
+}
+
 function formatDateTime(value?: Date | null) {
   if (!value) {
     return "—";
@@ -166,6 +176,7 @@ function getRecipientCategoryLabel(email: {
 
 type AdminEmailsPageProps = {
   searchParams?: Promise<{
+    section?: string;
     q?: string;
     status?: string;
     kind?: string;
@@ -177,6 +188,11 @@ export default async function AdminEmailsPage({
 }: AdminEmailsPageProps) {
   const user = await requireRoleAccess([USER_ROLES.ADMIN, USER_ROLES.SALES_MANAGER]);
   const resolvedSearchParams = searchParams ? await searchParams : undefined;
+  const activeModeId = getActiveEmailMode(resolvedSearchParams?.section?.trim());
+  const isTestMode = activeModeId === "email-test-section";
+  const isCampaignsMode = activeModeId === "email-campaigns-section";
+  const isLogMode = activeModeId === "email-log-section";
+  const isSettingsMode = activeModeId === "email-settings-section";
   const logQuery = resolvedSearchParams?.q?.trim() ?? "";
   const statusFilter = resolvedSearchParams?.status?.trim() ?? "all";
   const kindFilter = resolvedSearchParams?.kind?.trim() ?? "all";
@@ -288,96 +304,110 @@ export default async function AdminEmailsPage({
         >
           <div className="space-y-2">
             {workspaceEmailModes.map((mode) => (
-              <a
+              <Link
                 key={mode.id}
-                href={`#${mode.id}`}
+                href={`/admin/emails?section=${mode.id}`}
                 className={cn(
                   "flex items-center justify-between rounded-[var(--radius-md)] border px-4 py-3 text-sm font-medium transition",
-                  "border-[var(--border)] bg-[var(--surface)] text-[var(--foreground)] hover:bg-[var(--surface-strong)]",
+                  activeModeId === mode.id
+                    ? "border-[var(--primary)] bg-[var(--primary-soft)] text-[var(--primary)] shadow-[var(--shadow-soft)]"
+                    : "border-[var(--border)] bg-[var(--surface)] text-[var(--foreground)] hover:bg-[var(--surface-strong)]",
                 )}
               >
                 <span>{mode.label}</span>
-                <span className="text-xs text-[var(--muted)]">{modeMetrics[mode.id]}</span>
-              </a>
+                <span
+                  className={cn(
+                    "text-xs",
+                    activeModeId === mode.id ? "text-[var(--primary)]" : "text-[var(--muted)]",
+                  )}
+                >
+                  {modeMetrics[mode.id]}
+                </span>
+              </Link>
             ))}
           </div>
         </WorkspacePanel>
 
-        <div className="space-y-6">
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            <WorkspaceStatCard
-              label="В очереди"
-              value={queuedCount}
-              hint="Письма и кампании, которые уже созданы и ждут отправки."
-              icon={Clock3}
-            />
-            <WorkspaceStatCard
-              label="Отправлено"
-              value={sentCount}
-              hint="Письма, которые уже ушли в провайдер или были доставлены."
-              icon={Send}
-            />
-            <WorkspaceStatCard
-              label="Открыто"
-              value={openedCount}
-              hint="Открытия и клики по письмам, включая маркетинговые кампании."
-              icon={Eye}
-            />
-            <WorkspaceStatCard
-              label="Ошибки"
-              value={failedCount}
-              hint="Финальные ошибки доставки, возвраты и жалобы."
-              icon={MailWarning}
-            />
-          </div>
+        <div className="min-w-0 space-y-6">
+          {isSettingsMode ? (
+            <>
+              <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                <WorkspaceStatCard
+                  label="В очереди"
+                  value={queuedCount}
+                  hint="Письма и кампании, которые уже созданы и ждут отправки."
+                  icon={Clock3}
+                />
+                <WorkspaceStatCard
+                  label="Отправлено"
+                  value={sentCount}
+                  hint="Письма, которые уже ушли в провайдер или были доставлены."
+                  icon={Send}
+                />
+                <WorkspaceStatCard
+                  label="Открыто"
+                  value={openedCount}
+                  hint="Открытия и клики по письмам, включая маркетинговые кампании."
+                  icon={Eye}
+                />
+                <WorkspaceStatCard
+                  label="Ошибки"
+                  value={failedCount}
+                  hint="Финальные ошибки доставки, возвраты и жалобы."
+                  icon={MailWarning}
+                />
+              </div>
 
-          <WorkspacePanel
-            eyebrow="Контур"
-            title="Здоровье контура"
-            description="Короткая сводка по подпискам, провайдеру отправки и базовым параметрам контура."
-          >
-            <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-4">
-              <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] px-5 py-4">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
-                  Студенты с согласием
-                </p>
-                <p className="mt-3 text-3xl font-semibold tracking-[-0.03em] text-[var(--foreground)]">
-                  {preferenceMap.get("STUDENT:true") ?? 0}
-                </p>
-              </div>
-              <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] px-5 py-4">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
-                  Эксперты с согласием
-                </p>
-                <p className="mt-3 text-3xl font-semibold tracking-[-0.03em] text-[var(--foreground)]">
-                  {preferenceMap.get("EXPERT:true") ?? 0}
-                </p>
-              </div>
-              <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] px-5 py-4">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
-                  Провайдер
-                </p>
-                <p className="mt-3 text-lg font-semibold text-[var(--foreground)]">
-                  {config.provider === "resend"
-                    ? "Resend"
-                    : config.provider === "smtp"
-                      ? "SMTP"
-                      : "Mock"}
-                </p>
-                <p className="mt-2 text-sm text-[var(--muted)]">{config.sender.fromEmail}</p>
-              </div>
-              <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] px-5 py-4">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
-                  Reply-to
-                </p>
-                <p className="mt-3 text-lg font-semibold text-[var(--foreground)]">
-                  {config.replyTo.replyToEmail}
-                </p>
-                <p className="mt-2 text-sm text-[var(--muted)]">{config.replyTo.replyToName}</p>
-              </div>
-            </div>
-          </WorkspacePanel>
+              <WorkspacePanel
+                eyebrow="Контур"
+                title="Здоровье контура"
+                description="Короткая сводка по подпискам, провайдеру отправки и базовым параметрам контура."
+              >
+                <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-4">
+                  <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] px-5 py-4">
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
+                      Студенты с согласием
+                    </p>
+                    <p className="mt-3 text-3xl font-semibold tracking-[-0.03em] text-[var(--foreground)]">
+                      {preferenceMap.get("STUDENT:true") ?? 0}
+                    </p>
+                  </div>
+                  <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] px-5 py-4">
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
+                      Эксперты с согласием
+                    </p>
+                    <p className="mt-3 text-3xl font-semibold tracking-[-0.03em] text-[var(--foreground)]">
+                      {preferenceMap.get("EXPERT:true") ?? 0}
+                    </p>
+                  </div>
+                  <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] px-5 py-4">
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
+                      Провайдер
+                    </p>
+                    <p className="mt-3 text-lg font-semibold text-[var(--foreground)]">
+                      {config.provider === "resend"
+                        ? "Resend"
+                        : config.provider === "smtp"
+                          ? "SMTP"
+                          : "Mock"}
+                    </p>
+                    <p className="mt-2 text-sm text-[var(--muted)]">{config.sender.fromEmail}</p>
+                  </div>
+                  <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] px-5 py-4">
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
+                      Reply-to
+                    </p>
+                    <p className="mt-3 text-lg font-semibold text-[var(--foreground)]">
+                      {config.replyTo.replyToEmail}
+                    </p>
+                    <p className="mt-2 text-sm text-[var(--muted)]">{config.replyTo.replyToName}</p>
+                  </div>
+                </div>
+              </WorkspacePanel>
+            </>
+          ) : null}
 
+          {isTestMode ? (
           <div id="email-test-section" className="scroll-mt-24">
         <WorkspacePanel
           eyebrow="Шаблоны"
@@ -462,7 +492,9 @@ export default async function AdminEmailsPage({
           </div>
         </WorkspacePanel>
       </div>
+          ) : null}
 
+      {isCampaignsMode ? (
       <div id="email-campaigns-section" className="scroll-mt-24">
         <WorkspacePanel
           eyebrow="Кампании"
@@ -651,7 +683,9 @@ export default async function AdminEmailsPage({
           </div>
         </WorkspacePanel>
       </div>
+      ) : null}
 
+      {isLogMode ? (
       <div id="email-log-section" className="scroll-mt-24">
         <WorkspacePanel
           eyebrow="Журнал"
@@ -660,6 +694,7 @@ export default async function AdminEmailsPage({
         >
           <div className="mb-5 flex flex-col gap-4 rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-4 lg:flex-row lg:items-end lg:justify-between">
             <form action="/admin/emails" className="grid flex-1 gap-3 md:grid-cols-3">
+              <input type="hidden" name="section" value="email-log-section" />
               <div className="space-y-2 md:col-span-1">
                 <Label htmlFor="email-log-query">Поиск по теме, получателю или курсу</Label>
                 <Input
@@ -691,7 +726,7 @@ export default async function AdminEmailsPage({
               <div className="flex flex-wrap gap-3 md:col-span-3">
                 <Button type="submit">Применить фильтры</Button>
                 <Button asChild variant="outline">
-                  <Link href="/admin/emails#email-log-section">Сбросить</Link>
+                  <Link href="/admin/emails?section=email-log-section">Сбросить</Link>
                 </Button>
               </div>
             </form>
@@ -863,7 +898,9 @@ export default async function AdminEmailsPage({
           )}
         </WorkspacePanel>
       </div>
+      ) : null}
 
+      {isSettingsMode ? (
       <div id="email-settings-section" className="scroll-mt-24">
         <WorkspacePanel
           eyebrow="Настройки"
@@ -984,6 +1021,7 @@ export default async function AdminEmailsPage({
           </details>
         </WorkspacePanel>
       </div>
+      ) : null}
     </div>
   </div>
     </section>

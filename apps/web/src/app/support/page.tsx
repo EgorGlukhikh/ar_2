@@ -1,10 +1,14 @@
 import Link from "next/link";
 
-import { PublicFooter } from "@/components/marketing/public-footer";
-import { SupportRequestForm } from "@/components/support/support-request-form";
-import { Button } from "@/components/ui/button";
 import { PageContainer, PageGrid } from "@/components/layout/page-grid";
-import { WorkspacePageHeader, WorkspacePanel } from "@/components/workspace/workspace-primitives";
+import { PublicFooter } from "@/components/marketing/public-footer";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { SupportRequestForm } from "@/components/support/support-request-form";
+import {
+  WorkspacePageHeader,
+  WorkspacePanel,
+} from "@/components/workspace/workspace-primitives";
 import { getSupportFormPrefill } from "@/features/support/service";
 
 export const dynamic = "force-dynamic";
@@ -30,12 +34,10 @@ export default async function SupportPage() {
             description="Опиши, с чем столкнулся, что не сработало и как с тобой лучше связаться. Сообщение уйдёт напрямую команде платформы."
             meta={
               <div className="flex flex-wrap items-center gap-2">
-                <span className="rounded-full border border-[var(--border)] bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
-                  {prefill.roleLabel}
-                </span>
-                <span className="rounded-full border border-[var(--border)] bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
+                <Badge variant="neutral">{prefill.roleLabel}</Badge>
+                <Badge variant="neutral">
                   {prefill.isAuthenticated ? "Профиль найден" : "Гостевой запрос"}
-                </span>
+                </Badge>
               </div>
             }
           />
@@ -58,7 +60,7 @@ export default async function SupportPage() {
                 description="Поддержке особенно полезны детали, которые позволяют сразу воспроизвести ситуацию."
               >
                 <div className="space-y-3 text-sm leading-7 text-[var(--foreground)]">
-                  <p>Что именно пытался сделать и на каком шаге появилась проблема.</p>
+                  <p>Что именно ты пытался сделать и на каком шаге появилась проблема.</p>
                   <p>Какой курс, урок или раздел был открыт в этот момент.</p>
                   <p>Что ожидалось увидеть и что произошло по факту.</p>
                   <p>Если проблема повторяется, укажи это прямо в сообщении.</p>

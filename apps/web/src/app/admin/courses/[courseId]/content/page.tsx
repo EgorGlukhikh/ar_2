@@ -1,6 +1,6 @@
 ﻿import { CourseDeliveryFormat, LessonType, prisma } from "@academy/db";
 import { getTimezoneLabel } from "@/lib/timezones";
-import { Save, Trash2 } from "lucide-react";
+import { Save } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
@@ -14,10 +14,12 @@ import { Button } from "@/components/ui/button";
 import {
   quickCreateLesson,
   createModule,
-  deleteLesson,
-  deleteModule,
+  deleteLessonFromTree,
+  deleteModuleFromTree,
   repositionLesson,
   repositionModule,
+  renameLessonInTree,
+  renameModuleInTree,
   updateLesson,
   updateModule,
 } from "@/features/admin/course-actions";
@@ -277,6 +279,10 @@ export default async function CourseContentPage({
           quickCreateLessonAction={quickCreateLesson}
           repositionLessonAction={repositionLesson}
           repositionModuleAction={repositionModule}
+          renameModuleAction={renameModuleInTree}
+          renameLessonAction={renameLessonInTree}
+          deleteModuleAction={deleteModuleFromTree}
+          deleteLessonAction={deleteLessonFromTree}
         />
         {selectedLesson ? (
           <>
@@ -346,31 +352,6 @@ export default async function CourseContentPage({
               </article>
             ) : null}
 
-            <div className="flex flex-wrap justify-between gap-3">
-              {selectedLesson ? (
-                <Button asChild variant="outline">
-                  <Link href={`/learning/courses/${course.id}?lessonId=${selectedLesson.id}`}>
-                    Проверить как студент
-                  </Link>
-                </Button>
-              ) : (
-                <span />
-              )}
-
-              <form action={deleteModule}>
-                <input type="hidden" name="courseId" value={course.id} />
-                <input type="hidden" name="moduleId" value={selectedModule.id} />
-                <Button
-                  type="submit"
-                  variant="outline"
-                  className="border-red-300 text-red-600 hover:bg-red-50"
-                >
-                  <Trash2 className="mr-2 h-4 w-4" />
-                  Удалить модуль
-                </Button>
-              </form>
-            </div>
-
             {!selectedLesson ? (
               <EmptyStudio
                 title={
@@ -421,18 +402,6 @@ export default async function CourseContentPage({
                   </div>
                 </form>
 
-                <form action={deleteLesson} className="flex justify-end">
-                  <input type="hidden" name="courseId" value={course.id} />
-                  <input type="hidden" name="lessonId" value={selectedLesson.id} />
-                  <Button
-                    type="submit"
-                    variant="outline"
-                    className="border-red-300 text-red-600 hover:bg-red-50"
-                  >
-                    <Trash2 className="mr-2 h-4 w-4" />
-                    Удалить урок
-                  </Button>
-                </form>
               </>
             )}
           </>

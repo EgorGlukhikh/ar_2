@@ -3,9 +3,11 @@
 import { PencilLine, X } from "lucide-react";
 import { useState } from "react";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { SystemInfoItem } from "@/components/system/system-ui";
 
 type EditableModulePanelProps = {
   courseId: string;
@@ -35,16 +37,21 @@ export function EditableModulePanel({
   }
 
   return (
-    <article className="rounded-[28px] border border-[var(--border)] bg-white p-6 shadow-sm">
+    <article className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow-sm)]">
       <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
         <div className="space-y-2">
-          <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#7a6548]">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
             Выбранный модуль
           </p>
-          <h2 className="text-3xl font-semibold tracking-tight text-[var(--foreground)]">
+          <h2 className="text-[24px] font-semibold tracking-[-0.02em] text-[var(--foreground)]">
             {moduleTitle}
           </h2>
-          <p className="text-sm text-[var(--muted)]">Уроков: {lessonsCount}</p>
+          <div className="flex flex-wrap items-center gap-2">
+            <Badge variant="neutral">{lessonsCount} уроков</Badge>
+            <Badge variant="neutral">
+              {defaultLessonType === "LIVE" ? "Вебинары по умолчанию" : "Обычные уроки"}
+            </Badge>
+          </div>
         </div>
 
         <div className="flex flex-wrap gap-2">
@@ -61,7 +68,10 @@ export function EditableModulePanel({
 
       <div className="mt-5 grid gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
         {isEditingModule ? (
-          <form action={updateModuleAction} className="space-y-3 rounded-[22px] bg-[var(--surface)] p-4">
+          <form
+            action={updateModuleAction}
+            className="space-y-3 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface-strong)] p-4"
+          >
             <input type="hidden" name="courseId" value={courseId} />
             <input type="hidden" name="moduleId" value={moduleId} />
             <Label htmlFor="selected-module-title-editor">Название модуля</Label>
@@ -83,28 +93,19 @@ export function EditableModulePanel({
             </div>
           </form>
         ) : (
-          <div className="rounded-[22px] border border-[var(--border)] bg-[var(--surface)] p-4">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#7a6548]">
-              Название модуля
-            </p>
-            <p className="mt-3 text-base font-semibold text-[var(--foreground)]">{moduleTitle}</p>
-          </div>
+          <SystemInfoItem label="Название модуля" value={moduleTitle} className="p-4" />
         )}
 
-        <div className="rounded-[22px] border border-[var(--border)] bg-[var(--surface)] p-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#7a6548]">
-            Управление структурой
-          </p>
-          <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
-            Новые уроки и порядок шагов теперь управляются только в дереве слева. Правая часть
-            экрана отвечает за содержание выбранного модуля и урока.
-          </p>
-          <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
-            {defaultLessonType === "LIVE"
-              ? `Для курса в формате «${courseFormatLabel}» новые шаги будут создаваться как вебинары.`
-              : "Добавляй новые уроки через левую структуру, когда в программе действительно нужен новый шаг."}
-          </p>
-        </div>
+        <SystemInfoItem
+          label="Как устроен поток"
+          value={
+            defaultLessonType === "LIVE"
+              ? `Для формата «${courseFormatLabel}» новые шаги создаются как вебинарные занятия.`
+              : "Новые уроки, переносы и удаление шагов теперь управляются из дерева слева."
+          }
+          hint="Здесь оставлены только настройки выбранного модуля. Структура программы больше не дублируется в центральной колонке."
+          className="p-4"
+        />
       </div>
     </article>
   );

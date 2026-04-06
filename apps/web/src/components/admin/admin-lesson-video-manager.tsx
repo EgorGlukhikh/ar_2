@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { systemCardClassName, systemCardInsetClassName } from "@/components/system/system-ui";
 
 type VideoAssetState = {
   id: string;
@@ -300,17 +301,17 @@ export function AdminLessonVideoManager({
   }
 
   return (
-    <section className="space-y-5 rounded-[30px] border border-[rgba(135,148,176,0.2)] bg-[linear-gradient(180deg,rgba(255,255,255,0.95)_0%,rgba(247,249,255,0.98)_100%)] p-5 shadow-[0_20px_60px_rgba(33,41,74,0.08)]">
+    <section className={`space-y-5 ${systemCardClassName} p-5`}>
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         <div className="space-y-1">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[var(--muted)]">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
             Видео
           </p>
-          <h3 className="text-xl font-semibold tracking-tight text-[var(--foreground)]">
+          <h3 className="text-[24px] font-semibold tracking-[-0.02em] text-[var(--foreground)]">
             Управление источником урока
           </h3>
           <p className="text-sm leading-6 text-[var(--muted)]">
-            Подключай embed, импортируй ссылку или загружай локальный файл прямо в урок.
+            Один сценарий для урока: подключи ссылку или загрузи локальный файл в платформу.
           </p>
         </div>
 
@@ -360,8 +361,8 @@ export function AdminLessonVideoManager({
       </div>
 
       {(initialAsset || hasVideo) ? (
-        <div className="rounded-[24px] border border-[rgba(135,148,176,0.18)] bg-[rgba(255,255,255,0.88)] px-5 py-4 text-sm text-[var(--muted)] shadow-[inset_0_1px_0_rgba(255,255,255,0.8)]">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
+        <div className={`${systemCardInsetClassName} px-5 py-4 text-sm text-[var(--muted)]`}>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
             Текущее состояние
           </p>
           <p className="mt-2">
@@ -394,9 +395,9 @@ export function AdminLessonVideoManager({
       ) : null}
 
       <div className="grid gap-4 xl:grid-cols-2">
-        <div className="rounded-[26px] border border-[rgba(135,148,176,0.18)] bg-[rgba(255,255,255,0.88)] p-4 shadow-[0_14px_32px_rgba(33,41,74,0.05)]">
+        <div className={`${systemCardInsetClassName} p-4`}>
           <div className="space-y-2">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
               Ссылка
             </p>
             <h4 className="text-base font-semibold text-[var(--foreground)]">
@@ -424,9 +425,9 @@ export function AdminLessonVideoManager({
           </div>
         </div>
 
-        <div className="rounded-[26px] border border-dashed border-[rgba(135,148,176,0.28)] bg-[linear-gradient(180deg,rgba(248,250,255,0.94)_0%,rgba(255,255,255,0.94)_100%)] px-4 py-4 shadow-[0_14px_32px_rgba(33,41,74,0.05)]">
+        <div className="rounded-[var(--radius-md)] border border-dashed border-[var(--border)] bg-[var(--surface-strong)] px-4 py-4">
           <div className="space-y-1">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
               Файл
             </p>
             <h4 className="text-base font-semibold text-[var(--foreground)]">

@@ -1,10 +1,20 @@
 import Link from "next/link";
+
 import { prisma } from "@academy/db";
 import { USER_ROLES } from "@academy/shared";
+
 import { Button } from "@/components/ui/button";
-import { emailTemplateCatalogMap, emailTemplateKeys, type EmailTemplateKey } from "@/lib/email/catalog";
-import { renderTemplateByKey } from "@/lib/email/templates";
+import {
+  WorkspacePageHeader,
+  WorkspacePanel,
+} from "@/components/workspace/workspace-primitives";
 import { requireRoleAccess } from "@/lib/admin";
+import {
+  emailTemplateCatalogMap,
+  emailTemplateKeys,
+  type EmailTemplateKey,
+} from "@/lib/email/catalog";
+import { renderTemplateByKey } from "@/lib/email/templates";
 
 type AdminEmailPreviewPageProps = {
   searchParams: Promise<{
@@ -19,6 +29,7 @@ function buildAbsoluteUrl(path: string) {
     process.env.AUTH_URL?.trim() ||
     process.env.NEXTAUTH_URL?.trim() ||
     "http://localhost:3000";
+
   return `${base.replace(/\/+$/, "")}${path.startsWith("/") ? path : `/${path}`}`;
 }
 
@@ -34,9 +45,7 @@ export default async function AdminEmailPreviewPage({
 
   const course = courseId
     ? await prisma.course.findUnique({
-        where: {
-          id: courseId,
-        },
+        where: { id: courseId },
         select: {
           id: true,
           title: true,
@@ -52,46 +61,44 @@ export default async function AdminEmailPreviewPage({
       catalogUrl: buildAbsoluteUrl("/catalog"),
       signInUrl: buildAbsoluteUrl("/sign-in"),
       learningUrl: buildAbsoluteUrl("/learning"),
-      courseUrl: course?.slug ? buildAbsoluteUrl(`/catalog#${course.slug}`) : buildAbsoluteUrl("/catalog"),
+      courseUrl: course?.slug
+        ? buildAbsoluteUrl(`/catalog#${course.slug}`)
+        : buildAbsoluteUrl("/catalog"),
       expertUrl: buildAbsoluteUrl("/admin/courses"),
       preferencesUrl: buildAbsoluteUrl("/email/preferences?token=demo-preview"),
     },
-    replyEmail: process.env.EMAIL_REPLY_TO_EMAIL || process.env.EMAIL_FROM_EMAIL || "academy@example.com",
+    replyEmail:
+      process.env.EMAIL_REPLY_TO_EMAIL ||
+      process.env.EMAIL_FROM_EMAIL ||
+      "academy@example.com",
   });
 
   return (
     <section className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
-            Preview
-          </p>
-          <h1 className="mt-1 text-3xl font-semibold tracking-[-0.03em] text-[var(--foreground)]">
-            {emailTemplateCatalogMap[templateKey].label}
-          </h1>
-          <p className="mt-2 text-sm leading-7 text-[var(--muted)]">
-            Предпросмотр HTML-письма в брендовой верстке платформы.
-          </p>
-        </div>
-        <Button asChild variant="outline">
-          <Link href="/admin/emails">Вернуться в почтовый центр</Link>
-        </Button>
-      </div>
+      <WorkspacePageHeader
+        eyebrow="Preview"
+        title={emailTemplateCatalogMap[templateKey].label}
+        description="Предпросмотр HTML-письма в брендовой вёрстке платформы."
+        actions={
+          <Button asChild variant="outline">
+            <Link href="/admin/emails?section=email-test-section">
+              Вернуться в почтовый центр
+            </Link>
+          </Button>
+        }
+      />
 
-      <article className="rounded-[32px] border border-[var(--border)] bg-white p-6 shadow-[var(--shadow-lg)]">
-        <div className="rounded-[24px] border border-[var(--border)] bg-[var(--surface-strong)] px-5 py-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
-            Тема письма
-          </p>
-          <p className="mt-2 text-lg font-semibold text-[var(--foreground)]">{rendered.subject}</p>
-          <p className="mt-2 text-sm leading-7 text-[var(--muted)]">{rendered.preheader}</p>
-        </div>
-
+      <WorkspacePanel
+        eyebrow="Тема письма"
+        title={rendered.subject}
+        description={rendered.preheader}
+        className="overflow-hidden"
+      >
         <div
-          className="mt-6 overflow-hidden rounded-[28px] border border-[var(--border)] bg-[#eef3ff]"
+          className="overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border)] bg-[#eef3ff]"
           dangerouslySetInnerHTML={{ __html: rendered.html }}
         />
-      </article>
+      </WorkspacePanel>
     </section>
   );
 }

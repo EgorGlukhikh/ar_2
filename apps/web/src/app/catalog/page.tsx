@@ -20,7 +20,6 @@ export default async function CatalogPage() {
     <main
       className={`${marketingDisplay.variable} ${marketingBody.variable} min-h-screen bg-[var(--surface-strong)] font-[family:var(--font-landing-body)] text-[var(--foreground)]`}
     >
-      {/* ─── STICKY HEADER ─────────────────────────────────────────── */}
       <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-white/96 backdrop-blur-sm">
         <PageContainer className="flex h-16 items-center justify-between gap-4 py-0">
           <Link href="/" className="flex items-center gap-3">
@@ -33,12 +32,9 @@ export default async function CatalogPage() {
           </Link>
 
           <div className="flex shrink-0 items-center gap-3">
-            <Link
-              href="/"
-              className="text-sm font-medium text-[var(--muted)] transition-colors hover:text-[var(--foreground)]"
-            >
+            <PublicButton href="/" tone="secondary">
               На главную
-            </Link>
+            </PublicButton>
             {session?.user ? (
               <PublicButton href="/after-sign-in">
                 {formatPublicCopy("В кабинет")}
@@ -52,7 +48,6 @@ export default async function CatalogPage() {
         </PageContainer>
       </header>
 
-      {/* ─── HERO ──────────────────────────────────────────────────── */}
       <section className="bg-[var(--foreground)] py-14">
         <PageContainer>
           <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/50">
@@ -69,7 +64,6 @@ export default async function CatalogPage() {
         </PageContainer>
       </section>
 
-      {/* ─── COURSE GRID ───────────────────────────────────────────── */}
       <section className="py-16">
         <PageContainer>
           <CatalogPageContent

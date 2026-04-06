@@ -52,10 +52,20 @@ const updateModuleSchema = moduleSchema.extend({
   moduleId: z.string().trim().min(1),
 });
 
+const renameModuleSchema = z.object({
+  moduleId: z.string().trim().min(1),
+  title: z.string().trim().min(2),
+});
+
 const lessonSchema = z.object({
   moduleId: z.string().trim().min(1),
   title: z.string().trim().min(2),
   type: z.nativeEnum(LessonType).default(LessonType.TEXT),
+});
+
+const renameLessonSchema = z.object({
+  lessonId: z.string().trim().min(1),
+  title: z.string().trim().min(2),
 });
 
 const moveLessonSchema = z.object({
@@ -589,6 +599,12 @@ function resolveInsertIndex(args: {
   return args.placement === "after" ? targetIndex + 1 : targetIndex;
 }
 
+type CourseContentSelectionResult = {
+  courseId: string;
+  moduleId: string | null;
+  lessonId: string | null;
+};
+
 export async function createCourse(formData: FormData) {
   const user = await requireCourseCreator();
 
@@ -799,6 +815,34 @@ export async function updateModule(formData: FormData) {
   refreshAdminRoutes(parsed.courseId);
 }
 
+export async function renameModuleInTree(
+  formData: FormData,
+): Promise<CourseContentSelectionResult> {
+  const parsed = renameModuleSchema.parse({
+    moduleId: getTrimmedValue(formData, "moduleId"),
+    title: getTrimmedValue(formData, "title"),
+  });
+
+  const { moduleRecord } = await requireModuleContentEditor(parsed.moduleId);
+
+  await prisma.module.update({
+    where: {
+      id: parsed.moduleId,
+    },
+    data: {
+      title: parsed.title,
+    },
+  });
+
+  refreshAdminRoutes(moduleRecord.courseId);
+
+  return {
+    courseId: moduleRecord.courseId,
+    moduleId: parsed.moduleId,
+    lessonId: null,
+  };
+}
+
 export async function deleteModule(formData: FormData) {
   const moduleId = getTrimmedValue(formData, "moduleId");
   const courseId = getTrimmedValue(formData, "courseId");
@@ -812,6 +856,54 @@ export async function deleteModule(formData: FormData) {
   });
 
   refreshAdminRoutes(courseId);
+}
+
+export async function deleteModuleFromTree(
+  formData: FormData,
+): Promise<CourseContentSelectionResult> {
+  const moduleId = getTrimmedValue(formData, "moduleId");
+  const { moduleRecord } = await requireModuleContentEditor(moduleId);
+
+  const orderedModules = await prisma.module.findMany({
+    where: {
+      courseId: moduleRecord.courseId,
+    },
+    orderBy: {
+      position: "asc",
+    },
+    select: {
+      id: true,
+      lessons: {
+        orderBy: {
+          position: "asc",
+        },
+        select: {
+          id: true,
+        },
+        take: 1,
+      },
+    },
+  });
+
+  const currentIndex = orderedModules.findIndex((item) => item.id === moduleId);
+  const fallbackModule =
+    orderedModules[currentIndex + 1] ??
+    orderedModules[currentIndex - 1] ??
+    null;
+
+  await prisma.module.delete({
+    where: {
+      id: moduleId,
+    },
+  });
+
+  refreshAdminRoutes(moduleRecord.courseId);
+
+  return {
+    courseId: moduleRecord.courseId,
+    moduleId: fallbackModule?.id ?? null,
+    lessonId: fallbackModule?.lessons[0]?.id ?? null,
+  };
 }
 
 export async function createLesson(formData: FormData) {
@@ -993,6 +1085,34 @@ export async function updateLesson(formData: FormData) {
   refreshAdminRoutes(moduleRecord.courseId);
 }
 
+export async function renameLessonInTree(
+  formData: FormData,
+): Promise<CourseContentSelectionResult> {
+  const parsed = renameLessonSchema.parse({
+    lessonId: getTrimmedValue(formData, "lessonId"),
+    title: getTrimmedValue(formData, "title"),
+  });
+
+  const { lessonRecord } = await requireLessonContentEditor(parsed.lessonId);
+
+  await prisma.lesson.update({
+    where: {
+      id: parsed.lessonId,
+    },
+    data: {
+      title: parsed.title,
+    },
+  });
+
+  refreshAdminRoutes(lessonRecord.module.courseId);
+
+  return {
+    courseId: lessonRecord.module.courseId,
+    moduleId: lessonRecord.moduleId,
+    lessonId: parsed.lessonId,
+  };
+}
+
 export async function deleteLesson(formData: FormData) {
   const lessonId = getTrimmedValue(formData, "lessonId");
   const courseId = getTrimmedValue(formData, "courseId");
@@ -1006,6 +1126,45 @@ export async function deleteLesson(formData: FormData) {
   });
 
   refreshAdminRoutes(courseId);
+}
+
+export async function deleteLessonFromTree(
+  formData: FormData,
+): Promise<CourseContentSelectionResult> {
+  const lessonId = getTrimmedValue(formData, "lessonId");
+  const { lessonRecord } = await requireLessonContentEditor(lessonId);
+
+  const orderedLessons = await prisma.lesson.findMany({
+    where: {
+      moduleId: lessonRecord.moduleId,
+    },
+    orderBy: {
+      position: "asc",
+    },
+    select: {
+      id: true,
+    },
+  });
+
+  const currentIndex = orderedLessons.findIndex((item) => item.id === lessonId);
+  const fallbackLesson =
+    orderedLessons[currentIndex + 1] ??
+    orderedLessons[currentIndex - 1] ??
+    null;
+
+  await prisma.lesson.delete({
+    where: {
+      id: lessonId,
+    },
+  });
+
+  refreshAdminRoutes(lessonRecord.module.courseId);
+
+  return {
+    courseId: lessonRecord.module.courseId,
+    moduleId: lessonRecord.moduleId,
+    lessonId: fallbackLesson?.id ?? null,
+  };
 }
 
 export async function moveLessonToModule(formData: FormData) {
@@ -1261,6 +1420,7 @@ export async function repositionModule(formData: FormData) {
   return {
     courseId: moduleRecord.courseId,
     moduleId: parsed.moduleId,
+    lessonId: null,
   };
 }
 

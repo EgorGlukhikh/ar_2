@@ -379,7 +379,7 @@ export default async function CourseLearningPage({
 
   return (
     <section className="space-y-6">
-      <header className="rounded-[28px] border border-[var(--border)] bg-white p-8 shadow-sm">
+      <header className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-6 shadow-[var(--shadow-sm)] md:p-8">
         <div className="flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
           <div className="space-y-3">
             <div className="flex flex-wrap items-center gap-3">
@@ -402,7 +402,7 @@ export default async function CourseLearningPage({
             </p>
           </div>
 
-          <div className="min-w-[220px] space-y-3 rounded-[var(--radius-xl)] bg-[var(--surface)] p-4">
+          <div className="min-w-[220px] space-y-3 rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-strong)] p-4">
             <div className="flex items-center justify-between text-sm text-[var(--muted)]">
               <span>Прогресс</span>
               <span>
@@ -420,7 +420,7 @@ export default async function CourseLearningPage({
       </header>
 
       <div className="grid gap-6 xl:grid-cols-[340px_1fr]">
-        <aside className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-white p-5 shadow-sm">
+        <aside className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow-sm)]">
           <div className="space-y-4">
             {course.modules.length === 0 ? (
               <div className="rounded-2xl border border-dashed border-[var(--border)] bg-[var(--surface)] p-5 text-sm leading-7 text-[var(--muted)]">
@@ -494,7 +494,7 @@ export default async function CourseLearningPage({
           </div>
         </aside>
 
-        <article className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-white p-6 shadow-sm">
+        <article className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-6 shadow-[var(--shadow-sm)]">
           {!selectedEntry ? (
             <div className="rounded-2xl border border-dashed border-[var(--border)] bg-[var(--surface)] p-6 text-sm leading-7 text-[var(--muted)]">
               В этом курсе пока нет уроков.
