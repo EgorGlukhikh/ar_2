@@ -24,6 +24,7 @@ import {
   SectionLead,
 } from "@/components/marketing/public-primitives";
 import { PageContainer } from "@/components/layout/page-grid";
+import { Button } from "@/components/ui/button";
 import { formatPublicCopy } from "@/lib/public-copy";
 import { cn } from "@/lib/utils";
 import { audienceCards, roleCopy, trustPoints } from "@shared/public-home/copy";
@@ -348,9 +349,11 @@ export function LandingExperience({
                 Войти
               </Link>
             )}
-            <PublicButton href="/catalog">
+            <Button asChild size="sm">
+              <Link href="/catalog">
               Подобрать курс
-            </PublicButton>
+              </Link>
+            </Button>
           </div>
         </PageContainer>
       </header>

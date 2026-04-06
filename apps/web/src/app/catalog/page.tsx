@@ -8,7 +8,7 @@ import { CatalogPageContent } from "@frontend/catalog/components/catalog-page-co
 import { AcademyMark } from "@/components/brand/academy-mark";
 import { PageContainer } from "@/components/layout/page-grid";
 import { PublicFooter } from "@/components/marketing/public-footer";
-import { PublicButton } from "@/components/marketing/public-primitives";
+import { Button } from "@/components/ui/button";
 import { marketingBody, marketingDisplay } from "@/lib/marketing-theme";
 import { formatPublicCopy } from "@/lib/public-copy";
 
@@ -32,17 +32,23 @@ export default async function CatalogPage() {
           </Link>
 
           <div className="flex shrink-0 items-center gap-3">
-            <PublicButton href="/" tone="secondary">
+            <Button asChild size="sm" variant="outline">
+              <Link href="/">
               На главную
-            </PublicButton>
+              </Link>
+            </Button>
             {session?.user ? (
-              <PublicButton href="/after-sign-in">
+              <Button asChild size="sm">
+                <Link href="/after-sign-in">
                 {formatPublicCopy("В кабинет")}
-              </PublicButton>
+                </Link>
+              </Button>
             ) : (
-              <PublicButton href="/sign-in">
+              <Button asChild size="sm">
+                <Link href="/sign-in">
                 {formatPublicCopy("Войти")}
-              </PublicButton>
+                </Link>
+              </Button>
             )}
           </div>
         </PageContainer>
