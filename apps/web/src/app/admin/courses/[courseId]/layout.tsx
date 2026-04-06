@@ -4,6 +4,10 @@ import { GraduationCap, Settings2 } from "lucide-react";
 import { USER_ROLES } from "@academy/shared";
 
 import { AdminCourseTabs } from "@/components/admin/admin-course-tabs";
+import {
+  systemCompactActionRowClassName,
+  systemTopbarActionsClassName,
+} from "@/components/system/system-ui";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { getAdminCourseShell } from "@/features/admin/course-page-data";
@@ -49,7 +53,7 @@ export default async function CourseLayout({
               </Badge>
             </div>
 
-            <div className="mt-2 flex flex-wrap gap-4 text-xs text-[var(--muted)]">
+            <div className={`mt-2 ${systemCompactActionRowClassName} text-xs text-[var(--muted)]`}>
               <span>Модулей: {course._count.modules}</span>
               <span>Уроков: {course.lessonCount}</span>
               {isAdminMode ? (
@@ -59,7 +63,7 @@ export default async function CourseLayout({
           </div>
 
           {/* Right: action buttons */}
-          <div className="flex shrink-0 flex-wrap gap-2">
+          <div className={systemTopbarActionsClassName}>
             <Button asChild variant="outline" size="sm" className="shrink-0">
               <Link href={`/learning/courses/${course.id}`}>
                 <GraduationCap className="mr-1.5 h-3.5 w-3.5" />

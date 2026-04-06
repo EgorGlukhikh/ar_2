@@ -1,3 +1,5 @@
+import { SystemNotice, systemCardClassName } from "@/components/system/system-ui";
+
 type MediaSourceTypeValue =
   | "RUTUBE_EMBED"
   | "EXTERNAL_EMBED"
@@ -76,10 +78,16 @@ export function LessonVideoPlayer({
 
   if (videoAsset?.status === "ERROR") {
     return (
-      <div className="rounded-[var(--radius-xl)] border border-red-200 bg-red-50 p-6 text-sm leading-7 text-red-700">
-        Видео не удалось подготовить к воспроизведению.
-        {videoAsset.errorMessage ? ` ${videoAsset.errorMessage}` : ""}
-      </div>
+      <SystemNotice
+        tone="warning"
+        title="Видео не удалось подготовить к воспроизведению"
+        description={
+          videoAsset.errorMessage
+            ? `Детали: ${videoAsset.errorMessage}`
+            : undefined
+        }
+        className="p-6"
+      />
     );
   }
 
@@ -90,7 +98,7 @@ export function LessonVideoPlayer({
       videoAsset.status === "PROCESSING")
   ) {
     return (
-      <div className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-6">
+      <div className={`${systemCardClassName} p-6`}>
         <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
           Видео готовится
         </p>
@@ -141,14 +149,14 @@ export function LessonVideoPlayer({
 
   if (videoAsset || sourceType || playbackId) {
     return (
-      <div className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-6">
+      <div className={`${systemCardClassName} p-6`}>
         <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
           Видео урока
         </p>
         <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
           Видео уже прикреплено, но для воспроизведения еще не хватает рабочего
-          адреса плеера. Это ожидаемо в локальном тестовом режиме или при неполной
-          настройке видео-провайдера.
+          адреса плеера. Это ожидаемо в локальном тестовом режиме или при
+          неполной настройке видео-провайдера.
         </p>
       </div>
     );

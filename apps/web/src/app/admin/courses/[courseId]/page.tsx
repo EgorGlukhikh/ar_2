@@ -12,6 +12,15 @@ import { CourseDeliveryFormat, CourseStatus, prisma } from "@academy/db";
 import { USER_ROLES } from "@academy/shared";
 
 import { CourseCoverUploadField } from "@/components/admin/course-cover-upload-field";
+import {
+  systemActionRowClassName,
+  systemBodyTextClassName,
+  systemCardClassName,
+  systemCardInsetClassName,
+  systemEyebrowClassName,
+  systemIconTileClassName,
+  systemTitleClassName,
+} from "@/components/system/system-ui";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -93,26 +102,26 @@ export default async function CourseSettingsPage({
     <section className="grid gap-6 xl:grid-cols-[minmax(0,1.2fr)_360px]">
       <form
         action={updateCourse}
-        className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-6 shadow-[var(--shadow-sm)]"
+        className={`${systemCardClassName} p-6`}
       >
         <input type="hidden" name="courseId" value={course.id} />
         {!isAdmin ? <input type="hidden" name="status" value={course.status} /> : null}
 
         <div className="space-y-2">
-          <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
+          <p className={systemEyebrowClassName}>
             Карточка курса
           </p>
-          <h2 className="text-2xl font-semibold tracking-tight text-[var(--foreground)]">
+          <h2 className={systemTitleClassName}>
             Основная информация
           </h2>
-          <p className="text-sm leading-7 text-[var(--muted)]">
+          <p className={systemBodyTextClassName}>
             Здесь задаются понятные для ученика и автора вещи: название курса, формат
             обучения, описание, тема и теги, а также автоматически собранный адрес страницы.
           </p>
         </div>
 
         <div className="mt-6 grid gap-3 md:grid-cols-3">
-          <div className="rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface-strong)] p-4">
+          <div className={`${systemCardInsetClassName} p-4`}>
             <div className="flex items-center gap-2">
               <FileText className="h-5 w-5 shrink-0 text-[var(--primary)]" />
               <p className="text-sm font-semibold text-[var(--foreground)]">Карточка курса</p>
@@ -122,7 +131,7 @@ export default async function CourseSettingsPage({
             </p>
           </div>
 
-          <div className="rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface-strong)] p-4">
+          <div className={`${systemCardInsetClassName} p-4`}>
             <div className="flex items-center gap-2">
               <Tv className="h-5 w-5 shrink-0 text-[var(--primary)]" />
               <p className="text-sm font-semibold text-[var(--foreground)]">Формат обучения</p>
@@ -132,7 +141,7 @@ export default async function CourseSettingsPage({
             </p>
           </div>
 
-          <div className="rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface-strong)] p-4">
+          <div className={`${systemCardInsetClassName} p-4`}>
             <div className="flex items-center gap-2">
               <Sparkles className="h-5 w-5 shrink-0 text-[var(--primary)]" />
               <p className="text-sm font-semibold text-[var(--foreground)]">Публикация</p>
@@ -149,7 +158,7 @@ export default async function CourseSettingsPage({
             <Input id="title" name="title" defaultValue={course.title} required />
           </div>
 
-          <div className="rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-4">
+          <div className={`${systemCardInsetClassName} px-4 py-4`}>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
               Автоматический адрес
             </p>
@@ -259,7 +268,7 @@ export default async function CourseSettingsPage({
           ) : null}
         </div>
 
-        <div className="mt-8 flex flex-wrap gap-3">
+        <div className={`mt-8 ${systemActionRowClassName}`}>
           <Button type="submit">Сохранить изменения</Button>
           <Button asChild variant="outline">
             <Link href={`/admin/courses/${course.id}/content`}>Открыть программу</Link>
@@ -273,8 +282,8 @@ export default async function CourseSettingsPage({
       </form>
 
       <div className="space-y-6">
-        <article className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-6 shadow-[var(--shadow-sm)]">
-          <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
+        <article className={`${systemCardClassName} p-6`}>
+          <p className={systemEyebrowClassName}>
             Что дальше
           </p>
           <h2 className="mt-2 text-2xl font-semibold tracking-tight text-[var(--foreground)]">
@@ -292,7 +301,7 @@ export default async function CourseSettingsPage({
               .
             </p>
             {course.deliveryFormat === CourseDeliveryFormat.LIVE_COHORT ? (
-              <p className="rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-3">
+              <p className={`${systemCardInsetClassName} px-4 py-3`}>
                 Вебинарные занятия фиксируются по выбранному часовому поясу. После эфира
                 в уроке можно оставить запись и материалы.
               </p>
@@ -309,8 +318,8 @@ export default async function CourseSettingsPage({
           </div>
         </article>
 
-        <article className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-6 shadow-[var(--shadow-sm)]">
-          <div className="inline-flex rounded-2xl bg-[var(--primary-soft)] p-3 text-[var(--primary)]">
+        <article className={`${systemCardClassName} p-6`}>
+          <div className={systemIconTileClassName}>
             <CalendarClock className="h-5 w-5" />
           </div>
           <h2 className="mt-4 text-xl font-semibold text-[var(--foreground)]">
@@ -326,11 +335,11 @@ export default async function CourseSettingsPage({
         {isAdmin ? (
           <form
             action={deleteCourse}
-            className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-6 shadow-[var(--shadow-sm)]"
+            className={`${systemCardClassName} p-6`}
           >
             <input type="hidden" name="courseId" value={course.id} />
 
-            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
+            <p className={systemEyebrowClassName}>
               Опасная зона
             </p>
             <h2 className="mt-2 text-2xl font-semibold tracking-tight text-[var(--foreground)]">

@@ -3,6 +3,8 @@
 import { Pause, Play } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
+import { systemCardClassName, systemCardInsetClassName } from "@/components/system/system-ui";
+
 type AudioPlayerProps = {
   src: string;
   title?: string;
@@ -108,7 +110,7 @@ export function AudioPlayer({ src, title }: AudioPlayerProps) {
   const progressPercent = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   return (
-    <div className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow-sm)]">
+    <div className={`${systemCardClassName} p-5`}>
       <audio ref={audioRef} src={resolveAudioSrc(src)} preload="metadata" />
 
       {title ? (
@@ -146,7 +148,7 @@ export function AudioPlayer({ src, title }: AudioPlayerProps) {
         <button
           type="button"
           onClick={cycleSpeed}
-          className="shrink-0 rounded-lg border border-[var(--border)] bg-[var(--surface-strong)] px-2.5 py-1 text-xs font-semibold text-[var(--foreground)] transition hover:border-[var(--primary)] hover:text-[var(--primary)]"
+          className={`shrink-0 rounded-lg px-2.5 py-1 text-xs font-semibold text-[var(--foreground)] transition hover:border-[var(--primary)] hover:text-[var(--primary)] ${systemCardInsetClassName}`}
           aria-label="Скорость воспроизведения"
         >
           {speed}x

@@ -7,7 +7,14 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { SystemInfoItem } from "@/components/system/system-ui";
+import {
+  SystemActionRow,
+  SystemInfoItem,
+  systemCardClassName,
+  systemCardInsetClassName,
+  systemEyebrowClassName,
+  systemTitleClassName,
+} from "@/components/system/system-ui";
 
 type EditableModulePanelProps = {
   courseId: string;
@@ -37,13 +44,13 @@ export function EditableModulePanel({
   }
 
   return (
-    <article className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow-sm)]">
+    <article className={`${systemCardClassName} p-5`}>
       <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
         <div className="space-y-2">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
+          <p className={systemEyebrowClassName}>
             Выбранный модуль
           </p>
-          <h2 className="text-[24px] font-semibold tracking-[-0.02em] text-[var(--foreground)]">
+          <h2 className={systemTitleClassName}>
             {moduleTitle}
           </h2>
           <div className="flex flex-wrap items-center gap-2">
@@ -54,7 +61,7 @@ export function EditableModulePanel({
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-2">
+        <SystemActionRow dense className="justify-start xl:justify-end">
           <Button
             type="button"
             variant="outline"
@@ -63,14 +70,14 @@ export function EditableModulePanel({
             <PencilLine className="mr-2 h-4 w-4" />
             {isEditingModule ? "Скрыть редактирование" : "Редактировать модуль"}
           </Button>
-        </div>
+        </SystemActionRow>
       </div>
 
       <div className="mt-5 grid gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
         {isEditingModule ? (
           <form
             action={updateModuleAction}
-            className="space-y-3 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface-strong)] p-4"
+            className={`space-y-3 ${systemCardInsetClassName} p-4`}
           >
             <input type="hidden" name="courseId" value={courseId} />
             <input type="hidden" name="moduleId" value={moduleId} />

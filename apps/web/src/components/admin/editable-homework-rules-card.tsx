@@ -3,6 +3,12 @@
 import { PencilLine, X } from "lucide-react";
 import { useState } from "react";
 
+import {
+  SystemActionRow,
+  systemCardClassName,
+  systemCardInsetClassName,
+  systemEyebrowClassName,
+} from "@/components/system/system-ui";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -68,7 +74,7 @@ export function EditableHomeworkRulesCard({
   return (
     <article
       className={cn(
-        "rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-sm)]",
+        systemCardClassName,
         className,
       )}
     >
@@ -84,7 +90,7 @@ export function EditableHomeworkRulesCard({
 
       <div className="flex flex-wrap items-start justify-between gap-3 px-4 py-4">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
+          <p className={systemEyebrowClassName}>
             Домашняя работа
           </p>
           <h3 className="mt-1.5 text-xl font-semibold tracking-[-0.02em] text-[var(--foreground)]">
@@ -92,7 +98,7 @@ export function EditableHomeworkRulesCard({
           </h3>
         </div>
 
-        <div className="flex flex-wrap gap-2">
+        <SystemActionRow dense className="justify-start sm:justify-end">
           {isEditing ? (
             <>
               <Button type="submit" form={formId} size="sm">
@@ -109,7 +115,7 @@ export function EditableHomeworkRulesCard({
               Редактировать
             </Button>
           )}
-        </div>
+        </SystemActionRow>
       </div>
 
       <div className="border-t border-[var(--border)] px-4 py-4">
@@ -117,7 +123,7 @@ export function EditableHomeworkRulesCard({
           {homeworkRuleItems.map((item) => (
             <label
               key={item.key}
-              className="rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface-strong)] px-3.5 py-3"
+              className={`${systemCardInsetClassName} px-3.5 py-3`}
             >
               <div className="flex items-start gap-3">
                 {isEditing ? (

@@ -6,7 +6,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { updateUserProfile } from "@/features/profile/actions";
-import { SystemInfoItem } from "@/components/system/system-ui";
+import {
+  SystemActionRow,
+  SystemInfoItem,
+  systemCardInsetClassName,
+} from "@/components/system/system-ui";
 import { WorkspacePanel } from "@/components/workspace/workspace-primitives";
 
 type ProfileData = {
@@ -121,7 +125,7 @@ export function ProfilePageContent({ profile }: { profile: ProfileData }) {
               </div>
             </div>
 
-            <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-strong)] px-5 py-4">
+            <div className={`${systemCardInsetClassName} px-5 py-4`}>
               <label className="flex items-start gap-3">
                 <input
                   type="checkbox"
@@ -141,7 +145,7 @@ export function ProfilePageContent({ profile }: { profile: ProfileData }) {
               </label>
             </div>
 
-            <div className="flex items-center gap-3 pt-2">
+            <SystemActionRow className="pt-2">
               <Button type="submit" disabled={pending}>
                 {pending ? "Сохраняем..." : "Сохранить"}
               </Button>
@@ -153,7 +157,7 @@ export function ProfilePageContent({ profile }: { profile: ProfileData }) {
               >
                 Отмена
               </Button>
-            </div>
+            </SystemActionRow>
           </form>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

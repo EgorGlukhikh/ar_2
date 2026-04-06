@@ -4,7 +4,13 @@ import { PencilLine, X } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 
-import { SystemInfoItem } from "@/components/system/system-ui";
+import {
+  SystemActionRow,
+  SystemInfoItem,
+  systemCardClassName,
+  systemCardInsetClassName,
+  systemEyebrowClassName,
+} from "@/components/system/system-ui";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -51,7 +57,7 @@ export function EditableLessonSettingsCard({
   return (
     <article
       className={cn(
-        "rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-sm)]",
+        systemCardClassName,
         className,
       )}
     >
@@ -63,7 +69,7 @@ export function EditableLessonSettingsCard({
 
       <div className="flex flex-wrap items-start justify-between gap-3 px-4 py-4">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
+          <p className={systemEyebrowClassName}>
             Урок
           </p>
           <h3 className="mt-1.5 text-xl font-semibold tracking-[-0.02em] text-[var(--foreground)]">
@@ -71,7 +77,7 @@ export function EditableLessonSettingsCard({
           </h3>
         </div>
 
-        <div className="flex flex-wrap gap-2">
+        <SystemActionRow dense className="justify-start sm:justify-end">
           {isEditing ? (
             <>
               <Button type="submit" form={formId} size="sm">
@@ -88,7 +94,7 @@ export function EditableLessonSettingsCard({
               Редактировать
             </Button>
           )}
-        </div>
+        </SystemActionRow>
       </div>
 
       <div className="border-t border-[var(--border)] px-4 py-4">
@@ -138,7 +144,7 @@ export function EditableLessonSettingsCard({
                 />
               </div>
 
-              <label className="flex items-start gap-3 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface-strong)] px-3.5 py-3">
+              <label className={`flex items-start gap-3 ${systemCardInsetClassName} px-3.5 py-3`}>
                 <input
                   type="checkbox"
                   checked={draftIsPreview}
