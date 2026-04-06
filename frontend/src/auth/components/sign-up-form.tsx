@@ -163,7 +163,7 @@ export function SignUpForm({
         {renderError("passwordConfirmation")}
       </div>
 
-      <label className="flex items-start gap-3 rounded-[20px] border border-[var(--border)] bg-[var(--surface)] px-4 py-4">
+      <label className="flex items-start gap-3 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-4">
         <input
           type="checkbox"
           name="marketingEnabled"
@@ -171,20 +171,18 @@ export function SignUpForm({
         />
         <div className="space-y-1">
           <p className="text-sm font-medium text-[var(--foreground)]">
-            {formatPublicCopy(
-              "Даю согласие на получение информационных и рекламных рассылок от Академии риэлторов",
-            )}
+            {formatPublicCopy("Хочу получать новости Академии и полезные обновления")}
           </p>
           <p className="text-sm leading-6 text-[var(--muted)]">
             {formatPublicCopy(
-              "Включая новости о новых курсах, акциях, специальных предложениях и мероприятиях. Согласие можно отозвать в любой момент в письме или в личном кабинете.",
+              "Это необязательно. Рассылку можно отключить в письме или позже в кабинете.",
             )}
           </p>
         </div>
       </label>
 
       {formError ? (
-        <p className="rounded-[var(--radius-sm)] border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+        <p className="rounded-[var(--radius-md)] border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
           {formatPublicCopy(formError)}
         </p>
       ) : null}

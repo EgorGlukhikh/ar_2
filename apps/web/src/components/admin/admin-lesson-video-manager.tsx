@@ -8,7 +8,12 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { systemCardClassName, systemCardInsetClassName } from "@/components/system/system-ui";
+import {
+  SystemActionRow,
+  SystemNotice,
+  systemCardClassName,
+  systemCardInsetClassName,
+} from "@/components/system/system-ui";
 
 type VideoAssetState = {
   id: string;
@@ -307,11 +312,11 @@ export function AdminLessonVideoManager({
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
             Видео
           </p>
-          <h3 className="text-[24px] font-semibold tracking-[-0.02em] text-[var(--foreground)]">
+          <h3 className="text-[22px] font-semibold tracking-[-0.02em] text-[var(--foreground)]">
             Управление источником урока
           </h3>
           <p className="text-sm leading-6 text-[var(--muted)]">
-            Один сценарий для урока: подключи ссылку или загрузи локальный файл в платформу.
+            Подключи ссылку или загрузи файл. Дальше урок использует один актуальный источник.
           </p>
         </div>
 
@@ -361,37 +366,34 @@ export function AdminLessonVideoManager({
       </div>
 
       {(initialAsset || hasVideo) ? (
-        <div className={`${systemCardInsetClassName} px-5 py-4 text-sm text-[var(--muted)]`}>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
-            Текущее состояние
-          </p>
-          <p className="mt-2">
-            Источник:{" "}
-            <span className="font-medium text-[var(--foreground)]">
-              {initialAsset?.sourceType ?? fallbackVideoSourceType ?? "подключено"}
-            </span>
-          </p>
+        <SystemNotice
+          title="Текущее состояние"
+          description={
+            <>
+              Источник:{" "}
+              <span className="font-medium text-[var(--foreground)]">
+                {initialAsset?.sourceType ?? fallbackVideoSourceType ?? "подключено"}
+              </span>
+            </>
+          }
+        >
           {initialAsset?.playerUrl || initialAsset?.sourceUrl || fallbackVideoUrl ? (
-            <p className="mt-2 truncate rounded-2xl bg-[rgba(244,247,255,0.92)] px-3 py-2 text-[13px]">
+            <p className="truncate rounded-[var(--radius-sm)] bg-[rgba(244,247,255,0.92)] px-3 py-2 text-[13px]">
               {initialAsset?.playerUrl ?? initialAsset?.sourceUrl ?? fallbackVideoUrl}
             </p>
           ) : null}
           {initialAsset?.errorMessage ? (
             <p className="mt-2 text-red-600">{initialAsset.errorMessage}</p>
           ) : null}
-        </div>
+        </SystemNotice>
       ) : null}
 
       {message ? (
-        <p className="rounded-[22px] border border-emerald-200 bg-[linear-gradient(180deg,#effdf5_0%,#e8faef_100%)] px-4 py-3 text-sm text-emerald-700">
-          {message}
-        </p>
+        <SystemNotice tone="info" title="Готово" description={message} />
       ) : null}
 
       {error ? (
-        <p className="rounded-[22px] border border-red-200 bg-[linear-gradient(180deg,#fff4f4_0%,#ffeded_100%)] px-4 py-3 text-sm text-red-700">
-          {error}
-        </p>
+        <SystemNotice tone="warning" title="Нужно исправить" description={error} />
       ) : null}
 
       <div className="grid gap-4 xl:grid-cols-2">
@@ -412,12 +414,16 @@ export function AdminLessonVideoManager({
                 id={`video-link-${lessonId}`}
                 value={videoUrl}
                 onChange={(event) => setVideoUrl(event.target.value)}
-                placeholder="RUTUBE private/public, ссылка плеера или прямая ссылка"
+                placeholder="RUTUBE, ссылка плеера или прямая ссылка"
               />
             </div>
 
             <div className="flex items-end">
-              <Button type="button" onClick={handleVideoLink} disabled={pendingAction !== null}>
+              <Button
+                type="button"
+                onClick={handleVideoLink}
+                disabled={pendingAction !== null || !videoUrl.trim()}
+              >
                 <Link2 className="mr-2 h-4 w-4" />
                 {pendingAction === "video-link" ? "Подключаем..." : "Подключить"}
               </Button>
@@ -425,7 +431,7 @@ export function AdminLessonVideoManager({
           </div>
         </div>
 
-        <div className="rounded-[var(--radius-md)] border border-dashed border-[var(--border)] bg-[var(--surface-strong)] px-4 py-4">
+        <div className={`${systemCardInsetClassName} px-4 py-4`}>
           <div className="space-y-1">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
               Файл
@@ -445,7 +451,7 @@ export function AdminLessonVideoManager({
               </p>
             </div>
 
-            <div className="flex flex-wrap gap-2">
+            <SystemActionRow dense>
               <input
                 ref={fileInputRef}
                 id={`managed-video-${lessonId}`}
@@ -468,12 +474,12 @@ export function AdminLessonVideoManager({
               <Button
                 type="button"
                 onClick={handleManagedUpload}
-                disabled={pendingAction !== null}
+                disabled={pendingAction !== null || !managedFile}
               >
                 <Upload className="mr-2 h-4 w-4" />
                 {pendingAction === "managed-upload" ? "Загружаем..." : "Загрузить"}
               </Button>
-            </div>
+            </SystemActionRow>
           </div>
         </div>
       </div>

@@ -12,8 +12,8 @@ export function AuthShell({
   children: ReactNode;
 }) {
   return (
-    <section className="grid min-h-screen w-full xl:grid-cols-[1.02fr_0.98fr]">
-      <div className="relative hidden overflow-hidden bg-[linear-gradient(180deg,#6f84f5_0%,#89a0ff_100%)] text-white xl:flex xl:min-h-screen xl:flex-col xl:justify-between xl:px-10 xl:py-10">
+    <section className="grid min-h-screen w-full lg:grid-cols-[1.02fr_0.98fr]">
+      <div className="relative hidden overflow-hidden bg-[linear-gradient(180deg,#6f84f5_0%,#89a0ff_100%)] text-white lg:flex lg:min-h-screen lg:flex-col lg:justify-between lg:px-8 lg:py-8 xl:px-10 xl:py-10">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(255,255,255,0.18),transparent_26%),radial-gradient(circle_at_72%_76%,rgba(255,255,255,0.16),transparent_30%)]" />
 
         <div className="relative z-10 flex items-start gap-4">
@@ -45,7 +45,7 @@ export function AuthShell({
         </div>
       </div>
 
-      <div className="flex min-h-screen items-center bg-white px-6 py-10 sm:px-10 xl:px-16">
+      <div className="flex min-h-screen items-center bg-white px-6 py-10 sm:px-10 lg:px-12 xl:px-16">
         <div className="mx-auto w-full max-w-[520px]">{children}</div>
       </div>
     </section>

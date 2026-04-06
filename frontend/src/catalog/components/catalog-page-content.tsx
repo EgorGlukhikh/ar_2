@@ -37,7 +37,7 @@ function CourseAction({
     );
   }
 
-  if (isFree && !isAuthenticated) {
+  if (!isAuthenticated) {
     return (
       <PublicButton href="/sign-in" className="w-full justify-center">
         {formatPublicCopy("Получить доступ")}

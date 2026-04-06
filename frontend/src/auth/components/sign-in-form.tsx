@@ -54,36 +54,32 @@ export function SignInForm({
   return (
     <form action={handleSubmit} className="space-y-5">
       <div className="space-y-2">
-        <Label htmlFor="sign-in-email" className="sr-only">
-          {formatPublicCopy("Почта")}
-        </Label>
+        <Label htmlFor="sign-in-email">{formatPublicCopy("Почта")}</Label>
         <Input
           id="sign-in-email"
           name="email"
           type="email"
           autoComplete="email"
           defaultValue={defaultEmail || ""}
-          placeholder={formatPublicCopy("Почта")}
+          placeholder="name@example.com"
           required
         />
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="sign-in-password" className="sr-only">
-          {formatPublicCopy("Пароль")}
-        </Label>
+        <Label htmlFor="sign-in-password">{formatPublicCopy("Пароль")}</Label>
         <Input
           id="sign-in-password"
           name="password"
           type="password"
           autoComplete="current-password"
-          placeholder={formatPublicCopy("Пароль")}
+          placeholder={formatPublicCopy("Введи пароль от платформы")}
           required
         />
       </div>
 
       {error ? (
-        <p className="rounded-[var(--radius-sm)] border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+        <p className="rounded-[var(--radius-md)] border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
           {formatPublicCopy(error)}
         </p>
       ) : null}

@@ -31,6 +31,16 @@ export function SignInPageContent({
 }) {
   const [activeTab, setActiveTab] = useState<AuthTab>("sign-in");
   const [yandexPending, setYandexPending] = useState(false);
+  const activeTabCopy =
+    activeTab === "sign-in"
+      ? {
+          title: "Уже есть аккаунт",
+          text: "Войди по почте или через Яндекс ID, чтобы вернуться в кабинет и к своим курсам.",
+        }
+      : {
+          title: "Новый аккаунт",
+          text: "Регистрация нужна один раз. После создания аккаунта ты сразу попадешь на платформу.",
+        };
 
   async function handleYandexSignIn() {
     setYandexPending(true);
@@ -42,13 +52,20 @@ export function SignInPageContent({
   return (
     <AuthShell>
       <div className="space-y-8">
-        <h1 className="max-w-[12ch] text-[clamp(2.2rem,4vw,4rem)] font-semibold leading-[0.96] tracking-[-0.05em] text-[var(--foreground)]">
-          {formatPublicCopy("Вход в обучающую платформу")}
-        </h1>
+        <div className="space-y-4">
+          <h1 className="max-w-[12ch] text-[clamp(2.2rem,4vw,4rem)] font-semibold leading-[1.02] tracking-[-0.05em] text-[var(--foreground)]">
+            {formatPublicCopy("Вход в обучающую платформу")}
+          </h1>
+          <p className="max-w-[48ch] text-sm leading-7 text-[var(--muted)]">
+            {formatPublicCopy(
+              "Один экран для двух сценариев: вход для действующих пользователей и быстрая регистрация для новых.",
+            )}
+          </p>
+        </div>
 
         <AuthCard className="overflow-hidden border-[rgba(148,163,184,0.14)] bg-white p-0 shadow-none">
-          <div className="px-5 py-4">
-            <div className="inline-flex rounded-[18px] border border-[var(--border)] bg-[var(--surface-strong)] p-1">
+          <div className="px-5 py-4 sm:px-6">
+            <div className="grid grid-cols-2 rounded-[18px] border border-[var(--border)] bg-[var(--surface-strong)] p-1">
               {([
                 { id: "sign-in", label: "Вход" },
                 { id: "register", label: "Регистрация" },
@@ -58,7 +75,7 @@ export function SignInPageContent({
                   type="button"
                   onClick={() => setActiveTab(tab.id)}
                   className={cn(
-                    "min-h-[42px] rounded-[14px] px-5 text-sm font-semibold transition duration-200",
+                    "min-h-[42px] rounded-[14px] px-4 text-sm font-semibold transition duration-200",
                     activeTab === tab.id
                       ? "bg-[var(--primary)] !text-white shadow-[var(--shadow-brand)]"
                       : "text-[var(--foreground)] hover:bg-[var(--surface)]",
@@ -67,6 +84,15 @@ export function SignInPageContent({
                   {formatPublicCopy(tab.label)}
                 </button>
               ))}
+            </div>
+
+            <div className="mt-4 rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-3">
+              <p className="text-sm font-semibold text-[var(--foreground)]">
+                {formatPublicCopy(activeTabCopy.title)}
+              </p>
+              <p className="mt-1 text-sm leading-6 text-[var(--muted)]">
+                {formatPublicCopy(activeTabCopy.text)}
+              </p>
             </div>
           </div>
 
@@ -80,7 +106,7 @@ export function SignInPageContent({
             {payload.showInviteSuccess ? (
               <div className="rounded-[var(--radius-md)] border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm leading-6 text-emerald-700">
                 {formatPublicCopy(
-                  "Приглашение активировано. Можно войти в существующий аккаунт или быстро завершить регистрацию на эту почту.",
+                  "Приглашение активировано. Можно войти в существующий аккаунт или завершить регистрацию на эту почту.",
                 )}
               </div>
             ) : null}
@@ -92,13 +118,16 @@ export function SignInPageContent({
             )}
 
             {payload.isYandexEnabled ? (
-              <AuthMethodButton
-                label="Войти с Яндекс ID"
-                icon="Я"
-                onClick={handleYandexSignIn}
-                pending={yandexPending}
-                tone="yandex"
-              />
+              <div className="border-t border-[var(--border)] pt-5">
+                <AuthMethodButton
+                  label="Войти с Яндекс ID"
+                  hint="Быстрый вход без отдельного пароля платформы."
+                  icon="Я"
+                  onClick={handleYandexSignIn}
+                  pending={yandexPending}
+                  tone="yandex"
+                />
+              </div>
             ) : null}
           </div>
         </AuthCard>

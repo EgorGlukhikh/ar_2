@@ -35,21 +35,16 @@ export function CoursePreviewModal({ course, coverSrc, onClose }: CoursePreviewM
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      {/* Backdrop */}
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
 
-      {/* Modal panel */}
       <div className="relative z-10 flex max-h-[92dvh] w-full max-w-xl flex-col rounded-t-[28px] bg-white shadow-2xl sm:rounded-[28px]">
-
-        {/* ── Cover image ── */}
         {coverSrc ? (
           <div className="relative h-48 w-full shrink-0 overflow-hidden rounded-t-[28px] sm:rounded-t-[28px]">
             <Image src={coverSrc} alt={course.title} fill className="object-cover" />
           </div>
         ) : null}
 
-        {/* ── Header ── */}
-        <div className="flex items-start justify-between gap-4 px-6 pt-6 pb-4">
+        <div className="flex items-start justify-between gap-4 px-6 pb-4 pt-6">
           <div className="min-w-0">
             <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
               Программа курса
@@ -58,9 +53,7 @@ export function CoursePreviewModal({ course, coverSrc, onClose }: CoursePreviewM
               {course.title}
             </h2>
             {course.description ? (
-              <p className="mt-1.5 text-sm leading-6 text-[var(--muted)]">
-                {course.description}
-              </p>
+              <p className="mt-1.5 text-sm leading-6 text-[var(--muted)]">{course.description}</p>
             ) : null}
           </div>
           <button
@@ -73,7 +66,6 @@ export function CoursePreviewModal({ course, coverSrc, onClose }: CoursePreviewM
           </button>
         </div>
 
-        {/* ── Meta row ── */}
         <div className="flex flex-wrap items-center gap-4 border-y border-[var(--border)] px-6 py-3 text-xs text-[var(--muted)]">
           <span className="flex items-center gap-1.5">
             <User className="h-3.5 w-3.5 shrink-0" />
@@ -92,8 +84,7 @@ export function CoursePreviewModal({ course, coverSrc, onClose }: CoursePreviewM
           </span>
         </div>
 
-        {/* ── Module list (scrollable) ── */}
-        <div className="flex-1 overflow-y-auto px-6 py-5 space-y-5">
+        <div className="flex-1 space-y-5 overflow-y-auto px-6 py-5">
           {course.modules.length > 0 ? (
             course.modules.map((mod, i) => (
               <div key={mod.id}>
@@ -101,7 +92,7 @@ export function CoursePreviewModal({ course, coverSrc, onClose }: CoursePreviewM
                   <span className="shrink-0 rounded-md bg-[var(--primary-soft)] px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--primary)]">
                     Модуль {i + 1}
                   </span>
-                  <p className="text-sm font-semibold text-[var(--foreground)] truncate">
+                  <p className="truncate text-sm font-semibold text-[var(--foreground)]">
                     {mod.title}
                   </p>
                 </div>
@@ -121,27 +112,24 @@ export function CoursePreviewModal({ course, coverSrc, onClose }: CoursePreviewM
               </div>
             ))
           ) : (
-            <p className="text-sm text-[var(--muted)]">
-              Программа скоро будет опубликована.
-            </p>
+            <p className="text-sm text-[var(--muted)]">Программа скоро будет опубликована.</p>
           )}
         </div>
 
-        {/* ── CTA footer ── */}
-        <div className="border-t border-[var(--border)] px-6 py-5 space-y-3">
+        <div className="space-y-3 border-t border-[var(--border)] px-6 py-5">
           <Link
-            href="/sign-up"
+            href={`/catalog#${course.slug}`}
             onClick={onClose}
             className="flex w-full items-center justify-center rounded-[var(--control-radius)] bg-[var(--primary)] py-3.5 text-sm font-semibold !text-white shadow-[var(--shadow-brand)] transition hover:opacity-90 active:scale-[0.98]"
           >
-            Получить доступ
+            Открыть курс в каталоге
           </Link>
           <Link
             href="/sign-in"
             onClick={onClose}
             className="block text-center text-sm text-[var(--muted)] transition hover:text-[var(--foreground)]"
           >
-            Уже есть аккаунт? Войти →
+            Войти или зарегистрироваться →
           </Link>
         </div>
       </div>
