@@ -6,9 +6,10 @@ import { CheckoutPageContent } from "@frontend/checkout/components/checkout-page
 
 import { PublicFooter } from "@/components/marketing/public-footer";
 import {
-  PublicButton,
+  publicActionRowClassName,
   publicBadgeClassName,
 } from "@/components/marketing/public-primitives";
+import { Button } from "@/components/ui/button";
 import {
   marketingBody,
   marketingContainerClassName,
@@ -47,33 +48,33 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
                 <div className="space-y-3">
                   <div className="flex flex-wrap gap-2">
                     <span className={publicBadgeClassName}>
-                      {formatPublicCopy(`Заказ: ${payload.orderStatusLabel}`)}
+                      {formatPublicCopy(`Р—Р°РєР°Р·: ${payload.orderStatusLabel}`)}
                     </span>
                     {payload.paymentStatusLabel ? (
                       <span className={publicBadgeClassName}>
-                        {formatPublicCopy(`Платёж: ${payload.paymentStatusLabel}`)}
+                        {formatPublicCopy(`РџР»Р°С‚С‘Р¶: ${payload.paymentStatusLabel}`)}
                       </span>
                     ) : null}
                   </div>
                   <div className="space-y-1">
                     <p className="text-sm font-semibold text-[var(--foreground)]">
-                      {formatPublicCopy("Подтверждение доступа")}
+                      {formatPublicCopy("РџРѕРґС‚РІРµСЂР¶РґРµРЅРёРµ РґРѕСЃС‚СѓРїР°")}
                     </p>
                     <p className="max-w-[560px] text-sm leading-6 text-[var(--muted)]">
                       {formatPublicCopy(
-                        "Здесь видно, какой курс ты открываешь, сколько он стоит и что произойдет после подтверждения оплаты.",
+                        "Р—РґРµСЃСЊ РІРёРґРЅРѕ, РєР°РєРѕР№ РєСѓСЂСЃ С‚С‹ РѕС‚РєСЂС‹РІР°РµС€СЊ, СЃРєРѕР»СЊРєРѕ РѕРЅ СЃС‚РѕРёС‚ Рё С‡С‚Рѕ РїСЂРѕРёР·РѕР№РґРµС‚ РїРѕСЃР»Рµ РїРѕРґС‚РІРµСЂР¶РґРµРЅРёСЏ РѕРїР»Р°С‚С‹.",
                       )}
                     </p>
                   </div>
                 </div>
 
-                <div className="flex flex-wrap gap-3">
-                  <PublicButton href="/catalog" tone="secondary">
-                    {formatPublicCopy("К курсам")}
-                  </PublicButton>
-                  <PublicButton href="/learning" tone="secondary">
-                    {formatPublicCopy("Мой кабинет")}
-                  </PublicButton>
+                <div className={publicActionRowClassName}>
+                  <Button asChild size="sm" variant="outline">
+                    <a href="/catalog">{formatPublicCopy("Рљ РєСѓСЂСЃР°Рј")}</a>
+                  </Button>
+                  <Button asChild size="sm" variant="outline">
+                    <a href="/learning">{formatPublicCopy("РњРѕР№ РєР°Р±РёРЅРµС‚")}</a>
+                  </Button>
                 </div>
               </div>
             </header>

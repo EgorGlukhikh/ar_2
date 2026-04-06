@@ -10,11 +10,20 @@ export const publicCardClassName =
 export const publicSoftCardClassName =
   "rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-alt)] p-6 shadow-[var(--shadow-sm)]";
 
+export const publicInsetCardClassName =
+  "rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-sm)]";
+
+export const publicSoftInsetCardClassName =
+  "rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface-strong)]";
+
 export const publicGradientCardClassName =
   "rounded-[var(--radius-xl)] bg-[#1e285d] bg-[image:var(--brand-gradient)] bg-cover bg-center p-7 text-white shadow-[var(--shadow-brand)]";
 
 export const publicBadgeClassName =
   "inline-flex min-h-9 items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface)] px-3.5 text-[13px] font-medium leading-[18px] tracking-[0.04em] text-[var(--foreground)]";
+
+export const publicActionRowClassName = "flex flex-wrap gap-3";
+export const publicCompactActionRowClassName = "flex flex-wrap gap-2";
 
 export const publicIconBoxClassName =
   "flex h-11 w-11 items-center justify-center rounded-[var(--icon-radius)] bg-[var(--primary-soft)] text-[var(--primary)]";

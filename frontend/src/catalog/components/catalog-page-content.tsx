@@ -5,7 +5,12 @@ import { ArrowRight, X } from "lucide-react";
 import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
-import { PublicButton } from "@/components/marketing/public-primitives";
+import {
+  PublicButton,
+  publicCardClassName,
+  publicInsetCardClassName,
+  publicSoftInsetCardClassName,
+} from "@/components/marketing/public-primitives";
 import { startDemoCheckout } from "@/features/billing/actions";
 import { getPublicCourseCover } from "@/lib/marketing-theme";
 import { formatPublicCopy } from "@/lib/public-copy";
@@ -136,7 +141,7 @@ function CourseProgramDialog({
 
           <div className="flex min-h-0 flex-col">
             <div className="flex-1 space-y-6 overflow-y-auto px-5 py-6 sm:px-7">
-              <div className="rounded-[24px] bg-[var(--surface-strong)] p-5">
+              <div className={`${publicSoftInsetCardClassName} rounded-[24px] p-5`}>
                 <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
                   {formatPublicCopy("Что получишь")}
                 </p>
@@ -146,7 +151,7 @@ function CourseProgramDialog({
               </div>
 
               <div className="grid grid-cols-2 gap-3">
-                <div className="rounded-[22px] border border-[var(--border)] bg-[var(--surface)] p-4">
+                <div className={`${publicInsetCardClassName} rounded-[22px] p-4`}>
                   <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
                     Формат
                   </p>
@@ -154,7 +159,7 @@ function CourseProgramDialog({
                     {course.deliveryFormatLabel}
                   </p>
                 </div>
-                <div className="rounded-[22px] border border-[var(--border)] bg-[var(--surface)] p-4">
+                <div className={`${publicInsetCardClassName} rounded-[22px] p-4`}>
                   <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
                     Уроков
                   </p>
@@ -176,7 +181,7 @@ function CourseProgramDialog({
                   {course.modules.map((module, moduleIndex) => (
                     <article
                       key={module.id}
-                      className="rounded-[24px] border border-[var(--border)] bg-[var(--surface)] p-4"
+                      className={`${publicInsetCardClassName} rounded-[24px] p-4`}
                     >
                       <div className="flex items-start gap-3">
                         <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[var(--primary-soft)] text-xs font-semibold text-[var(--primary)]">
@@ -285,7 +290,7 @@ export function CatalogPageContent({
 
   if (courses.length === 0) {
     return (
-      <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-10 text-center shadow-[var(--shadow-sm)]">
+      <div className={`${publicCardClassName} p-10 text-center`}>
         <h2 className="text-2xl font-semibold leading-8 tracking-[-0.02em] text-[var(--foreground)]">
           {formatPublicCopy("Пока нет опубликованных курсов")}
         </h2>
@@ -320,7 +325,7 @@ export function CatalogPageContent({
                 openCourse(course.slug);
               }
             }}
-            className="group flex h-full cursor-pointer flex-col overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-sm)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[var(--shadow-md)]"
+            className={`${publicCardClassName} group flex h-full cursor-pointer flex-col overflow-hidden p-0`}
           >
             <div className="relative h-52 shrink-0 overflow-hidden">
               <Image
@@ -344,7 +349,7 @@ export function CatalogPageContent({
                 {formatPublicCopy(course.description)}
               </p>
 
-              <div className="mt-4 min-h-[116px] rounded-[var(--radius-md)] bg-[var(--surface-strong)] px-4 py-3">
+              <div className={`mt-4 min-h-[116px] ${publicSoftInsetCardClassName} px-4 py-3`}>
                 <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
                   {formatPublicCopy("Что получишь")}
                 </p>

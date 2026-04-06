@@ -5,6 +5,12 @@ import { USER_ROLES } from "@academy/shared";
 
 import { acceptWorkspaceInvite, getWorkspaceInviteByToken } from "@/features/admin/invite-actions";
 import { AcademyMark } from "@/components/brand/academy-mark";
+import {
+  publicActionRowClassName,
+  publicGradientCardClassName,
+  publicInsetCardClassName,
+  publicSoftInsetCardClassName,
+} from "@/components/marketing/public-primitives";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -18,11 +24,11 @@ import {
 } from "@/lib/marketing-theme";
 
 const roleLabelMap = {
-  [USER_ROLES.AUTHOR]: "Автор",
-  [USER_ROLES.CURATOR]: "Куратор",
-  [USER_ROLES.SALES_MANAGER]: "Продажи",
-  [USER_ROLES.ADMIN]: "Администратор",
-  [USER_ROLES.STUDENT]: "Студент",
+  [USER_ROLES.AUTHOR]: "РђРІС‚РѕСЂ",
+  [USER_ROLES.CURATOR]: "РљСѓСЂР°С‚РѕСЂ",
+  [USER_ROLES.SALES_MANAGER]: "РџСЂРѕРґР°Р¶Рё",
+  [USER_ROLES.ADMIN]: "РђРґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂ",
+  [USER_ROLES.STUDENT]: "РЎС‚СѓРґРµРЅС‚",
 } as const;
 
 type InvitePageProps = {
@@ -39,15 +45,15 @@ function InviteStateCard({
   description: string;
 }) {
   return (
-    <div className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-6 shadow-[var(--shadow-sm)]">
-      <h2 className="text-2xl font-semibold tracking-tight text-[#1c2442]">{title}</h2>
-      <p className="mt-3 text-sm leading-7 text-[#596177]">{description}</p>
-      <div className="mt-6 flex flex-wrap gap-3">
+    <div className={`${publicInsetCardClassName} rounded-[var(--radius-xl)] p-6`}>
+      <h2 className="text-2xl font-semibold tracking-tight text-[var(--foreground)]">{title}</h2>
+      <p className="mt-3 text-sm leading-7 text-[var(--muted)]">{description}</p>
+      <div className={`mt-6 ${publicActionRowClassName}`}>
         <Button asChild>
-          <Link href="/sign-in">Перейти ко входу</Link>
+          <Link href="/sign-in">РџРµСЂРµР№С‚Рё РєРѕ РІС…РѕРґСѓ</Link>
         </Button>
         <Button asChild variant="outline">
-          <Link href="/">На главную</Link>
+          <Link href="/">РќР° РіР»Р°РІРЅСѓСЋ</Link>
         </Button>
       </div>
     </div>
@@ -74,46 +80,46 @@ export default async function InvitePage({ params }: InvitePageProps) {
             <header className="flex flex-col gap-4 border-b border-[var(--border)] pb-6 md:flex-row md:items-center md:justify-between">
               <div className="flex items-center gap-4">
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#1c2442] text-white">
-                  <AcademyMark className="w-7" title="Академия риэлторов" />
+                  <AcademyMark className="w-7" title="РђРєР°РґРµРјРёСЏ СЂРёСЌР»С‚РѕСЂРѕРІ" />
                 </div>
                 <div>
                   <p className="font-[family:var(--font-landing-display)] text-lg font-semibold text-[#1c2442]">
-                    Академия риэлторов
+                    РђРєР°РґРµРјРёСЏ СЂРёСЌР»С‚РѕСЂРѕРІ
                   </p>
                   <p className="text-sm leading-6 text-[#667087]">
-                    Приглашение в рабочий контур команды.
+                    РџСЂРёРіР»Р°С€РµРЅРёРµ РІ СЂР°Р±РѕС‡РёР№ РєРѕРЅС‚СѓСЂ РєРѕРјР°РЅРґС‹.
                   </p>
                 </div>
               </div>
 
-              <div className="flex flex-wrap gap-3">
-                <Button asChild variant="outline">
-                  <Link href="/sign-in">Вход</Link>
+              <div className={publicActionRowClassName}>
+                <Button asChild size="sm" variant="outline">
+                  <Link href="/sign-in">Р’С…РѕРґ</Link>
                 </Button>
-                <Button asChild>
-                  <Link href="/catalog">Каталог</Link>
+                <Button asChild size="sm">
+                  <Link href="/catalog">РљР°С‚Р°Р»РѕРі</Link>
                 </Button>
               </div>
             </header>
 
             <div className="grid gap-8 py-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
               <div className="space-y-5">
-                <div className="rounded-[32px] bg-[linear-gradient(135deg,_#18213d_0%,_#3146b6_56%,_#ff8f6d_100%)] p-6 text-white shadow-[0_30px_90px_rgba(38,43,101,0.22)] md:p-8">
+                <div className={`${publicGradientCardClassName} rounded-[32px] md:p-8`}>
                   <p className="text-xs font-semibold uppercase tracking-[0.34em] text-white/60">
-                    Приглашение
+                    РџСЂРёРіР»Р°С€РµРЅРёРµ
                   </p>
                   <h1 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">
-                    Войти в команду платформы.
+                    Р’РѕР№С‚Рё РІ РєРѕРјР°РЅРґСѓ РїР»Р°С‚С„РѕСЂРјС‹.
                   </h1>
                   <p className="mt-4 text-sm leading-7 text-white/80">
-                    Ссылка ведет в реальный рабочий контур. После активации ты сможешь войти
-                    по почте и паролю и попасть сразу в свой кабинет по роли.
+                    РЎСЃС‹Р»РєР° РІРµРґРµС‚ РІ СЂРµР°Р»СЊРЅС‹Р№ СЂР°Р±РѕС‡РёР№ РєРѕРЅС‚СѓСЂ. РџРѕСЃР»Рµ Р°РєС‚РёРІР°С†РёРё С‚С‹ СЃРјРѕР¶РµС€СЊ РІРѕР№С‚Рё
+                    РїРѕ РїРѕС‡С‚Рµ Рё РїР°СЂРѕР»СЋ Рё РїРѕРїР°СЃС‚СЊ СЃСЂР°Р·Сѓ РІ СЃРІРѕР№ РєР°Р±РёРЅРµС‚ РїРѕ СЂРѕР»Рё.
                   </p>
                   <div className="mt-6 space-y-3">
                     {[
-                      "Одно приглашение — одна роль и один рабочий маршрут.",
-                      "После активации вход идет через обычную форму логина.",
-                      "Если приглашение просрочено, админ сможет выпустить новое.",
+                      "РћРґРЅРѕ РїСЂРёРіР»Р°С€РµРЅРёРµ вЂ” РѕРґРЅР° СЂРѕР»СЊ Рё РѕРґРёРЅ СЂР°Р±РѕС‡РёР№ РјР°СЂС€СЂСѓС‚.",
+                      "РџРѕСЃР»Рµ Р°РєС‚РёРІР°С†РёРё РІС…РѕРґ РёРґРµС‚ С‡РµСЂРµР· РѕР±С‹С‡РЅСѓСЋ С„РѕСЂРјСѓ Р»РѕРіРёРЅР°.",
+                      "Р•СЃР»Рё РїСЂРёРіР»Р°С€РµРЅРёРµ РїСЂРѕСЃСЂРѕС‡РµРЅРѕ, Р°РґРјРёРЅ СЃРјРѕР¶РµС‚ РІС‹РїСѓСЃС‚РёС‚СЊ РЅРѕРІРѕРµ.",
                     ].map((item) => (
                       <div
                         key={item}
@@ -127,56 +133,56 @@ export default async function InvitePage({ params }: InvitePageProps) {
                 </div>
               </div>
 
-              <aside className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow-sm)] md:p-6">
+              <aside className={`${publicInsetCardClassName} rounded-[var(--radius-xl)] p-5 md:p-6`}>
                 {isMissing ? (
                   <InviteStateCard
-                    title="Приглашение не найдено"
-                    description="Ссылка больше не существует или была создана с ошибкой. Попроси команду выдать новое приглашение."
+                    title="РџСЂРёРіР»Р°С€РµРЅРёРµ РЅРµ РЅР°Р№РґРµРЅРѕ"
+                    description="РЎСЃС‹Р»РєР° Р±РѕР»СЊС€Рµ РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚ РёР»Рё Р±С‹Р»Р° СЃРѕР·РґР°РЅР° СЃ РѕС€РёР±РєРѕР№. РџРѕРїСЂРѕСЃРё РєРѕРјР°РЅРґСѓ РІС‹РґР°С‚СЊ РЅРѕРІРѕРµ РїСЂРёРіР»Р°С€РµРЅРёРµ."
                   />
                 ) : isRevoked ? (
                   <InviteStateCard
-                    title="Приглашение отозвано"
-                    description="Администратор уже отключил это приглашение. Если доступ все еще нужен, попроси выдать новое."
+                    title="РџСЂРёРіР»Р°С€РµРЅРёРµ РѕС‚РѕР·РІР°РЅРѕ"
+                    description="РђРґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂ СѓР¶Рµ РѕС‚РєР»СЋС‡РёР» СЌС‚Рѕ РїСЂРёРіР»Р°С€РµРЅРёРµ. Р•СЃР»Рё РґРѕСЃС‚СѓРї РІСЃРµ РµС‰Рµ РЅСѓР¶РµРЅ, РїРѕРїСЂРѕСЃРё РІС‹РґР°С‚СЊ РЅРѕРІРѕРµ."
                   />
                 ) : isAccepted ? (
                   <InviteStateCard
-                    title="Приглашение уже активировано"
-                    description="Эта ссылка уже использована. Можно просто войти в платформу по своей почте и паролю."
+                    title="РџСЂРёРіР»Р°С€РµРЅРёРµ СѓР¶Рµ Р°РєС‚РёРІРёСЂРѕРІР°РЅРѕ"
+                    description="Р­С‚Р° СЃСЃС‹Р»РєР° СѓР¶Рµ РёСЃРїРѕР»СЊР·РѕРІР°РЅР°. РњРѕР¶РЅРѕ РїСЂРѕСЃС‚Рѕ РІРѕР№С‚Рё РІ РїР»Р°С‚С„РѕСЂРјСѓ РїРѕ СЃРІРѕРµР№ РїРѕС‡С‚Рµ Рё РїР°СЂРѕР»СЋ."
                   />
                 ) : isExpired ? (
                   <InviteStateCard
-                    title="Приглашение просрочено"
-                    description="Срок действия ссылки-приглашения истек. Попроси администратора выпустить новое приглашение."
+                    title="РџСЂРёРіР»Р°С€РµРЅРёРµ РїСЂРѕСЃСЂРѕС‡РµРЅРѕ"
+                    description="РЎСЂРѕРє РґРµР№СЃС‚РІРёСЏ СЃСЃС‹Р»РєРё-РїСЂРёРіР»Р°С€РµРЅРёСЏ РёСЃС‚РµРє. РџРѕРїСЂРѕСЃРё Р°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂР° РІС‹РїСѓСЃС‚РёС‚СЊ РЅРѕРІРѕРµ РїСЂРёРіР»Р°С€РµРЅРёРµ."
                   />
                 ) : (
-                  <div className="rounded-[var(--radius-xl)] border border-[var(--border)] bg-[linear-gradient(180deg,_#f6f8ff_0%,_#fffaf7_100%)] p-6">
+                  <div className={`${publicSoftInsetCardClassName} rounded-[var(--radius-xl)] p-6`}>
                     <div className="space-y-3">
                       <p className="text-xs font-semibold uppercase tracking-[0.34em] text-[#7b8296]">
-                        Активация доступа
+                        РђРєС‚РёРІР°С†РёСЏ РґРѕСЃС‚СѓРїР°
                       </p>
                       <h2 className="font-[family:var(--font-landing-display)] text-3xl font-semibold tracking-tight text-[#1c2442]">
-                        Подтверди приглашение
+                        РџРѕРґС‚РІРµСЂРґРё РїСЂРёРіР»Р°С€РµРЅРёРµ
                       </h2>
                       <p className="text-sm leading-7 text-[#596177]">
-                        После активации эта почта получит рабочую роль и сможет входить в свой
-                        контур платформы.
+                        РџРѕСЃР»Рµ Р°РєС‚РёРІР°С†РёРё СЌС‚Р° РїРѕС‡С‚Р° РїРѕР»СѓС‡РёС‚ СЂР°Р±РѕС‡СѓСЋ СЂРѕР»СЊ Рё СЃРјРѕР¶РµС‚ РІС…РѕРґРёС‚СЊ РІ СЃРІРѕР№
+                        РєРѕРЅС‚СѓСЂ РїР»Р°С‚С„РѕСЂРјС‹.
                       </p>
                     </div>
 
                     <div className="mt-6 grid gap-4 md:grid-cols-2">
-                      <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow-sm)]">
+                      <div className={`${publicInsetCardClassName} p-5`}>
                         <div className="inline-flex rounded-2xl bg-[#eef2ff] p-3">
                           <Mail className="h-5 w-5 text-[#2840db]" />
                         </div>
-                        <p className="mt-4 text-sm text-[#697088]">Почта</p>
+                        <p className="mt-4 text-sm text-[#697088]">РџРѕС‡С‚Р°</p>
                         <p className="mt-2 text-lg font-semibold text-[#1c2442]">{invite.email}</p>
                       </div>
 
-                      <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-5 shadow-[var(--shadow-sm)]">
+                      <div className={`${publicInsetCardClassName} p-5`}>
                         <div className="inline-flex rounded-2xl bg-[#eef2ff] p-3">
                           <ShieldCheck className="h-5 w-5 text-[#2840db]" />
                         </div>
-                        <p className="mt-4 text-sm text-[#697088]">Роль</p>
+                        <p className="mt-4 text-sm text-[#697088]">Р РѕР»СЊ</p>
                         <p className="mt-2 text-lg font-semibold text-[#1c2442]">
                           {roleLabelMap[invite.role]}
                         </p>
@@ -187,45 +193,49 @@ export default async function InvitePage({ params }: InvitePageProps) {
                       <input type="hidden" name="token" value={invite.token} />
 
                       <div className="space-y-2">
-                        <Label htmlFor="invite-name">Имя</Label>
+                        <Label htmlFor="invite-name">РРјСЏ</Label>
                         <Input
                           id="invite-name"
                           name="name"
-                          placeholder="Например, Анна Иванова"
+                          placeholder="РќР°РїСЂРёРјРµСЂ, РђРЅРЅР° РРІР°РЅРѕРІР°"
                           required
                         />
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="invite-password">Пароль</Label>
+                        <Label htmlFor="invite-password">РџР°СЂРѕР»СЊ</Label>
                         <Input
                           id="invite-password"
                           name="password"
                           type="password"
-                          placeholder="Минимум 5 символов"
+                          placeholder="РњРёРЅРёРјСѓРј 5 СЃРёРјРІРѕР»РѕРІ"
                           required
                         />
                       </div>
 
                       {invite.note ? (
-                        <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-4 text-sm leading-7 text-[#596177]">
-                          <p className="font-medium text-[#1c2442]">Комментарий к приглашению</p>
+                        <div className={`${publicInsetCardClassName} p-4 text-sm leading-7 text-[var(--muted)]`}>
+                          <p className="font-medium text-[var(--foreground)]">
+                            РљРѕРјРјРµРЅС‚Р°СЂРёР№ Рє РїСЂРёРіР»Р°С€РµРЅРёСЋ
+                          </p>
                           <p className="mt-2 whitespace-pre-wrap">{invite.note}</p>
                         </div>
                       ) : null}
 
                       <Button type="submit" size="lg" className="w-full">
-                        Активировать доступ
+                        РђРєС‚РёРІРёСЂРѕРІР°С‚СЊ РґРѕСЃС‚СѓРї
                         <ArrowRight className="ml-2 h-4 w-4" />
                       </Button>
                     </form>
 
-                    <div className="mt-6 rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-4 text-sm leading-7 text-[#596177]">
+                    <div
+                      className={`mt-6 ${publicInsetCardClassName} p-4 text-sm leading-7 text-[var(--muted)]`}
+                    >
                       <div className="flex items-start gap-3">
                         <UserPlus2 className="mt-1 h-4 w-4 text-[#2840db]" />
                         <p>
-                          Приглашение выдано от имени{" "}
-                          <span className="font-medium text-[#1c2442]">
+                          РџСЂРёРіР»Р°С€РµРЅРёРµ РІС‹РґР°РЅРѕ РѕС‚ РёРјРµРЅРё{" "}
+                          <span className="font-medium text-[var(--foreground)]">
                             {invite.invitedBy.name || invite.invitedBy.email}
                           </span>
                           .
