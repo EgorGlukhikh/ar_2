@@ -5,6 +5,9 @@ import { BookOpenText } from "lucide-react";
 
 import { SiteIllustration } from "@/components/illustrations/site-illustration";
 import {
+  SystemActionRow,
+  SystemInfoItem,
+  SystemNotice,
   systemActionRowClassName,
   systemBodyTextClassName,
   systemCardClassName,
@@ -50,6 +53,21 @@ type WorkspaceEmptyStateProps = {
   action?: ReactNode;
   className?: string;
   illustrationKind?: IllustrationKey;
+};
+
+type WorkspaceNoticeProps = {
+  title: string;
+  description?: ReactNode;
+  tone?: "neutral" | "info" | "warning";
+  className?: string;
+  children?: ReactNode;
+};
+
+type WorkspaceInfoItemProps = {
+  label: string;
+  value: ReactNode;
+  hint?: ReactNode;
+  className?: string;
 };
 
 type CourseThumbProps = {
@@ -237,6 +255,45 @@ export function WorkspaceEmptyState({
       <p className="mt-3 max-w-2xl text-sm leading-7 text-[var(--muted)]">{description}</p>
       {action ? <div className="mt-6">{action}</div> : null}
     </div>
+  );
+}
+
+export function WorkspaceActionRow({
+  dense = false,
+  className,
+  children,
+}: {
+  dense?: boolean;
+  className?: string;
+  children: ReactNode;
+}) {
+  return (
+    <SystemActionRow dense={dense} className={className}>
+      {children}
+    </SystemActionRow>
+  );
+}
+
+export function WorkspaceInfoItem({
+  label,
+  value,
+  hint,
+  className,
+}: WorkspaceInfoItemProps) {
+  return <SystemInfoItem label={label} value={value} hint={hint} className={className} />;
+}
+
+export function WorkspaceNotice({
+  title,
+  description,
+  tone = "neutral",
+  className,
+  children,
+}: WorkspaceNoticeProps) {
+  return (
+    <SystemNotice tone={tone} title={title} description={description} className={className}>
+      {children}
+    </SystemNotice>
   );
 }
 

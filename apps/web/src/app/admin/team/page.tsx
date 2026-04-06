@@ -11,7 +11,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import {
+  WorkspaceActionRow,
   WorkspaceEmptyState,
+  WorkspaceNotice,
   WorkspacePageHeader,
   WorkspacePanel,
   WorkspaceStatCard,
@@ -23,14 +25,14 @@ import {
 import { createWorkspaceMember } from "@/features/admin/user-actions";
 import { requireAdminUser } from "@/lib/admin";
 import { buildWorkspaceInviteUrl } from "@/lib/invites";
-import { cn } from "@/lib/utils";
+import { systemNavItemClassName } from "@/components/system/system-ui";
 
 const roleLabelMap = {
-  ADMIN: "Администратор",
-  AUTHOR: "Автор",
-  CURATOR: "Куратор",
-  SALES_MANAGER: "Продажи",
-  STUDENT: "Студент",
+  ADMIN: "РђРґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂ",
+  AUTHOR: "РђРІС‚РѕСЂ",
+  CURATOR: "РљСѓСЂР°С‚РѕСЂ",
+  SALES_MANAGER: "РџСЂРѕРґР°Р¶Рё",
+  STUDENT: "РЎС‚СѓРґРµРЅС‚",
 } as const;
 
 const dateFormatter = new Intl.DateTimeFormat("ru-RU", {
@@ -46,7 +48,7 @@ type TeamPageProps = {
 
 function formatDate(value?: Date | null) {
   if (!value) {
-    return "—";
+    return "вЂ”";
   }
 
   return dateFormatter.format(value);
@@ -58,18 +60,18 @@ function getInviteStatus(invite: {
   expiresAt: Date;
 }) {
   if (invite.revokedAt) {
-    return { label: "Отозвано", variant: "warning" as const };
+    return { label: "РћС‚РѕР·РІР°РЅРѕ", variant: "warning" as const };
   }
 
   if (invite.acceptedAt) {
-    return { label: "Активировано", variant: "success" as const };
+    return { label: "РђРєС‚РёРІРёСЂРѕРІР°РЅРѕ", variant: "success" as const };
   }
 
   if (invite.expiresAt.getTime() < Date.now()) {
-    return { label: "Истекло", variant: "warning" as const };
+    return { label: "РСЃС‚РµРєР»Рѕ", variant: "warning" as const };
   }
 
-  return { label: "Ожидает активации", variant: "neutral" as const };
+  return { label: "РћР¶РёРґР°РµС‚ Р°РєС‚РёРІР°С†РёРё", variant: "neutral" as const };
 }
 
 export default async function TeamPage({ searchParams }: TeamPageProps) {
@@ -122,69 +124,56 @@ export default async function TeamPage({ searchParams }: TeamPageProps) {
   return (
     <section className="space-y-6">
       <WorkspacePageHeader
-        eyebrow="Команда платформы"
-        title="Роли, доступы и приглашения"
-        description="Разделен на два рабочих контура: действующая команда и приглашения. Так проще отдельно управлять людьми в системе и всеми сценариями подключения."
+        eyebrow="РљРѕРјР°РЅРґР° РїР»Р°С‚С„РѕСЂРјС‹"
+        title="Р РѕР»Рё, РґРѕСЃС‚СѓРїС‹ Рё РїСЂРёРіР»Р°С€РµРЅРёСЏ"
+        description="Р Р°Р·РґРµР»РµРЅ РЅР° РґРІР° СЂР°Р±РѕС‡РёС… РєРѕРЅС‚СѓСЂР°: РґРµР№СЃС‚РІСѓСЋС‰Р°СЏ РєРѕРјР°РЅРґР° Рё РїСЂРёРіР»Р°С€РµРЅРёСЏ. РўР°Рє РїСЂРѕС‰Рµ РѕС‚РґРµР»СЊРЅРѕ СѓРїСЂР°РІР»СЏС‚СЊ Р»СЋРґСЊРјРё РІ СЃРёСЃС‚РµРјРµ Рё РІСЃРµРјРё СЃС†РµРЅР°СЂРёСЏРјРё РїРѕРґРєР»СЋС‡РµРЅРёСЏ."
       />
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <WorkspaceStatCard
-          label="Команда"
+          label="РљРѕРјР°РЅРґР°"
           value={teamMembers.length}
-          hint="Все внутренние участники платформы."
+          hint="Р’СЃРµ РІРЅСѓС‚СЂРµРЅРЅРёРµ СѓС‡Р°СЃС‚РЅРёРєРё РїР»Р°С‚С„РѕСЂРјС‹."
           icon={Users2}
         />
         <WorkspaceStatCard
-          label="Авторы"
+          label="РђРІС‚РѕСЂС‹"
           value={authorCount}
-          hint="Могут работать с закрепленными курсами."
+          hint="РњРѕРіСѓС‚ СЂР°Р±РѕС‚Р°С‚СЊ СЃ Р·Р°РєСЂРµРїР»РµРЅРЅС‹РјРё РєСѓСЂСЃР°РјРё."
           icon={UserCog}
         />
         <WorkspaceStatCard
-          label="Кураторы"
+          label="РљСѓСЂР°С‚РѕСЂС‹"
           value={curatorCount}
-          hint="Проверяют домашние задания и следят за студентами."
+          hint="РџСЂРѕРІРµСЂСЏСЋС‚ РґРѕРјР°С€РЅРёРµ Р·Р°РґР°РЅРёСЏ Рё СЃР»РµРґСЏС‚ Р·Р° СЃС‚СѓРґРµРЅС‚Р°РјРё."
           icon={ShieldCheck}
         />
         <WorkspaceStatCard
-          label="Открытые приглашения"
+          label="РћС‚РєСЂС‹С‚С‹Рµ РїСЂРёРіР»Р°С€РµРЅРёСЏ"
           value={pendingInvites}
-          hint="Еще не активированные ссылки и доступы."
+          hint="Р•С‰Рµ РЅРµ Р°РєС‚РёРІРёСЂРѕРІР°РЅРЅС‹Рµ СЃСЃС‹Р»РєРё Рё РґРѕСЃС‚СѓРїС‹."
           icon={Briefcase}
         />
       </div>
 
       <div className="grid gap-6 xl:grid-cols-[240px_minmax(0,1fr)]">
         <WorkspacePanel
-          eyebrow="Навигация"
-          title="Контур команды"
-          description="Слева переключение между действующими участниками и приглашениями."
+          eyebrow="РќР°РІРёРіР°С†РёСЏ"
+          title="РљРѕРЅС‚СѓСЂ РєРѕРјР°РЅРґС‹"
+          description="РЎР»РµРІР° РїРµСЂРµРєР»СЋС‡РµРЅРёРµ РјРµР¶РґСѓ РґРµР№СЃС‚РІСѓСЋС‰РёРјРё СѓС‡Р°СЃС‚РЅРёРєР°РјРё Рё РїСЂРёРіР»Р°С€РµРЅРёСЏРјРё."
           className="self-start"
         >
           <div className="space-y-2">
-            <Link
-              href="/admin/team"
-              className={cn(
-                "flex items-center justify-between rounded-[var(--radius-md)] border px-4 py-3 text-sm font-medium transition",
-                activeTab === "members"
-                  ? "border-[var(--primary)] bg-[var(--primary-soft)] text-[var(--primary)]"
-                  : "border-[var(--border)] bg-[var(--surface)] text-[var(--foreground)] hover:bg-[var(--surface-strong)]",
-              )}
-            >
-              <span>Действующие</span>
+            <Link href="/admin/team" className={systemNavItemClassName(activeTab === "members")}>
+              <span>Р”РµР№СЃС‚РІСѓСЋС‰РёРµ</span>
               <span className="text-xs">{teamMembers.length}</span>
             </Link>
 
             <Link
               href="/admin/team?tab=invites"
-              className={cn(
-                "flex items-center justify-between rounded-[var(--radius-md)] border px-4 py-3 text-sm font-medium transition",
-                activeTab === "invites"
-                  ? "border-[var(--primary)] bg-[var(--primary-soft)] text-[var(--primary)]"
-                  : "border-[var(--border)] bg-[var(--surface)] text-[var(--foreground)] hover:bg-[var(--surface-strong)]",
-              )}
+              className={systemNavItemClassName(activeTab === "invites")}
             >
-              <span>Приглашения</span>
+              <span>РџСЂРёРіР»Р°С€РµРЅРёСЏ</span>
               <span className="text-xs">{invites.length}</span>
             </Link>
           </div>
@@ -193,14 +182,14 @@ export default async function TeamPage({ searchParams }: TeamPageProps) {
         <div className="space-y-6">
           {activeTab === "members" ? (
             <WorkspacePanel
-              eyebrow="Действующая команда"
-              title="Кто уже работает в системе"
-              description="Список показывает текущих авторов, кураторов, продажи и администраторов без смешивания с формами приглашений."
+              eyebrow="Р”РµР№СЃС‚РІСѓСЋС‰Р°СЏ РєРѕРјР°РЅРґР°"
+              title="РљС‚Рѕ СѓР¶Рµ СЂР°Р±РѕС‚Р°РµС‚ РІ СЃРёСЃС‚РµРјРµ"
+              description="РЎРїРёСЃРѕРє РїРѕРєР°Р·С‹РІР°РµС‚ С‚РµРєСѓС‰РёС… Р°РІС‚РѕСЂРѕРІ, РєСѓСЂР°С‚РѕСЂРѕРІ, РїСЂРѕРґР°Р¶Рё Рё Р°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂРѕРІ Р±РµР· СЃРјРµС€РёРІР°РЅРёСЏ СЃ С„РѕСЂРјР°РјРё РїСЂРёРіР»Р°С€РµРЅРёР№."
             >
               {teamMembers.length === 0 ? (
                 <WorkspaceEmptyState
-                  title="Пока нет участников команды"
-                  description="Как только появится автор или куратор, он отобразится здесь."
+                  title="РџРѕРєР° РЅРµС‚ СѓС‡Р°СЃС‚РЅРёРєРѕРІ РєРѕРјР°РЅРґС‹"
+                  description="РљР°Рє С‚РѕР»СЊРєРѕ РїРѕСЏРІРёС‚СЃСЏ Р°РІС‚РѕСЂ РёР»Рё РєСѓСЂР°С‚РѕСЂ, РѕРЅ РѕС‚РѕР±СЂР°Р·РёС‚СЃСЏ Р·РґРµСЃСЊ."
                   className="border-[var(--border)] bg-[var(--surface)] shadow-none"
                 />
               ) : (
@@ -208,12 +197,12 @@ export default async function TeamPage({ searchParams }: TeamPageProps) {
                   <div className="overflow-x-auto">
                     <div className="min-w-[920px]">
                       <div className="grid grid-cols-[minmax(220px,1.4fr)_160px_240px_140px_140px_160px] gap-4 border-b border-[var(--border)] bg-[var(--surface-strong)] px-5 py-4 text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
-                        <span>Участник</span>
-                        <span>Роль</span>
-                        <span>Почта</span>
-                        <span>Курсы</span>
-                        <span>Проверки</span>
-                        <span>Создан</span>
+                        <span>РЈС‡Р°СЃС‚РЅРёРє</span>
+                        <span>Р РѕР»СЊ</span>
+                        <span>РџРѕС‡С‚Р°</span>
+                        <span>РљСѓСЂСЃС‹</span>
+                        <span>РџСЂРѕРІРµСЂРєРё</span>
+                        <span>РЎРѕР·РґР°РЅ</span>
                       </div>
 
                       <div className="divide-y divide-[var(--border)]">
@@ -227,7 +216,7 @@ export default async function TeamPage({ searchParams }: TeamPageProps) {
                                 {member.name || member.email}
                               </p>
                               <p className="mt-1 text-sm text-[var(--muted)]">
-                                Аккаунт команды платформы
+                                РђРєРєР°СѓРЅС‚ РєРѕРјР°РЅРґС‹ РїР»Р°С‚С„РѕСЂРјС‹
                               </p>
                             </div>
 
@@ -242,13 +231,13 @@ export default async function TeamPage({ searchParams }: TeamPageProps) {
                             </div>
 
                             <div className="pt-1 text-sm text-[var(--foreground)]">
-                              {member.role === USER_ROLES.AUTHOR ? member._count.authored : "—"}
+                              {member.role === USER_ROLES.AUTHOR ? member._count.authored : "вЂ”"}
                             </div>
 
                             <div className="pt-1 text-sm text-[var(--foreground)]">
                               {member.role === USER_ROLES.CURATOR
                                 ? member._count.reviewedHomeworkSubmissions
-                                : "—"}
+                                : "вЂ”"}
                             </div>
 
                             <div className="pt-1 text-sm text-[var(--foreground)]">
@@ -266,18 +255,18 @@ export default async function TeamPage({ searchParams }: TeamPageProps) {
             <>
               <div className="grid gap-6 xl:grid-cols-2">
                 <WorkspacePanel
-                  eyebrow="Прямое создание"
-                  title="Завести участника сразу"
-                  description="Используй этот сценарий, если команда уже согласована и учетку можно выдать вручную."
+                  eyebrow="РџСЂСЏРјРѕРµ СЃРѕР·РґР°РЅРёРµ"
+                  title="Р—Р°РІРµСЃС‚Рё СѓС‡Р°СЃС‚РЅРёРєР° СЃСЂР°Р·Сѓ"
+                  description="РСЃРїРѕР»СЊР·СѓР№ СЌС‚РѕС‚ СЃС†РµРЅР°СЂРёР№, РµСЃР»Рё РєРѕРјР°РЅРґР° СѓР¶Рµ СЃРѕРіР»Р°СЃРѕРІР°РЅР° Рё СѓС‡РµС‚РєСѓ РјРѕР¶РЅРѕ РІС‹РґР°С‚СЊ РІСЂСѓС‡РЅСѓСЋ."
                 >
                   <form action={createWorkspaceMember} className="space-y-5">
                     <div className="space-y-2">
-                      <Label htmlFor="team-name">Имя</Label>
-                      <Input id="team-name" name="name" placeholder="Анна Иванова" required />
+                      <Label htmlFor="team-name">РРјСЏ</Label>
+                      <Input id="team-name" name="name" placeholder="РђРЅРЅР° РРІР°РЅРѕРІР°" required />
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="team-email">Почта</Label>
+                      <Label htmlFor="team-email">РџРѕС‡С‚Р°</Label>
                       <Input
                         id="team-email"
                         name="email"
@@ -288,39 +277,39 @@ export default async function TeamPage({ searchParams }: TeamPageProps) {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="team-password">Пароль</Label>
+                      <Label htmlFor="team-password">РџР°СЂРѕР»СЊ</Label>
                       <Input
                         id="team-password"
                         name="password"
                         type="password"
-                        placeholder="Минимум 5 символов"
+                        placeholder="РњРёРЅРёРјСѓРј 5 СЃРёРјРІРѕР»РѕРІ"
                         required
                       />
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="team-role">Роль</Label>
+                      <Label htmlFor="team-role">Р РѕР»СЊ</Label>
                       <Select id="team-role" name="role" defaultValue={USER_ROLES.AUTHOR}>
-                        <option value={USER_ROLES.AUTHOR}>Автор</option>
-                        <option value={USER_ROLES.CURATOR}>Куратор</option>
-                        <option value={USER_ROLES.SALES_MANAGER}>Продажи</option>
+                        <option value={USER_ROLES.AUTHOR}>РђРІС‚РѕСЂ</option>
+                        <option value={USER_ROLES.CURATOR}>РљСѓСЂР°С‚РѕСЂ</option>
+                        <option value={USER_ROLES.SALES_MANAGER}>РџСЂРѕРґР°Р¶Рё</option>
                       </Select>
                     </div>
 
                     <Button type="submit" className="w-full">
-                      Создать участника
+                      РЎРѕР·РґР°С‚СЊ СѓС‡Р°СЃС‚РЅРёРєР°
                     </Button>
                   </form>
                 </WorkspacePanel>
 
                 <WorkspacePanel
-                  eyebrow="Приглашения"
-                  title="Выпустить ссылку-приглашение"
-                  description="Этот сценарий удобнее, когда человек должен сам активировать доступ, придумать пароль и зайти в платформу по ссылке."
+                  eyebrow="РџСЂРёРіР»Р°С€РµРЅРёСЏ"
+                  title="Р’С‹РїСѓСЃС‚РёС‚СЊ СЃСЃС‹Р»РєСѓ-РїСЂРёРіР»Р°С€РµРЅРёРµ"
+                  description="Р­С‚РѕС‚ СЃС†РµРЅР°СЂРёР№ СѓРґРѕР±РЅРµРµ, РєРѕРіРґР° С‡РµР»РѕРІРµРє РґРѕР»Р¶РµРЅ СЃР°Рј Р°РєС‚РёРІРёСЂРѕРІР°С‚СЊ РґРѕСЃС‚СѓРї, РїСЂРёРґСѓРјР°С‚СЊ РїР°СЂРѕР»СЊ Рё Р·Р°Р№С‚Рё РІ РїР»Р°С‚С„РѕСЂРјСѓ РїРѕ СЃСЃС‹Р»РєРµ."
                 >
                   <form action={createWorkspaceInvite} className="space-y-5">
                     <div className="space-y-2">
-                      <Label htmlFor="invite-email">Почта</Label>
+                      <Label htmlFor="invite-email">РџРѕС‡С‚Р°</Label>
                       <Input
                         id="invite-email"
                         name="email"
@@ -331,49 +320,49 @@ export default async function TeamPage({ searchParams }: TeamPageProps) {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="invite-role">Роль</Label>
+                      <Label htmlFor="invite-role">Р РѕР»СЊ</Label>
                       <Select id="invite-role" name="role" defaultValue={USER_ROLES.AUTHOR}>
-                        <option value={USER_ROLES.AUTHOR}>Автор</option>
-                        <option value={USER_ROLES.CURATOR}>Куратор</option>
-                        <option value={USER_ROLES.SALES_MANAGER}>Продажи</option>
+                        <option value={USER_ROLES.AUTHOR}>РђРІС‚РѕСЂ</option>
+                        <option value={USER_ROLES.CURATOR}>РљСѓСЂР°С‚РѕСЂ</option>
+                        <option value={USER_ROLES.SALES_MANAGER}>РџСЂРѕРґР°Р¶Рё</option>
                       </Select>
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="invite-days">Срок действия</Label>
+                      <Label htmlFor="invite-days">РЎСЂРѕРє РґРµР№СЃС‚РІРёСЏ</Label>
                       <Select id="invite-days" name="expiresInDays" defaultValue="7">
-                        <option value="3">3 дня</option>
-                        <option value="7">7 дней</option>
-                        <option value="14">14 дней</option>
-                        <option value="30">30 дней</option>
+                        <option value="3">3 РґРЅСЏ</option>
+                        <option value="7">7 РґРЅРµР№</option>
+                        <option value="14">14 РґРЅРµР№</option>
+                        <option value="30">30 РґРЅРµР№</option>
                       </Select>
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="invite-note">Комментарий</Label>
+                      <Label htmlFor="invite-note">РљРѕРјРјРµРЅС‚Р°СЂРёР№</Label>
                       <Input
                         id="invite-note"
                         name="note"
-                        placeholder="Например, доступ к двум курсам по новому запуску"
+                        placeholder="РќР°РїСЂРёРјРµСЂ, РґРѕСЃС‚СѓРї Рє РґРІСѓРј РєСѓСЂСЃР°Рј РїРѕ РЅРѕРІРѕРјСѓ Р·Р°РїСѓСЃРєСѓ"
                       />
                     </div>
 
                     <Button type="submit" className="w-full">
-                      Создать приглашение
+                      РЎРѕР·РґР°С‚СЊ РїСЂРёРіР»Р°С€РµРЅРёРµ
                     </Button>
                   </form>
                 </WorkspacePanel>
               </div>
 
               <WorkspacePanel
-                eyebrow="Приглашения"
-                title="История ссылок и статусов"
-                description="Сюда попадают свежие приглашения. Ссылку можно скопировать и отправить человеку вручную, даже если почтовый контур пока отключен."
+                eyebrow="РџСЂРёРіР»Р°С€РµРЅРёСЏ"
+                title="РСЃС‚РѕСЂРёСЏ СЃСЃС‹Р»РѕРє Рё СЃС‚Р°С‚СѓСЃРѕРІ"
+                description="РЎСЋРґР° РїРѕРїР°РґР°СЋС‚ СЃРІРµР¶РёРµ РїСЂРёРіР»Р°С€РµРЅРёСЏ. РЎСЃС‹Р»РєСѓ РјРѕР¶РЅРѕ СЃРєРѕРїРёСЂРѕРІР°С‚СЊ Рё РѕС‚РїСЂР°РІРёС‚СЊ С‡РµР»РѕРІРµРєСѓ РІСЂСѓС‡РЅСѓСЋ, РґР°Р¶Рµ РµСЃР»Рё РїРѕС‡С‚РѕРІС‹Р№ РєРѕРЅС‚СѓСЂ РїРѕРєР° РѕС‚РєР»СЋС‡РµРЅ."
               >
                 {invites.length === 0 ? (
                   <WorkspaceEmptyState
-                    title="Пока нет приглашений"
-                    description="Создай первое приглашение, и оно появится в этом списке."
+                    title="РџРѕРєР° РЅРµС‚ РїСЂРёРіР»Р°С€РµРЅРёР№"
+                    description="РЎРѕР·РґР°Р№ РїРµСЂРІРѕРµ РїСЂРёРіР»Р°С€РµРЅРёРµ, Рё РѕРЅРѕ РїРѕСЏРІРёС‚СЃСЏ РІ СЌС‚РѕРј СЃРїРёСЃРєРµ."
                     className="border-[var(--border)] bg-[var(--surface)] shadow-none"
                   />
                 ) : (
@@ -398,45 +387,48 @@ export default async function TeamPage({ searchParams }: TeamPageProps) {
                                   {invite.email}
                                 </h2>
                                 <p className="mt-1 text-sm text-[var(--muted)]">
-                                  Выдал {invite.invitedBy.name || invite.invitedBy.email}
+                                  Р’С‹РґР°Р» {invite.invitedBy.name || invite.invitedBy.email}
                                 </p>
                               </div>
                               <div className="grid gap-2 text-sm text-[var(--muted)] md:grid-cols-2">
-                                <p>Создано: {formatDate(invite.createdAt)}</p>
-                                <p>Действует до: {formatDate(invite.expiresAt)}</p>
-                                <p>Активировано: {formatDate(invite.acceptedAt)}</p>
-                                <p>Отозвано: {formatDate(invite.revokedAt)}</p>
+                                <p>РЎРѕР·РґР°РЅРѕ: {formatDate(invite.createdAt)}</p>
+                                <p>Р”РµР№СЃС‚РІСѓРµС‚ РґРѕ: {formatDate(invite.expiresAt)}</p>
+                                <p>РђРєС‚РёРІРёСЂРѕРІР°РЅРѕ: {formatDate(invite.acceptedAt)}</p>
+                                <p>РћС‚РѕР·РІР°РЅРѕ: {formatDate(invite.revokedAt)}</p>
                               </div>
                               {invite.note ? (
-                                <p className="rounded-2xl border border-[var(--border)] bg-white px-4 py-3 text-sm leading-7 text-[var(--muted)]">
-                                  {invite.note}
-                                </p>
+                                <WorkspaceNotice title="РљРѕРјРјРµРЅС‚Р°СЂРёР№" description={invite.note} />
                               ) : null}
                             </div>
 
-                            <div className="flex w-full max-w-[420px] flex-col gap-3 rounded-[var(--radius-xl)] border border-[var(--border)] bg-white p-4">
-                              <div className="flex items-center gap-2 text-sm font-medium text-[var(--foreground)]">
-                                <Link2 className="h-4 w-4 text-[var(--primary)]" />
-                                Ссылка приглашения
-                              </div>
+                            <WorkspaceNotice
+                              className="w-full max-w-[420px]"
+                              title="РЎСЃС‹Р»РєР° РїСЂРёРіР»Р°С€РµРЅРёСЏ"
+                              description={
+                                <span className="inline-flex items-center gap-2">
+                                  <Link2 className="h-4 w-4 text-[var(--primary)]" />
+                                  Р“РѕС‚РѕРІР° Рє РѕС‚РїСЂР°РІРєРµ РёР»Рё РїСЂРѕРІРµСЂРєРµ.
+                                </span>
+                              }
+                            >
                               <Input readOnly value={inviteUrl} />
-                              <div className="flex flex-wrap gap-2">
+                              <WorkspaceActionRow dense className="mt-3">
                                 <InviteLinkCopy url={inviteUrl} />
                                 <Button asChild variant="outline" size="sm">
                                   <a href={inviteUrl} target="_blank" rel="noreferrer">
-                                    Открыть приглашение
+                                    РћС‚РєСЂС‹С‚СЊ РїСЂРёРіР»Р°С€РµРЅРёРµ
                                   </a>
                                 </Button>
                                 {!invite.revokedAt && !invite.acceptedAt ? (
                                   <form action={revokeWorkspaceInvite}>
                                     <input type="hidden" name="inviteId" value={invite.id} />
                                     <Button type="submit" variant="outline" size="sm">
-                                      Отозвать
+                                      РћС‚РѕР·РІР°С‚СЊ
                                     </Button>
                                   </form>
                                 ) : null}
-                              </div>
-                            </div>
+                              </WorkspaceActionRow>
+                            </WorkspaceNotice>
                           </div>
                         </article>
                       );

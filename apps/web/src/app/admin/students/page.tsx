@@ -10,6 +10,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   WorkspaceEmptyState,
+  WorkspaceInfoItem,
+  WorkspaceNotice,
   WorkspacePageHeader,
   WorkspacePanel,
   WorkspaceStatCard,
@@ -55,57 +57,63 @@ export default async function StudentsPage() {
   return (
     <section className="space-y-6">
       <WorkspacePageHeader
-        eyebrow="База студентов"
-        title="Управление учениками"
-        description="Здесь команда видит всех студентов, их доступы и активность. Создание новых аккаунтов оставлено администратору, а куратор работает с уже существующей базой."
+        eyebrow="Р‘Р°Р·Р° СЃС‚СѓРґРµРЅС‚РѕРІ"
+        title="РЈРїСЂР°РІР»РµРЅРёРµ СѓС‡РµРЅРёРєР°РјРё"
+        description="Р—РґРµСЃСЊ РєРѕРјР°РЅРґР° РІРёРґРёС‚ РІСЃРµС… СЃС‚СѓРґРµРЅС‚РѕРІ, РёС… РґРѕСЃС‚СѓРїС‹ Рё Р°РєС‚РёРІРЅРѕСЃС‚СЊ. РЎРѕР·РґР°РЅРёРµ РЅРѕРІС‹С… Р°РєРєР°СѓРЅС‚РѕРІ РѕСЃС‚Р°РІР»РµРЅРѕ Р°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂСѓ, Р° РєСѓСЂР°С‚РѕСЂ СЂР°Р±РѕС‚Р°РµС‚ СЃ СѓР¶Рµ СЃСѓС‰РµСЃС‚РІСѓСЋС‰РµР№ Р±Р°Р·РѕР№."
         meta={
-          <div className="rounded-[var(--control-radius)] bg-[var(--surface)] px-4 py-3 text-sm text-[var(--muted)]">
-            Всего студентов: {students.length}
-          </div>
+          <WorkspaceInfoItem
+            label="Р’СЃРµРіРѕ"
+            value={`РЎС‚СѓРґРµРЅС‚РѕРІ: ${students.length}`}
+            className="min-w-[180px]"
+          />
         }
       />
 
       <div className="grid gap-4 md:grid-cols-3">
         <WorkspaceStatCard
-          label="Студенты"
+          label="РЎС‚СѓРґРµРЅС‚С‹"
           value={students.length}
-          hint="Все созданные ученики платформы."
+          hint="Р’СЃРµ СЃРѕР·РґР°РЅРЅС‹Рµ СѓС‡РµРЅРёРєРё РїР»Р°С‚С„РѕСЂРјС‹."
           icon={Users}
         />
         <WorkspaceStatCard
-          label="С доступом"
+          label="РЎ РґРѕСЃС‚СѓРїРѕРј"
           value={studentsWithCourses}
-          hint="Студенты, у которых уже открыт хотя бы один курс."
+          hint="РЎС‚СѓРґРµРЅС‚С‹, Сѓ РєРѕС‚РѕСЂС‹С… СѓР¶Рµ РѕС‚РєСЂС‹С‚ С…РѕС‚СЏ Р±С‹ РѕРґРёРЅ РєСѓСЂСЃ."
           icon={GraduationCap}
         />
         <WorkspaceStatCard
-          label="Без доступа"
+          label="Р‘РµР· РґРѕСЃС‚СѓРїР°"
           value={students.length - studentsWithCourses}
-          hint="Пользователи, которым еще не выданы курсы."
+          hint="РџРѕР»СЊР·РѕРІР°С‚РµР»Рё, РєРѕС‚РѕСЂС‹Рј РµС‰Рµ РЅРµ РІС‹РґР°РЅС‹ РєСѓСЂСЃС‹."
           icon={UserPlus}
         />
       </div>
 
       <div className="grid gap-6 xl:grid-cols-[420px_minmax(0,1fr)]">
         <WorkspacePanel
-          eyebrow="Новый студент"
-          title={user.role === USER_ROLES.ADMIN ? "Создать учетную запись" : "Доступ к базе студентов"}
+          eyebrow="РќРѕРІС‹Р№ СЃС‚СѓРґРµРЅС‚"
+          title={
+            user.role === USER_ROLES.ADMIN
+              ? "РЎРѕР·РґР°С‚СЊ СѓС‡РµС‚РЅСѓСЋ Р·Р°РїРёСЃСЊ"
+              : "Р”РѕСЃС‚СѓРї Рє Р±Р°Р·Рµ СЃС‚СѓРґРµРЅС‚РѕРІ"
+          }
           description={
             user.role === USER_ROLES.ADMIN
-              ? "Форма нужна для быстрого старта. Дальше доступ к курсам можно выдать внутри карточки конкретного курса."
-              : "Куратор использует этот раздел как рабочую базу и не создает новые аккаунты."
+              ? "Р¤РѕСЂРјР° РЅСѓР¶РЅР° РґР»СЏ Р±С‹СЃС‚СЂРѕРіРѕ СЃС‚Р°СЂС‚Р°. Р”Р°Р»СЊС€Рµ РґРѕСЃС‚СѓРї Рє РєСѓСЂСЃР°Рј РјРѕР¶РЅРѕ РІС‹РґР°С‚СЊ РІРЅСѓС‚СЂРё РєР°СЂС‚РѕС‡РєРё РєРѕРЅРєСЂРµС‚РЅРѕРіРѕ РєСѓСЂСЃР°."
+              : "РљСѓСЂР°С‚РѕСЂ РёСЃРїРѕР»СЊР·СѓРµС‚ СЌС‚РѕС‚ СЂР°Р·РґРµР» РєР°Рє СЂР°Р±РѕС‡СѓСЋ Р±Р°Р·Сѓ Рё РЅРµ СЃРѕР·РґР°РµС‚ РЅРѕРІС‹Рµ Р°РєРєР°СѓРЅС‚С‹."
           }
           className="self-start"
         >
           {user.role === USER_ROLES.ADMIN ? (
             <form action={createStudent} className="space-y-5">
               <div className="space-y-2">
-                <Label htmlFor="student-name">Имя</Label>
-                <Input id="student-name" name="name" placeholder="Иван Петров" required />
+                <Label htmlFor="student-name">РРјСЏ</Label>
+                <Input id="student-name" name="name" placeholder="РРІР°РЅ РџРµС‚СЂРѕРІ" required />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="student-email">Почта</Label>
+                <Label htmlFor="student-email">РџРѕС‡С‚Р°</Label>
                 <Input
                   id="student-email"
                   name="email"
@@ -116,53 +124,64 @@ export default async function StudentsPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="student-password">Пароль</Label>
+                <Label htmlFor="student-password">РџР°СЂРѕР»СЊ</Label>
                 <Input
                   id="student-password"
                   name="password"
                   type="password"
-                  placeholder="Минимум 5 символов"
+                  placeholder="РњРёРЅРёРјСѓРј 5 СЃРёРјРІРѕР»РѕРІ"
                   required
                 />
               </div>
 
               <div className="grid gap-3 sm:grid-cols-2">
-                <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-4 py-4">
-                  <Mail className="h-4 w-4 text-[var(--primary)]" />
-                  <p className="mt-3 text-sm font-medium text-[var(--foreground)]">Почта для входа</p>
-                  <p className="mt-1 text-xs leading-5 text-[var(--muted)]">
-                    Этот адрес студент использует в платформе.
-                  </p>
-                </div>
-                <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-4 py-4">
-                  <KeyRound className="h-4 w-4 text-[var(--primary)]" />
-                  <p className="mt-3 text-sm font-medium text-[var(--foreground)]">Временный пароль</p>
-                  <p className="mt-1 text-xs leading-5 text-[var(--muted)]">
-                    Его можно заменить позже после первого входа.
-                  </p>
-                </div>
+                <WorkspaceInfoItem
+                  label="РџРѕС‡С‚Р° РґР»СЏ РІС…РѕРґР°"
+                  value={
+                    <>
+                      <Mail className="mb-3 h-4 w-4 text-[var(--primary)]" />
+                      <span className="block text-sm font-medium text-[var(--foreground)]">
+                        РђРґСЂРµСЃ РґР»СЏ Р°РІС‚РѕСЂРёР·Р°С†РёРё
+                      </span>
+                    </>
+                  }
+                  hint="Р­С‚РѕС‚ Р°РґСЂРµСЃ СЃС‚СѓРґРµРЅС‚ РёСЃРїРѕР»СЊР·СѓРµС‚ РІ РїР»Р°С‚С„РѕСЂРјРµ."
+                />
+                <WorkspaceInfoItem
+                  label="Р’СЂРµРјРµРЅРЅС‹Р№ РїР°СЂРѕР»СЊ"
+                  value={
+                    <>
+                      <KeyRound className="mb-3 h-4 w-4 text-[var(--primary)]" />
+                      <span className="block text-sm font-medium text-[var(--foreground)]">
+                        РЎС‚Р°СЂС‚ Р±РµР· РѕР¶РёРґР°РЅРёСЏ
+                      </span>
+                    </>
+                  }
+                  hint="Р•РіРѕ РјРѕР¶РЅРѕ Р·Р°РјРµРЅРёС‚СЊ РїРѕР·Р¶Рµ РїРѕСЃР»Рµ РїРµСЂРІРѕРіРѕ РІС…РѕРґР°."
+                />
               </div>
 
               <Button type="submit" className="w-full">
-                Создать студента
+                РЎРѕР·РґР°С‚СЊ СЃС‚СѓРґРµРЅС‚Р°
               </Button>
             </form>
           ) : (
-            <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] px-4 py-4 text-sm leading-7 text-[var(--muted)]">
-              Создание новых студентов оставлено администратору. Здесь куратор использует список уже зачисленных и активных учеников.
-            </div>
+            <WorkspaceNotice
+              title="РЎРѕР·РґР°РЅРёРµ РѕСЃС‚Р°РІР»РµРЅРѕ Р°РґРјРёРЅСѓ"
+              description="Р—РґРµСЃСЊ РєСѓСЂР°С‚РѕСЂ РёСЃРїРѕР»СЊР·СѓРµС‚ СЃРїРёСЃРѕРє СѓР¶Рµ Р·Р°С‡РёСЃР»РµРЅРЅС‹С… Рё Р°РєС‚РёРІРЅС‹С… СѓС‡РµРЅРёРєРѕРІ."
+            />
           )}
         </WorkspacePanel>
 
         <WorkspacePanel
-          eyebrow="Список учеников"
-          title="Кого уже можно вести по курсам"
-          description="Карточки ниже помогают быстро понять, у кого уже есть доступы и сколько активности зафиксировано в системе."
+          eyebrow="РЎРїРёСЃРѕРє СѓС‡РµРЅРёРєРѕРІ"
+          title="РљРѕРіРѕ СѓР¶Рµ РјРѕР¶РЅРѕ РІРµСЃС‚Рё РїРѕ РєСѓСЂСЃР°Рј"
+          description="РљР°СЂС‚РѕС‡РєРё РЅРёР¶Рµ РїРѕРјРѕРіР°СЋС‚ Р±С‹СЃС‚СЂРѕ РїРѕРЅСЏС‚СЊ, Сѓ РєРѕРіРѕ СѓР¶Рµ РµСЃС‚СЊ РґРѕСЃС‚СѓРїС‹ Рё СЃРєРѕР»СЊРєРѕ Р°РєС‚РёРІРЅРѕСЃС‚Рё Р·Р°С„РёРєСЃРёСЂРѕРІР°РЅРѕ РІ СЃРёСЃС‚РµРјРµ."
         >
           {students.length === 0 ? (
             <WorkspaceEmptyState
-              title="Пока нет студентов"
-              description="Как только появится первый студент, он отобразится здесь."
+              title="РџРѕРєР° РЅРµС‚ СЃС‚СѓРґРµРЅС‚РѕРІ"
+              description="РљР°Рє С‚РѕР»СЊРєРѕ РїРѕСЏРІРёС‚СЃСЏ РїРµСЂРІС‹Р№ СЃС‚СѓРґРµРЅС‚, РѕРЅ РѕС‚РѕР±СЂР°Р·РёС‚СЃСЏ Р·РґРµСЃСЊ."
               className="border-[var(--border)] bg-[var(--surface)] shadow-none"
             />
           ) : (
@@ -179,34 +198,33 @@ export default async function StudentsPage() {
                           <h2 className="text-xl font-semibold tracking-tight text-[var(--foreground)]">
                             {student.name || student.email}
                           </h2>
-                          <Badge variant="neutral">Студент</Badge>
+                          <Badge variant="neutral">РЎС‚СѓРґРµРЅС‚</Badge>
                         </div>
                         <p className="text-sm text-[var(--muted)]">{student.email}</p>
                       </div>
 
                       <div className="flex flex-wrap gap-2">
-                        <Badge variant="neutral">Курсов {student._count.enrollments}</Badge>
-                        <Badge variant="neutral">Активностей {student._count.progress}</Badge>
+                        <Badge variant="neutral">РљСѓСЂСЃРѕРІ {student._count.enrollments}</Badge>
+                        <Badge variant="neutral">РђРєС‚РёРІРЅРѕСЃС‚РµР№ {student._count.progress}</Badge>
                       </div>
                     </div>
 
                     <div className="space-y-2">
                       <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
-                        Последние доступы
+                        РџРѕСЃР»РµРґРЅРёРµ РґРѕСЃС‚СѓРїС‹
                       </p>
                       {student.enrollments.length === 0 ? (
-                        <div className="rounded-2xl border border-dashed border-[var(--border)] bg-white px-4 py-4 text-sm leading-6 text-[var(--muted)]">
-                          У студента пока нет открытых курсов.
-                        </div>
+                        <WorkspaceNotice
+                          title="РџРѕРєР° РЅРµС‚ РѕС‚РєСЂС‹С‚С‹С… РєСѓСЂСЃРѕРІ"
+                          description="РЈ СЃС‚СѓРґРµРЅС‚Р° РµС‰Рµ РЅРµС‚ Р°РєС‚РёРІРЅС‹С… Р·Р°С‡РёСЃР»РµРЅРёР№."
+                          className="border-dashed shadow-none"
+                        />
                       ) : (
                         <div className="flex flex-wrap gap-2">
                           {student.enrollments.map((enrollment) => (
-                            <span
-                              key={enrollment.id}
-                              className="rounded-[var(--control-radius)] border border-[var(--border)] bg-white px-3 py-2 text-sm text-[var(--foreground)]"
-                            >
+                            <Badge key={enrollment.id} variant="neutral">
                               {enrollment.course.title}
-                            </span>
+                            </Badge>
                           ))}
                         </div>
                       )}
