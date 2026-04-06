@@ -7,6 +7,14 @@ import { USER_ROLES } from "@academy/shared";
 import { AdminNav } from "@/components/admin/admin-nav";
 import { LogoutButton } from "@/components/auth/logout-button";
 import { AcademyMark } from "@/components/brand/academy-mark";
+import {
+  systemBrandMarkShellClassName,
+  systemTopbarActionsClassName,
+  systemTopbarClassName,
+  systemTopbarInnerClassName,
+  systemTopbarPrimaryRowClassName,
+  systemTopbarSecondaryRowClassName,
+} from "@/components/system/system-ui";
 import { Button } from "@/components/ui/button";
 import { RolePreviewSwitcher } from "@/components/workspace/role-preview-switcher";
 import { canCreateCourses } from "@/lib/admin";
@@ -35,11 +43,11 @@ export default async function AdminLayout({
 
   return (
     <main className="min-h-screen bg-[var(--background)]">
-      <header className="sticky top-0 z-40 border-b border-[var(--border)] bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80">
-        <div className="px-4 md:px-6">
-          <div className="flex items-center justify-between gap-4 py-3">
+      <header className={systemTopbarClassName}>
+        <div className={systemTopbarInnerClassName}>
+          <div className={systemTopbarPrimaryRowClassName}>
             <div className="flex items-center gap-3">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--foreground)] text-white shadow-sm">
+              <div className={systemBrandMarkShellClassName}>
                 <AcademyMark className="w-[18px]" title="Академия риэлторов" />
               </div>
               <div className="min-w-0">
@@ -55,7 +63,7 @@ export default async function AdminLayout({
               </div>
             </div>
 
-            <div className="flex shrink-0 flex-wrap items-center gap-2">
+            <div className={systemTopbarActionsClassName}>
               {canCreateCourse ? (
                 <Button asChild size="sm">
                   <Link href="/admin/courses/new">+ Новый курс</Link>
@@ -78,7 +86,7 @@ export default async function AdminLayout({
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center justify-between gap-3 pb-3">
+          <div className={systemTopbarSecondaryRowClassName}>
             <AdminNav effectiveRole={viewer.effectiveRole} />
             <RolePreviewSwitcher
               actualRole={viewer.actualRole}

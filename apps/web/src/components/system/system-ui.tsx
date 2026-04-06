@@ -15,6 +15,27 @@ export const systemHeaderCardClassName =
   "rounded-[var(--radius-xl)] border border-[var(--border)] bg-[rgba(255,255,255,0.92)] shadow-[var(--shadow-sm)] backdrop-blur";
 
 export const systemSectionSpacingClassName = "space-y-6";
+export const systemActionRowClassName = "flex flex-wrap items-center gap-3";
+export const systemCompactActionRowClassName = "flex flex-wrap items-center gap-2";
+export const systemEyebrowClassName =
+  "text-xs font-semibold uppercase tracking-[0.2em] text-[var(--muted)]";
+export const systemTitleClassName =
+  "text-[24px] font-semibold tracking-[-0.02em] text-[var(--foreground)]";
+export const systemHeroTitleClassName =
+  "text-[clamp(1.75rem,3.4vw,2.35rem)] font-semibold tracking-[-0.02em] text-[var(--foreground)]";
+export const systemBodyTextClassName =
+  "max-w-[var(--content-max)] text-sm leading-7 text-[var(--muted)]";
+export const systemTopbarClassName =
+  "sticky top-0 z-40 border-b border-[var(--border)] bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80";
+export const systemTopbarInnerClassName = "px-4 md:px-6";
+export const systemTopbarPrimaryRowClassName =
+  "flex items-center justify-between gap-4 py-3";
+export const systemTopbarSecondaryRowClassName =
+  "flex flex-wrap items-center justify-between gap-3 pb-3";
+export const systemTopbarActionsClassName =
+  "flex shrink-0 flex-wrap items-center gap-2";
+export const systemBrandMarkShellClassName =
+  "flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--foreground)] text-white shadow-sm";
 
 export const systemIconTileClassName =
   "flex h-11 w-11 items-center justify-center rounded-[var(--icon-radius)] bg-[var(--primary-soft)] text-[var(--primary)]";
@@ -87,6 +108,27 @@ export function SystemFormGroup({
   );
 }
 
+export function SystemActionRow({
+  dense = false,
+  className,
+  children,
+  ...props
+}: HTMLAttributes<HTMLDivElement> & {
+  dense?: boolean;
+}) {
+  return (
+    <div
+      className={cn(
+        dense ? systemCompactActionRowClassName : systemActionRowClassName,
+        className,
+      )}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+}
+
 export function SystemInfoItem({
   label,
   value,
@@ -105,6 +147,43 @@ export function SystemInfoItem({
       </p>
       <div className="mt-3 text-sm font-medium text-[var(--foreground)]">{value}</div>
       {hint ? <div className="mt-1 text-sm leading-6 text-[var(--muted)]">{hint}</div> : null}
+    </div>
+  );
+}
+
+export function SystemNotice({
+  tone = "neutral",
+  title,
+  description,
+  className,
+  children,
+  ...props
+}: HTMLAttributes<HTMLDivElement> & {
+  tone?: "neutral" | "info" | "warning";
+  title: string;
+  description?: ReactNode;
+}) {
+  const toneClassName =
+    tone === "info"
+      ? "border-[rgba(59,130,246,0.18)] bg-[rgba(239,246,255,0.88)]"
+      : tone === "warning"
+        ? "border-[rgba(245,158,11,0.24)] bg-[rgba(255,251,235,0.92)]"
+        : "border-[var(--border)] bg-[var(--surface-strong)]";
+
+  return (
+    <div
+      className={cn(
+        "rounded-[var(--radius-md)] border p-4 shadow-[var(--shadow-sm)]",
+        toneClassName,
+        className,
+      )}
+      {...props}
+    >
+      <p className="text-sm font-semibold text-[var(--foreground)]">{title}</p>
+      {description ? (
+        <div className="mt-2 text-sm leading-6 text-[var(--muted)]">{description}</div>
+      ) : null}
+      {children ? <div className="mt-3">{children}</div> : null}
     </div>
   );
 }

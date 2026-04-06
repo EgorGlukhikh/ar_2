@@ -2,6 +2,11 @@
 
 import { USER_ROLES, type UserRole } from "@academy/shared";
 
+import {
+  SystemActionRow,
+  systemCardClassName,
+  systemCompactActionRowClassName,
+} from "@/components/system/system-ui";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -47,8 +52,8 @@ export function RolePreviewSwitcher({
   }
 
   return (
-    <div className="flex flex-col gap-3 rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] px-4 py-4">
-      <div className="flex flex-wrap items-center gap-2">
+    <div className={`${systemCardClassName} flex flex-col gap-3 px-4 py-4`}>
+      <SystemActionRow dense>
         <Badge variant="neutral">
           <Eye className="mr-2 h-3.5 w-3.5" />
           Просмотр ролей
@@ -58,11 +63,13 @@ export function RolePreviewSwitcher({
           <span className="font-medium text-[var(--foreground)]">
             {roleMeta[effectiveRole as keyof typeof roleMeta]?.label ?? effectiveRole}
           </span>
-          {previewRole ? ` · preview` : ""}
+          {previewRole ? " · предпросмотр" : ""}
         </span>
-      </div>
+      </SystemActionRow>
 
-      <div className="flex max-w-full gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div
+        className={`${systemCompactActionRowClassName} max-w-full overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden`}
+      >
         {(Object.entries(roleMeta) as Array<
           [Extract<UserRole, "ADMIN" | "AUTHOR" | "STUDENT">, (typeof roleMeta)[keyof typeof roleMeta]]
         >).map(([role, meta]) => {
@@ -70,7 +77,7 @@ export function RolePreviewSwitcher({
           const isActive = effectiveRole === role;
 
           return (
-            <Button key={role} asChild variant={isActive ? "default" : "outline"}>
+            <Button key={role} asChild size="sm" variant={isActive ? "default" : "outline"}>
               <Link
                 href={`/admin/role-preview?role=${role}&returnTo=${encodeURIComponent(meta.returnTo)}`}
               >
@@ -84,4 +91,3 @@ export function RolePreviewSwitcher({
     </div>
   );
 }
-

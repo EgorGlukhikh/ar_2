@@ -1,5 +1,7 @@
 # Contributing
 
+UI consistency rules live in `docs/ui-consistency-contract.md`. New pages and refactors should use that contract together with the existing shared primitives instead of hand-rolling local shells.
+
 ## Базовое правило
 
 Новые фичи строим по одной и той же схеме, чтобы человек и AI добавляли изменения одинаково.

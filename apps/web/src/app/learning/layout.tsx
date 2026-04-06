@@ -4,6 +4,14 @@ import Link from "next/link";
 import { LogoutButton } from "@/components/auth/logout-button";
 import { AcademyMark } from "@/components/brand/academy-mark";
 import { LearningNav } from "@/components/learning/learning-nav";
+import {
+  systemBrandMarkShellClassName,
+  systemTopbarActionsClassName,
+  systemTopbarClassName,
+  systemTopbarInnerClassName,
+  systemTopbarPrimaryRowClassName,
+  systemTopbarSecondaryRowClassName,
+} from "@/components/system/system-ui";
 import { Button } from "@/components/ui/button";
 import { RolePreviewSwitcher } from "@/components/workspace/role-preview-switcher";
 import { isElevatedUserRole } from "@/lib/user";
@@ -24,11 +32,11 @@ export default async function LearningLayout({
 
   return (
     <main className="min-h-screen bg-[linear-gradient(180deg,_#f7f9ff_0%,_#f1f5ff_100%)]">
-      <header className="sticky top-0 z-40 border-b border-[var(--border)] bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80">
-        <div className="px-4 md:px-6">
-          <div className="flex items-center justify-between gap-4 py-3">
+      <header className={systemTopbarClassName}>
+        <div className={systemTopbarInnerClassName}>
+          <div className={systemTopbarPrimaryRowClassName}>
             <div className="flex items-center gap-3">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--foreground)] text-white shadow-sm">
+              <div className={systemBrandMarkShellClassName}>
                 <AcademyMark className="w-[18px]" title="Академия риэлторов" />
               </div>
               <div className="min-w-0">
@@ -43,7 +51,7 @@ export default async function LearningLayout({
               </div>
             </div>
 
-            <div className="flex shrink-0 flex-wrap items-center gap-2">
+            <div className={systemTopbarActionsClassName}>
               {hasTeamAccess ? (
                 <Button asChild size="sm" variant="outline">
                   <Link href="/admin">Рабочий кабинет</Link>
@@ -59,7 +67,7 @@ export default async function LearningLayout({
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center justify-between gap-3 pb-3">
+          <div className={systemTopbarSecondaryRowClassName}>
             <LearningNav />
             <RolePreviewSwitcher
               actualRole={viewer.actualRole}

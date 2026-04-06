@@ -5,9 +5,14 @@ import { BookOpenText } from "lucide-react";
 
 import { SiteIllustration } from "@/components/illustrations/site-illustration";
 import {
+  systemActionRowClassName,
+  systemBodyTextClassName,
   systemCardClassName,
+  systemEyebrowClassName,
   systemHeaderCardClassName,
+  systemHeroTitleClassName,
   systemIconTileClassName,
+  systemTitleClassName,
 } from "@/components/system/system-ui";
 import { PageGrid } from "@/components/layout/page-grid";
 import type { IllustrationKey } from "@/lib/illustrations";
@@ -123,21 +128,15 @@ export function WorkspacePageHeader({
     >
       <PageGrid className="items-end">
         <div className="space-y-3 xl:col-span-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
-            {eyebrow}
-          </p>
-          <h1 className="text-[clamp(1.75rem,3.4vw,2.35rem)] font-semibold tracking-[-0.02em] text-[var(--foreground)]">
-            {title}
-          </h1>
-          <p className="max-w-[var(--content-max)] text-sm leading-7 text-[var(--muted)]">
-            {description}
-          </p>
+          <p className={systemEyebrowClassName}>{eyebrow}</p>
+          <h1 className={systemHeroTitleClassName}>{title}</h1>
+          <p className={systemBodyTextClassName}>{description}</p>
         </div>
 
         {(actions || meta) && (
           <div className="flex flex-col gap-3 xl:col-span-4 xl:items-end">
             {meta}
-            {actions ? <div className="flex flex-wrap gap-3">{actions}</div> : null}
+            {actions ? <div className={systemActionRowClassName}>{actions}</div> : null}
           </div>
         )}
       </PageGrid>
@@ -163,24 +162,16 @@ export function WorkspacePanel({
       {(eyebrow || title || description || actions) && (
         <PageGrid className="items-end">
           <div className="space-y-2 xl:col-span-8">
-            {eyebrow ? (
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
-                {eyebrow}
-              </p>
-            ) : null}
-            {title ? (
-              <h2 className="text-[24px] font-semibold tracking-[-0.02em] text-[var(--foreground)]">
-                {title}
-              </h2>
-            ) : null}
-            {description ? (
-              <p className="max-w-[var(--content-max)] text-sm leading-7 text-[var(--muted)]">
-                {description}
-              </p>
-            ) : null}
+            {eyebrow ? <p className={systemEyebrowClassName}>{eyebrow}</p> : null}
+            {title ? <h2 className={systemTitleClassName}>{title}</h2> : null}
+            {description ? <p className={systemBodyTextClassName}>{description}</p> : null}
           </div>
 
-          {actions ? <div className="flex flex-wrap gap-3 xl:col-span-4 xl:justify-end">{actions}</div> : null}
+          {actions ? (
+            <div className={`${systemActionRowClassName} xl:col-span-4 xl:justify-end`}>
+              {actions}
+            </div>
+          ) : null}
         </PageGrid>
       )}
 

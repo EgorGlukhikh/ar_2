@@ -1,8 +1,19 @@
 import { signOut } from "@academy/auth";
 
-import { Button } from "@/components/ui/button";
+import { Button, type ButtonProps } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
-export function LogoutButton() {
+type LogoutButtonProps = {
+  size?: ButtonProps["size"];
+  variant?: ButtonProps["variant"];
+  className?: string;
+};
+
+export function LogoutButton({
+  size = "sm",
+  variant = "outline",
+  className,
+}: LogoutButtonProps = {}) {
   async function handleLogout() {
     "use server";
 
@@ -11,7 +22,7 @@ export function LogoutButton() {
 
   return (
     <form action={handleLogout}>
-      <Button type="submit" variant="outline">
+      <Button type="submit" variant={variant} size={size} className={cn(className)}>
         Выйти
       </Button>
     </form>
